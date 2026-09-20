@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -2724,7 +2724,7 @@
         function updateUIStats() {
             let currentBal = getWallet();
             document.getElementById('walletDisplay').innerText = currentBal.toFixed(2);
-            document.getElementById('betDisplay').innerText = currentBal.toFixed(2);
+            document.getElementById('betDisplay').innerText = currentBet.toFixed(2); // Fix applied here
             document.getElementById('walletDisplayA').innerText = currentBal.toFixed(2);
             let topWalA = document.getElementById('walletDisplayTopA');
             if (topWalA) topWalA.innerText = currentBal.toFixed(2);
@@ -3099,3 +3099,4 @@
 </script>
 </body>
 </html>
+          
