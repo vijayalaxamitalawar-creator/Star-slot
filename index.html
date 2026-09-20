@@ -841,16 +841,17 @@
             height: 100%; 
             max-height: 100%;
             box-sizing: border-box; 
-            border: 12px solid #7ea6db;
+            border: 12px solid #ffd700;
             background: transparent;
             border-radius: 8px;
             overflow: hidden;
             position: relative;
             transform-origin: center center;
             transition: transform 0.1s ease-out;
-            padding: 4px; 
+            padding: 0px; 
             aspect-ratio: 1 / 1;
             margin: auto;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
         .slot-reels-inner {
             display: grid; 
@@ -892,10 +893,11 @@
             100% { transform: translateY(0%); }
         }
         .slot-cell {
-            background: linear-gradient(145deg, #e8f0fe, #c7dcef);
-            border: 2px solid #527ca3; 
+            background: linear-gradient(145deg, #2b2b2b, #111111);
+            border: 2px solid #ffd700; 
             margin: 0px; 
-            border-radius: 4px; 
+            padding: 0px;
+            border-radius: 1px; 
             width: 100%;
             flex: 1;
             display: flex;
@@ -905,10 +907,11 @@
             position: relative;
             box-sizing: border-box;
             overflow: hidden;
+            box-shadow: inset 0 0 6px rgba(255, 215, 0, 0.6);
         }
         .slot-cell img {
-            max-width: 80%;
-            max-height: 80%;
+            max-width: 85%;
+            max-height: 85%;
             object-fit: contain;
         }
         .badge-wild { 
@@ -1361,7 +1364,7 @@
             <h4>👥 Referral Program</h4>
             <p style="font-size: 10px; color: #ccc; margin: 0 0 6px 0;">Share your link and earn coins per referral!</p>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-                <input type="text" id="referralLinkInput" class="admin-input" readonly value="https://star-slot-eweo.vercel.app/" style="margin-bottom:0;">
+                <input type="text" id="referralLinkInput" class="admin-input" readonly value="https://luckyspin.casino/ref=LS-892341" style="margin-bottom:0;">
                 <button class="admin-btn" onclick="copyReferralLink()">📋 Copy</button>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 6px;">
@@ -1531,6 +1534,12 @@
                 <option value="default">Groups C to O (Super Ace Theme)</option>
             </select>
 
+            <label class="admin-label">Upload Custom Frame Image (Gallery):</label>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="file" id="customFrameImageInput" class="admin-input" accept="image/*" onchange="previewCustomFrameImageFile(event)" style="margin-bottom:0;">
+                <button class="admin-btn" style="background:#ff4757; color:#fff; white-space:nowrap;" onclick="removeCustomFrameImage()">🗑️ Delete Frame</button>
+            </div>
+
             <label class="admin-label">1) Frame Scale: <span id="frameScaleVal">1.0</span>x</label>
             <input type="range" id="frameScaleRange" min="0.5" max="1.5" step="0.05" value="1.0" class="admin-input" oninput="document.getElementById('frameScaleVal').innerText=this.value; previewFrameScaleLive(this.value)">
 
@@ -1578,8 +1587,8 @@
             <h3>🎮 GAME DIFFICULTY MODE</h3>
             <select id="adminDifficultySelect" class="admin-select" onchange="updateDifficultySetting(this.value)">
                 <option value="normal">Normal Mode (Balanced & Fair Win)</option>
-                <option value="medium">Medium Mode (Win-Loss Pattern: Frequent 1-3 coin wins, 5-coin wins after 12 dead spins, mega win, ultimate net loss)</option>
-                <option value="hard">Hard Mode (Relentless Heavy Losses - Extremely rare wins)</option>
+                <option value="medium">Medium Mode (Win-Loss Pattern: Frequent small wins, medium wins after intervals, ultimate net loss)</option>
+                <option value="hard">Hard Mode (Relentless Heavy Losses - Extremely rare minimal wins)</option>
             </select>
         </div>
 
@@ -1591,7 +1600,7 @@
             <select id="forceModeSelect" class="admin-select">
                 <option value="none">Normal (Strict Difficulty Rule)</option>
                 <option value="win">Force Win 🟢</option>
-                <option value="loss">Force Loss 🔴</option>
+                <option value="loss">Force Loss 🔴 (With occasional small wins)</option>
             </select>
             <button class="admin-btn" onclick="saveForceRule()">💾 Save Rule</button>
         </div>
@@ -1723,7 +1732,7 @@
             document.getElementById('adminLobbyPreviewContainer').style.display = 'block';
             document.getElementById('adminLobbyGameTitleDisplay').innerText = `[#${game.id}] ${game.name} (Group ${game.group})`;
             
-            let cfg = lobbyLogoConfigs[game.id] || { url: null, scale: 100 };
+            let cfg = lobbyLogoConfigs[game.id] || lobbyLogoConfigs[String(game.id)] || { url: null, scale: 100 };
             let currentScale = cfg.scale !== undefined ? cfg.scale : 100;
             document.getElementById('lobbyLogoSizeRange').value = currentScale;
             document.getElementById('lobbyLogoSizeValLabel').innerText = currentScale;
@@ -1757,9 +1766,8 @@
         function saveLobbyLogoConfig() {
             let scaleVal = parseInt(document.getElementById('lobbyLogoSizeRange').value);
             if (lobbyLogoRemoved) {
-                if (lobbyLogoConfigs[selectedLobbyGameId]) {
-                    delete lobbyLogoConfigs[selectedLobbyGameId];
-                }
+                if (lobbyLogoConfigs[selectedLobbyGameId]) delete lobbyLogoConfigs[selectedLobbyGameId];
+                if (lobbyLogoConfigs[String(selectedLobbyGameId)]) delete lobbyLogoConfigs[String(selectedLobbyGameId)];
             } else {
                 if (!lobbyLogoConfigs[selectedLobbyGameId]) lobbyLogoConfigs[selectedLobbyGameId] = {};
                 if (tempLobbyLogoDataUrl) {
@@ -1774,6 +1782,8 @@
 
         // --- FRAME & REEL POSITION/SIZE CUSTOMIZATION FUNCTIONS ---
         let gameFrameConfigs = JSON.parse(localStorage.getItem('slot_game_frame_configs') || '{}');
+        let tempFrameImageBase64 = null;
+        let frameImageRemoved = false;
 
         function searchFrameGame() {
             let gNum = parseInt(document.getElementById('frameGameSearchInput').value);
@@ -1804,26 +1814,55 @@
             if (game) openGame(game.id);
         }
 
+        function previewCustomFrameImageFile(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    tempFrameImageBase64 = e.target.result;
+                    frameImageRemoved = false;
+                    alert("✅ Custom frame image preview loaded!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeCustomFrameImage() {
+            tempFrameImageBase64 = null;
+            frameImageRemoved = true;
+            alert("🗑️ Frame image marked for deletion. Click 'Save Frame & Reel Settings' to apply.");
+        }
+
         function loadFrameSettingsForTarget(targetKey) {
-            let cfg = gameFrameConfigs[targetKey] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0 };
+            let cfg = gameFrameConfigs[targetKey] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0, frameImageUrl: null };
             
-            document.getElementById('frameScaleRange').value = cfg.scale;
-            document.getElementById('frameScaleVal').innerText = cfg.scale;
+            let scale = cfg.scale !== undefined && !isNaN(cfg.scale) ? cfg.scale : 1.0;
+            let reelScale = cfg.reelScale !== undefined && !isNaN(cfg.reelScale) ? cfg.reelScale : 1.0;
+            let width = cfg.width !== undefined && !isNaN(cfg.width) ? cfg.width : 100;
+            let height = cfg.height !== undefined && !isNaN(cfg.height) ? cfg.height : 100;
+            let offsetX = cfg.offsetX !== undefined && !isNaN(cfg.offsetX) ? cfg.offsetX : 0;
+            let offsetY = cfg.offsetY !== undefined && !isNaN(cfg.offsetY) ? cfg.offsetY : 0;
 
-            document.getElementById('reelScaleRange').value = cfg.reelScale;
-            document.getElementById('reelScaleVal').innerText = cfg.reelScale;
+            document.getElementById('frameScaleRange').value = scale;
+            document.getElementById('frameScaleVal').innerText = scale;
 
-            document.getElementById('reelWidthRange').value = cfg.width;
-            document.getElementById('reelWidthVal').innerText = cfg.width;
+            document.getElementById('reelScaleRange').value = reelScale;
+            document.getElementById('reelScaleVal').innerText = reelScale;
 
-            document.getElementById('reelHeightRange').value = cfg.height;
-            document.getElementById('reelHeightVal').innerText = cfg.height;
+            document.getElementById('reelWidthRange').value = width;
+            document.getElementById('reelWidthVal').innerText = width;
 
-            document.getElementById('reelOffsetXRange').value = cfg.offsetX;
-            document.getElementById('reelOffsetXVal').innerText = cfg.offsetX;
+            document.getElementById('reelHeightRange').value = height;
+            document.getElementById('reelHeightVal').innerText = height;
 
-            document.getElementById('reelOffsetYRange').value = cfg.offsetY;
-            document.getElementById('reelOffsetYVal').innerText = cfg.offsetY;
+            document.getElementById('reelOffsetXRange').value = offsetX;
+            document.getElementById('reelOffsetXVal').innerText = offsetX;
+
+            document.getElementById('reelOffsetYRange').value = offsetY;
+            document.getElementById('reelOffsetYVal').innerText = offsetY;
+
+            tempFrameImageBase64 = cfg.frameImageUrl || null;
+            frameImageRemoved = false;
         }
 
         function previewFrameScaleLive(val) {
@@ -1838,11 +1877,11 @@
         }
 
         function previewReelLiveConfigs() {
-            let scale = parseFloat(document.getElementById('frameScaleRange').value);
-            let width = parseInt(document.getElementById('reelWidthRange').value);
-            let height = parseInt(document.getElementById('reelHeightRange').value);
-            let offsetX = parseInt(document.getElementById('reelOffsetXRange').value);
-            let offsetY = parseInt(document.getElementById('reelOffsetYRange').value);
+            let scale = parseFloat(document.getElementById('frameScaleRange').value) || 1.0;
+            let width = parseInt(document.getElementById('reelWidthRange').value) || 100;
+            let height = parseInt(document.getElementById('reelHeightRange').value) || 100;
+            let offsetX = parseInt(document.getElementById('reelOffsetXRange').value) || 0;
+            let offsetY = parseInt(document.getElementById('reelOffsetYRange').value) || 0;
 
             document.getElementById('reelWidthVal').innerText = width;
             document.getElementById('reelHeightVal').innerText = height;
@@ -1863,13 +1902,15 @@
 
         function saveGameFrameConfig() {
             let targetKey = document.getElementById('adminFrameTargetSelect').value;
+            let existingCfg = gameFrameConfigs[targetKey] || {};
             let cfg = {
-                scale: parseFloat(document.getElementById('frameScaleRange').value),
-                reelScale: parseFloat(document.getElementById('reelScaleRange').value),
-                width: parseInt(document.getElementById('reelWidthRange').value),
-                height: parseInt(document.getElementById('reelHeightRange').value),
-                offsetX: parseInt(document.getElementById('reelOffsetXRange').value),
-                offsetY: parseInt(document.getElementById('reelOffsetYRange').value)
+                scale: parseFloat(document.getElementById('frameScaleRange').value) || 1.0,
+                reelScale: parseFloat(document.getElementById('reelScaleRange').value) || 1.0,
+                width: parseInt(document.getElementById('reelWidthRange').value) || 100,
+                height: parseInt(document.getElementById('reelHeightRange').value) || 100,
+                offsetX: parseInt(document.getElementById('reelOffsetXRange').value) || 0,
+                offsetY: parseInt(document.getElementById('reelOffsetYRange').value) || 0,
+                frameImageUrl: frameImageRemoved ? null : (tempFrameImageBase64 || existingCfg.frameImageUrl || null)
             };
             gameFrameConfigs[targetKey] = cfg;
             localStorage.setItem('slot_game_frame_configs', JSON.stringify(gameFrameConfigs));
@@ -2158,7 +2199,7 @@
         function renderProfileScreenData() {
             let uid = getPlayerUniqueId();
             document.getElementById('profileUniqueIdDisplay').innerText = `ID: ${uid}`;
-            document.getElementById('referralLinkInput').value = `https://star-slot-eweo.vercel.app/?ref=${uid.replace('#','')}`;
+            document.getElementById('referralLinkInput').value = `https://luckyspin.casino/ref=${uid.replace('#','')}`;
             
             let savedDetails = localStorage.getItem('casino_player_saved_details') || "";
             document.getElementById('playerDetailsTextarea').value = savedDetails;
@@ -2228,7 +2269,7 @@
             
             let html = '';
             filteredGames.forEach(game => {
-                let logoCfg = lobbyLogoConfigs[game.id] || { url: null, scale: 100 };
+                let logoCfg = lobbyLogoConfigs[game.id] || lobbyLogoConfigs[String(game.id)] || { url: null, scale: 100 };
                 let scalePct = logoCfg.scale !== undefined ? logoCfg.scale : 100;
                 let scaleMultiplier = scalePct / 100;
                 let displayIcon = game.icon;
@@ -2647,8 +2688,10 @@
         }
 
         function removeCustomSymbol() {
-            if (gameSymbolConfigs[activeGameId] && gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx]) {
-                delete gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx];
+            let confGroup = gameSymbolConfigs[activeGameId] || gameSymbolConfigs[String(activeGameId)];
+            if (confGroup && (confGroup[selectedTargetSymbolIdx] || confGroup[String(selectedTargetSymbolIdx)])) {
+                delete confGroup[selectedTargetSymbolIdx];
+                delete confGroup[String(selectedTargetSymbolIdx)];
                 localStorage.setItem('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs));
                 renderAdminMasterPalette();
                 renderSlotGrid();
@@ -2739,7 +2782,10 @@
         }
 
         function calculateDifficultyAdjustedWin(rawWin, bet) {
-            if (forceRule.mode === 'loss') return 0;
+            if (forceRule.mode === 'loss') {
+                // Force loss mode mein bhi 15% chance par chhote wins aayenge taaki player bore na ho
+                return Math.random() < 0.15 ? parseFloat((bet * (0.2 + Math.random() * 0.4)).toFixed(2)) : 0;
+            }
             if (forceRule.mode === 'win') return bet * 120;
 
             if (rawWin > 0) return rawWin;
@@ -2748,18 +2794,18 @@
             let finalWin = 0;
 
             if (globalDifficulty === 'normal') {
-                finalWin = rawWin > 0 ? rawWin * 1.1 : (Math.random() < 0.35 ? bet * 1.2 : 0);
+                finalWin = rawWin > 0 ? rawWin * 1.1 : (Math.random() < 0.38 ? bet * 1.2 : 0);
             } 
             else if (globalDifficulty === 'medium') {
                 diffState.spinsSinceLastWin++;
-                if (diffState.spinCount % 38 === 0) {
-                    finalWin = bet * 25; 
+                if (diffState.spinCount % 35 === 0) {
+                    finalWin = bet * 20; 
                     diffState.spinsSinceLastWin = 0;
-                } else if (diffState.spinsSinceLastWin >= 13 && Math.random() < 0.6) {
-                    finalWin = 5.00;
+                } else if (diffState.spinsSinceLastWin >= 10 && Math.random() < 0.6) {
+                    finalWin = parseFloat((bet * 0.5).toFixed(2));
                     diffState.spinsSinceLastWin = 0;
-                } else if (diffState.spinsSinceLastWin >= 10 && Math.random() < 0.65) {
-                    finalWin = Math.random() < 0.5 ? 1.00 : 3.00;
+                } else if (diffState.spinsSinceLastWin >= 6 && Math.random() < 0.5) {
+                    finalWin = parseFloat((bet * 0.2).toFixed(2));
                     diffState.spinsSinceLastWin = 0;
                 } else {
                     finalWin = 0;
@@ -2767,8 +2813,8 @@
             } 
             else if (globalDifficulty === 'hard') {
                 diffState.spinsSinceLastWin++;
-                if (diffState.spinsSinceLastWin >= 22 && Math.random() < 0.2) {
-                    finalWin = bet * 0.15;
+                if (diffState.spinsSinceLastWin >= 18 && Math.random() < 0.25) {
+                    finalWin = parseFloat((bet * 0.2).toFixed(2));
                     diffState.spinsSinceLastWin = 0;
                 } else {
                     finalWin = 0;
@@ -3036,7 +3082,7 @@
                     let sym = symbols[sIdx];
                     let config = getSymbolConfig(activeGameId, sIdx);
                     let scaleMultiplier = (config.scale || 100) / 100;
-                    let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:80%; max-height:80%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                    let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:85%; max-height:85%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
                     let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
                     html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
                 }
@@ -3065,7 +3111,7 @@
                     let sym = symbols[sIdx];
                     let config = getSymbolConfig(activeGameId, sIdx);
                     let scaleMultiplier = (config.scale || 100) / 100;
-                    let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:80%; max-height:80%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                    let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:85%; max-height:85%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
                     let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
                     html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
                 }
@@ -3074,24 +3120,45 @@
         }
 
         function getSymbolConfig(gameId, sIdx) {
-            if (gameSymbolConfigs[gameId] && gameSymbolConfigs[gameId][sIdx]) {
-                return gameSymbolConfigs[gameId][sIdx];
+            let confGroup = gameSymbolConfigs[gameId] || gameSymbolConfigs[String(gameId)];
+            if (confGroup) {
+                let symConf = confGroup[sIdx] || confGroup[String(sIdx)];
+                if (symConf) {
+                    return symConf;
+                }
             }
             return { url: null, scale: 100 };
         }
 
         function applyCustomFrameToActiveGame(groupName, gameId) {
-            let frameCfg = gameFrameConfigs[groupName] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0 };
+            let targetKey = groupName === 'A' ? 'groupA' : (groupName === 'B' ? 'groupB' : 'default');
+            let frameCfg = gameFrameConfigs[targetKey] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0, frameImageUrl: null };
             let frameBoxId = 'slotFrameBoxDefault';
             if (groupName === 'A') frameBoxId = 'slotFrameBoxA';
             if (groupName === 'B') frameBoxId = 'slotFrameBoxB';
 
             let frameEl = document.getElementById(frameBoxId);
             if (frameEl) {
-                frameEl.style.transform = `scale(${frameCfg.scale})`;
-                frameEl.style.width = `${frameCfg.width}%`;
-                frameEl.style.height = `${frameCfg.height}%`;
-                frameEl.style.transform += ` translate(${frameCfg.offsetX}px, ${frameCfg.offsetY}px)`;
+                let scale = frameCfg.scale !== undefined ? frameCfg.scale : 1.0;
+                let width = frameCfg.width !== undefined ? frameCfg.width : 100;
+                let height = frameCfg.height !== undefined ? frameCfg.height : 100;
+                let offsetX = frameCfg.offsetX !== undefined ? frameCfg.offsetX : 0;
+                let offsetY = frameCfg.offsetY !== undefined ? frameCfg.offsetY : 0;
+
+                frameEl.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                frameEl.style.width = `${width}%`;
+                frameEl.style.height = `${height}%`;
+
+                if (frameCfg.frameImageUrl) {
+                    frameEl.style.borderImage = `url(${frameCfg.frameImageUrl}) 30 round`;
+                    frameEl.style.borderWidth = '16px';
+                    frameEl.style.backgroundImage = `url(${frameCfg.frameImageUrl})`;
+                    frameEl.style.backgroundSize = 'cover';
+                } else {
+                    frameEl.style.borderImage = 'none';
+                    frameEl.style.borderWidth = '12px';
+                    frameEl.style.backgroundImage = 'none';
+                }
             }
         }
 
