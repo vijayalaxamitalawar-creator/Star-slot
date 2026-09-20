@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1361,7 +1361,7 @@
             <h4>👥 Referral Program</h4>
             <p style="font-size: 10px; color: #ccc; margin: 0 0 6px 0;">Share your link and earn coins per referral!</p>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-                <input type="text" id="referralLinkInput" class="admin-input" readonly value="https://luckyspin.casino/ref=LS-892341" style="margin-bottom:0;">
+                <input type="text" id="referralLinkInput" class="admin-input" readonly value="https://star-slot-eweo.vercel.app/" style="margin-bottom:0;">
                 <button class="admin-btn" onclick="copyReferralLink()">📋 Copy</button>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 6px;">
@@ -2158,7 +2158,7 @@
         function renderProfileScreenData() {
             let uid = getPlayerUniqueId();
             document.getElementById('profileUniqueIdDisplay').innerText = `ID: ${uid}`;
-            document.getElementById('referralLinkInput').value = `https://luckyspin.casino/ref=${uid.replace('#','')}`;
+            document.getElementById('referralLinkInput').value = `https://star-slot-eweo.vercel.app/?ref=${uid.replace('#','')}`;
             
             let savedDetails = localStorage.getItem('casino_player_saved_details') || "";
             document.getElementById('playerDetailsTextarea').value = savedDetails;
@@ -2724,7 +2724,7 @@
         function updateUIStats() {
             let currentBal = getWallet();
             document.getElementById('walletDisplay').innerText = currentBal.toFixed(2);
-            document.getElementById('betDisplay').innerText = currentBet.toFixed(2); // Fix applied here
+            document.getElementById('betDisplay').innerText = currentBet.toFixed(2);
             document.getElementById('walletDisplayA').innerText = currentBal.toFixed(2);
             let topWalA = document.getElementById('walletDisplayTopA');
             if (topWalA) topWalA.innerText = currentBal.toFixed(2);
@@ -3099,4 +3099,3 @@
 </script>
 </body>
 </html>
-          
