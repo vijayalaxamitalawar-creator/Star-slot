@@ -1,0 +1,3101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LuckySpin Casino - Ultimate Strict Pro Edition (150 Games)</title>
+    <style>
+        html, body {
+            background: radial-gradient(circle, #1e3c72 0%, #0b132b 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            height: 100dvh;
+            background: #0f1c3f;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        /* OFFLINE SCREEN STYLES */
+        #offlineScreen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background: #0b132b;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            text-align: center;
+        }
+        .offline-card {
+            background: rgba(15, 28, 63, 0.95);
+            border: 2px solid #ff4757;
+            border-radius: 14px;
+            padding: 25px 20px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(255,71,87,0.5);
+        }
+
+        /* LOGIN SCREEN STYLES */
+        #loginScreen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background: radial-gradient(circle, #1e3c72 0%, #0b132b 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 500;
+        }
+        .login-card {
+            background: rgba(15, 28, 63, 0.95);
+            border: 2px solid #00c6ff;
+            border-radius: 14px;
+            padding: 20px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0,198,255,0.5);
+        }
+
+        /* Top Header */
+        .header {
+            background: linear-gradient(135deg, #1b3b6f, #0d1b2a);
+            padding: 8px 15px;
+            border-bottom: 2px solid #00c6ff;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .welcome-banner {
+            background: #0077b6;
+            color: #fff;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+            display: inline-block;
+        }
+        .casino-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: #00c6ff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            margin: 0;
+        }
+        .admin-gear-btn {
+            background: rgba(0,198,255,0.2);
+            border: 1px solid #00c6ff;
+            color: #00c6ff;
+            font-size: 16px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Jackpot & Slots Banner Row */
+        .top-banners {
+            display: flex;
+            gap: 8px;
+            padding: 8px 10px;
+            flex-shrink: 0;
+        }
+        .slots-main-banner {
+            flex: 2;
+            background: linear-gradient(135deg, #1d3557, #0b132b);
+            border: 2px solid #00c6ff;
+            border-radius: 10px;
+            padding: 8px 10px;
+            text-align: left;
+            position: relative;
+            cursor: pointer;
+        }
+        .slots-main-banner h2 { color: #00c6ff; margin: 0; font-size: 15px; }
+        .slots-main-banner p { font-size: 10px; color: #ccc; margin: 2px 0 0 0; }
+
+        .jackpot-banner {
+            flex: 1.5;
+            background: linear-gradient(135deg, #3a0ca3, #10002b);
+            border: 2px solid #7209b7;
+            border-radius: 10px;
+            padding: 8px 10px;
+            text-align: center;
+        }
+        .jackpot-title { font-size: 9px; color: #f72585; font-weight: bold; }
+        .jackpot-amount { font-size: 13px; font-weight: bold; color: #fff; margin-top: 3px; }
+
+        /* Quick Menu Icons */
+        .quick-menu {
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 5px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
+        }
+        .q-item {
+            text-align: center;
+            font-size: 9px;
+            color: #ccc;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .q-item:active { transform: scale(0.92); }
+        .q-icon {
+            font-size: 15px;
+            background: rgba(0,198,255,0.1);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 2px auto;
+            border: 1px solid rgba(0,198,255,0.3);
+        }
+
+        /* Group Navigation Bar (A to O) */
+        .group-nav-bar {
+            display: flex;
+            overflow-x: auto;
+            gap: 6px;
+            padding: 6px 10px;
+            background: rgba(0,0,0,0.4);
+            white-space: nowrap;
+            border-bottom: 1px solid rgba(0,198,255,0.2);
+            scrollbar-width: thin;
+            flex-shrink: 0;
+        }
+        .group-nav-bar::-webkit-scrollbar { height: 3px; }
+        .group-nav-bar::-webkit-scrollbar-thumb { background: #00c6ff; border-radius: 2px; }
+        .group-tab {
+            background: #112244;
+            border: 1px solid rgba(0,198,255,0.3);
+            color: #ccc;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .group-tab.active, .group-tab:hover {
+            background: #00c6ff;
+            color: #000;
+            border-color: #00c6ff;
+        }
+
+        /* Games Grid Section */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #00c6ff;
+            flex-shrink: 0;
+        }
+        .games-grid-container {
+            flex: 1;
+            min-height: 150px;
+            overflow-y: auto;
+            padding: 0 10px 70px 10px;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .game-card {
+            background: #112244;
+            border: 1px solid rgba(0,198,255,0.4);
+            border-radius: 8px;
+            padding: 0;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            height: 82px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: transform 0.1s;
+        }
+        .game-card:active { transform: scale(0.96); }
+        .game-num {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            font-size: 9px;
+            background: rgba(0,0,0,0.7);
+            color: #00c6ff;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+            z-index: 5;
+        }
+        .game-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .game-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .game-name {
+            position: relative;
+            z-index: 4;
+            font-size: 9px;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(0,0,0,0.65);
+            width: 100%;
+            padding: 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Bottom Nav Bar */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0b132b;
+            border-top: 1px solid rgba(0,198,255,0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 5px 0;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 9px;
+            color: #aaa;
+            cursor: pointer;
+        }
+        .nav-item.active { color: #00c6ff; }
+        .nav-icon { font-size: 15px; margin-bottom: 1px; }
+
+        /* GAMEPLAY SCREEN */
+        #gameScreen {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 6px 8px;
+            text-align: center;
+            background: #110a05;
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            z-index: 150;
+            transition: background 0.3s ease;
+        }
+
+        /* FREE GAME BANNER OVERLAY */
+        #freeGameBanner {
+            display: none;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 900;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 15px rgba(255,71,87,0.9);
+            z-index: 250;
+            letter-spacing: 1px;
+            animation: pulseBanner 0.8s infinite alternate;
+        }
+        @keyframes pulseBanner {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.08); }
+        }
+
+        /* GROUP A LUXURY THEME */
+        #gameScreen.group-a-mode {
+            background: radial-gradient(circle at center, #fdf8ee 0%, #e8d3b3 60%, #c49a5b 100%);
+            color: #4a3525;
+            padding: 6px;
+        }
+        #gameScreen.group-a-mode .group-a-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 4px;
+            flex-shrink: 0;
+        }
+        #gameScreen.group-a-mode .group-a-menu-btn {
+            background: radial-gradient(circle, #f3d482 0%, #b8860b 100%);
+            border: 2px solid #fff;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* GROUP B WESTERN WOOD THEME */
+        #gameScreen.group-b-mode {
+            background: radial-gradient(circle at center, #2e1107 0%, #120703 100%);
+            color: #f4e8c1;
+            padding: 6px;
+        }
+        .group-b-top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 4px;
+            flex-shrink: 0;
+            background: rgba(0,0,0,0.4);
+            border-radius: 6px;
+            margin-bottom: 2px;
+        }
+        .group-b-menu-btn {
+            background: linear-gradient(180deg, #b8860b 0%, #5c3a00 100%);
+            border: 2px solid #ffd700;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .group-b-wanted-banner {
+            text-align: center;
+            background: linear-gradient(180deg, #45280b 0%, #1a0e04 100%);
+            border: 3px solid #8b5a2b;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+        }
+        .group-b-wanted-text {
+            font-size: 16px;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px #000;
+            letter-spacing: 2px;
+            font-family: serif;
+            margin: 0;
+        }
+        .group-b-wanted-sub {
+            font-size: 9px;
+            color: #00ffcc;
+            font-weight: bold;
+            margin: 0;
+        }
+        .group-b-bonus-buy-btn {
+            background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+            color: #3d1a00;
+            border: 2px solid #fff;
+            border-radius: 6px;
+            padding: 4px 16px;
+            font-weight: 900;
+            font-size: 11px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            margin: 4px auto;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+        .group-b-control-panel {
+            background: linear-gradient(180deg, #3d220f 0%, #150a04 100%);
+            border: 3px solid #8b5a2b;
+            border-radius: 10px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.8);
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+        .group-b-stats-bar {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+        }
+        .group-b-stat-box {
+            flex: 1;
+            background: rgba(15, 7, 2, 0.9);
+            border: 1px solid #b8860b;
+            border-radius: 4px;
+            padding: 3px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .group-b-stat-val {
+            color: #fff;
+            font-size: 11px;
+            display: block;
+        }
+        .group-b-buttons-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+        .group-b-action-btn {
+            background: linear-gradient(180deg, #4a3b2c 0%, #221810 100%);
+            border: 2px solid #8b5a2b;
+            color: #ffd700;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .group-b-spin-main-btn {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #f3c653 0%, #d4af37 60%, #8b6508 100%);
+            border: 3px solid #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.8), inset 0 2px 5px rgba(255,255,255,0.5);
+            transition: transform 0.1s;
+        }
+        .group-b-spin-main-btn:active { transform: scale(0.92); }
+
+        /* CONTROL PANELS GROUP A & OTHERS */
+        .group-a-control-panel {
+            background: linear-gradient(180deg, #4a3525 0%, #1e1508 100%);
+            border: 3px solid #d4af37;
+            border-radius: 10px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.8);
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+        .group-a-ribbon {
+            background: linear-gradient(90deg, transparent, #b8860b, transparent);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 900;
+            padding: 2px 0;
+            text-align: center;
+            border-radius: 4px;
+            margin-bottom: 3px;
+            letter-spacing: 1px;
+            border: 1px solid #ffd700;
+        }
+        .group-a-subtext {
+            font-size: 9px;
+            color: #ffd700;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .group-a-stats-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .g-stat-box {
+            flex: 1;
+            background: rgba(30, 20, 10, 0.85);
+            border: 1px solid #ffd700;
+            border-radius: 6px;
+            padding: 3px;
+            text-align: center;
+        }
+        .g-stat-label { font-size: 7px; color: #ffd700; display: block; font-weight: bold; }
+        .g-stat-val { font-size: 11px; color: #fff; font-weight: 900; }
+        .group-a-buttons-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+        .g-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #ffd700;
+            background: linear-gradient(135deg, #d4af37, #8b6508);
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .g-action-btn.minus-btn { background: linear-gradient(135deg, #718093, #2f3640); }
+        .g-spin-main-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4757 0%, #e84118 60%, #c23616 100%);
+            border: 3px solid #ffd700;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* SUPER ACE / C-TO-O THEME STYLING */
+        #gameScreen.group-c-to-o-mode {
+            background: radial-gradient(circle at center, #23395d 0%, #101c2c 60%, #0a1118 100%);
+            color: #ffffff;
+            padding: 6px;
+        }
+        .superace-top-bar {
+            background: linear-gradient(180deg, #324a6d 0%, #16263d 100%);
+            border: 2px solid #7ea6db;
+            border-radius: 8px;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+        }
+        .superace-menu-btn {
+            background: radial-gradient(circle, #4a75b5 0%, #1c3b6f 100%);
+            color: #fff;
+            border: 2px solid #a6c4f5;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* MULTIPLIER / GROUP C JACKPOT BANNERS */
+        .superace-multiplier-banner {
+            background: linear-gradient(180deg, #1b2d45 0%, #0d1724 100%);
+            border: 2px solid #527ca3;
+            border-radius: 6px;
+            padding: 4px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            flex-shrink: 0;
+        }
+        .superace-mult-item {
+            background: #0f1c2e;
+            border: 1px solid #3c5d85;
+            color: #ffd700;
+            font-size: 12px;
+            font-weight: 900;
+            padding: 2px 10px;
+            border-radius: 4px;
+        }
+        .superace-mult-item.active-mult {
+            background: linear-gradient(180deg, #d4af37 0%, #8b6508 100%);
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 0 0 8px rgba(212,175,55,0.8);
+        }
+
+        /* GROUP C DEDICATED 3 JACKPOT STYLING */
+        .group-c-jackpot-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            flex-shrink: 0;
+            width: 100%;
+        }
+        .group-c-jackpot-box {
+            flex: 1;
+            background: linear-gradient(180deg, #3a1c00 0%, #1a0a00 100%);
+            border: 2px solid #ffd700;
+            border-radius: 6px;
+            padding: 3px 2px;
+            text-align: center;
+            box-shadow: 0 0 6px rgba(255,215,0,0.4);
+        }
+        .group-c-jackpot-box.j20000 { border-color: #ff4757; background: linear-gradient(180deg, #4a0d18 0%, #200409 100%); }
+        .group-c-jackpot-box.j5000 { border-color: #ffa500; background: linear-gradient(180deg, #4a2c0d 0%, #201104 100%); }
+        .group-c-jackpot-box.j2000 { border-color: #2ed573; background: linear-gradient(180deg, #0d4a25 0%, #04200e 100%); }
+        .c-j-title { font-size: 8px; font-weight: 900; letter-spacing: 1px; color: #ffd700; }
+        .c-j-val { font-size: 11px; font-weight: 900; color: #fff; margin-top: 1px; }
+
+        .superace-control-bar {
+            background: linear-gradient(180deg, #2b4363 0%, #111e30 100%);
+            border: 2px solid #6b9ad2;
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.7);
+        }
+        .superace-auto-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #f3c653 0%, #d4af37 60%, #8b6508 100%);
+            border: 3px solid #fff;
+            color: #2b1700;
+            font-size: 11px;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(212,175,55,0.6);
+        }
+        .superace-spin-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #f3c653 0%, #d4af37 60%, #8b6508 100%);
+            border: 3px solid #fff;
+            color: #2b1700;
+            font-size: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(212,175,55,0.8);
+            transition: transform 0.1s;
+        }
+        .superace-spin-btn:active { transform: scale(0.92); }
+        .superace-middle-panel {
+            flex: 1;
+            background: rgba(10,18,30,0.85);
+            border: 1px solid #4872a3;
+            border-radius: 6px;
+            padding: 4px;
+            text-align: center;
+        }
+        .superace-bet-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3px;
+            background: rgba(5,10,18,0.9);
+            border: 1px solid #3c5d85;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+
+        /* WIN POPUPS (TRANSPARENT BACKGROUND NO-BLOCK) */
+        #winPopupOverlay {
+            display: none;
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 10px;
+            z-index: 300;
+            text-align: center;
+            pointer-events: none;
+            animation: popIn 0.3s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        #winPopupTitle { 
+            font-size: 24px; 
+            font-weight: 900; 
+            color: #ffd700; 
+            margin-bottom: 4px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            text-shadow: 0 0 10px #000, 0 0 20px #ffc107; 
+        }
+        #winPopupAmount { 
+            font-size: 32px; 
+            font-weight: 900; 
+            color: #00ffcc; 
+            text-shadow: 0 0 10px #000, 0 0 20px #00ffcc, 0 0 30px #00ffcc; 
+        }
+        
+        /* MACHINE & FRAME LAYOUT */
+        .machine-main-layout { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            width: 100%; 
+            flex: 1; 
+            box-sizing: border-box; 
+            overflow: hidden; 
+            padding: 4px 0;
+            position: relative;
+        }
+        .slot-grid-container { 
+            width: 100%; 
+            height: 100%; 
+            max-height: 100%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            box-sizing: border-box;
+            position: relative;
+        }
+        .slot-frame-box { 
+            display: flex; 
+            width: 100%; 
+            max-width: 100%;
+            height: 100%; 
+            max-height: 100%;
+            box-sizing: border-box; 
+            border: 12px solid #7ea6db;
+            background: transparent;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            transform-origin: center center;
+            transition: transform 0.1s ease-out;
+            padding: 4px; 
+            aspect-ratio: 1 / 1;
+            margin: auto;
+        }
+        .slot-reels-inner {
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 0px; 
+            width: 100%; 
+            height: 100%;
+            align-items: stretch; 
+            justify-items: stretch; 
+            box-sizing: border-box; 
+            position: relative;
+        }
+        .slot-reel-window {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: transparent;
+            box-sizing: border-box;
+        }
+        .slot-column { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 0px; 
+            height: 100%; 
+            justify-content: space-between; 
+            width: 100%; 
+            align-items: stretch; 
+            box-sizing: border-box;
+            will-change: transform;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .slot-column.spinning {
+            height: 200%;
+            animation: cycleWheelSpin 0.25s linear infinite;
+        }
+        @keyframes cycleWheelSpin {
+            0% { transform: translateY(-50%); }
+            100% { transform: translateY(0%); }
+        }
+        .slot-cell {
+            background: linear-gradient(145deg, #e8f0fe, #c7dcef);
+            border: 2px solid #527ca3; 
+            margin: 0px; 
+            border-radius: 4px; 
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .slot-cell img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+        .badge-wild { 
+            font-size: 6px; 
+            background: #000; 
+            color: #ffc107; 
+            padding: 1px 3px; 
+            border-radius: 2px; 
+            font-weight: 900; 
+            border: 1px solid #ffc107; 
+            position: absolute; 
+            bottom: 2px; 
+            z-index: 5; 
+        }
+        .badge-scatter { 
+            font-size: 6px; 
+            background: #ff4757; 
+            color: #fff; 
+            padding: 1px 3px; 
+            border-radius: 2px; 
+            font-weight: 900; 
+            border: 1px solid #fff; 
+            position: absolute; 
+            bottom: 2px; 
+            z-index: 5; 
+        }
+
+        .slot-cell.winning-highlight {
+            border: 3px solid #ff0055 !important;
+            box-shadow: 0 0 15px #ff0055, inset 0 0 10px #ff0055;
+            animation: pulseHighlight 0.5s infinite alternate;
+            z-index: 10;
+        }
+        @keyframes pulseHighlight {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.05); filter: brightness(1.3); }
+        }
+
+        /* ADMIN SCREEN */
+        #adminScreen {
+            display: none;
+            padding: 12px;
+            text-align: left;
+            overflow-y: auto;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .admin-card {
+            background: rgba(15, 28, 63, 0.95);
+            border: 1px solid #00c6ff;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .admin-card h3 { color: #00c6ff; margin-top: 0; font-size: 13px; border-bottom: 1px solid rgba(0,198,255,0.3); padding-bottom: 4px; }
+        .admin-label { font-size: 10px; color: #ccc; margin-bottom: 2px; display: block; }
+        .admin-input, .admin-select { width: 100%; background: #112244; color: #fff; border: 1px solid #00c6ff; padding: 5px; border-radius: 4px; box-sizing: border-box; margin-bottom: 6px; font-size: 11px; }
+        .admin-btn { background: #00c6ff; color: #000; border: none; padding: 6px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 10px; }
+
+        /* UPGRADED PROFILE SCREEN STYLES */
+        #profileScreen {
+            display: none;
+            padding: 10px;
+            text-align: left;
+            overflow-y: auto;
+            height: 100%;
+            box-sizing: border-box;
+            background: #0f1c3f;
+        }
+        .profile-header-card {
+            background: linear-gradient(135deg, #1b3b6f, #0d1b2a);
+            border: 2px solid #00c6ff;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .profile-avatar-container {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 2px solid #00c6ff;
+            background: #112244;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 6px;
+        }
+        .profile-avatar-container img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-avatar-container span { font-size: 28px; }
+        .profile-top-row {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            gap: 8px;
+        }
+        .profile-balance-box {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #00c6ff;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: #00c6ff;
+            font-weight: bold;
+            flex: 1;
+        }
+        .profile-withdraw-btn {
+            background: linear-gradient(135deg, #2ed573, #1e90ff);
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-weight: bold;
+            font-size: 11px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+        .profile-section-card {
+            background: rgba(15, 28, 63, 0.95);
+            border: 1px solid rgba(0,198,255,0.4);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .profile-section-card h4 { color: #00c6ff; margin: 0 0 6px 0; font-size: 12px; border-bottom: 1px solid rgba(0,198,255,0.2); padding-bottom: 4px; }
+        
+        .notebook-lines-box {
+            background: #fff;
+            color: #222;
+            border-radius: 6px;
+            padding: 8px 10px;
+            background-image: linear-gradient(#dcdcdc 1px, transparent 1px);
+            background-size: 100% 24px;
+            line-height: 24px;
+            margin-bottom: 6px;
+            position: relative;
+        }
+        .notebook-textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 12px;
+            line-height: 24px;
+            color: #111;
+        }
+
+        .custom-modal-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 400;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-card {
+            background: #112244;
+            border: 2px solid #00c6ff;
+            border-radius: 12px;
+            padding: 16px;
+            width: 85%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,198,255,0.4);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- OFFLINE CHECK SCREEN -->
+    <div id="offlineScreen">
+        <div class="offline-card">
+            <h2 style="color: #ff4757; margin-top: 0; font-size: 18px;">⚠️ NO INTERNET CONNECTION</h2>
+            <p style="font-size: 11px; color: #ccc; margin-bottom: 15px;">App ko chalane ke liye internet connection zaroori hai. Kripya apna internet on karein.</p>
+            <button class="admin-btn" style="background:#00c6ff; color:#000; width:100%; padding:8px; font-size:12px;" onclick="checkInternetAndReload()">Retry Connection</button>
+        </div>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" style="display:none;">
+        <div class="login-card">
+            <h2 style="color: #00c6ff; margin-top: 0; font-size: 18px;">🎰 LUCKYSPIN LOGIN</h2>
+            <p style="font-size: 10px; color: #ccc; margin-bottom: 15px;">Enter your mobile number to continue</p>
+            
+            <div id="mobileStepDiv">
+                <input type="tel" id="loginMobileInput" class="admin-input" placeholder="Enter Mobile Number" maxlength="10" style="text-align:center; font-size:14px; font-weight:bold; margin-bottom:10px;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; padding:8px; font-size:12px;" onclick="sendLoginOtp()">Get OTP</button>
+            </div>
+
+            <div id="otpStepDiv" style="display:none;">
+                <p id="otpHintText" style="font-size: 10px; color: #00ffcc; margin-bottom: 8px;"></p>
+                <input type="text" id="loginOtpInput" class="admin-input" placeholder="Enter 4-digit OTP" maxlength="4" style="text-align:center; font-size:14px; font-weight:bold; margin-bottom:10px;">
+                <button class="admin-btn" style="background:#00c6ff; color:#000; width:100%; padding:8px; font-size:12px;" onclick="verifyLoginOtp()">Verify & Login</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- LOBBY SCREEN -->
+    <div id="lobbyScreen" style="display:flex; flex-direction:column; height:100%; overflow:hidden; position:relative;">
+        <div class="header">
+            <div>
+                <div class="welcome-banner">WELCOME TO LUCKYSPIN</div>
+                <h1 class="casino-title">LUCKYSPIN PRO (150 GAMES)</h1>
+            </div>
+            <button class="admin-gear-btn" onclick="openAdminPanel()">⚙️</button>
+        </div>
+
+        <div class="top-banners">
+            <div class="slots-main-banner" onclick="openGame(1)">
+                <h2>🎰 6x6 SLOTS</h2>
+                <p>150 Games (Groups A-O)</p>
+            </div>
+            <div class="jackpot-banner">
+                <div class="jackpot-title">🔥 JACKPOT</div>
+                <div class="jackpot-amount">🪙 1,98,750</div>
+            </div>
+        </div>
+
+        <div class="quick-menu">
+            <div class="q-item" onclick="openDailyScratch()"><div class="q-icon">🎁</div>Daily Bonus</div>
+            <div class="q-item" onclick="openLuckyWheel()"><div class="q-icon">🎡</div>Spin & Win</div>
+            <div class="q-item" onclick="openWhatsAppSupport()"><div class="q-icon">💬</div>WhatsApp</div>
+            <div class="q-item" onclick="showFeature('Tasks', '📋 Complete 3 spins to get 50 bonus coins.')"><div class="q-icon">📋</div>Tasks</div>
+            <div class="q-item" onclick="showFeature('Leaderboard', '🏆 You are currently ranked #4 in the global pool!')"><div class="q-icon">🏆</div>Leaderboard</div>
+        </div>
+
+        <div class="group-nav-bar" id="groupNavBar"></div>
+
+        <div class="section-title">
+            <span id="groupSectionTitle">⭐ GROUP A GAMES (10 Games)</span>
+            <span style="font-size: 9px; color: #aaa;">6x6 Grid</span>
+        </div>
+
+        <div class="games-grid-container">
+            <div class="games-grid" id="gamesGrid"></div>
+        </div>
+    </div>
+
+    <!-- GAMEPLAY SCREEN -->
+    <div id="gameScreen">
+        <div id="freeGameBanner">FREE GAMES: <span id="freeGameCountDisplay">0</span></div>
+        
+        <!-- Group A Top Control Container -->
+        <div id="groupATopControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
+            <div class="group-a-top-bar">
+                <button class="group-a-menu-btn" onclick="backToLobby()">☰</button>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <div style="background: rgba(0,0,0,0.6); border: 1px solid #ffd700; padding: 3px 8px; border-radius: 4px; font-size: 10px; color: #ffd700; font-weight: bold;">🪙 <span id="walletDisplayTopA">2670</span></div>
+                    <div style="background: linear-gradient(135deg, #4a0e4e, #240526); border: 2px solid #ffd700; color: #ffd700; padding: 2px 10px; border-radius: 6px; font-weight: 900; font-size: 9px; text-align:center;">WAYS<br><span style="color:#fff; font-size:11px;">46,656</span></div>
+                </div>
+            </div>
+
+            <div class="machine-main-layout">
+                <div class="slot-grid-container">
+                    <div class="slot-frame-box" id="slotFrameBoxA">
+                        <div class="slot-reels-inner" id="slotGridGroupA"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-a-control-panel">
+                <div class="group-a-ribbon">Free Spins</div>
+                <div class="group-a-subtext">winning WILD increases total multiplier</div>
+                <div class="group-a-stats-row">
+                    <div class="g-stat-box"><span class="g-stat-label">BALANCE</span><span class="g-stat-val" id="walletDisplayA">2670</span></div>
+                    <div class="g-stat-box"><span class="g-stat-label">BET</span><span class="g-stat-val" id="betDisplayA">1.00</span></div>
+                    <div class="g-stat-box"><span class="g-stat-label">WIN</span><span class="g-stat-val" id="spinWinDisplayA">0.00</span></div>
+                </div>
+                <div class="group-a-buttons-row">
+                    <button class="g-action-btn" onclick="showFeature('Turbo Mode', '⚡ Turbo spin enabled!')">⚡</button>
+                    <button class="g-action-btn minus-btn" onclick="changeBet(-1)">➖</button>
+                    <button class="g-spin-main-btn" id="spinBtnA" onclick="handleSpin()">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.27 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                    </button>
+                    <button class="g-action-btn" onclick="changeBet(1)">➕</button>
+                    <button class="g-action-btn" onclick="showFeature('Auto Spin', '▶️ Auto spin activated!')">▶️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group B Top Control Container -->
+        <div id="groupBTopControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
+            <div class="group-b-top-header">
+                <button class="group-b-menu-btn" onclick="backToLobby()">☰</button>
+                <div style="font-size:10px; font-weight:bold; color:#ffd700;">WANTED: DEAD OR A WILD</div>
+            </div>
+            <div class="group-b-wanted-banner">
+                <h2 class="group-b-wanted-text">!WANTED!</h2>
+                <div class="group-b-wanted-sub">DEAD OR A WILD</div>
+                <button class="group-b-bonus-buy-btn" onclick="showFeature('Bonus Buy', '🌟 Bonus Buy feature activated!')">BONUS BUY</button>
+            </div>
+            <div class="machine-main-layout">
+                <div class="slot-grid-container">
+                    <div class="slot-frame-box" id="slotFrameBoxB">
+                        <div class="slot-reels-inner" id="slotGridGroupB"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="group-b-control-panel">
+                <div class="group-b-stats-bar">
+                    <div class="group-b-stat-box"><span>BALANCE</span><span class="group-b-stat-val" id="walletDisplayB">2670</span></div>
+                    <div class="group-b-stat-box"><span>BET</span><span class="group-b-stat-val" id="betDisplayB">1</span></div>
+                    <div class="group-b-stat-box"><span>WIN</span><span class="group-b-stat-val" id="spinWinDisplayB">0</span></div>
+                </div>
+                <div class="group-b-buttons-row">
+                    <button class="group-b-action-btn" onclick="showFeature('Turbo', '⚡ Turbo Mode')">⚡</button>
+                    <button class="group-b-action-btn" onclick="changeBet(-1)">-</button>
+                    <button class="group-b-spin-main-btn" id="spinBtnB" onclick="handleSpin()">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="#3d1a00"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.27 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                    </button>
+                    <button class="group-b-action-btn" onclick="changeBet(1)">+</button>
+                    <button class="group-b-action-btn" onclick="showFeature('Auto', '▶️ Auto Spin')">▶️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Groups C to O Super Ace Theme Container -->
+        <div id="defaultGameControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
+            <div class="superace-top-bar">
+                <button class="superace-menu-btn" onclick="backToLobby()">☰</button>
+                <div style="background: rgba(0,0,0,0.5); border: 1px solid #7ea6db; border-radius: 6px; padding: 3px 10px; display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: bold; color: #ffd700;">
+                    <span>🪙</span> <span id="walletDisplay">2670</span>
+                </div>
+            </div>
+
+            <div class="superace-multiplier-banner" id="defaultMultiplierBanner">
+                <div class="superace-mult-item active-mult">x1</div>
+                <div class="superace-mult-item">x2</div>
+                <div class="superace-mult-item">x3</div>
+                <div class="superace-mult-item">x5</div>
+            </div>
+
+            <div class="group-c-jackpot-container" id="groupCJackpotBanner" style="display:none;">
+                <div class="group-c-jackpot-box j20000">
+                    <div class="c-j-title">JACKPOT</div>
+                    <div class="c-j-val">20000</div>
+                </div>
+                <div class="group-c-jackpot-box j5000">
+                    <div class="c-j-title">JACKPOT</div>
+                    <div class="c-j-val">5000</div>
+                </div>
+                <div class="group-c-jackpot-box j2000">
+                    <div class="c-j-title">JACKPOT</div>
+                    <div class="c-j-val">2000</div>
+                </div>
+            </div>
+
+            <div class="machine-main-layout">
+                <div class="slot-grid-container">
+                    <div class="slot-frame-box" id="slotFrameBoxDefault">
+                        <div class="slot-reels-inner" id="slotGridDefault"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="superace-control-bar">
+                <button class="superace-auto-btn" onclick="showFeature('Auto Spin', '▶️ Auto spin activated!')">AUTO</button>
+                
+                <div class="superace-middle-panel">
+                    <div style="font-size: 8px; color: #a6c4f5; font-weight: bold;">WIN</div>
+                    <div style="font-size: 12px; font-weight: 900; color: #00ffcc;" id="spinWinDisplay">0.00</div>
+                    <div class="superace-bet-row">
+                        <button class="bet-mini-btn minus" onclick="changeBet(-1)" style="width:18px;height:18px;background:#ff4757;color:#fff;border:none;border-radius:3px;font-weight:bold;cursor:pointer;">-</button>
+                        <span style="font-size: 10px; font-weight:bold; color:#fff;"><span id="betDisplay">1</span></span>
+                        <button class="bet-mini-btn" onclick="changeBet(1)" style="width:18px;height:18px;background:#2ed573;color:#fff;border:none;border-radius:3px;font-weight:bold;cursor:pointer;">+</button>
+                        <button onclick="showFeature('Turbo', '⚡ Turbo Mode')" style="background:#e84118;color:#fff;border:none;border-radius:3px;width:20px;height:18px;font-size:10px;font-weight:bold;cursor:pointer;">⚡</button>
+                    </div>
+                </div>
+
+                <button class="superace-spin-btn" id="spinBtnDefault" onclick="handleSpin()">SPIN</button>
+            </div>
+        </div>
+
+        <!-- TRANSPARENT WIN POPUP -->
+        <div id="winPopupOverlay">
+            <div id="winPopupTitle">MEGA WIN!</div>
+            <div id="winPopupAmount">+150 COINS</div>
+        </div>
+    </div>
+
+    <!-- DAILY BONUS SCRATCH CARDS MODAL -->
+    <div id="scratchModal" class="custom-modal-overlay">
+        <div class="modal-card" style="max-width:350px;">
+            <h3 style="color:#00c6ff; margin-top:0;">🎁 Daily Bonus Scratch Cards</h3>
+            <p style="font-size:10px; color:#ccc; margin-bottom:10px;">7 scratch cards available! Choose any 1 card to scratch (Win 5 to 30 coins).</p>
+            <div id="scratchCardsGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px;"></div>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeScratchModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- LUCKY WHEEL MODAL -->
+    <div id="wheelModal" class="custom-modal-overlay">
+        <div class="modal-card" style="max-width:320px;">
+            <h3 style="color:#00c6ff; margin-top:0;">🎡 Lucky Wheel Spin</h3>
+            <p id="wheelStatusText" style="font-size:10px; color:#00ffcc; margin-bottom:8px;">Spin between 5 to 50 coins!</p>
+            <div style="font-size:45px; margin:10px 0;" id="wheelDisplayBox">🎡</div>
+            <div id="wheelResultDisplay" style="font-size:15px; font-weight:bold; color:#00c6ff; margin-bottom:10px;"></div>
+            <button id="spinWheelBtn" class="admin-btn" style="background:#2ed573; color:#fff; width:100%; padding:8px; font-size:12px; display:none;" onclick="executeLuckyWheelSpin()">Spin Now!</button>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%; margin-top:6px;" onclick="closeWheelModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- UPGRADED PROFILE SCREEN -->
+    <div id="profileScreen" class="sub-screen" style="display:none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <button class="back-btn" onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back</button>
+            <div style="font-size: 12px; font-weight: bold; color: #00c6ff;">👤 Player Profile</div>
+        </div>
+
+        <div class="profile-header-card">
+            <div class="profile-avatar-container" onclick="document.getElementById('profilePicInput').click()" title="Change Profile Picture">
+                <span id="profileAvatarDisplay">👤</span>
+                <img id="profileAvatarImg" src="" style="display:none;" />
+            </div>
+            <input type="file" id="profilePicInput" accept="image/*" style="display:none;" onchange="updateProfilePicture(event)">
+            <h3 id="profilePlayerName" style="margin: 4px 0 2px 0; font-size: 13px; color: #00c6ff;">LuckyPlayer_777</h3>
+            <p id="profileUniqueIdDisplay" style="font-size: 9px; color: #00ffcc; margin: 0 0 6px 0; font-weight: bold;">ID: #LS-892341</p>
+            
+            <div class="profile-top-row">
+                <div class="profile-balance-box">
+                    <span>Balance: 🪙 <span id="profileWalletDisplay">2670</span></span>
+                </div>
+                <button class="profile-withdraw-btn" onclick="openWithdrawalModal()">💸 Withdrawal</button>
+            </div>
+        </div>
+
+        <div class="profile-section-card">
+            <h4>📋 Player Personal Details (6 Lines)</h4>
+            <p style="font-size: 9px; color: #aaa; margin: 0 0 6px 0;">Write your details below and save them:</p>
+            <div class="notebook-lines-box">
+                <textarea id="playerDetailsTextarea" class="notebook-textarea" style="height: 144px;" placeholder="Line 1: Name&#10;Line 2: Mobile No&#10;Line 3: UPI ID&#10;Line 4: Bank Acc&#10;Line 5: Address&#10;Line 6: Note"></textarea>
+            </div>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="savePlayerPersonalDetails()">💾 Save Details</button>
+        </div>
+
+        <div class="profile-section-card">
+            <h4>👥 Referral Program</h4>
+            <p style="font-size: 10px; color: #ccc; margin: 0 0 6px 0;">Share your link and earn coins per referral!</p>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="text" id="referralLinkInput" class="admin-input" readonly value="https://luckyspin.casino/ref=LS-892341" style="margin-bottom:0;">
+                <button class="admin-btn" onclick="copyReferralLink()">📋 Copy</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 6px;">
+                <span style="font-size: 10px; color: #00c6ff;">Total Referred: <strong id="referralCount">0</strong> users</span>
+                <span style="font-size: 10px; color: #2ed573;">Total Earned: 🪙 <strong id="referralEarnings">0</strong></span>
+            </div>
+            <div id="referralHistoryBox" style="margin-top: 6px; max-height: 80px; overflow-y: auto; font-size: 9px; color: #aaa;"></div>
+        </div>
+
+        <div class="profile-section-card" style="text-align: center; cursor: pointer;" onclick="openWhatsAppSupport()">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span style="font-size: 20px;">💬</span>
+                <div style="text-align: left;">
+                    <h4 style="margin: 0; color: #25d366; border: none; padding: 0;">Support Team WhatsApp Chat</h4>
+                    <span style="font-size: 9px; color: #ccc;">Tap here to chat directly with Admin on WhatsApp</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-section-card">
+            <h4>📝 Player Feedback & Screenshot</h4>
+            <p style="font-size: 9px; color: #aaa; margin: 0 0 6px 0;">Write your feedback on the lines below or attach a screenshot:</p>
+            <div class="notebook-lines-box" style="background-size: 100% 24px;">
+                <textarea id="feedbackTextarea" class="notebook-textarea" style="height: 120px;" placeholder="Write your feedback here (5 lines notebook format)..."></textarea>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">
+                <input type="file" id="feedbackImageInput" class="admin-input" accept="image/*" style="margin-bottom:0; font-size:9px;" onchange="previewFeedbackImage(event)">
+                <span id="feedbackImgStatus" style="font-size: 9px; color: #00ffcc;">No screenshot attached</span>
+            </div>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="submitPlayerFeedback()">📤 Send Feedback to Admin</button>
+        </div>
+    </div>
+
+    <!-- CUSTOM WITHDRAWAL MODAL -->
+    <div id="customWithdrawModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#00c6ff; margin-top:0; font-size:15px;">💸 Request Withdrawal</h3>
+            <p style="font-size:10px; color:#ccc; margin-bottom:8px;">Enter amount of coins to withdraw:</p>
+            <input type="number" id="modalWithdrawAmountInput" class="admin-input" placeholder="Enter coin amount" style="text-align:center; font-size:14px; font-weight:bold;">
+            <div style="display:flex; gap:6px; margin-top:10px;">
+                <button class="admin-btn" style="background:#718093; color:#fff; flex:1;" onclick="closeWithdrawalModal()">Cancel</button>
+                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1;" onclick="submitWithdrawalRequestFromModal()">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#00c6ff; margin-top:0; font-size:15px;">🔐 Admin Login Verification</h3>
+            <p style="font-size:10px; color:#ccc; margin-bottom:8px;">Enter Admin Mobile Number & Password:</p>
+            <input type="tel" id="adminLoginMobileInput" class="admin-input" placeholder="Admin Mobile Number" maxlength="10" style="text-align:center;">
+            <input type="password" id="adminLoginPasswordInput" class="admin-input" placeholder="Admin Password" style="text-align:center;">
+            <div style="display:flex; gap:6px; margin-top:10px;">
+                <button class="admin-btn" style="background:#718093; color:#fff; flex:1;" onclick="closeAdminLoginModal()">Cancel</button>
+                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1;" onclick="verifyAdminLogin()">Login</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ADMIN PANEL SCREEN -->
+    <div id="adminScreen" class="sub-screen" style="display:none;">
+        <button class="back-btn" onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back to Lobby</button>
+        <div style="clear: both; height: 8px;"></div>
+        <h2 style="color: #00c6ff; margin-top: 0; font-size: 15px;">⚙️ Master Admin Control Panel</h2>
+
+        <div class="admin-card">
+            <h3>🔐 Change Admin Credentials</h3>
+            <label class="admin-label">Admin Mobile Number:</label>
+            <input type="tel" id="changeAdminMobileInput" class="admin-input" placeholder="Enter new admin mobile">
+            <label class="admin-label">Admin Password:</label>
+            <input type="password" id="changeAdminPasswordInput" class="admin-input" placeholder="Enter new admin password">
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:4px;" onclick="saveNewAdminCredentials()">💾 Update Admin Credentials</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>🔍 SEARCH PLAYER PROFILE & DETAILS</h3>
+            <label class="admin-label">Enter Player ID or Mobile Number:</label>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="text" id="adminSearchPlayerIdInput" class="admin-input" placeholder="e.g. #LS-892341 or mobile" style="margin-bottom:0;">
+                <button class="admin-btn" onclick="adminSearchPlayerProfile()" style="white-space: nowrap;">🔍 Search</button>
+            </div>
+            <div id="adminPlayerSearchResultBox" style="display:none; margin-top: 6px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; font-size: 10px; color: #fff;"></div>
+        </div>
+
+        <div class="admin-card">
+            <h3>💸 Player Withdrawal Requests</h3>
+            <div id="adminWithdrawalListContainer" style="max-height: 140px; overflow-y: auto; font-size: 10px; color: #ccc;">
+                <p style="color:#aaa;">No pending withdrawal requests.</p>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3>📝 Player Feedbacks & Screenshots</h3>
+            <div id="adminFeedbackListContainer" style="max-height: 140px; overflow-y: auto; font-size: 10px; color: #ccc;">
+                <p style="color:#aaa;">No feedbacks received yet.</p>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3>🎯 GROUP C JACKPOT TARGET CONTROL</h3>
+            <label class="admin-label">Target Player Mobile / ID:</label>
+            <input type="text" id="adminGroupCPlayerId" class="admin-input" value="9876543210" placeholder="Enter target player mobile or ID">
+            <label class="admin-label">Select Jackpot To Trigger (On Next Spin):</label>
+            <select id="adminGroupCJackpotSelect" class="admin-select">
+                <option value="none">None (Standard Gameplay)</option>
+                <option value="20000">Jackpot 20000</option>
+                <option value="5000">Jackpot 5000</option>
+                <option value="2000">Jackpot 2000</option>
+            </select>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:4px;" onclick="saveGroupCJackpotTarget()">💾 Save Jackpot Target</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>🖼️ LOBBY GAME LOGO MANAGER & FITTER (1 TO 150)</h3>
+            <label class="admin-label">Enter Game Number (1 to 150):</label>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="number" id="adminLobbyGameSearchInput" class="admin-input" min="1" max="150" value="1" style="margin-bottom:0;">
+                <button class="admin-btn" onclick="searchAdminLobbyGame()" style="white-space: nowrap;">🔍 Search Game</button>
+            </div>
+            <div id="adminLobbyPreviewContainer" style="display:none; margin-top: 8px; border-top: 1px solid rgba(0,198,255,0.3); padding-top: 6px;">
+                <p style="font-size: 11px; color: #00c6ff; margin: 3px 0; font-weight: bold;">Selected Game: <span id="adminLobbyGameTitleDisplay"></span></p>
+                <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">
+                    <div style="flex: 1;">
+                        <label class="admin-label">Upload Custom Lobby Logo:</label>
+                        <input type="file" id="customLobbyLogoFileInput" class="admin-input" accept="image/*" onchange="previewCustomLobbyLogoFile(event)" style="margin-bottom:0;">
+                    </div>
+                    <button class="admin-btn" style="background:#ff4757; color:#fff; height:28px; margin-top:14px;" onclick="removeCustomLobbyLogo()">🗑️ Delete Logo</button>
+                </div>
+                <label class="admin-label">Adjust Logo Size / Zoom: <span id="lobbyLogoSizeValLabel">100</span>%</label>
+                <input type="range" id="lobbyLogoSizeRange" min="20" max="200" value="100" class="admin-input" style="padding:0;" oninput="updateLobbyLogoScaleLive(this.value)">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:6px;" onclick="saveLobbyLogoConfig()">💾 Save Lobby Logo</button>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3>🎵 CUSTOM AUDIO & BGM</h3>
+            <label class="admin-label">Upload Background Music (BGM - Lobby & Menu):</label>
+            <input type="file" id="customBgmFileInput" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'bgm')">
+            <div id="bgmStatus" style="font-size: 9px; color: #00ffcc; margin-bottom: 6px;">No custom BGM uploaded.</div>
+
+            <label class="admin-label">Upload Spin Button Sound:</label>
+            <input type="file" id="customSpinAudioInput" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'spin')">
+            <div id="spinAudioStatus" style="font-size: 9px; color: #00ffcc; margin-bottom: 6px;">No custom spin sound uploaded.</div>
+
+            <label class="admin-label">Upload Super / Mega Win Popup Sound:</label>
+            <input type="file" id="customWinAudioInput" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'win')">
+            <div id="winAudioStatus" style="font-size: 9px; color: #00ffcc; margin-bottom: 6px;">No custom win sound uploaded.</div>
+
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:6px;" onclick="saveAudioSettings()">💾 Save Audio Settings</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>🖼️ FRAME & REEL POSITION/SIZE CUSTOMIZATION</h3>
+            <label class="admin-label">Search by Game Number (1 to 150):</label>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="number" id="frameGameSearchInput" class="admin-input" min="1" max="150" value="1" style="margin-bottom:0;">
+                <button class="admin-btn" onclick="searchFrameGame()" style="white-space: nowrap;">🔍 Search Game</button>
+            </div>
+            <div id="frameGameInfoDisplay" style="font-size: 10px; color: #00ffcc; margin-bottom: 6px; display:none;"></div>
+            <button id="openFrameGameBtn" class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-bottom:6px; display:none;" onclick="openFrameSearchedGame()">🎮 Open This Game</button>
+
+            <label class="admin-label">Select Game Type / Group:</label>
+            <select id="adminFrameTargetSelect" class="admin-select" onchange="loadFrameSettingsForTarget(this.value)">
+                <option value="groupA">Group A (Luxury Theme)</option>
+                <option value="groupB">Group B (Western Theme)</option>
+                <option value="default">Groups C to O (Super Ace Theme)</option>
+            </select>
+
+            <label class="admin-label">1) Frame Scale: <span id="frameScaleVal">1.0</span>x</label>
+            <input type="range" id="frameScaleRange" min="0.5" max="1.5" step="0.05" value="1.0" class="admin-input" oninput="document.getElementById('frameScaleVal').innerText=this.value; previewFrameScaleLive(this.value)">
+
+            <label class="admin-label">2) Reel Area Zoom Scale: <span id="reelScaleVal">1.0</span>x</label>
+            <input type="range" id="reelScaleRange" min="0.5" max="1.5" step="0.05" value="1.0" class="admin-input" oninput="document.getElementById('reelScaleVal').innerText=this.value; previewReelLiveConfigs()">
+
+            <label class="admin-label">3) Reel Width (%): <span id="reelWidthVal">100</span>%</label>
+            <input type="range" id="reelWidthRange" min="50" max="150" step="1" value="100" class="admin-input" oninput="document.getElementById('reelWidthVal').innerText=this.value; previewReelLiveConfigs()">
+
+            <label class="admin-label">4) Reel Height (%): <span id="reelHeightVal">100</span>%</label>
+            <input type="range" id="reelHeightRange" min="50" max="150" step="1" value="100" class="admin-input" oninput="document.getElementById('reelHeightVal').innerText=this.value; previewReelLiveConfigs()">
+
+            <label class="admin-label">5) Reel Offset X: <span id="reelOffsetXVal">0</span>px</label>
+            <input type="range" id="reelOffsetXRange" min="-100" max="100" step="1" value="0" class="admin-input" oninput="document.getElementById('reelOffsetXVal').innerText=this.value; previewReelLiveConfigs()">
+
+            <label class="admin-label">6) Reel Offset Y: <span id="reelOffsetYVal">0</span>px</label>
+            <input type="range" id="reelOffsetYRange" min="-100" max="100" step="1" value="0" class="admin-input" oninput="document.getElementById('reelOffsetYVal').innerText=this.value; previewReelLiveConfigs()">
+
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:6px;" onclick="saveGameFrameConfig()">💾 Save Frame & Reel Settings</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>⚙️ SYMBOL FITTER (PERMANENT SAVE)</h3>
+            <label class="admin-label">Enter Game Number (1 to 150):</label>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="number" id="adminGameSearchInput" class="admin-input" min="1" max="150" value="1" style="margin-bottom:0;">
+                <button class="admin-btn" onclick="searchAdminGame()" style="white-space: nowrap;">🔍 Search</button>
+            </div>
+            <div id="adminGamePreviewContainer" style="display:none; margin-top: 8px; border-top: 1px solid rgba(0,198,255,0.3); padding-top: 6px;">
+                <p style="font-size: 11px; color: #00c6ff; margin: 3px 0; font-weight: bold;">Game Found: <span id="adminGameTitleDisplay"></span></p>
+                <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin: 6px 0;" onclick="openSearchedGameDirectly()">🎮 Open This Game</button>
+                <div id="adminMasterSymbolsPalette" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; background: #000; padding: 6px; border: 2px solid #00c6ff; border-radius: 6px; margin-bottom: 6px; max-height: 180px; overflow-y: auto;"></div>
+                <div id="selectedSymbolInfo" style="font-size: 10px; color: #00ffcc; margin-bottom: 6px; font-weight: bold;">Selected Symbol: Index 0</div>
+                <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                    <input type="file" id="customSymbolFileInput" class="admin-input" accept="image/*" onchange="previewCustomSymbolFile(event)" style="margin-bottom:0;">
+                    <button class="admin-btn" style="background:#ff4757; color:#fff; white-space:nowrap;" onclick="removeCustomSymbol()">🗑️ Delete Symbol</button>
+                </div>
+                <label class="admin-label">Adjust Size: <span id="sizeValLabel">100</span>%</label>
+                <input type="range" id="symbolSizeRange" min="20" max="200" value="100" class="admin-input" oninput="updateSymbolScaleLive(this.value)">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:8px;" onclick="saveSymbolFitterConfig()">💾 Save Symbol & Size</button>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3>🎮 GAME DIFFICULTY MODE</h3>
+            <select id="adminDifficultySelect" class="admin-select" onchange="updateDifficultySetting(this.value)">
+                <option value="normal">Normal Mode (Balanced & Fair Win)</option>
+                <option value="medium">Medium Mode (Win-Loss Pattern: Frequent 1-3 coin wins, 5-coin wins after 12 dead spins, mega win, ultimate net loss)</option>
+                <option value="hard">Hard Mode (Relentless Heavy Losses - Extremely rare wins)</option>
+            </select>
+        </div>
+
+        <div class="admin-card">
+            <h3>🎯 FORCE WIN / LOSS CONTROL</h3>
+            <label class="admin-label">Player ID / Mobile:</label>
+            <input type="text" id="forcePlayerIdInput" class="admin-input" value="9876543210">
+            <label class="admin-label">Outcome Mode:</label>
+            <select id="forceModeSelect" class="admin-select">
+                <option value="none">Normal (Strict Difficulty Rule)</option>
+                <option value="win">Force Win 🟢</option>
+                <option value="loss">Force Loss 🔴</option>
+            </select>
+            <button class="admin-btn" onclick="saveForceRule()">💾 Save Rule</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>💬 WHATSAPP SUPPORT NUMBER</h3>
+            <input type="text" id="adminWhatsappInput" class="admin-input" value="919876543210">
+            <button class="admin-btn" onclick="saveWhatsAppNumber()">💾 Update WhatsApp</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>🪙 COIN ADD / DEDUCT CONTROL</h3>
+            <input type="text" id="searchCoinPlayerInput" class="admin-input" placeholder="Enter player mobile number">
+            <button class="admin-btn" onclick="searchPlayerCoins()">🔍 Search Player</button>
+            <div id="playerCoinDetailsBox" style="display:none; margin-top:6px; background:rgba(0,0,0,0.3); padding:6px; border-radius:4px;">
+                <p style="margin:2px 0; font-size:10px;">Player: <span id="foundPlayerName" style="color:#00c6ff"></span></p>
+                <p style="margin:2px 0; font-size:10px;">Current Balance: 🪙 <span id="foundPlayerBalance" style="color:#00ffcc; font-weight:bold;">2670</span></p>
+                <input type="number" id="coinAmountChangeInput" class="admin-input" placeholder="Enter amount">
+                <button class="admin-btn" style="background:#2ed573; color:#fff;" onclick="applyCoinChange('add')">➕ Add Coins</button>
+                <button class="admin-btn" style="background:#ff4757; color:#fff;" onclick="applyCoinChange('deduct')">➖ Deduct Coins</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchNav(this, 'Home')"><div class="nav-icon">🏠</div>Home</div>
+        <div class="nav-item" onclick="switchNav(this, 'Missions')"><div class="nav-icon">🎯</div>Missions</div>
+        <div class="nav-item" onclick="switchNav(this, 'Wallet')"><div class="nav-icon">👛</div>Wallet</div>
+        <div class="nav-item" onclick="switchNav(this, 'Store')"><div class="nav-icon">🛒</div>Store</div>
+        <div class="nav-item" onclick="switchNav(this, 'Referral')"><div class="nav-icon">👥</div>Referral</div>
+        <div class="nav-item" onclick="switchNav(this, 'Profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+</div>
+<script>
+        const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
+        const iconsPool = ["👑", "🍉", "🐯", "💎", "🐉", "🎰", "🌟", "🪙", "🔥", "🧞", "🏴‍☠️", "🐃", "🍬", "⚡", "🗿", "👸", "🦁", "🐚", "🃏", "🐼", "🍇", "🔱", "🏦", "🌶️", "📖", "✨", "🎡", "⭐", "🍒", "🔔"];
+        let gameList = [];
+        
+        let counter = 1;
+        groups.forEach(g => {
+            for (let i = 1; i <= 10; i++) {
+                gameList.push({
+                    id: counter,
+                    name: `Slot Pro ${counter}`,
+                    icon: iconsPool[(counter - 1) % iconsPool.length],
+                    sub: `${(counter % 3) + 2}x - ${(counter % 5 + 3) * 5}x`,
+                    group: g
+                });
+                counter++;
+            }
+        });
+
+        let currentActiveGroup = 'A';
+
+        let generatedOtp = "";
+        let pendingMobile = "";
+
+        // --- INTERNET CONNECTIVITY CHECKER ---
+        function checkInternetAndReload() {
+            if (navigator.onLine) {
+                document.getElementById('offlineScreen').style.display = 'none';
+                initAppFlow();
+            } else {
+                alert("⚠️ Abhi bhi internet connection nahi hai! Kripya network check karein.");
+            }
+        }
+
+        window.addEventListener('online', () => {
+            document.getElementById('offlineScreen').style.display = 'none';
+            initAppFlow();
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('offlineScreen').style.display = 'flex';
+        });
+
+        // Continuous Background Music Init & Audio Configs
+        let gameAudioConfigs = JSON.parse(localStorage.getItem('slot_game_audio_configs') || '{"bgm": null, "spin": null, "win": null}');
+        let bgmAudioElement = new Audio();
+        bgmAudioElement.loop = true;
+        
+        function startContinuousBgm() {
+            if (bgmAudioElement.paused) {
+                if (gameAudioConfigs.bgm) {
+                    bgmAudioElement.src = gameAudioConfigs.bgm;
+                    bgmAudioElement.play().catch(e => {});
+                }
+            }
+        }
+
+        function previewCustomAudio(event, type) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    gameAudioConfigs[type] = e.target.result;
+                    if (type === 'bgm') {
+                        document.getElementById('bgmStatus').innerText = "✅ Custom BGM ready";
+                        bgmAudioElement.src = e.target.result;
+                        bgmAudioElement.play().catch(err => {});
+                    }
+                    if (type === 'spin') document.getElementById('spinAudioStatus').innerText = "✅ Custom Spin Sound ready";
+                    if (type === 'win') document.getElementById('winAudioStatus').innerText = "✅ Custom Win Sound ready";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveAudioSettings() {
+            localStorage.setItem('slot_game_audio_configs', JSON.stringify(gameAudioConfigs));
+            alert("✅ Audio settings successfully saved!");
+        }
+
+        // --- LOBBY GAME LOGO MANAGER & FITTER FUNCTIONS ---
+        let selectedLobbyGameId = 1;
+        let tempLobbyLogoDataUrl = null;
+        let lobbyLogoRemoved = false;
+        let lobbyLogoConfigs = JSON.parse(localStorage.getItem('slot_lobby_logo_configs') || '{}');
+
+        function searchAdminLobbyGame() {
+            let gNum = parseInt(document.getElementById('adminLobbyGameSearchInput').value);
+            let game = gameList.find(g => g.id === gNum);
+            if (!game) {
+                alert("⚠️ Invalid Game Number (1 to 150)!");
+                return;
+            }
+            selectedLobbyGameId = game.id;
+            document.getElementById('adminLobbyPreviewContainer').style.display = 'block';
+            document.getElementById('adminLobbyGameTitleDisplay').innerText = `[#${game.id}] ${game.name} (Group ${game.group})`;
+            
+            let cfg = lobbyLogoConfigs[game.id] || { url: null, scale: 100 };
+            let currentScale = cfg.scale !== undefined ? cfg.scale : 100;
+            document.getElementById('lobbyLogoSizeRange').value = currentScale;
+            document.getElementById('lobbyLogoSizeValLabel').innerText = currentScale;
+            tempLobbyLogoDataUrl = cfg.url || null;
+            lobbyLogoRemoved = false;
+        }
+
+        function previewCustomLobbyLogoFile(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    tempLobbyLogoDataUrl = e.target.result;
+                    lobbyLogoRemoved = false;
+                    alert("✅ Lobby logo preview loaded successfully!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeCustomLobbyLogo() {
+            tempLobbyLogoDataUrl = null;
+            lobbyLogoRemoved = true;
+            alert("🗑️ Logo marked for deletion. Click 'Save Lobby Logo' to apply.");
+        }
+
+        function updateLobbyLogoScaleLive(val) {
+            document.getElementById('lobbyLogoSizeValLabel').innerText = val;
+        }
+
+        function saveLobbyLogoConfig() {
+            let scaleVal = parseInt(document.getElementById('lobbyLogoSizeRange').value);
+            if (lobbyLogoRemoved) {
+                if (lobbyLogoConfigs[selectedLobbyGameId]) {
+                    delete lobbyLogoConfigs[selectedLobbyGameId];
+                }
+            } else {
+                if (!lobbyLogoConfigs[selectedLobbyGameId]) lobbyLogoConfigs[selectedLobbyGameId] = {};
+                if (tempLobbyLogoDataUrl) {
+                    lobbyLogoConfigs[selectedLobbyGameId].url = tempLobbyLogoDataUrl;
+                }
+                lobbyLogoConfigs[selectedLobbyGameId].scale = scaleVal;
+            }
+            localStorage.setItem('slot_lobby_logo_configs', JSON.stringify(lobbyLogoConfigs));
+            renderLobbyGridForGroup(currentActiveGroup);
+            alert("✅ Lobby game logo config successfully saved!");
+        }
+
+        // --- FRAME & REEL POSITION/SIZE CUSTOMIZATION FUNCTIONS ---
+        let gameFrameConfigs = JSON.parse(localStorage.getItem('slot_game_frame_configs') || '{}');
+
+        function searchFrameGame() {
+            let gNum = parseInt(document.getElementById('frameGameSearchInput').value);
+            let game = gameList.find(g => g.id === gNum);
+            let infoBox = document.getElementById('frameGameInfoDisplay');
+            let openBtn = document.getElementById('openFrameGameBtn');
+            if (!game) {
+                alert("⚠️ Invalid Game Number!");
+                infoBox.style.display = 'none';
+                openBtn.style.display = 'none';
+                return;
+            }
+            infoBox.style.display = 'block';
+            infoBox.innerText = `Found Game: [#${game.id}] ${game.name} (Group ${game.group})`;
+            openBtn.style.display = 'block';
+
+            let targetSelect = document.getElementById('adminFrameTargetSelect');
+            if (game.group === 'A') targetSelect.value = 'groupA';
+            else if (game.group === 'B') targetSelect.value = 'groupB';
+            else targetSelect.value = 'default';
+
+            loadFrameSettingsForTarget(targetSelect.value);
+        }
+
+        function openFrameSearchedGame() {
+            let gNum = parseInt(document.getElementById('frameGameSearchInput').value);
+            let game = gameList.find(g => g.id === gNum);
+            if (game) openGame(game.id);
+        }
+
+        function loadFrameSettingsForTarget(targetKey) {
+            let cfg = gameFrameConfigs[targetKey] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0 };
+            
+            document.getElementById('frameScaleRange').value = cfg.scale;
+            document.getElementById('frameScaleVal').innerText = cfg.scale;
+
+            document.getElementById('reelScaleRange').value = cfg.reelScale;
+            document.getElementById('reelScaleVal').innerText = cfg.reelScale;
+
+            document.getElementById('reelWidthRange').value = cfg.width;
+            document.getElementById('reelWidthVal').innerText = cfg.width;
+
+            document.getElementById('reelHeightRange').value = cfg.height;
+            document.getElementById('reelHeightVal').innerText = cfg.height;
+
+            document.getElementById('reelOffsetXRange').value = cfg.offsetX;
+            document.getElementById('reelOffsetXVal').innerText = cfg.offsetX;
+
+            document.getElementById('reelOffsetYRange').value = cfg.offsetY;
+            document.getElementById('reelOffsetYVal').innerText = cfg.offsetY;
+        }
+
+        function previewFrameScaleLive(val) {
+            let targetKey = document.getElementById('adminFrameTargetSelect').value;
+            let frameBoxId = 'slotFrameBoxDefault';
+            if (targetKey === 'groupA') frameBoxId = 'slotFrameBoxA';
+            if (targetKey === 'groupB') frameBoxId = 'slotFrameBoxB';
+            let el = document.getElementById(frameBoxId);
+            if (el) {
+                el.style.transform = `scale(${val})`;
+            }
+        }
+
+        function previewReelLiveConfigs() {
+            let scale = parseFloat(document.getElementById('frameScaleRange').value);
+            let width = parseInt(document.getElementById('reelWidthRange').value);
+            let height = parseInt(document.getElementById('reelHeightRange').value);
+            let offsetX = parseInt(document.getElementById('reelOffsetXRange').value);
+            let offsetY = parseInt(document.getElementById('reelOffsetYRange').value);
+
+            document.getElementById('reelWidthVal').innerText = width;
+            document.getElementById('reelHeightVal').innerText = height;
+            document.getElementById('reelOffsetXVal').innerText = offsetX;
+            document.getElementById('reelOffsetYVal').innerText = offsetY;
+
+            let targetKey = document.getElementById('adminFrameTargetSelect').value;
+            let frameBoxId = 'slotFrameBoxDefault';
+            if (targetKey === 'groupA') frameBoxId = 'slotFrameBoxA';
+            if (targetKey === 'groupB') frameBoxId = 'slotFrameBoxB';
+            let el = document.getElementById(frameBoxId);
+            if (el) {
+                el.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                el.style.width = `${width}%`;
+                el.style.height = `${height}%`;
+            }
+        }
+
+        function saveGameFrameConfig() {
+            let targetKey = document.getElementById('adminFrameTargetSelect').value;
+            let cfg = {
+                scale: parseFloat(document.getElementById('frameScaleRange').value),
+                reelScale: parseFloat(document.getElementById('reelScaleRange').value),
+                width: parseInt(document.getElementById('reelWidthRange').value),
+                height: parseInt(document.getElementById('reelHeightRange').value),
+                offsetX: parseInt(document.getElementById('reelOffsetXRange').value),
+                offsetY: parseInt(document.getElementById('reelOffsetYRange').value)
+            };
+            gameFrameConfigs[targetKey] = cfg;
+            localStorage.setItem('slot_game_frame_configs', JSON.stringify(gameFrameConfigs));
+            alert("✅ Frame & Reel settings successfully saved!");
+        }
+
+        function sendLoginOtp() {
+            let mobile = document.getElementById('loginMobileInput').value.trim();
+            if (mobile.length < 10) {
+                alert("⚠️ Kripya 10-digit valid mobile number enter karein!");
+                return;
+            }
+            pendingMobile = mobile;
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            
+            document.getElementById('mobileStepDiv').style.display = 'none';
+            document.getElementById('otpStepDiv').style.display = 'block';
+            document.getElementById('otpHintText').innerText = `🔐 Test OTP for ${mobile} is: ${generatedOtp}`;
+        }
+
+        function verifyLoginOtp() {
+            let enteredOtp = document.getElementById('loginOtpInput').value.trim();
+            if (enteredOtp !== generatedOtp) {
+                alert("⚠️ Invalid OTP! Kripya sahi OTP enter karein.");
+                return;
+            }
+
+            localStorage.setItem('casino_logged_in', 'true');
+            localStorage.setItem('casino_player_mobile', pendingMobile);
+            
+            let uid = localStorage.getItem('casino_player_uid');
+            if (!uid) {
+                uid = '#LS-' + Math.floor(100000 + Math.random() * 900000);
+                localStorage.setItem('casino_player_uid', uid);
+            }
+
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('lobbyScreen').style.display = 'flex';
+            startContinuousBgm();
+            updateUIStats();
+            alert("✅ Successfully logged in!");
+        }
+
+        function openAdminPanel() {
+            document.getElementById('adminLoginMobileInput').value = "";
+            document.getElementById('adminLoginPasswordInput').value = "";
+            document.getElementById('adminLoginModal').style.display = 'flex';
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('adminLoginModal').style.display = 'none';
+        }
+
+        function verifyAdminLogin() {
+            let enteredMob = document.getElementById('adminLoginMobileInput').value.trim();
+            let enteredPass = document.getElementById('adminLoginPasswordInput').value.trim();
+
+            let savedAdminMob = localStorage.getItem('casino_admin_mobile') || "9876543210";
+            let savedAdminPass = localStorage.getItem('casino_admin_password') || "admin123";
+
+            if (enteredMob === savedAdminMob && enteredPass === savedAdminPass) {
+                closeAdminLoginModal();
+                hideAllScreens();
+                document.getElementById('adminScreen').style.display = 'block';
+                updateUIStats();
+                renderAdminWithdrawals();
+
+                document.getElementById('changeAdminMobileInput').value = savedAdminMob;
+                document.getElementById('changeAdminPasswordInput').value = savedAdminPass;
+            } else {
+                alert("⚠️ Invalid Admin Mobile Number or Password!");
+            }
+        }
+
+        function saveNewAdminCredentials() {
+            let newMob = document.getElementById('changeAdminMobileInput').value.trim();
+            let newPass = document.getElementById('changeAdminPasswordInput').value.trim();
+
+            if (newMob.length < 10 || newPass === "") {
+                alert("⚠️ Kripya valid admin mobile number aur password enter karein!");
+                return;
+            }
+
+            localStorage.setItem('casino_admin_mobile', newMob);
+            localStorage.setItem('casino_admin_password', newPass);
+            alert("✅ Admin credentials successfully updated!");
+        }
+
+        function getPlayerUniqueId() {
+            let uid = localStorage.getItem('casino_player_uid');
+            if (!uid) {
+                uid = '#LS-' + Math.floor(100000 + Math.random() * 900000);
+                localStorage.setItem('casino_player_uid', uid);
+            }
+            return uid;
+        }
+
+        function getProfilePic() {
+            return localStorage.getItem('casino_profile_pic') || null;
+        }
+
+        function updateProfilePicture(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('casino_profile_pic', e.target.result);
+                    renderProfileScreenData();
+                    alert("✅ Profile picture updated successfully!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function savePlayerPersonalDetails() {
+            let detailsText = document.getElementById('playerDetailsTextarea').value;
+            localStorage.setItem('casino_player_saved_details', detailsText);
+            alert("✅ Player personal details saved successfully!");
+        }
+
+        function adminSearchPlayerProfile() {
+            let query = document.getElementById('adminSearchPlayerIdInput').value.trim().toLowerCase();
+            let resultBox = document.getElementById('adminPlayerSearchResultBox');
+            if (!query) {
+                alert("⚠️ Kripya Player ID ya Mobile Number enter karein!");
+                return;
+            }
+
+            let myUid = getPlayerUniqueId().toLowerCase();
+            let myMobile = (localStorage.getItem('casino_player_mobile') || "9876543210").toLowerCase();
+            let myBal = getWallet();
+            let myDetails = localStorage.getItem('casino_player_saved_details') || "No details saved yet.";
+            let myPic = getProfilePic();
+
+            if (myUid.includes(query) || myMobile.includes(query) || query.includes("lucky")) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `
+                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+                        <div style="width:36px; height:36px; border-radius:50%; background:#222; overflow:hidden; border:1px solid #00c6ff; display:flex; align-items:center; justify-content:center;">
+                            ${myPic ? `<img src="${myPic}" style="width:100%; height:100%; object-fit:cover;" />` : `<span>👤</span>`}
+                        </div>
+                        <div>
+                            <strong style="color:#00c6ff;">LuckyPlayer_777</strong> (${getPlayerUniqueId()})<br>
+                            <span style="color:#00ffcc;">Mobile: ${myMobile} | Balance: 🪙 ${myBal.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.6); padding:6px; border-radius:4px; font-size:9px; white-space:pre-wrap; border:1px solid rgba(0,198,255,0.3);"><strong>Saved Details (6 Lines):</strong><br>${myDetails}</div>
+                `;
+            } else {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `<span style="color:#ff4757;">⚠️ No player found with ID or Mobile: "${query}"</span>`;
+            }
+        }
+
+        let tempFeedbackImageBase64 = null;
+        function previewFeedbackImage(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    tempFeedbackImageBase64 = e.target.result;
+                    document.getElementById('feedbackImgStatus').innerText = "✅ Screenshot Attached";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function submitPlayerFeedback() {
+            let text = document.getElementById('feedbackTextarea').value.trim();
+            if (text === "" && !tempFeedbackImageBase64) {
+                alert("⚠️ Kripya feedback text likhein ya screenshot attach karein!");
+                return;
+            }
+            let feedbacks = JSON.parse(localStorage.getItem('casino_player_feedbacks') || '[]');
+            feedbacks.unshift({
+                uid: getPlayerUniqueId(),
+                text: text,
+                image: tempFeedbackImageBase64,
+                time: new Date().toLocaleString()
+            });
+            localStorage.setItem('casino_player_feedbacks', JSON.stringify(feedbacks));
+            document.getElementById('feedbackTextarea').value = "";
+            tempFeedbackImageBase64 = null;
+            document.getElementById('feedbackImgStatus').innerText = "No screenshot attached";
+            alert("✅ Feedback sent to admin successfully!");
+        }
+
+        function openWithdrawalModal() {
+            document.getElementById('modalWithdrawAmountInput').value = "";
+            document.getElementById('customWithdrawModal').style.display = 'flex';
+        }
+
+        function closeWithdrawalModal() {
+            document.getElementById('customWithdrawModal').style.display = 'none';
+        }
+
+        function submitWithdrawalRequestFromModal() {
+            let amtStr = document.getElementById('modalWithdrawAmountInput').value.trim();
+            if (amtStr === "") {
+                alert("⚠️ Kripya withdrawal amount enter karein!");
+                return;
+            }
+            let amt = parseFloat(amtStr);
+            if (isNaN(amt) || amt <= 0) {
+                alert("⚠️ Valid amount enter karein!");
+                return;
+            }
+            let currentBal = getWallet();
+            if (amt > currentBal) {
+                alert("⚠️ Insufficient balance for withdrawal!");
+                return;
+            }
+            currentBal -= amt;
+            setWallet(currentBal);
+
+            let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
+            requests.unshift({
+                uid: getPlayerUniqueId(),
+                amount: amt,
+                status: 'Pending',
+                time: new Date().toLocaleString()
+            });
+            localStorage.setItem('casino_withdrawal_requests', JSON.stringify(requests));
+            
+            closeWithdrawalModal();
+            updateUIStats();
+            renderProfileScreenData();
+            renderAdminWithdrawals();
+            alert(`✅ Withdrawal request of 🪙 ${amt} sent to Admin successfully!`);
+        }
+
+        function renderAdminWithdrawals() {
+            let container = document.getElementById('adminWithdrawalListContainer');
+            if (!container) return;
+            let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
+            if (requests.length === 0) {
+                container.innerHTML = `<p style="color:#aaa;">No pending withdrawal requests.</p>`;
+            } else {
+                let html = '';
+                requests.forEach((req, idx) => {
+                    html += `<div style="background:rgba(0,0,0,0.4); border:1px solid #00c6ff; padding:5px; border-radius:4px; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div><strong>Player:</strong> ${req.uid} | <span style="color:#00ffcc">🪙 ${req.amount}</span></div>
+                            <div style="font-size:8px; color:#aaa;">Time: ${req.time}</div>
+                        </div>
+                        <button onclick="clearWithdrawalRequest(${idx})" style="background:#2ed573; color:#fff; border:none; padding:3px 8px; border-radius:3px; font-size:9px; font-weight:bold; cursor:pointer;">✔ Paid</button>
+                    </div>`;
+                });
+                container.innerHTML = html;
+            }
+
+            let fContainer = document.getElementById('adminFeedbackListContainer');
+            if (fContainer) {
+                let feedbacks = JSON.parse(localStorage.getItem('casino_player_feedbacks') || '[]');
+                if (feedbacks.length === 0) {
+                    fContainer.innerHTML = `<p style="color:#aaa;">No feedbacks received yet.</p>`;
+                } else {
+                    let fHtml = '';
+                    feedbacks.forEach(f => {
+                        fHtml += `<div style="background:rgba(0,0,0,0.4); border:1px solid #2ed573; padding:4px; border-radius:4px; margin-bottom:4px;">
+                            <div><strong>${f.uid}:</strong> ${f.text}</div>
+                            ${f.image ? `<img src="${f.image}" style="max-width:50px; max-height:50px; margin-top:2px; border-radius:4px;" />` : ''}
+                            <div style="font-size:8px; color:#aaa;">${f.time}</div>
+                        </div>`;
+                    });
+                    fContainer.innerHTML = fHtml;
+                }
+            }
+        }
+
+        function clearWithdrawalRequest(index) {
+            let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
+            requests.splice(index, 1);
+            localStorage.setItem('casino_withdrawal_requests', JSON.stringify(requests));
+            renderAdminWithdrawals();
+            alert("✅ Withdrawal request marked as paid and removed!");
+        }
+
+        function copyReferralLink() {
+            let input = document.getElementById('referralLinkInput');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            alert("✅ Referral link copied to clipboard!");
+        }
+
+        function renderProfileScreenData() {
+            let uid = getPlayerUniqueId();
+            document.getElementById('profileUniqueIdDisplay').innerText = `ID: ${uid}`;
+            document.getElementById('referralLinkInput').value = `https://luckyspin.casino/ref=${uid.replace('#','')}`;
+            
+            let savedDetails = localStorage.getItem('casino_player_saved_details') || "";
+            document.getElementById('playerDetailsTextarea').value = savedDetails;
+
+            let pic = getProfilePic();
+            let avatarDisp = document.getElementById('profileAvatarDisplay');
+            let avatarImg = document.getElementById('profileAvatarImg');
+            if (pic) {
+                avatarDisp.style.display = 'none';
+                avatarImg.style.display = 'block';
+                avatarImg.src = pic;
+            } else {
+                avatarDisp.style.display = 'block';
+                avatarImg.style.display = 'none';
+            }
+            document.getElementById('profileWalletDisplay').innerText = getWallet().toFixed(2);
+
+            let refHistory = JSON.parse(localStorage.getItem('casino_referral_history') || '[]');
+            document.getElementById('referralCount').innerText = refHistory.length;
+            let totalRefEarned = refHistory.reduce((acc, curr) => acc + curr.earned, 0);
+            document.getElementById('referralEarnings').innerText = totalRefEarned.toFixed(2);
+
+            let histHtml = '';
+            if (refHistory.length === 0) {
+                histHtml = `<p style="color:#aaa; margin:0;">No referrals yet. Share link to earn!</p>`;
+            } else {
+                refHistory.forEach(r => {
+                    histHtml += `<div>👤 ${r.name} (${r.time}) - Earned 🪙 +${r.earned}</div>`;
+                });
+            }
+            document.getElementById('referralHistoryBox').innerHTML = histHtml;
+        }
+
+        function getWallet() {
+            let val = localStorage.getItem('casino_wallet');
+            if (val === null || val === undefined || isNaN(val)) {
+                val = 2670.00;
+                localStorage.setItem('casino_wallet', val);
+            }
+            return parseFloat(parseFloat(val).toFixed(2));
+        }
+
+        function setWallet(newVal) {
+            let cleanVal = parseFloat(Math.max(0, newVal).toFixed(2));
+            localStorage.setItem('casino_wallet', cleanVal);
+            updateUIStats();
+        }
+
+        function renderGroupTabs() {
+            let html = '';
+            groups.forEach(g => {
+                let activeCls = g === currentActiveGroup ? 'active' : '';
+                html += `<button class="group-tab ${activeCls}" onclick="switchGroup('${g}')">Group ${g}</button>`;
+            });
+            document.getElementById('groupNavBar').innerHTML = html;
+        }
+
+        function switchGroup(groupName) {
+            currentActiveGroup = groupName;
+            renderGroupTabs();
+            renderLobbyGridForGroup(groupName);
+        }
+
+        function renderLobbyGridForGroup(groupName) {
+            let filteredGames = gameList.filter(g => g.group === groupName);
+            document.getElementById('groupSectionTitle').innerText = `⭐ GROUP ${groupName} GAMES (10 Games)`;
+            
+            let html = '';
+            filteredGames.forEach(game => {
+                let logoCfg = lobbyLogoConfigs[game.id] || { url: null, scale: 100 };
+                let scalePct = logoCfg.scale !== undefined ? logoCfg.scale : 100;
+                let scaleMultiplier = scalePct / 100;
+                let displayIcon = game.icon;
+
+                if (logoCfg.url) {
+                    displayIcon = `<img src="${logoCfg.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: cover;" />`;
+                } else {
+                    let fontSize = Math.floor(26 * scaleMultiplier);
+                    displayIcon = `<span style="font-size:${fontSize}px; line-height:1;">${game.icon}</span>`;
+                }
+
+                let cardExtraStyle = groupName === 'B' ? 'border-radius: 50%; border: 2px solid #ffd700;' : '';
+
+                html += `
+                    <div class="game-card" style="${cardExtraStyle}" onclick="openGame(${game.id})">
+                        <span class="game-num">${game.id}</span>
+                        <div class="game-img">${displayIcon}</div>
+                        <div class="game-name">${game.name}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('gamesGrid').innerHTML = html;
+        }
+
+        function initAppFlow() {
+            let isLoggedIn = localStorage.getItem('casino_logged_in');
+            if (isLoggedIn === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('lobbyScreen').style.display = 'flex';
+                startContinuousBgm();
+            } else {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('lobbyScreen').style.display = 'none';
+            }
+
+            renderGroupTabs();
+            renderLobbyGridForGroup('A');
+            loadFrameSettingsForTarget('groupA');
+            updateUIStats();
+            renderAdminWithdrawals();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!navigator.onLine) {
+                document.getElementById('offlineScreen').style.display = 'flex';
+                return;
+            }
+            initAppFlow();
+        });
+
+        let activeGameId = 1;
+        let currentBet = 1;
+        let isSpinning = false;
+        let supportWhatsAppNumber = "919876543210";
+        let globalDifficulty = localStorage.getItem('slot_difficulty_mode') || "normal";
+        document.getElementById('adminDifficultySelect').value = globalDifficulty;
+
+        let forceRule = JSON.parse(localStorage.getItem('slot_force_rule') || '{"mode": "none", "playerId": "9876543210"}');
+        document.getElementById('forcePlayerIdInput').value = forceRule.playerId || "9876543210";
+        document.getElementById('forceModeSelect').value = forceRule.mode || "none";
+
+        let groupCJackpotRule = JSON.parse(localStorage.getItem('slot_groupc_jackpot_rule') || '{"playerId": "9876543210", "type": "none"}');
+        document.getElementById('adminGroupCPlayerId').value = groupCJackpotRule.playerId || "9876543210";
+        document.getElementById('adminGroupCJackpotSelect').value = groupCJackpotRule.type || "none";
+
+        let freeGamesRemaining = 0;
+        let gameSymbolConfigs = JSON.parse(localStorage.getItem('slot_game_symbol_configs') || '{}');
+
+        let selectedTargetSymbolIdx = 0; 
+        let spinningColumns = [false, false, false, false, false, false];
+
+        let diffState = JSON.parse(localStorage.getItem('slot_advanced_diff_state') || JSON.stringify({
+            spinCount: 0,
+            netLoss: 0,
+            spinsSinceLastWin: 0
+        }));
+
+        const symbols = [
+            { icon: '🚗', mult: 50, name: 'Car' },
+            { icon: '🐶', mult: 30, name: 'Dog' },
+            { icon: '😼', mult: 20, name: 'Cat' },
+            { icon: '🙈', mult: 10, name: 'Monkey' },
+            { icon: '🥳', mult: 5, name: 'Party' },
+            { icon: '👑', mult: 15 }, { icon: '🍉', mult: 8 }, { icon: '💎', mult: 25 },
+            { icon: '🐉', mult: 40 }, { icon: '🎰', mult: 35 }, { icon: '🌟', mult: 12 }, { icon: '🪙', mult: 10 },
+            { icon: '🔥', mult: 45 }, { icon: '🧞', mult: 20 }, { icon: '🏴‍☠️', mult: 30 }, { icon: '🐃', mult: 15 },
+            { icon: '⭐', isWild: true, mult: 60 },
+            { icon: '🎟️', isScatter: true, mult: 0 }
+        ];
+
+        let gridData = [
+            [0,  1,  2,  3,  4,  15],  
+            [6,  3,  15, 2,  1,  5],  
+            [7,  15, 9,  10, 5,  1],  
+            [11, 0,  12, 8,  15, 7],  
+            [13, 14, 5,  1,  11, 0],  
+            [10, 2,  5,  1,  11, 12]  
+        ];
+
+        /* --- DAILY BONUS SCRATCH CARDS & LUCKY WHEEL --- */
+        function openDailyScratch() {
+            let todayStr = new Date().toDateString();
+            let lastClaim = localStorage.getItem('casino_last_scratch_date');
+            if (lastClaim === todayStr) {
+                alert("⚠️ Aapne aaj ka Daily Bonus scratch card pehle hi use kar liya hai! Kal fir koshish karein.");
+                return;
+            }
+
+            let grid = document.getElementById('scratchCardsGrid');
+            let html = '';
+            for (let i = 1; i <= 7; i++) {
+                html += `<div id="scard-${i}" onclick="revealScratchCard(${i})" style="background:#112244; border:2px solid #00c6ff; border-radius:8px; height:65px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:bold; cursor:pointer; color:#00c6ff; text-align:center; padding:2px;"><span>🎁</span>Card ${i}</div>`;
+            }
+            grid.innerHTML = html;
+            document.getElementById('scratchModal').style.display = 'flex';
+        }
+
+        function revealScratchCard(cardNum) {
+            let todayStr = new Date().toDateString();
+            localStorage.setItem('casino_last_scratch_date', todayStr);
+
+            let reward = Math.floor(Math.random() * 26) + 5;
+            let cardEl = document.getElementById(`scard-${cardNum}`);
+            cardEl.style.background = '#2ed573';
+            cardEl.style.color = '#000';
+            cardEl.innerHTML = `<span style="font-size:16px;">🪙</span>+${reward} Coins`;
+
+            let currentBal = getWallet();
+            currentBal += reward;
+            setWallet(currentBal);
+            updateUIStats();
+
+            for (let i = 1; i <= 7; i++) {
+                let el = document.getElementById(`scard-${i}`);
+                if (el) el.onclick = null;
+            }
+
+            setTimeout(() => {
+                document.getElementById('scratchModal').style.display = 'none';
+                alert(`🎉 Badhai ho! Aapko scratch card se 🪙 +${reward} coins mile hain.`);
+            }, 800);
+        }
+
+        function closeScratchModal() {
+            document.getElementById('scratchModal').style.display = 'none';
+        }
+
+        function getCurrentWheelSlot() {
+            let hour = new Date().getHours();
+            if (hour === 10) return 'slot_10am';
+            if (hour === 13) return 'slot_1pm';
+            if (hour === 22) return 'slot_10pm';
+            return null;
+        }
+
+        function openLuckyWheel() {
+            let slot = getCurrentWheelSlot();
+            let todayStr = new Date().toDateString();
+            let statusText = document.getElementById('wheelStatusText');
+            let spinBtn = document.getElementById('spinWheelBtn');
+            let wheelBox = document.getElementById('wheelDisplayBox');
+
+            wheelBox.innerText = '🎡';
+            document.getElementById('wheelResultDisplay').innerText = '';
+
+            if (!slot) {
+                statusText.innerHTML = "⚠️ Abhi spin karne ka samay nahi hai!<br><br><b>Sahi Samay:</b><br>☀️ Subah 10:00 baje<br>🌞 Dopahar 1:00 baje<br>🌙 Raat 10:00 baje";
+                spinBtn.style.display = 'none';
+                document.getElementById('wheelModal').style.display = 'flex';
+                return;
+            }
+
+            let claimedKey = `casino_wheel_${todayStr}_${slot}`;
+            let alreadyClaimed = localStorage.getItem(claimedKey);
+
+            if (alreadyClaimed === 'true') {
+                statusText.innerHTML = "⚠️ Aap is timing ka spin pehle hi use kar chuke hain!";
+                spinBtn.style.display = 'none';
+            } else {
+                statusText.innerHTML = "🟢 Spin available for current time slot! Tap below to spin.";
+                spinBtn.style.display = 'block';
+            }
+            document.getElementById('wheelModal').style.display = 'flex';
+        }
+
+        function executeLuckyWheelSpin() {
+            let slot = getCurrentWheelSlot();
+            let todayStr = new Date().toDateString();
+            if (!slot) return;
+
+            let claimedKey = `casino_wheel_${todayStr}_${slot}`;
+            localStorage.setItem(claimedKey, 'true');
+
+            let spinBtn = document.getElementById('spinWheelBtn');
+            spinBtn.style.display = 'none';
+
+            let wheelBox = document.getElementById('wheelDisplayBox');
+            let resultDisplay = document.getElementById('wheelResultDisplay');
+            resultDisplay.innerText = "Spinning wheel...";
+
+            let count = 0;
+            let spinInterval = setInterval(() => {
+                let tempNum = Math.floor(Math.random() * 46) + 5;
+                wheelBox.innerText = ['🎡', '🎰', '🪙', '✨'][Math.floor(Math.random() * 4)];
+                resultDisplay.innerText = `Number: ${tempNum}`;
+                count++;
+                if (count > 12) {
+                    clearInterval(spinInterval);
+                    let finalCoin = Math.floor(Math.random() * 46) + 5;
+                    wheelBox.innerText = '🪙';
+                    resultDisplay.innerText = `🎉 Won +${finalCoin} Coins!`;
+
+                    let currentBal = getWallet();
+                    currentBal += finalCoin;
+                    setWallet(currentBal);
+                    updateUIStats();
+                }
+            }, 90);
+        }
+
+        function closeWheelModal() {
+            document.getElementById('wheelModal').style.display = 'none';
+        }
+
+        function playSpinSound() {
+            if (gameAudioConfigs.spin) {
+                new Audio(gameAudioConfigs.spin).play().catch(e => {});
+            } else {
+                try {
+                    let ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    let osc = ctx.createOscillator();
+                    let gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(400, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.1);
+                } catch(err) {}
+            }
+        }
+
+        function playWinSound(amount) {
+            if (gameAudioConfigs.win) {
+                new Audio(gameAudioConfigs.win).play().catch(e => {});
+                return;
+            }
+            try {
+                let ctx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = ctx.createOscillator();
+                let gain = ctx.createGain();
+                if (amount > 100) {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, ctx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(800, ctx.currentTime + 0.4);
+                } else if (amount > 50) {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(500, ctx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(700, ctx.currentTime + 0.3);
+                } else {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, ctx.currentTime);
+                }
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+        }
+
+        function openGame(gameId) {
+            let game = gameList.find(g => g.id === gameId);
+            if (!game) return;
+            activeGameId = game.id;
+            
+            hideAllScreens();
+            let gameScreenEl = document.getElementById('gameScreen');
+            gameScreenEl.style.display = 'flex';
+
+            if (game.group === 'A') {
+                gameScreenEl.classList.add('group-a-mode');
+                gameScreenEl.classList.remove('group-b-mode', 'group-c-to-o-mode');
+                document.getElementById('groupATopControlsContainer').style.display = 'flex';
+                document.getElementById('groupBTopControlsContainer').style.display = 'none';
+                document.getElementById('defaultGameControlsContainer').style.display = 'none';
+            } else if (game.group === 'B') {
+                gameScreenEl.classList.remove('group-a-mode', 'group-c-to-o-mode');
+                gameScreenEl.classList.add('group-b-mode');
+                document.getElementById('groupATopControlsContainer').style.display = 'none';
+                document.getElementById('groupBTopControlsContainer').style.display = 'flex';
+                document.getElementById('defaultGameControlsContainer').style.display = 'none';
+            } else {
+                gameScreenEl.classList.remove('group-a-mode', 'group-b-mode');
+                gameScreenEl.classList.add('group-c-to-o-mode');
+                document.getElementById('groupATopControlsContainer').style.display = 'none';
+                document.getElementById('groupBTopControlsContainer').style.display = 'none';
+                document.getElementById('defaultGameControlsContainer').style.display = 'flex';
+
+                if (game.group === 'C') {
+                    document.getElementById('defaultMultiplierBanner').style.display = 'none';
+                    document.getElementById('groupCJackpotBanner').style.display = 'flex';
+                } else {
+                    document.getElementById('defaultMultiplierBanner').style.display = 'flex';
+                    document.getElementById('groupCJackpotBanner').style.display = 'none';
+                }
+            }
+
+            startContinuousBgm();
+            renderSlotGrid();
+            applyCustomFrameToActiveGame(game.group, game.id);
+            updateUIStats();
+        }
+
+        function hideAllScreens() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('lobbyScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('adminScreen').style.display = 'none';
+            document.getElementById('profileScreen').style.display = 'none';
+            document.getElementById('winPopupOverlay').style.display = 'none';
+            document.getElementById('adminLoginModal').style.display = 'none';
+            document.getElementById('scratchModal').style.display = 'none';
+            document.getElementById('wheelModal').style.display = 'none';
+        }
+
+        function backToLobby() {
+            hideAllScreens();
+            document.getElementById('lobbyScreen').style.display = 'flex';
+            renderLobbyGridForGroup(currentActiveGroup);
+            updateUIStats();
+        }
+
+        function saveGroupCJackpotTarget() {
+            let pid = document.getElementById('adminGroupCPlayerId').value.trim();
+            let type = document.getElementById('adminGroupCJackpotSelect').value;
+            groupCJackpotRule = { playerId: pid, type: type };
+            localStorage.setItem('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule));
+            alert(`✅ Group C Jackpot Target Saved!\nPlayer: ${pid}\nTarget Jackpot: ${type}`);
+        }
+
+        function searchAdminGame() {
+            let gNum = parseInt(document.getElementById('adminGameSearchInput').value);
+            let game = gameList.find(g => g.id === gNum);
+            if (!game) { alert("⚠️ Invalid Game Number!"); return; }
+            activeGameId = game.id;
+            document.getElementById('adminGamePreviewContainer').style.display = 'block';
+            document.getElementById('adminGameTitleDisplay').innerText = `[#${game.id}] ${game.name} (Group ${game.group})`;
+            renderAdminMasterPalette();
+        }
+
+        function openSearchedGameDirectly() {
+            let gNum = parseInt(document.getElementById('adminGameSearchInput').value);
+            let game = gameList.find(g => g.id === gNum);
+            if (game) openGame(game.id);
+        }
+
+        function renderAdminMasterPalette() {
+            let html = '';
+            symbols.forEach((sym, sIdx) => {
+                let config = getSymbolConfig(activeGameId, sIdx);
+                let scaleMultiplier = (config.scale || 100) / 100;
+                let cellContent = config.url ? `<img src="${config.url}" style="width: 100%; height: 100%; object-fit: cover; transform: scale(${scaleMultiplier});" />` : `<span style="font-size:20px;">${sym.icon}</span>`;
+                let activeBorder = sIdx === selectedTargetSymbolIdx ? 'border: 2px solid #00ffcc;' : 'border: 1px solid #ffd700;';
+                html += `<div onclick="selectAdminSymbol(${sIdx})" style="height:42px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); ${activeBorder} border-radius:4px; cursor:pointer; position:relative; overflow:hidden; box-sizing:border-box;">${cellContent}</div>`;
+            });
+            document.getElementById('adminMasterSymbolsPalette').innerHTML = html;
+            document.getElementById('selectedSymbolInfo').innerText = `Selected Symbol: Index ${selectedTargetSymbolIdx}`;
+        }
+
+        function selectAdminSymbol(sIdx) {
+            selectedTargetSymbolIdx = sIdx;
+            let config = getSymbolConfig(activeGameId, sIdx);
+            document.getElementById('symbolSizeRange').value = config.scale || 100;
+            document.getElementById('sizeValLabel').innerText = config.scale || 100;
+            renderAdminMasterPalette();
+        }
+
+        function updateSymbolScaleLive(val) {
+            document.getElementById('sizeValLabel').innerText = val;
+            if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
+            if (!gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx]) {
+                gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = { url: null, scale: 100 };
+            }
+            gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx].scale = parseInt(val);
+            renderAdminMasterPalette();
+            renderSlotGrid();
+        }
+
+        function previewCustomSymbolFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
+                    gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = {
+                        url: e.target.result,
+                        scale: parseInt(document.getElementById('symbolSizeRange').value)
+                    };
+                    renderAdminMasterPalette();
+                    renderSlotGrid();
+                    alert("✅ Custom symbol preview updated!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveSymbolFitterConfig() {
+            localStorage.setItem('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs));
+            renderSlotGrid();
+            alert("✅ Symbol and size permanently saved successfully!");
+        }
+
+        function removeCustomSymbol() {
+            if (gameSymbolConfigs[activeGameId] && gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx]) {
+                delete gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx];
+                localStorage.setItem('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs));
+                renderAdminMasterPalette();
+                renderSlotGrid();
+                alert("🗑️ Custom symbol deleted!");
+            } else {
+                alert("⚠️ Is symbol par koi custom image nahi hai!");
+            }
+        }
+
+        function updateDifficultySetting(mode) {
+            globalDifficulty = mode;
+            localStorage.setItem('slot_difficulty_mode', mode);
+            alert("✅ Difficulty strictly updated to " + mode);
+        }
+
+        function saveForceRule() {
+            let pId = document.getElementById('forcePlayerIdInput').value.trim();
+            let mode = document.getElementById('forceModeSelect').value;
+            forceRule = { mode: mode, playerId: pId };
+            localStorage.setItem('slot_force_rule', JSON.stringify(forceRule));
+            alert("✅ Force rule strictly saved!");
+        }
+
+        function saveWhatsAppNumber() { alert("✅ WhatsApp number updated!"); }
+        function openWhatsAppSupport() { window.open(`https://wa.me/${supportWhatsAppNumber}?text=Hello`, '_blank'); }
+
+        function searchPlayerCoins() {
+            let inputVal = document.getElementById('searchCoinPlayerInput').value.trim();
+            let playerId = inputVal !== "" ? inputVal : "9876543210";
+            document.getElementById('playerCoinDetailsBox').style.display = 'block';
+            document.getElementById('foundPlayerName').innerText = `User (${playerId})`;
+            document.getElementById('foundPlayerBalance').innerText = getWallet().toFixed(2);
+        }
+
+        function applyCoinChange(action) {
+            let amtInput = document.getElementById('coinAmountChangeInput');
+            let amt = parseFloat(amtInput.value);
+            if (isNaN(amt) || amt <= 0) { alert("⚠️ Kripya valid amount enter karein!"); return; }
+            
+            let currentW = getWallet();
+            if (action === 'add') {
+                currentW += amt;
+            } else if (action === 'deduct') {
+                currentW -= amt;
+                if (currentW < 0) currentW = 0;
+            }
+            
+            setWallet(currentW);
+            document.getElementById('foundPlayerBalance').innerText = getWallet().toFixed(2);
+            amtInput.value = '';
+            alert(`✅ Coins successfully ${action === 'add' ? 'added' : 'deducted'}!`);
+        }
+
+        function switchNav(el, tabName) {
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            if (tabName === 'Profile') {
+                hideAllScreens();
+                document.getElementById('profileScreen').style.display = 'block';
+                renderProfileScreenData();
+            } else {
+                backToLobby();
+            }
+        }
+
+        function changeBet(amt) {
+            if (currentBet + amt >= 1 && currentBet + amt <= 100) {
+                currentBet += amt;
+                updateUIStats();
+            }
+        }
+
+        function updateUIStats() {
+            let currentBal = getWallet();
+            document.getElementById('walletDisplay').innerText = currentBal.toFixed(2);
+            document.getElementById('betDisplay').innerText = currentBal.toFixed(2);
+            document.getElementById('walletDisplayA').innerText = currentBal.toFixed(2);
+            let topWalA = document.getElementById('walletDisplayTopA');
+            if (topWalA) topWalA.innerText = currentBal.toFixed(2);
+            document.getElementById('walletDisplayB').innerText = currentBal.toFixed(2);
+            document.getElementById('betDisplayB').innerText = currentBet.toFixed(2);
+            
+            let betDispA = document.getElementById('betDisplayA');
+            if (betDispA) betDispA.innerText = currentBet.toFixed(2);
+
+            let profileBal = document.getElementById('profileWalletDisplay');
+            if (profileBal) profileBal.innerText = currentBal.toFixed(2);
+        }
+
+        function calculateDifficultyAdjustedWin(rawWin, bet) {
+            if (forceRule.mode === 'loss') return 0;
+            if (forceRule.mode === 'win') return bet * 120;
+
+            if (rawWin > 0) return rawWin;
+
+            diffState.spinCount++;
+            let finalWin = 0;
+
+            if (globalDifficulty === 'normal') {
+                finalWin = rawWin > 0 ? rawWin * 1.1 : (Math.random() < 0.35 ? bet * 1.2 : 0);
+            } 
+            else if (globalDifficulty === 'medium') {
+                diffState.spinsSinceLastWin++;
+                if (diffState.spinCount % 38 === 0) {
+                    finalWin = bet * 25; 
+                    diffState.spinsSinceLastWin = 0;
+                } else if (diffState.spinsSinceLastWin >= 13 && Math.random() < 0.6) {
+                    finalWin = 5.00;
+                    diffState.spinsSinceLastWin = 0;
+                } else if (diffState.spinsSinceLastWin >= 10 && Math.random() < 0.65) {
+                    finalWin = Math.random() < 0.5 ? 1.00 : 3.00;
+                    diffState.spinsSinceLastWin = 0;
+                } else {
+                    finalWin = 0;
+                }
+            } 
+            else if (globalDifficulty === 'hard') {
+                diffState.spinsSinceLastWin++;
+                if (diffState.spinsSinceLastWin >= 22 && Math.random() < 0.2) {
+                    finalWin = bet * 0.15;
+                    diffState.spinsSinceLastWin = 0;
+                } else {
+                    finalWin = 0;
+                }
+            }
+
+            localStorage.setItem('slot_advanced_diff_state', JSON.stringify(diffState));
+            return parseFloat(Math.max(0, finalWin).toFixed(2));
+        }
+
+        function handleSpin() {
+            if (isSpinning) return;
+            isSpinning = true;
+            
+            let winOverlay = document.getElementById('winPopupOverlay');
+            if (winOverlay) winOverlay.style.display = 'none';
+            renderSlotGrid();
+
+            playSpinSound();
+            
+            let currentBal = getWallet();
+
+            if (freeGamesRemaining > 0) {
+                freeGamesRemaining--;
+                document.getElementById('freeGameCountDisplay').innerText = freeGamesRemaining;
+                if (freeGamesRemaining <= 0) {
+                    document.getElementById('freeGameBanner').style.display = 'none';
+                }
+            } else {
+                if (currentBal < currentBet) {
+                    alert("⚠️ Insufficient Balance!");
+                    isSpinning = false;
+                    return;
+                }
+                currentBal = parseFloat((currentBal - currentBet).toFixed(2));
+                setWallet(currentBal);
+            }
+
+            spinningColumns = [true, true, true, true, true, true];
+            renderSlotGrid(spinningColumns);
+
+            let activeGame = gameList.find(g => g.id === activeGameId);
+            let targetGrid = [];
+
+            let triggerJackpotType = "none";
+            if (activeGame && activeGame.group === 'C' && groupCJackpotRule.type !== 'none') {
+                triggerJackpotType = groupCJackpotRule.type;
+            }
+
+            if (triggerJackpotType !== "none") {
+                let chosenSymIdx = Math.floor(Math.random() * (symbols.length - 2)); 
+                for (let r = 0; r < 6; r++) {
+                    targetGrid[r] = [];
+                    for (let c = 0; c < 6; c++) {
+                        targetGrid[r][c] = chosenSymIdx;
+                    }
+                }
+            } else {
+                let scatterIndex = symbols.length - 1;
+                let scatterChance = globalDifficulty === 'normal' ? 0.015 : 0.003;
+                let triggerFreeGameThisSpin = (Math.random() < scatterChance);
+                let scatterCountTarget = triggerFreeGameThisSpin && freeGamesRemaining === 0 ? 4 : (Math.random() < 0.88 ? 0 : 1);
+
+                for (let r = 0; r < 6; r++) {
+                    targetGrid[r] = [];
+                    for (let c = 0; c < 6; c++) {
+                        let randSym = Math.floor(Math.random() * scatterIndex);
+                        targetGrid[r][c] = randSym;
+                    }
+                }
+
+                let placedScatters = 0;
+                while (placedScatters < scatterCountTarget) {
+                    let rr = Math.floor(Math.random() * 6);
+                    let cc = Math.floor(Math.random() * 6);
+                    if (targetGrid[rr][cc] !== scatterIndex) {
+                        targetGrid[rr][cc] = scatterIndex;
+                        placedScatters++;
+                    }
+                }
+            }
+
+            const stopDelays = [500, 850, 1200, 1550, 1900, 2250];
+
+            for (let c = 0; c < 6; c++) {
+                let colIndex = c;
+                setTimeout(() => {
+                    spinningColumns[colIndex] = false;
+                    for (let r = 0; r < 6; r++) { gridData[r][colIndex] = targetGrid[r][colIndex]; }
+                    updateSingleColumn(colIndex, gridData);
+
+                    if (colIndex === 5) {
+                        spinningColumns = [false, false, false, false, false, false];
+                        renderSlotGrid(spinningColumns);
+
+                        let totalWin = 0;
+                        let winningCellsCoord = [];
+
+                        if (triggerJackpotType !== "none") {
+                            totalWin = parseFloat(triggerJackpotType);
+                            for(let r=0; r<6; r++) for(let col=0; col<6; col++) winningCellsCoord.push([r,col]);
+
+                            groupCJackpotRule.type = "none";
+                            localStorage.setItem('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule));
+                            document.getElementById('adminGroupCJackpotSelect').value = "none";
+
+                            if (winOverlay) {
+                                document.getElementById('winPopupTitle').innerText = `🎉 JACKPOT ${totalWin}!`;
+                                document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
+                                winOverlay.style.display = 'block';
+                            }
+                        } else {
+                            let finalScatterCount = 0;
+                            for (let r = 0; r < 6; r++) {
+                                for (let col = 0; col < 6; col++) {
+                                    if (symbols[gridData[r][col]].isScatter) finalScatterCount++;
+                                }
+                            }
+
+                            if (finalScatterCount >= 4) {
+                                freeGamesRemaining += 10;
+                                document.getElementById('freeGameCountDisplay').innerText = freeGamesRemaining;
+                                document.getElementById('freeGameBanner').style.display = 'block';
+                            }
+
+                            let evalResult = evaluateStrictPaylinesWithHighlight(gridData);
+                            totalWin = calculateDifficultyAdjustedWin(evalResult.rawWin, currentBet);
+                            winningCellsCoord = evalResult.winningCells;
+                        }
+                        
+                        if (winningCellsCoord.length > 0 && totalWin > 0) {
+                            highlightWinningCellsDOM(winningCellsCoord);
+                        }
+
+                        totalWin = parseFloat(totalWin.toFixed(2));
+                        
+                        let latestBal = getWallet();
+                        latestBal = parseFloat((latestBal + totalWin).toFixed(2));
+                        setWallet(latestBal);
+                        updateUIStats();
+                        
+                        document.getElementById('spinWinDisplay').innerText = totalWin.toFixed(2);
+                        let spinWinA = document.getElementById('spinWinDisplayA');
+                        if (spinWinA) spinWinA.innerText = totalWin.toFixed(2);
+                        let spinWinB = document.getElementById('spinWinDisplayB');
+                        if (spinWinB) spinWinB.innerText = totalWin.toFixed(2);
+
+                        if (totalWin > 0 && triggerJackpotType === "none") {
+                            playWinSound(totalWin);
+                            if (winOverlay) {
+                                if (totalWin >= 20) {
+                                    document.getElementById('winPopupTitle').innerText = "🔥 MEGA WIN!";
+                                    document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
+                                    winOverlay.style.display = 'block';
+                                } else {
+                                    document.getElementById('winPopupTitle').innerText = "WIN!";
+                                    document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
+                                    winOverlay.style.display = 'block';
+                                }
+                            }
+                        }
+
+                        isSpinning = false;
+
+                        if (freeGamesRemaining > 0) {
+                            setTimeout(() => { handleSpin(); }, 1200);
+                        }
+                    }
+                }, stopDelays[c]);
+            }
+        }
+
+        function evaluateStrictPaylinesWithHighlight(grid) {
+            let totalWin = 0;
+            let baseMultiplier = 2.0;
+            let winningCells = [];
+
+            let patterns = [];
+            for (let r = 0; r < 6; r++) {
+                patterns.push({ type: 'straight', path: [[r,0], [r,1], [r,2], [r,3], [r,4], [r,5]] });
+            }
+            patterns.push({ type: 'v', path: [[0,0], [1,1], [2,2], [3,3], [2,4], [1,5]] });
+            patterns.push({ type: 'v', path: [[3,0], [2,1], [1,2], [0,3], [1,4], [2,5]] });
+            patterns.push({ type: 'v', path: [[0,0], [2,1], [4,2], [5,3], [4,4], [2,5]] });
+            patterns.push({ type: 'w', path: [[0,0], [3,1], [5,2], [3,3], [0,4], [3,5]] });
+            patterns.push({ type: 'w', path: [[5,0], [2,1], [0,2], [2,3], [5,4], [2,5]] });
+
+            patterns.forEach(pat => {
+                let matchSymbol = null;
+                let consecutiveCount = 0;
+                let currentPathCells = [];
+
+                for (let i = 0; i < pat.path.length; i++) {
+                    let r = pat.path[i][0];
+                    let c = pat.path[i][1];
+                    let sIdx = grid[r][c];
+                    let sym = symbols[sIdx];
+
+                    if (!sym) continue;
+                    if (sym.isScatter) break;
+
+                    if (i === 0) {
+                        if (!sym.isWild) {
+                            matchSymbol = sIdx;
+                            consecutiveCount = 1;
+                            currentPathCells.push([r, c]);
+                        } else {
+                            consecutiveCount = 1;
+                            currentPathCells.push([r, c]);
+                        }
+                    } else {
+                        if (sym.isWild || sIdx === matchSymbol || matchSymbol === null) {
+                            if (matchSymbol === null && !sym.isWild) {
+                                matchSymbol = sIdx;
+                            }
+                            consecutiveCount++;
+                            currentPathCells.push([r, c]);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+
+                if (consecutiveCount >= 3) {
+                    let effectiveSymIdx = matchSymbol !== null ? matchSymbol : 0;
+                    let symObj = symbols[effectiveSymIdx] || { mult: 10 };
+                    let lineWin = currentBet * (consecutiveCount * 0.5) * (symObj.mult * 0.2) * baseMultiplier;
+                    totalWin += lineWin;
+                    currentPathCells.forEach(cell => {
+                        if (!winningCells.some(wc => wc[0] === cell[0] && wc[1] === cell[1])) {
+                            winningCells.push(cell);
+                        }
+                    });
+                }
+            });
+
+            return { rawWin: parseFloat(totalWin.toFixed(2)), winningCells: winningCells };
+        }
+
+        function highlightWinningCellsDOM(winningCells) {
+            winningCells.forEach(cellCoord => {
+                let r = cellCoord[0];
+                let c = cellCoord[1];
+                let colEl = document.getElementById(`col-${c}`);
+                if (colEl) {
+                    let cellEl = colEl.children[r];
+                    if (cellEl) cellEl.classList.add('winning-highlight');
+                }
+            });
+        }
+
+        function renderSlotGrid(isSpinningArray = [false,false,false,false,false,false]) {
+            let activeGame = gameList.find(g => g.id === activeGameId);
+            let cellExtraStyle = activeGame && activeGame.group === 'B' ? 'border-radius: 50%;' : '';
+
+            let html = '';
+            for (let c = 0; c < 6; c++) {
+                let isSpinningCol = isSpinningArray[c];
+                let blurClass = isSpinningCol ? 'spinning' : '';
+                html += `<div class="slot-reel-window"><div class="slot-column ${blurClass}" id="col-${c}">`;
+                
+                let repeatCount = isSpinningCol ? 16 : 6;
+                for (let r = 0; r < repeatCount; r++) {
+                    let sIdx = isSpinningCol ? Math.floor(Math.random() * symbols.length) : gridData[r % 6][c];
+                    let sym = symbols[sIdx];
+                    let config = getSymbolConfig(activeGameId, sIdx);
+                    let scaleMultiplier = (config.scale || 100) / 100;
+                    let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:80%; max-height:80%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                    let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
+                    html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
+                }
+                html += `</div></div>`;
+            }
+            let gridA = document.getElementById('slotGridGroupA');
+            let gridB = document.getElementById('slotGridGroupB');
+            let gridDef = document.getElementById('slotGridDefault');
+            if (gridA) gridA.innerHTML = html;
+            if (gridB) gridB.innerHTML = html;
+            if (gridDef) gridDef.innerHTML = html;
+        }
+
+        function updateSingleColumn(colIndex, currentGrid) {
+            let activeGame = gameList.find(g => g.id === activeGameId);
+            let cellExtraStyle = activeGame && activeGame.group === 'B' ? 'border-radius: 50%;' : '';
+            let colEls = document.querySelectorAll(`[id^="col-${colIndex}"]`);
+            colEls.forEach(colEl => {
+                colEl.classList.remove('spinning');
+                colEl.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                colEl.style.transform = 'translate3d(0, 0, 0)';
+                
+                let html = '';
+                for (let r = 0; r < 6; r++) {
+                    let sIdx = currentGrid[r][colIndex];
+                    let sym = symbols[sIdx];
+                    let config = getSymbolConfig(activeGameId, sIdx);
+                    let scaleMultiplier = (config.scale || 100) / 100;
+                    let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:80%; max-height:80%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                    let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
+                    html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
+                }
+                colEl.innerHTML = html;
+            });
+        }
+
+        function getSymbolConfig(gameId, sIdx) {
+            if (gameSymbolConfigs[gameId] && gameSymbolConfigs[gameId][sIdx]) {
+                return gameSymbolConfigs[gameId][sIdx];
+            }
+            return { url: null, scale: 100 };
+        }
+
+        function applyCustomFrameToActiveGame(groupName, gameId) {
+            let frameCfg = gameFrameConfigs[groupName] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0 };
+            let frameBoxId = 'slotFrameBoxDefault';
+            if (groupName === 'A') frameBoxId = 'slotFrameBoxA';
+            if (groupName === 'B') frameBoxId = 'slotFrameBoxB';
+
+            let frameEl = document.getElementById(frameBoxId);
+            if (frameEl) {
+                frameEl.style.transform = `scale(${frameCfg.scale})`;
+                frameEl.style.width = `${frameCfg.width}%`;
+                frameEl.style.height = `${frameCfg.height}%`;
+                frameEl.style.transform += ` translate(${frameCfg.offsetX}px, ${frameCfg.offsetY}px)`;
+            }
+        }
+
+        function showFeature(title, msg) { alert(`⭐ ${title}\n\n${msg}`); }
+</script>
+</body>
+</html>
