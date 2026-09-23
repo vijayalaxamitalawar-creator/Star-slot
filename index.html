@@ -33,7 +33,6 @@
             box-sizing: border-box;
         }
 
-        /* OFFLINE SCREEN STYLES */
         #offlineScreen {
             display: none;
             flex-direction: column;
@@ -61,7 +60,6 @@
             box-shadow: 0 0 25px rgba(255,71,87,0.5);
         }
 
-        /* LOGIN SCREEN STYLES */
         #loginScreen {
             display: flex;
             flex-direction: column;
@@ -88,7 +86,6 @@
             box-shadow: 0 0 25px rgba(0,198,255,0.5);
         }
 
-        /* Top Header */
         .header {
             background: linear-gradient(135deg, #1b3b6f, #0d1b2a);
             padding: 8px 15px;
@@ -131,7 +128,6 @@
             justify-content: center;
         }
         
-        /* Jackpot & Slots Banner Row */
         .top-banners {
             display: flex;
             gap: 8px;
@@ -162,7 +158,6 @@
         .jackpot-title { font-size: 9px; color: #f72585; font-weight: bold; }
         .jackpot-amount { font-size: 13px; font-weight: bold; color: #fff; margin-top: 3px; }
 
-        /* Quick Menu Icons */
         .quick-menu {
             display: flex;
             justify-content: space-around;
@@ -192,7 +187,6 @@
             border: 1px solid rgba(0,198,255,0.3);
         }
 
-        /* Group Navigation Bar (A to O) */
         .group-nav-bar {
             display: flex;
             overflow-x: auto;
@@ -223,7 +217,6 @@
             border-color: #00c6ff;
         }
 
-        /* Games Grid Section */
         .section-title {
             display: flex;
             justify-content: space-between;
@@ -307,7 +300,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Bottom Nav Bar */
         .bottom-nav {
             position: absolute;
             bottom: 0;
@@ -330,7 +322,6 @@
         .nav-item.active { color: #00c6ff; }
         .nav-icon { font-size: 15px; margin-bottom: 1px; }
 
-        /* GAMEPLAY SCREEN */
         #gameScreen {
             display: none;
             flex-direction: column;
@@ -350,31 +341,6 @@
             transition: background 0.3s ease;
         }
 
-        /* FREE GAME BANNER OVERLAY */
-        #freeGameBanner {
-            display: none;
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #ff4757, #ff6b81);
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 900;
-            border: 2px solid #ffd700;
-            box-shadow: 0 0 15px rgba(255,71,87,0.9);
-            z-index: 250;
-            letter-spacing: 1px;
-            animation: pulseBanner 0.8s infinite alternate;
-        }
-        @keyframes pulseBanner {
-            0% { transform: translateX(-50%) scale(1); }
-            100% { transform: translateX(-50%) scale(1.08); }
-        }
-
-        /* GROUP A LUXURY THEME */
         #gameScreen.group-a-mode {
             background: radial-gradient(circle at center, #fdf8ee 0%, #e8d3b3 60%, #c49a5b 100%);
             color: #4a3525;
@@ -403,7 +369,6 @@
             justify-content: center;
         }
 
-        /* GROUP B WESTERN WOOD THEME */
         #gameScreen.group-b-mode {
             background: radial-gradient(circle at center, #2e1107 0%, #120703 100%);
             color: #f4e8c1;
@@ -541,7 +506,6 @@
         }
         .group-b-spin-main-btn:active { transform: scale(0.92); }
 
-        /* CONTROL PANELS GROUP A & OTHERS */
         .group-a-control-panel {
             background: linear-gradient(180deg, #4a3525 0%, #1e1508 100%);
             border: 3px solid #d4af37;
@@ -624,7 +588,6 @@
             justify-content: center;
         }
 
-        /* SUPER ACE / C-TO-O THEME STYLING */
         #gameScreen.group-c-to-o-mode {
             background: radial-gradient(circle at center, #23395d 0%, #101c2c 60%, #0a1118 100%);
             color: #ffffff;
@@ -656,7 +619,6 @@
             justify-content: center;
         }
         
-        /* MULTIPLIER / GROUP C JACKPOT BANNERS */
         .superace-multiplier-banner {
             background: linear-gradient(180deg, #1b2d45 0%, #0d1724 100%);
             border: 2px solid #527ca3;
@@ -685,7 +647,6 @@
             box-shadow: 0 0 8px rgba(212,175,55,0.8);
         }
 
-        /* GROUP C DEDICATED 3 JACKPOT STYLING */
         .group-c-jackpot-container {
             display: flex;
             justify-content: space-between;
@@ -775,7 +736,6 @@
             padding: 2px 6px;
         }
 
-        /* WIN POPUPS (TRANSPARENT BACKGROUND NO-BLOCK) */
         #winPopupOverlay {
             display: none;
             position: absolute;
@@ -789,11 +749,6 @@
             z-index: 300;
             text-align: center;
             pointer-events: none;
-            animation: popIn 0.3s ease-out;
-        }
-        @keyframes popIn {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
         #winPopupTitle { 
             font-size: 24px; 
@@ -811,7 +766,6 @@
             text-shadow: 0 0 10px #000, 0 0 20px #00ffcc, 0 0 30px #00ffcc; 
         }
         
-        /* MACHINE & FRAME LAYOUT */
         .machine-main-layout { 
             display: flex; 
             justify-content: center; 
@@ -950,7 +904,28 @@
             100% { transform: scale(1.05); filter: brightness(1.3); }
         }
 
-        /* ADMIN SCREEN */
+        /* STYLISH FREE GAME BANNER & BOX */
+        .stylish-free-banner {
+            background: linear-gradient(135deg, #ff007f, #7928ca, #ffb800);
+            background-size: 200% 200%;
+            animation: stylishGlow 2s ease infinite;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            box-shadow: 0 0 12px rgba(255, 0, 127, 0.8);
+            letter-spacing: 1px;
+            display: none;
+        }
+        @keyframes stylishGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         #adminScreen {
             display: none;
             padding: 12px;
@@ -971,7 +946,6 @@
         .admin-input, .admin-select { width: 100%; background: #112244; color: #fff; border: 1px solid #00c6ff; padding: 5px; border-radius: 4px; box-sizing: border-box; margin-bottom: 6px; font-size: 11px; }
         .admin-btn { background: #00c6ff; color: #000; border: none; padding: 6px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 10px; }
 
-        /* UPGRADED PROFILE SCREEN STYLES */
         #profileScreen {
             display: none;
             padding: 10px;
@@ -1035,7 +1009,6 @@
             font-weight: bold;
             font-size: 11px;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
         .profile-section-card {
             background: rgba(15, 28, 63, 0.95);
@@ -1055,7 +1028,6 @@
             background-size: 100% 24px;
             line-height: 24px;
             margin-bottom: 6px;
-            position: relative;
         }
         .notebook-textarea {
             width: 100%;
@@ -1098,7 +1070,7 @@
     <div id="offlineScreen">
         <div class="offline-card">
             <h2 style="color: #ff4757; margin-top: 0; font-size: 18px;">⚠️ NO INTERNET CONNECTION</h2>
-            <p style="font-size: 11px; color: #ccc; margin-bottom: 15px;">App ko chalane ke liye internet connection zaroori hai. Kripya apna internet on karein.</p>
+            <p style="font-size: 11px; color: #ccc; margin-bottom: 15px;">App ko chalane ke liye internet connection zaroori hai.</p>
             <button class="admin-btn" style="background:#00c6ff; color:#000; width:100%; padding:8px; font-size:12px;" onclick="checkInternetAndReload()">Retry Connection</button>
         </div>
     </div>
@@ -1123,7 +1095,7 @@
     </div>
     
     <!-- LOBBY SCREEN -->
-    <div id="lobbyScreen" style="display:flex; flex-direction:column; height:100%; overflow:hidden; position:relative;">
+    <div id="lobbyScreen" style="display:flex; flex-direction:column; position:absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; z-index:10;">
         <div class="header">
             <div>
                 <div class="welcome-banner">WELCOME TO LUCKYSPIN</div>
@@ -1148,7 +1120,7 @@
             <div class="q-item" onclick="openLuckyWheel()"><div class="q-icon">🎡</div>Spin & Win</div>
             <div class="q-item" onclick="openWhatsAppSupport()"><div class="q-icon">💬</div>WhatsApp</div>
             <div class="q-item" onclick="showFeature('Tasks', '📋 Complete 3 spins to get 50 bonus coins.')"><div class="q-icon">📋</div>Tasks</div>
-            <div class="q-item" onclick="showFeature('Leaderboard', '🏆 You are currently ranked #4 in the global pool!')"><div class="q-icon">🏆</div>Leaderboard</div>
+            <div class="q-item" onclick="showFeature('Leaderboard', '🏆 You are ranked #4 in global pool!')"><div class="q-icon">🏆</div>Leaderboard</div>
         </div>
 
         <div class="group-nav-bar" id="groupNavBar"></div>
@@ -1165,13 +1137,17 @@
 
     <!-- GAMEPLAY SCREEN -->
     <div id="gameScreen">
-        <div id="freeGameBanner">FREE GAMES: <span id="freeGameCountDisplay">0</span></div>
-        
-        <!-- Group A Top Control Container -->
+        <!-- FREE GAME ACCUMULATED WIN BOX -->
+        <div id="freeGameWinBox" style="display:none; background:rgba(10,20,40,0.95); border:2px solid #ffb800; border-radius:8px; padding:4px 10px; text-align:center; margin:4px auto; box-shadow:0 0 12px #ffb800; flex-shrink:0; width:90%; z-index:20;">
+            <div style="font-size:8px; color:#ffb800; font-weight:bold; letter-spacing:1px;">⭐ FREE GAMES TOTAL ACCUMULATED WIN ⭐</div>
+            <div id="freeGameAccumulatedDisplay" style="font-size:16px; font-weight:900; color:#00ffcc;">0.00 COINS</div>
+        </div>
+
         <div id="groupATopControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
             <div class="group-a-top-bar">
                 <button class="group-a-menu-btn" onclick="backToLobby()">☰</button>
                 <div style="display: flex; gap: 6px; align-items: center;">
+                    <div id="freeGameIndicatorA" class="stylish-free-banner">✨ FREE GAMES: <span id="freeGameCountA">0</span> ✨</div>
                     <div style="background: rgba(0,0,0,0.6); border: 1px solid #ffd700; padding: 3px 8px; border-radius: 4px; font-size: 10px; color: #ffd700; font-weight: bold;">🪙 <span id="walletDisplayTopA">2670</span></div>
                     <div style="background: linear-gradient(135deg, #4a0e4e, #240526); border: 2px solid #ffd700; color: #ffd700; padding: 2px 10px; border-radius: 6px; font-weight: 900; font-size: 9px; text-align:center;">WAYS<br><span style="color:#fff; font-size:11px;">46,656</span></div>
                 </div>
@@ -1186,7 +1162,7 @@
             </div>
 
             <div class="group-a-control-panel">
-                <div class="group-a-ribbon">Free Spins</div>
+                <div class="group-a-ribbon">Normal Spins</div>
                 <div class="group-a-subtext">winning WILD increases total multiplier</div>
                 <div class="group-a-stats-row">
                     <div class="g-stat-box"><span class="g-stat-label">BALANCE</span><span class="g-stat-val" id="walletDisplayA">2670</span></div>
@@ -1194,7 +1170,7 @@
                     <div class="g-stat-box"><span class="g-stat-label">WIN</span><span class="g-stat-val" id="spinWinDisplayA">0.00</span></div>
                 </div>
                 <div class="group-a-buttons-row">
-                    <button class="g-action-btn" onclick="showFeature('Turbo Mode', '⚡ Turbo spin enabled!')">⚡</button>
+                    <button class="g-action-btn" onclick="showFeature('Turbo Mode', '⚡ Turbo enabled!')">⚡</button>
                     <button class="g-action-btn minus-btn" onclick="changeBet(-1)">➖</button>
                     <button class="g-spin-main-btn" id="spinBtnA" onclick="handleSpin()">
                         <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.27 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
@@ -1205,16 +1181,18 @@
             </div>
         </div>
 
-        <!-- Group B Top Control Container -->
         <div id="groupBTopControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
             <div class="group-b-top-header">
                 <button class="group-b-menu-btn" onclick="backToLobby()">☰</button>
-                <div style="font-size:10px; font-weight:bold; color:#ffd700;">WANTED: DEAD OR A WILD</div>
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <div id="freeGameIndicatorB" class="stylish-free-banner">✨ FREE GAMES: <span id="freeGameCountB">0</span> ✨</div>
+                    <div style="font-size:10px; font-weight:bold; color:#ffd700;">WANTED: DEAD OR A WILD</div>
+                </div>
             </div>
             <div class="group-b-wanted-banner">
                 <h2 class="group-b-wanted-text">!WANTED!</h2>
                 <div class="group-b-wanted-sub">DEAD OR A WILD</div>
-                <button class="group-b-bonus-buy-btn" onclick="showFeature('Bonus Buy', '🌟 Bonus Buy feature activated!')">BONUS BUY</button>
+                <button class="group-b-bonus-buy-btn" onclick="showFeature('Bonus Buy', '🌟 Bonus Buy activated!')">BONUS BUY</button>
             </div>
             <div class="machine-main-layout">
                 <div class="slot-grid-container">
@@ -1230,7 +1208,7 @@
                     <div class="group-b-stat-box"><span>WIN</span><span class="group-b-stat-val" id="spinWinDisplayB">0</span></div>
                 </div>
                 <div class="group-b-buttons-row">
-                    <button class="group-b-action-btn" onclick="showFeature('Turbo', '⚡ Turbo Mode')">⚡</button>
+                    <button class="group-b-action-btn" onclick="showFeature('Turbo', '⚡ Turbo')">⚡</button>
                     <button class="group-b-action-btn" onclick="changeBet(-1)">-</button>
                     <button class="group-b-spin-main-btn" id="spinBtnB" onclick="handleSpin()">
                         <svg viewBox="0 0 24 24" width="30" height="30" fill="#3d1a00"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.27 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
@@ -1241,12 +1219,14 @@
             </div>
         </div>
 
-        <!-- Groups C to O Super Ace Theme Container -->
         <div id="defaultGameControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
             <div class="superace-top-bar">
                 <button class="superace-menu-btn" onclick="backToLobby()">☰</button>
-                <div style="background: rgba(0,0,0,0.5); border: 1px solid #7ea6db; border-radius: 6px; padding: 3px 10px; display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: bold; color: #ffd700;">
-                    <span>🪙</span> <span id="walletDisplay">2670</span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <div id="freeGameIndicatorDefault" class="stylish-free-banner">✨ FREE GAMES: <span id="freeGameCountDefault">0</span> ✨</div>
+                    <div style="background: rgba(0,0,0,0.5); border: 1px solid #7ea6db; border-radius: 6px; padding: 3px 10px; display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: bold; color: #ffd700;">
+                        <span>🪙</span> <span id="walletDisplay">2670</span>
+                    </div>
                 </div>
             </div>
 
@@ -1258,18 +1238,9 @@
             </div>
 
             <div class="group-c-jackpot-container" id="groupCJackpotBanner" style="display:none;">
-                <div class="group-c-jackpot-box j20000">
-                    <div class="c-j-title">JACKPOT</div>
-                    <div class="c-j-val">20000</div>
-                </div>
-                <div class="group-c-jackpot-box j5000">
-                    <div class="c-j-title">JACKPOT</div>
-                    <div class="c-j-val">5000</div>
-                </div>
-                <div class="group-c-jackpot-box j2000">
-                    <div class="c-j-title">JACKPOT</div>
-                    <div class="c-j-val">2000</div>
-                </div>
+                <div class="group-c-jackpot-box j20000"><div class="c-j-title">JACKPOT</div><div class="c-j-val">20000</div></div>
+                <div class="group-c-jackpot-box j5000"><div class="c-j-title">JACKPOT</div><div class="c-j-val">5000</div></div>
+                <div class="group-c-jackpot-box j2000"><div class="c-j-title">JACKPOT</div><div class="c-j-val">2000</div></div>
             </div>
 
             <div class="machine-main-layout">
@@ -1287,10 +1258,10 @@
                     <div style="font-size: 8px; color: #a6c4f5; font-weight: bold;">WIN</div>
                     <div style="font-size: 12px; font-weight: 900; color: #00ffcc;" id="spinWinDisplay">0.00</div>
                     <div class="superace-bet-row">
-                        <button class="bet-mini-btn minus" onclick="changeBet(-1)" style="width:18px;height:18px;background:#ff4757;color:#fff;border:none;border-radius:3px;font-weight:bold;cursor:pointer;">-</button>
+                        <button onclick="changeBet(-1)" style="width:18px;height:18px;background:#ff4757;color:#fff;border:none;border-radius:3px;font-weight:bold;cursor:pointer;">-</button>
                         <span style="font-size: 10px; font-weight:bold; color:#fff;"><span id="betDisplay">1</span></span>
-                        <button class="bet-mini-btn" onclick="changeBet(1)" style="width:18px;height:18px;background:#2ed573;color:#fff;border:none;border-radius:3px;font-weight:bold;cursor:pointer;">+</button>
-                        <button onclick="showFeature('Turbo', '⚡ Turbo Mode')" style="background:#e84118;color:#fff;border:none;border-radius:3px;width:20px;height:18px;font-size:10px;font-weight:bold;cursor:pointer;">⚡</button>
+                        <button onclick="changeBet(1)" style="width:18px;height:18px;background:#2ed573;color:#fff;border:none;border-radius:3px;font-weight:bold;cursor:pointer;">+</button>
+                        <button onclick="showFeature('Turbo', '⚡ Turbo')" style="background:#e84118;color:#fff;border:none;border-radius:3px;width:20px;height:18px;font-size:10px;font-weight:bold;cursor:pointer;">⚡</button>
                     </div>
                 </div>
 
@@ -1298,18 +1269,17 @@
             </div>
         </div>
 
-        <!-- TRANSPARENT WIN POPUP -->
         <div id="winPopupOverlay">
             <div id="winPopupTitle">MEGA WIN!</div>
             <div id="winPopupAmount">+150 COINS</div>
         </div>
     </div>
 
-    <!-- DAILY BONUS SCRATCH CARDS MODAL -->
+    <!-- DAILY BONUS MODAL -->
     <div id="scratchModal" class="custom-modal-overlay">
         <div class="modal-card" style="max-width:350px;">
             <h3 style="color:#00c6ff; margin-top:0;">🎁 Daily Bonus Scratch Cards</h3>
-            <p style="font-size:10px; color:#ccc; margin-bottom:10px;">7 scratch cards available! Choose any 1 card to scratch (Win 5 to 30 coins).</p>
+            <p style="font-size:10px; color:#ccc; margin-bottom:10px;">Choose any 1 card to scratch (Win 5 to 30 coins).</p>
             <div id="scratchCardsGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px;"></div>
             <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeScratchModal()">Close</button>
         </div>
@@ -1327,10 +1297,10 @@
         </div>
     </div>
 
-    <!-- UPGRADED PROFILE SCREEN -->
-    <div id="profileScreen" class="sub-screen" style="display:none;">
+    <!-- PROFILE SCREEN -->
+    <div id="profileScreen" class="sub-screen" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; z-index:200;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <button class="back-btn" onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back</button>
+            <button onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back</button>
             <div style="font-size: 12px; font-weight: bold; color: #00c6ff;">👤 Player Profile</div>
         </div>
 
@@ -1353,7 +1323,6 @@
 
         <div class="profile-section-card">
             <h4>📋 Player Personal Details (6 Lines)</h4>
-            <p style="font-size: 9px; color: #aaa; margin: 0 0 6px 0;">Write your details below and save them:</p>
             <div class="notebook-lines-box">
                 <textarea id="playerDetailsTextarea" class="notebook-textarea" style="height: 144px;" placeholder="Line 1: Name&#10;Line 2: Mobile No&#10;Line 3: UPI ID&#10;Line 4: Bank Acc&#10;Line 5: Address&#10;Line 6: Note"></textarea>
             </div>
@@ -1362,51 +1331,47 @@
 
         <div class="profile-section-card">
             <h4>👥 Referral Program</h4>
-            <p style="font-size: 10px; color: #ccc; margin: 0 0 6px 0;">Share your link and earn coins per referral!</p>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                 <input type="text" id="referralLinkInput" class="admin-input" readonly value="https://luckyspin.casino/ref=LS-892341" style="margin-bottom:0;">
                 <button class="admin-btn" onclick="copyReferralLink()">📋 Copy</button>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 6px;">
-                <span style="font-size: 10px; color: #00c6ff;">Total Referred: <strong id="referralCount">0</strong> users</span>
+                <span style="font-size: 10px; color: #00c6ff;">Total Referred: <strong id="referralCount">0</strong></span>
                 <span style="font-size: 10px; color: #2ed573;">Total Earned: 🪙 <strong id="referralEarnings">0</strong></span>
             </div>
-            <div id="referralHistoryBox" style="margin-top: 6px; max-height: 80px; overflow-y: auto; font-size: 9px; color: #aaa;"></div>
         </div>
 
         <div class="profile-section-card" style="text-align: center; cursor: pointer;" onclick="openWhatsAppSupport()">
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <span style="font-size: 20px;">💬</span>
                 <div style="text-align: left;">
-                    <h4 style="margin: 0; color: #25d366; border: none; padding: 0;">Support Team WhatsApp Chat</h4>
-                    <span style="font-size: 9px; color: #ccc;">Tap here to chat directly with Admin on WhatsApp</span>
+                    <h4 style="margin: 0; color: #25d366; border: none; padding: 0;">Support WhatsApp Chat</h4>
+                    <span style="font-size: 9px; color: #ccc;">Tap to chat directly with Admin</span>
                 </div>
             </div>
         </div>
 
         <div class="profile-section-card">
             <h4>📝 Player Feedback & Screenshot</h4>
-            <p style="font-size: 9px; color: #aaa; margin: 0 0 6px 0;">Write your feedback on the lines below or attach a screenshot:</p>
             <div class="notebook-lines-box" style="background-size: 100% 24px;">
-                <textarea id="feedbackTextarea" class="notebook-textarea" style="height: 120px;" placeholder="Write your feedback here (5 lines notebook format)..."></textarea>
+                <textarea id="feedbackTextarea" class="notebook-textarea" style="height: 120px;" placeholder="Write feedback here..."></textarea>
             </div>
             <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">
                 <input type="file" id="feedbackImageInput" class="admin-input" accept="image/*" style="margin-bottom:0; font-size:9px;" onchange="previewFeedbackImage(event)">
                 <span id="feedbackImgStatus" style="font-size: 9px; color: #00ffcc;">No screenshot attached</span>
             </div>
-            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="submitPlayerFeedback()">📤 Send Feedback to Admin</button>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="submitPlayerFeedback()">📤 Send Feedback</button>
         </div>
     </div>
 
-    <!-- CUSTOM WITHDRAWAL MODAL -->
+    <!-- WITHDRAWAL MODAL -->
     <div id="customWithdrawModal" class="custom-modal-overlay">
         <div class="modal-card">
             <h3 style="color:#00c6ff; margin-top:0; font-size:15px;">💸 Request Withdrawal</h3>
-            <p style="font-size:10px; color:#ccc; margin-bottom:8px;">Enter amount of coins to withdraw:</p>
             <input type="number" id="modalWithdrawAmountInput" class="admin-input" placeholder="Enter coin amount" style="text-align:center; font-size:14px; font-weight:bold;">
             <div style="display:flex; gap:6px; margin-top:10px;">
                 <button class="admin-btn" style="background:#718093; color:#fff; flex:1;" onclick="closeWithdrawalModal()">Cancel</button>
-                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1;" onclick="submitWithdrawalRequestFromModal()">Submit Request</button>
+                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1;" onclick="submitWithdrawalRequestFromModal()">Submit</button>
             </div>
         </div>
     </div>
@@ -1415,7 +1380,6 @@
     <div id="adminLoginModal" class="custom-modal-overlay">
         <div class="modal-card">
             <h3 style="color:#00c6ff; margin-top:0; font-size:15px;">🔐 Admin Login Verification</h3>
-            <p style="font-size:10px; color:#ccc; margin-bottom:8px;">Enter Admin Mobile Number & Password:</p>
             <input type="tel" id="adminLoginMobileInput" class="admin-input" placeholder="Admin Mobile Number" maxlength="10" style="text-align:center;">
             <input type="password" id="adminLoginPasswordInput" class="admin-input" placeholder="Admin Password" style="text-align:center;">
             <div style="display:flex; gap:6px; margin-top:10px;">
@@ -1426,26 +1390,25 @@
     </div>
     
     <!-- ADMIN PANEL SCREEN -->
-    <div id="adminScreen" class="sub-screen" style="display:none;">
-        <button class="back-btn" onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back to Lobby</button>
+    <div id="adminScreen" class="sub-screen" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; z-index:200; background:#0f1c3f;">
+        <button onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back to Lobby</button>
         <div style="clear: both; height: 8px;"></div>
         <h2 style="color: #00c6ff; margin-top: 0; font-size: 15px;">⚙️ Master Admin Control Panel</h2>
 
         <div class="admin-card">
             <h3>🔐 Change Admin Credentials</h3>
             <label class="admin-label">Admin Mobile Number:</label>
-            <input type="tel" id="changeAdminMobileInput" class="admin-input" placeholder="Enter new admin mobile">
+            <input type="tel" id="changeAdminMobileInput" class="admin-input">
             <label class="admin-label">Admin Password:</label>
-            <input type="password" id="changeAdminPasswordInput" class="admin-input" placeholder="Enter new admin password">
+            <input type="password" id="changeAdminPasswordInput" class="admin-input">
             <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:4px;" onclick="saveNewAdminCredentials()">💾 Update Admin Credentials</button>
         </div>
 
         <div class="admin-card">
-            <h3>🔍 SEARCH PLAYER PROFILE & DETAILS</h3>
-            <label class="admin-label">Enter Player ID or Mobile Number:</label>
+            <h3>🔍 SEARCH PLAYER PROFILE</h3>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                 <input type="text" id="adminSearchPlayerIdInput" class="admin-input" placeholder="e.g. #LS-892341 or mobile" style="margin-bottom:0;">
-                <button class="admin-btn" onclick="adminSearchPlayerProfile()" style="white-space: nowrap;">🔍 Search</button>
+                <button class="admin-btn" onclick="adminSearchPlayerProfile()">🔍 Search</button>
             </div>
             <div id="adminPlayerSearchResultBox" style="display:none; margin-top: 6px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; font-size: 10px; color: #fff;"></div>
         </div>
@@ -1467,8 +1430,8 @@
         <div class="admin-card">
             <h3>🎯 GROUP C JACKPOT TARGET CONTROL</h3>
             <label class="admin-label">Target Player Mobile / ID:</label>
-            <input type="text" id="adminGroupCPlayerId" class="admin-input" value="9876543210" placeholder="Enter target player mobile or ID">
-            <label class="admin-label">Select Jackpot To Trigger (On Next Spin):</label>
+            <input type="text" id="adminGroupCPlayerId" class="admin-input" value="9876543210">
+            <label class="admin-label">Select Jackpot To Trigger:</label>
             <select id="adminGroupCJackpotSelect" class="admin-select">
                 <option value="none">None (Standard Gameplay)</option>
                 <option value="20000">Jackpot 20000</option>
@@ -1479,50 +1442,48 @@
         </div>
 
         <div class="admin-card">
-            <h3>🖼️ LOBBY GAME LOGO MANAGER & FITTER (1 TO 150)</h3>
-            <label class="admin-label">Enter Game Number (1 to 150):</label>
+            <h3>🖼️ LOBBY GAME LOGO MANAGER (1 TO 150)</h3>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                 <input type="number" id="adminLobbyGameSearchInput" class="admin-input" min="1" max="150" value="1" style="margin-bottom:0;">
-                <button class="admin-btn" onclick="searchAdminLobbyGame()" style="white-space: nowrap;">🔍 Search Game</button>
+                <button class="admin-btn" onclick="searchAdminLobbyGame()">🔍 Search Game</button>
             </div>
             <div id="adminLobbyPreviewContainer" style="display:none; margin-top: 8px; border-top: 1px solid rgba(0,198,255,0.3); padding-top: 6px;">
-                <p style="font-size: 11px; color: #00c6ff; margin: 3px 0; font-weight: bold;">Selected Game: <span id="adminLobbyGameTitleDisplay"></span></p>
+                <p style="font-size: 11px; color: #00c6ff; margin: 3px 0; font-weight: bold;">Selected: <span id="adminLobbyGameTitleDisplay"></span></p>
                 <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">
                     <div style="flex: 1;">
                         <label class="admin-label">Upload Custom Lobby Logo:</label>
                         <input type="file" id="customLobbyLogoFileInput" class="admin-input" accept="image/*" onchange="previewCustomLobbyLogoFile(event)" style="margin-bottom:0;">
                     </div>
-                    <button class="admin-btn" style="background:#ff4757; color:#fff; height:28px; margin-top:14px;" onclick="removeCustomLobbyLogo()">🗑️ Delete Logo</button>
+                    <button class="admin-btn" style="background:#ff4757; color:#fff; height:28px; margin-top:14px;" onclick="removeCustomLobbyLogo()">🗑️ Delete</button>
                 </div>
-                <label class="admin-label">Adjust Logo Size / Zoom: <span id="lobbyLogoSizeValLabel">100</span>%</label>
-                <input type="range" id="lobbyLogoSizeRange" min="20" max="200" value="100" class="admin-input" style="padding:0;" oninput="updateLobbyLogoScaleLive(this.value)">
+                <label class="admin-label">Adjust Size / Zoom: <span id="lobbyLogoSizeValLabel">100</span>%</label>
+                <input type="range" id="lobbyLogoSizeRange" min="20" max="200" value="100" class="admin-input" oninput="updateLobbyLogoScaleLive(this.value)">
                 <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:6px;" onclick="saveLobbyLogoConfig()">💾 Save Lobby Logo</button>
             </div>
         </div>
 
         <div class="admin-card">
             <h3>🎵 CUSTOM AUDIO & BGM</h3>
-            <label class="admin-label">Upload Background Music (BGM - Lobby & Menu):</label>
+            <label class="admin-label">Upload Background Music (BGM):</label>
             <input type="file" id="customBgmFileInput" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'bgm')">
             <div id="bgmStatus" style="font-size: 9px; color: #00ffcc; margin-bottom: 6px;">No custom BGM uploaded.</div>
 
             <label class="admin-label">Upload Spin Button Sound:</label>
             <input type="file" id="customSpinAudioInput" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'spin')">
-            <div id="spinAudioStatus" style="font-size: 9px; color: #00ffcc; margin-bottom: 6px;">No custom spin sound uploaded.</div>
+            <div id="spinAudioStatus" style="font-size: 9px; color: #00ffcc; margin-bottom: 6px;">No custom spin sound.</div>
 
-            <label class="admin-label">Upload Super / Mega Win Popup Sound:</label>
+            <label class="admin-label">Upload Win Popup Sound:</label>
             <input type="file" id="customWinAudioInput" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'win')">
-            <div id="winAudioStatus" style="font-size: 9px; color: #00ffcc; margin-bottom: 6px;">No custom win sound uploaded.</div>
+            <div id="winAudioStatus" style="font-size: 9px; color: #00ffcc; margin-bottom: 6px;">No custom win sound.</div>
 
             <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:6px;" onclick="saveAudioSettings()">💾 Save Audio Settings</button>
         </div>
 
         <div class="admin-card">
             <h3>🖼️ FRAME & REEL POSITION/SIZE CUSTOMIZATION</h3>
-            <label class="admin-label">Search by Game Number (1 to 150):</label>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                 <input type="number" id="frameGameSearchInput" class="admin-input" min="1" max="150" value="1" style="margin-bottom:0;">
-                <button class="admin-btn" onclick="searchFrameGame()" style="white-space: nowrap;">🔍 Search Game</button>
+                <button class="admin-btn" onclick="searchFrameGame()">🔍 Search Game</button>
             </div>
             <div id="frameGameInfoDisplay" style="font-size: 10px; color: #00ffcc; margin-bottom: 6px; display:none;"></div>
             <button id="openFrameGameBtn" class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-bottom:6px; display:none;" onclick="openFrameSearchedGame()">🎮 Open This Game</button>
@@ -1534,7 +1495,7 @@
                 <option value="default">Groups C to O (Super Ace Theme)</option>
             </select>
 
-            <label class="admin-label">Upload Custom Frame Image (Gallery):</label>
+            <label class="admin-label">Upload Custom Frame Image:</label>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                 <input type="file" id="customFrameImageInput" class="admin-input" accept="image/*" onchange="previewCustomFrameImageFile(event)" style="margin-bottom:0;">
                 <button class="admin-btn" style="background:#ff4757; color:#fff; white-space:nowrap;" onclick="removeCustomFrameImage()">🗑️ Delete Frame</button>
@@ -1543,39 +1504,38 @@
             <label class="admin-label">1) Frame Scale: <span id="frameScaleVal">1.0</span>x</label>
             <input type="range" id="frameScaleRange" min="0.5" max="1.5" step="0.05" value="1.0" class="admin-input" oninput="document.getElementById('frameScaleVal').innerText=this.value; previewFrameScaleLive(this.value)">
 
-            <label class="admin-label">2) Reel Area Zoom Scale: <span id="reelScaleVal">1.0</span>x</label>
+            <label class="admin-label">2) Reel Zoom Scale: <span id="reelScaleVal">1.0</span>x</label>
             <input type="range" id="reelScaleRange" min="0.5" max="1.5" step="0.05" value="1.0" class="admin-input" oninput="document.getElementById('reelScaleVal').innerText=this.value; previewReelLiveConfigs()">
 
             <label class="admin-label">3) Reel Width (%): <span id="reelWidthVal">100</span>%</label>
-            <input type="range" id="reelWidthRange" min="50" max="150" step="1" value="100" class="admin-input" oninput="document.getElementById('reelWidthVal').innerText=this.value; previewReelLiveConfigs()">
+            <input type="range" id="reelWidthRange" min="50" max="150" step="1" value="100" class="admin-input" oninput="previewReelLiveConfigs()">
 
             <label class="admin-label">4) Reel Height (%): <span id="reelHeightVal">100</span>%</label>
-            <input type="range" id="reelHeightRange" min="50" max="150" step="1" value="100" class="admin-input" oninput="document.getElementById('reelHeightVal').innerText=this.value; previewReelLiveConfigs()">
+            <input type="range" id="reelHeightRange" min="50" max="150" step="1" value="100" class="admin-input" oninput="previewReelLiveConfigs()">
 
             <label class="admin-label">5) Reel Offset X: <span id="reelOffsetXVal">0</span>px</label>
-            <input type="range" id="reelOffsetXRange" min="-100" max="100" step="1" value="0" class="admin-input" oninput="document.getElementById('reelOffsetXVal').innerText=this.value; previewReelLiveConfigs()">
+            <input type="range" id="reelOffsetXRange" min="-100" max="100" step="1" value="0" class="admin-input" oninput="previewReelLiveConfigs()">
 
             <label class="admin-label">6) Reel Offset Y: <span id="reelOffsetYVal">0</span>px</label>
-            <input type="range" id="reelOffsetYRange" min="-100" max="100" step="1" value="0" class="admin-input" oninput="document.getElementById('reelOffsetYVal').innerText=this.value; previewReelLiveConfigs()">
+            <input type="range" id="reelOffsetYRange" min="-100" max="100" step="1" value="0" class="admin-input" oninput="previewReelLiveConfigs()">
 
             <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:6px;" onclick="saveGameFrameConfig()">💾 Save Frame & Reel Settings</button>
         </div>
 
         <div class="admin-card">
             <h3>⚙️ SYMBOL FITTER (PERMANENT SAVE)</h3>
-            <label class="admin-label">Enter Game Number (1 to 150):</label>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                 <input type="number" id="adminGameSearchInput" class="admin-input" min="1" max="150" value="1" style="margin-bottom:0;">
-                <button class="admin-btn" onclick="searchAdminGame()" style="white-space: nowrap;">🔍 Search</button>
+                <button class="admin-btn" onclick="searchAdminGame()">🔍 Search</button>
             </div>
             <div id="adminGamePreviewContainer" style="display:none; margin-top: 8px; border-top: 1px solid rgba(0,198,255,0.3); padding-top: 6px;">
-                <p style="font-size: 11px; color: #00c6ff; margin: 3px 0; font-weight: bold;">Game Found: <span id="adminGameTitleDisplay"></span></p>
+                <p style="font-size: 11px; color: #00c6ff; margin: 3px 0; font-weight: bold;">Game: <span id="adminGameTitleDisplay"></span></p>
                 <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin: 6px 0;" onclick="openSearchedGameDirectly()">🎮 Open This Game</button>
                 <div id="adminMasterSymbolsPalette" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; background: #000; padding: 6px; border: 2px solid #00c6ff; border-radius: 6px; margin-bottom: 6px; max-height: 180px; overflow-y: auto;"></div>
                 <div id="selectedSymbolInfo" style="font-size: 10px; color: #00ffcc; margin-bottom: 6px; font-weight: bold;">Selected Symbol: Index 0</div>
                 <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                     <input type="file" id="customSymbolFileInput" class="admin-input" accept="image/*" onchange="previewCustomSymbolFile(event)" style="margin-bottom:0;">
-                    <button class="admin-btn" style="background:#ff4757; color:#fff; white-space:nowrap;" onclick="removeCustomSymbol()">🗑️ Delete Symbol</button>
+                    <button class="admin-btn" style="background:#ff4757; color:#fff; white-space:nowrap;" onclick="removeCustomSymbol()">🗑️ Delete</button>
                 </div>
                 <label class="admin-label">Adjust Size: <span id="sizeValLabel">100</span>%</label>
                 <input type="range" id="symbolSizeRange" min="20" max="200" value="100" class="admin-input" oninput="updateSymbolScaleLive(this.value)">
@@ -1586,21 +1546,19 @@
         <div class="admin-card">
             <h3>🎮 GAME DIFFICULTY MODE</h3>
             <select id="adminDifficultySelect" class="admin-select" onchange="updateDifficultySetting(this.value)">
-                <option value="normal">Normal Mode (Balanced & Fair Win)</option>
-                <option value="medium">Medium Mode (Win-Loss Pattern: Frequent small wins, medium wins after intervals, ultimate net loss)</option>
-                <option value="hard">Hard Mode (Relentless Heavy Losses - Extremely rare minimal wins)</option>
+                <option value="normal">Normal Mode (Balanced)</option>
+                <option value="medium">Medium Mode (Win-Loss Pattern)</option>
+                <option value="hard">Hard Mode (Heavy Losses)</option>
             </select>
         </div>
 
         <div class="admin-card">
             <h3>🎯 FORCE WIN / LOSS CONTROL</h3>
-            <label class="admin-label">Player ID / Mobile:</label>
             <input type="text" id="forcePlayerIdInput" class="admin-input" value="9876543210">
-            <label class="admin-label">Outcome Mode:</label>
             <select id="forceModeSelect" class="admin-select">
-                <option value="none">Normal (Strict Difficulty Rule)</option>
+                <option value="none">Normal Rule</option>
                 <option value="win">Force Win 🟢</option>
-                <option value="loss">Force Loss 🔴 (With occasional small wins)</option>
+                <option value="loss">Force Loss 🔴</option>
             </select>
             <button class="admin-btn" onclick="saveForceRule()">💾 Save Rule</button>
         </div>
@@ -1613,11 +1571,11 @@
 
         <div class="admin-card">
             <h3>🪙 COIN ADD / DEDUCT CONTROL</h3>
-            <input type="text" id="searchCoinPlayerInput" class="admin-input" placeholder="Enter player mobile number">
+            <input type="text" id="searchCoinPlayerInput" class="admin-input" placeholder="Enter player mobile">
             <button class="admin-btn" onclick="searchPlayerCoins()">🔍 Search Player</button>
             <div id="playerCoinDetailsBox" style="display:none; margin-top:6px; background:rgba(0,0,0,0.3); padding:6px; border-radius:4px;">
                 <p style="margin:2px 0; font-size:10px;">Player: <span id="foundPlayerName" style="color:#00c6ff"></span></p>
-                <p style="margin:2px 0; font-size:10px;">Current Balance: 🪙 <span id="foundPlayerBalance" style="color:#00ffcc; font-weight:bold;">2670</span></p>
+                <p style="margin:2px 0; font-size:10px;">Balance: 🪙 <span id="foundPlayerBalance" style="color:#00ffcc; font-weight:bold;">2670</span></p>
                 <input type="number" id="coinAmountChangeInput" class="admin-input" placeholder="Enter amount">
                 <button class="admin-btn" style="background:#2ed573; color:#fff;" onclick="applyCoinChange('add')">➕ Add Coins</button>
                 <button class="admin-btn" style="background:#ff4757; color:#fff;" onclick="applyCoinChange('deduct')">➖ Deduct Coins</button>
@@ -1635,1534 +1593,1460 @@
         <div class="nav-item" onclick="switchNav(this, 'Profile')"><div class="nav-icon">👤</div>Profile</div>
     </div>
 </div>
+
 <script>
-        const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
-        const iconsPool = ["👑", "🍉", "🐯", "💎", "🐉", "🎰", "🌟", "🪙", "🔥", "🧞", "🏴‍☠️", "🐃", "🍬", "⚡", "🗿", "👸", "🦁", "🐚", "🃏", "🐼", "🍇", "🔱", "🏦", "🌶️", "📖", "✨", "🎡", "⭐", "🍒", "🔔"];
-        let gameList = [];
-        
-        let counter = 1;
-        groups.forEach(g => {
-            for (let i = 1; i <= 10; i++) {
-                gameList.push({
-                    id: counter,
-                    name: `Slot Pro ${counter}`,
-                    icon: iconsPool[(counter - 1) % iconsPool.length],
-                    sub: `${(counter % 3) + 2}x - ${(counter % 5 + 3) * 5}x`,
-                    group: g
-                });
-                counter++;
-            }
-        });
-
-        let currentActiveGroup = 'A';
-
-        let generatedOtp = "";
-        let pendingMobile = "";
-
-        // --- INTERNET CONNECTIVITY CHECKER ---
-        function checkInternetAndReload() {
-            if (navigator.onLine) {
-                document.getElementById('offlineScreen').style.display = 'none';
-                initAppFlow();
+    function safeSaveLocalStorage(key, dataString) {
+        try {
+            localStorage.setItem(key, dataString);
+            return true;
+        } catch (e) {
+            if (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014) {
+                try {
+                    localStorage.removeItem('slot_game_symbol_configs');
+                    localStorage.setItem(key, dataString);
+                    alert("⚠️ Storage full ho gayi thi, purana symbol cache clear karke data save kar diya gaya hai!");
+                    return true;
+                } catch (err2) {
+                    alert("⚠️ Storage Full: Image size bahut badi hai! Kripya chote size ki image upload karein.");
+                }
             } else {
-                alert("⚠️ Abhi bhi internet connection nahi hai! Kripya network check karein.");
+                alert("⚠️ Save error: " + e.message);
             }
+            return false;
         }
+    }
 
-        window.addEventListener('online', () => {
+    function compressImageFile(file, maxWidth, maxHeight, quality, callback) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            let img = new Image();
+            img.onload = function() {
+                let canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                let ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                let compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                callback(compressedDataUrl);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
+    const iconsPool = ["👑", "🍉", "🐯", "💎", "🐉", "🎰", "🌟", "🪙", "🔥", "🧞", "🏴‍☠️", "🐃", "🍬", "⚡", "🗿", "👸", "🦁", "🐚", "🃏", "🐼", "🍇", "🔱", "🏦", "🌶️", "📖", "✨", "🎡", "⭐", "🍒", "🔔"];
+    let gameList = [];
+    
+    let counter = 1;
+    groups.forEach(g => {
+        for (let i = 1; i <= 10; i++) {
+            gameList.push({
+                id: counter,
+                name: `Slot Pro ${counter}`,
+                icon: iconsPool[(counter - 1) % iconsPool.length],
+                sub: `${(counter % 3) + 2}x - ${(counter % 5 + 3) * 5}x`,
+                group: g
+            });
+            counter++;
+        }
+    });
+
+    let currentActiveGroup = 'A';
+    let generatedOtp = "";
+    let pendingMobile = "";
+
+    function checkInternetAndReload() {
+        if (navigator.onLine) {
             document.getElementById('offlineScreen').style.display = 'none';
             initAppFlow();
-        });
+        } else {
+            alert("⚠️ Internet connection nahi hai!");
+        }
+    }
 
-        window.addEventListener('offline', () => {
-            document.getElementById('offlineScreen').style.display = 'flex';
-        });
+    window.addEventListener('online', () => {
+        document.getElementById('offlineScreen').style.display = 'none';
+        initAppFlow();
+    });
 
-        // Continuous Background Music Init & Audio Configs
-        let gameAudioConfigs = JSON.parse(localStorage.getItem('slot_game_audio_configs') || '{"bgm": null, "spin": null, "win": null}');
-        let bgmAudioElement = new Audio();
-        bgmAudioElement.loop = true;
-        
-        function startContinuousBgm() {
-            if (bgmAudioElement.paused) {
-                if (gameAudioConfigs.bgm) {
-                    bgmAudioElement.src = gameAudioConfigs.bgm;
-                    bgmAudioElement.play().catch(e => {});
+    window.addEventListener('offline', () => {
+        document.getElementById('offlineScreen').style.display = 'flex';
+    });
+
+    let gameAudioConfigs = JSON.parse(localStorage.getItem('slot_game_audio_configs') || '{"bgm": null, "spin": null, "win": null}');
+    let bgmAudioElement = new Audio();
+    bgmAudioElement.loop = true;
+    
+    function startContinuousBgm() {
+        if (bgmAudioElement.paused && gameAudioConfigs.bgm) {
+            bgmAudioElement.src = gameAudioConfigs.bgm;
+            bgmAudioElement.play().catch(e => {});
+        }
+    }
+
+    function previewCustomAudio(event, type) {
+        let file = event.target.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                gameAudioConfigs[type] = e.target.result;
+                if (type === 'bgm') {
+                    document.getElementById('bgmStatus').innerText = "✅ Custom BGM ready";
+                    bgmAudioElement.src = e.target.result;
+                    bgmAudioElement.play().catch(err => {});
                 }
-            }
-        }
-
-        function previewCustomAudio(event, type) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    gameAudioConfigs[type] = e.target.result;
-                    if (type === 'bgm') {
-                        document.getElementById('bgmStatus').innerText = "✅ Custom BGM ready";
-                        bgmAudioElement.src = e.target.result;
-                        bgmAudioElement.play().catch(err => {});
-                    }
-                    if (type === 'spin') document.getElementById('spinAudioStatus').innerText = "✅ Custom Spin Sound ready";
-                    if (type === 'win') document.getElementById('winAudioStatus').innerText = "✅ Custom Win Sound ready";
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function saveAudioSettings() {
-            localStorage.setItem('slot_game_audio_configs', JSON.stringify(gameAudioConfigs));
-            alert("✅ Audio settings successfully saved!");
-        }
-
-        // --- LOBBY GAME LOGO MANAGER & FITTER FUNCTIONS ---
-        let selectedLobbyGameId = 1;
-        let tempLobbyLogoDataUrl = null;
-        let lobbyLogoRemoved = false;
-        let lobbyLogoConfigs = JSON.parse(localStorage.getItem('slot_lobby_logo_configs') || '{}');
-
-        function searchAdminLobbyGame() {
-            let gNum = parseInt(document.getElementById('adminLobbyGameSearchInput').value);
-            let game = gameList.find(g => g.id === gNum);
-            if (!game) {
-                alert("⚠️ Invalid Game Number (1 to 150)!");
-                return;
-            }
-            selectedLobbyGameId = game.id;
-            document.getElementById('adminLobbyPreviewContainer').style.display = 'block';
-            document.getElementById('adminLobbyGameTitleDisplay').innerText = `[#${game.id}] ${game.name} (Group ${game.group})`;
-            
-            let cfg = lobbyLogoConfigs[game.id] || lobbyLogoConfigs[String(game.id)] || { url: null, scale: 100 };
-            let currentScale = cfg.scale !== undefined ? cfg.scale : 100;
-            document.getElementById('lobbyLogoSizeRange').value = currentScale;
-            document.getElementById('lobbyLogoSizeValLabel').innerText = currentScale;
-            tempLobbyLogoDataUrl = cfg.url || null;
-            lobbyLogoRemoved = false;
-        }
-
-        function previewCustomLobbyLogoFile(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    tempLobbyLogoDataUrl = e.target.result;
-                    lobbyLogoRemoved = false;
-                    alert("✅ Lobby logo preview loaded successfully!");
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function removeCustomLobbyLogo() {
-            tempLobbyLogoDataUrl = null;
-            lobbyLogoRemoved = true;
-            alert("🗑️ Logo marked for deletion. Click 'Save Lobby Logo' to apply.");
-        }
-
-        function updateLobbyLogoScaleLive(val) {
-            document.getElementById('lobbyLogoSizeValLabel').innerText = val;
-        }
-
-        function saveLobbyLogoConfig() {
-            let scaleVal = parseInt(document.getElementById('lobbyLogoSizeRange').value);
-            if (lobbyLogoRemoved) {
-                if (lobbyLogoConfigs[selectedLobbyGameId]) delete lobbyLogoConfigs[selectedLobbyGameId];
-                if (lobbyLogoConfigs[String(selectedLobbyGameId)]) delete lobbyLogoConfigs[String(selectedLobbyGameId)];
-            } else {
-                if (!lobbyLogoConfigs[selectedLobbyGameId]) lobbyLogoConfigs[selectedLobbyGameId] = {};
-                if (tempLobbyLogoDataUrl) {
-                    lobbyLogoConfigs[selectedLobbyGameId].url = tempLobbyLogoDataUrl;
-                }
-                lobbyLogoConfigs[selectedLobbyGameId].scale = scaleVal;
-            }
-            localStorage.setItem('slot_lobby_logo_configs', JSON.stringify(lobbyLogoConfigs));
-            renderLobbyGridForGroup(currentActiveGroup);
-            alert("✅ Lobby game logo config successfully saved!");
-        }
-
-        // --- FRAME & REEL POSITION/SIZE CUSTOMIZATION FUNCTIONS ---
-        let gameFrameConfigs = JSON.parse(localStorage.getItem('slot_game_frame_configs') || '{}');
-        let tempFrameImageBase64 = null;
-        let frameImageRemoved = false;
-
-        function searchFrameGame() {
-            let gNum = parseInt(document.getElementById('frameGameSearchInput').value);
-            let game = gameList.find(g => g.id === gNum);
-            let infoBox = document.getElementById('frameGameInfoDisplay');
-            let openBtn = document.getElementById('openFrameGameBtn');
-            if (!game) {
-                alert("⚠️ Invalid Game Number!");
-                infoBox.style.display = 'none';
-                openBtn.style.display = 'none';
-                return;
-            }
-            infoBox.style.display = 'block';
-            infoBox.innerText = `Found Game: [#${game.id}] ${game.name} (Group ${game.group})`;
-            openBtn.style.display = 'block';
-
-            let targetSelect = document.getElementById('adminFrameTargetSelect');
-            if (game.group === 'A') targetSelect.value = 'groupA';
-            else if (game.group === 'B') targetSelect.value = 'groupB';
-            else targetSelect.value = 'default';
-
-            loadFrameSettingsForTarget(targetSelect.value);
-        }
-
-        function openFrameSearchedGame() {
-            let gNum = parseInt(document.getElementById('frameGameSearchInput').value);
-            let game = gameList.find(g => g.id === gNum);
-            if (game) openGame(game.id);
-        }
-
-        function previewCustomFrameImageFile(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    tempFrameImageBase64 = e.target.result;
-                    frameImageRemoved = false;
-                    alert("✅ Custom frame image preview loaded!");
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function removeCustomFrameImage() {
-            tempFrameImageBase64 = null;
-            frameImageRemoved = true;
-            alert("🗑️ Frame image marked for deletion. Click 'Save Frame & Reel Settings' to apply.");
-        }
-
-        function loadFrameSettingsForTarget(targetKey) {
-            let cfg = gameFrameConfigs[targetKey] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0, frameImageUrl: null };
-            
-            let scale = cfg.scale !== undefined && !isNaN(cfg.scale) ? cfg.scale : 1.0;
-            let reelScale = cfg.reelScale !== undefined && !isNaN(cfg.reelScale) ? cfg.reelScale : 1.0;
-            let width = cfg.width !== undefined && !isNaN(cfg.width) ? cfg.width : 100;
-            let height = cfg.height !== undefined && !isNaN(cfg.height) ? cfg.height : 100;
-            let offsetX = cfg.offsetX !== undefined && !isNaN(cfg.offsetX) ? cfg.offsetX : 0;
-            let offsetY = cfg.offsetY !== undefined && !isNaN(cfg.offsetY) ? cfg.offsetY : 0;
-
-            document.getElementById('frameScaleRange').value = scale;
-            document.getElementById('frameScaleVal').innerText = scale;
-
-            document.getElementById('reelScaleRange').value = reelScale;
-            document.getElementById('reelScaleVal').innerText = reelScale;
-
-            document.getElementById('reelWidthRange').value = width;
-            document.getElementById('reelWidthVal').innerText = width;
-
-            document.getElementById('reelHeightRange').value = height;
-            document.getElementById('reelHeightVal').innerText = height;
-
-            document.getElementById('reelOffsetXRange').value = offsetX;
-            document.getElementById('reelOffsetXVal').innerText = offsetX;
-
-            document.getElementById('reelOffsetYRange').value = offsetY;
-            document.getElementById('reelOffsetYVal').innerText = offsetY;
-
-            tempFrameImageBase64 = cfg.frameImageUrl || null;
-            frameImageRemoved = false;
-        }
-
-        function previewFrameScaleLive(val) {
-            let targetKey = document.getElementById('adminFrameTargetSelect').value;
-            let frameBoxId = 'slotFrameBoxDefault';
-            if (targetKey === 'groupA') frameBoxId = 'slotFrameBoxA';
-            if (targetKey === 'groupB') frameBoxId = 'slotFrameBoxB';
-            let el = document.getElementById(frameBoxId);
-            if (el) {
-                el.style.transform = `scale(${val})`;
-            }
-        }
-
-        function previewReelLiveConfigs() {
-            let scale = parseFloat(document.getElementById('frameScaleRange').value) || 1.0;
-            let width = parseInt(document.getElementById('reelWidthRange').value) || 100;
-            let height = parseInt(document.getElementById('reelHeightRange').value) || 100;
-            let offsetX = parseInt(document.getElementById('reelOffsetXRange').value) || 0;
-            let offsetY = parseInt(document.getElementById('reelOffsetYRange').value) || 0;
-
-            document.getElementById('reelWidthVal').innerText = width;
-            document.getElementById('reelHeightVal').innerText = height;
-            document.getElementById('reelOffsetXVal').innerText = offsetX;
-            document.getElementById('reelOffsetYVal').innerText = offsetY;
-
-            let targetKey = document.getElementById('adminFrameTargetSelect').value;
-            let frameBoxId = 'slotFrameBoxDefault';
-            if (targetKey === 'groupA') frameBoxId = 'slotFrameBoxA';
-            if (targetKey === 'groupB') frameBoxId = 'slotFrameBoxB';
-            let el = document.getElementById(frameBoxId);
-            if (el) {
-                el.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
-                el.style.width = `${width}%`;
-                el.style.height = `${height}%`;
-            }
-        }
-
-        function saveGameFrameConfig() {
-            let targetKey = document.getElementById('adminFrameTargetSelect').value;
-            let existingCfg = gameFrameConfigs[targetKey] || {};
-            let cfg = {
-                scale: parseFloat(document.getElementById('frameScaleRange').value) || 1.0,
-                reelScale: parseFloat(document.getElementById('reelScaleRange').value) || 1.0,
-                width: parseInt(document.getElementById('reelWidthRange').value) || 100,
-                height: parseInt(document.getElementById('reelHeightRange').value) || 100,
-                offsetX: parseInt(document.getElementById('reelOffsetXRange').value) || 0,
-                offsetY: parseInt(document.getElementById('reelOffsetYRange').value) || 0,
-                frameImageUrl: frameImageRemoved ? null : (tempFrameImageBase64 || existingCfg.frameImageUrl || null)
+                if (type === 'spin') document.getElementById('spinAudioStatus').innerText = "✅ Custom Spin Sound ready";
+                if (type === 'win') document.getElementById('winAudioStatus').innerText = "✅ Custom Win Sound ready";
             };
-            gameFrameConfigs[targetKey] = cfg;
-            localStorage.setItem('slot_game_frame_configs', JSON.stringify(gameFrameConfigs));
-            alert("✅ Frame & Reel settings successfully saved!");
+            reader.readAsDataURL(file);
         }
+    }
 
-        function sendLoginOtp() {
-            let mobile = document.getElementById('loginMobileInput').value.trim();
-            if (mobile.length < 10) {
-                alert("⚠️ Kripya 10-digit valid mobile number enter karein!");
-                return;
-            }
-            pendingMobile = mobile;
-            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-            
-            document.getElementById('mobileStepDiv').style.display = 'none';
-            document.getElementById('otpStepDiv').style.display = 'block';
-            document.getElementById('otpHintText').innerText = `🔐 Test OTP for ${mobile} is: ${generatedOtp}`;
+    function saveAudioSettings() {
+        if (safeSaveLocalStorage('slot_game_audio_configs', JSON.stringify(gameAudioConfigs))) {
+            alert("✅ Audio settings successfully saved permanently!");
         }
+    }
 
-        function verifyLoginOtp() {
-            let enteredOtp = document.getElementById('loginOtpInput').value.trim();
-            if (enteredOtp !== generatedOtp) {
-                alert("⚠️ Invalid OTP! Kripya sahi OTP enter karein.");
-                return;
-            }
+    let selectedLobbyGameId = 1;
+    let tempLobbyLogoDataUrl = null;
+    let lobbyLogoRemoved = false;
+    let lobbyLogoConfigs = JSON.parse(localStorage.getItem('slot_lobby_logo_configs') || '{}');
 
-            localStorage.setItem('casino_logged_in', 'true');
-            localStorage.setItem('casino_player_mobile', pendingMobile);
-            
-            let uid = localStorage.getItem('casino_player_uid');
-            if (!uid) {
-                uid = '#LS-' + Math.floor(100000 + Math.random() * 900000);
-                localStorage.setItem('casino_player_uid', uid);
-            }
+    function searchAdminLobbyGame() {
+        let gNum = parseInt(document.getElementById('adminLobbyGameSearchInput').value);
+        let game = gameList.find(g => g.id === gNum);
+        if (!game) { alert("⚠️ Invalid Game Number!"); return; }
+        selectedLobbyGameId = game.id;
+        document.getElementById('adminLobbyPreviewContainer').style.display = 'block';
+        document.getElementById('adminLobbyGameTitleDisplay').innerText = `[#${game.id}] ${game.name} (Group ${game.group})`;
+        
+        let cfg = lobbyLogoConfigs[game.id] || lobbyLogoConfigs[String(game.id)] || { url: null, scale: 100 };
+        let currentScale = cfg.scale !== undefined ? cfg.scale : 100;
+        document.getElementById('lobbyLogoSizeRange').value = currentScale;
+        document.getElementById('lobbyLogoSizeValLabel').innerText = currentScale;
+        tempLobbyLogoDataUrl = cfg.url || null;
+        lobbyLogoRemoved = false;
+    }
 
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('lobbyScreen').style.display = 'flex';
-            startContinuousBgm();
-            updateUIStats();
-            alert("✅ Successfully logged in!");
-        }
-
-        function openAdminPanel() {
-            document.getElementById('adminLoginMobileInput').value = "";
-            document.getElementById('adminLoginPasswordInput').value = "";
-            document.getElementById('adminLoginModal').style.display = 'flex';
-        }
-
-        function closeAdminLoginModal() {
-            document.getElementById('adminLoginModal').style.display = 'none';
-        }
-
-        function verifyAdminLogin() {
-            let enteredMob = document.getElementById('adminLoginMobileInput').value.trim();
-            let enteredPass = document.getElementById('adminLoginPasswordInput').value.trim();
-
-            let savedAdminMob = localStorage.getItem('casino_admin_mobile') || "9876543210";
-            let savedAdminPass = localStorage.getItem('casino_admin_password') || "admin123";
-
-            if (enteredMob === savedAdminMob && enteredPass === savedAdminPass) {
-                closeAdminLoginModal();
-                hideAllScreens();
-                document.getElementById('adminScreen').style.display = 'block';
-                updateUIStats();
-                renderAdminWithdrawals();
-
-                document.getElementById('changeAdminMobileInput').value = savedAdminMob;
-                document.getElementById('changeAdminPasswordInput').value = savedAdminPass;
-            } else {
-                alert("⚠️ Invalid Admin Mobile Number or Password!");
-            }
-        }
-
-        function saveNewAdminCredentials() {
-            let newMob = document.getElementById('changeAdminMobileInput').value.trim();
-            let newPass = document.getElementById('changeAdminPasswordInput').value.trim();
-
-            if (newMob.length < 10 || newPass === "") {
-                alert("⚠️ Kripya valid admin mobile number aur password enter karein!");
-                return;
-            }
-
-            localStorage.setItem('casino_admin_mobile', newMob);
-            localStorage.setItem('casino_admin_password', newPass);
-            alert("✅ Admin credentials successfully updated!");
-        }
-
-        function getPlayerUniqueId() {
-            let uid = localStorage.getItem('casino_player_uid');
-            if (!uid) {
-                uid = '#LS-' + Math.floor(100000 + Math.random() * 900000);
-                localStorage.setItem('casino_player_uid', uid);
-            }
-            return uid;
-        }
-
-        function getProfilePic() {
-            return localStorage.getItem('casino_profile_pic') || null;
-        }
-
-        function updateProfilePicture(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    localStorage.setItem('casino_profile_pic', e.target.result);
-                    renderProfileScreenData();
-                    alert("✅ Profile picture updated successfully!");
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function savePlayerPersonalDetails() {
-            let detailsText = document.getElementById('playerDetailsTextarea').value;
-            localStorage.setItem('casino_player_saved_details', detailsText);
-            alert("✅ Player personal details saved successfully!");
-        }
-
-        function adminSearchPlayerProfile() {
-            let query = document.getElementById('adminSearchPlayerIdInput').value.trim().toLowerCase();
-            let resultBox = document.getElementById('adminPlayerSearchResultBox');
-            if (!query) {
-                alert("⚠️ Kripya Player ID ya Mobile Number enter karein!");
-                return;
-            }
-
-            let myUid = getPlayerUniqueId().toLowerCase();
-            let myMobile = (localStorage.getItem('casino_player_mobile') || "9876543210").toLowerCase();
-            let myBal = getWallet();
-            let myDetails = localStorage.getItem('casino_player_saved_details') || "No details saved yet.";
-            let myPic = getProfilePic();
-
-            if (myUid.includes(query) || myMobile.includes(query) || query.includes("lucky")) {
-                resultBox.style.display = 'block';
-                resultBox.innerHTML = `
-                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
-                        <div style="width:36px; height:36px; border-radius:50%; background:#222; overflow:hidden; border:1px solid #00c6ff; display:flex; align-items:center; justify-content:center;">
-                            ${myPic ? `<img src="${myPic}" style="width:100%; height:100%; object-fit:cover;" />` : `<span>👤</span>`}
-                        </div>
-                        <div>
-                            <strong style="color:#00c6ff;">LuckyPlayer_777</strong> (${getPlayerUniqueId()})<br>
-                            <span style="color:#00ffcc;">Mobile: ${myMobile} | Balance: 🪙 ${myBal.toFixed(2)}</span>
-                        </div>
-                    </div>
-                    <div style="background:rgba(0,0,0,0.6); padding:6px; border-radius:4px; font-size:9px; white-space:pre-wrap; border:1px solid rgba(0,198,255,0.3);"><strong>Saved Details (6 Lines):</strong><br>${myDetails}</div>
-                `;
-            } else {
-                resultBox.style.display = 'block';
-                resultBox.innerHTML = `<span style="color:#ff4757;">⚠️ No player found with ID or Mobile: "${query}"</span>`;
-            }
-        }
-
-        let tempFeedbackImageBase64 = null;
-        function previewFeedbackImage(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    tempFeedbackImageBase64 = e.target.result;
-                    document.getElementById('feedbackImgStatus').innerText = "✅ Screenshot Attached";
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function submitPlayerFeedback() {
-            let text = document.getElementById('feedbackTextarea').value.trim();
-            if (text === "" && !tempFeedbackImageBase64) {
-                alert("⚠️ Kripya feedback text likhein ya screenshot attach karein!");
-                return;
-            }
-            let feedbacks = JSON.parse(localStorage.getItem('casino_player_feedbacks') || '[]');
-            feedbacks.unshift({
-                uid: getPlayerUniqueId(),
-                text: text,
-                image: tempFeedbackImageBase64,
-                time: new Date().toLocaleString()
+    function previewCustomLobbyLogoFile(event) {
+        let file = event.target.files[0];
+        if (file) {
+            compressImageFile(file, 100, 100, 0.5, function(compressedUrl) {
+                tempLobbyLogoDataUrl = compressedUrl;
+                lobbyLogoRemoved = false;
+                alert("✅ Lobby logo compressed & preview loaded successfully!");
             });
-            localStorage.setItem('casino_player_feedbacks', JSON.stringify(feedbacks));
-            document.getElementById('feedbackTextarea').value = "";
-            tempFeedbackImageBase64 = null;
-            document.getElementById('feedbackImgStatus').innerText = "No screenshot attached";
-            alert("✅ Feedback sent to admin successfully!");
         }
+    }
 
-        function openWithdrawalModal() {
-            document.getElementById('modalWithdrawAmountInput').value = "";
-            document.getElementById('customWithdrawModal').style.display = 'flex';
+    function removeCustomLobbyLogo() {
+        tempLobbyLogoDataUrl = null;
+        lobbyLogoRemoved = true;
+        alert("🗑️ Logo marked for deletion. Click 'Save Lobby Logo' to apply.");
+    }
+
+    function updateLobbyLogoScaleLive(val) {
+        document.getElementById('lobbyLogoSizeValLabel').innerText = val;
+    }
+
+    function saveLobbyLogoConfig() {
+        let scaleVal = parseInt(document.getElementById('lobbyLogoSizeRange').value);
+        if (lobbyLogoRemoved) {
+            if (lobbyLogoConfigs[selectedLobbyGameId]) delete lobbyLogoConfigs[selectedLobbyGameId];
+            if (lobbyLogoConfigs[String(selectedLobbyGameId)]) delete lobbyLogoConfigs[String(selectedLobbyGameId)];
+        } else {
+            if (!lobbyLogoConfigs[selectedLobbyGameId]) lobbyLogoConfigs[selectedLobbyGameId] = {};
+            if (tempLobbyLogoDataUrl) {
+                lobbyLogoConfigs[selectedLobbyGameId].url = tempLobbyLogoDataUrl;
+            }
+            lobbyLogoConfigs[selectedLobbyGameId].scale = scaleVal;
         }
-
-        function closeWithdrawalModal() {
-            document.getElementById('customWithdrawModal').style.display = 'none';
+        if (safeSaveLocalStorage('slot_lobby_logo_configs', JSON.stringify(lobbyLogoConfigs))) {
+            renderLobbyGridForGroup(currentActiveGroup);
+            alert("✅ Lobby game logo config successfully saved permanently!");
         }
+    }
 
-        function submitWithdrawalRequestFromModal() {
-            let amtStr = document.getElementById('modalWithdrawAmountInput').value.trim();
-            if (amtStr === "") {
-                alert("⚠️ Kripya withdrawal amount enter karein!");
-                return;
-            }
-            let amt = parseFloat(amtStr);
-            if (isNaN(amt) || amt <= 0) {
-                alert("⚠️ Valid amount enter karein!");
-                return;
-            }
-            let currentBal = getWallet();
-            if (amt > currentBal) {
-                alert("⚠️ Insufficient balance for withdrawal!");
-                return;
-            }
-            currentBal -= amt;
-            setWallet(currentBal);
+    let gameFrameConfigs = JSON.parse(localStorage.getItem('slot_game_frame_configs') || '{}');
+    let tempFrameImageBase64 = null;
+    let frameImageRemoved = false;
 
-            let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
-            requests.unshift({
-                uid: getPlayerUniqueId(),
-                amount: amt,
-                status: 'Pending',
-                time: new Date().toLocaleString()
+    function searchFrameGame() {
+        let gNum = parseInt(document.getElementById('frameGameSearchInput').value);
+        let game = gameList.find(g => g.id === gNum);
+        let infoBox = document.getElementById('frameGameInfoDisplay');
+        let openBtn = document.getElementById('openFrameGameBtn');
+        if (!game) {
+            infoBox.style.display = 'none';
+            openBtn.style.display = 'none';
+            return;
+        }
+        infoBox.style.display = 'block';
+        infoBox.innerText = `Found Game: [#${game.id}] ${game.name} (Group ${game.group})`;
+        openBtn.style.display = 'block';
+        let targetSelect = document.getElementById('adminFrameTargetSelect');
+        if (game.group === 'A') targetSelect.value = 'groupA';
+        else if (game.group === 'B') targetSelect.value = 'groupB';
+        else targetSelect.value = 'default';
+        loadFrameSettingsForTarget(targetSelect.value);
+    }
+
+    function openFrameSearchedGame() {
+        let gNum = parseInt(document.getElementById('frameGameSearchInput').value);
+        let game = gameList.find(g => g.id === gNum);
+        if (game) openGame(game.id);
+    }
+
+    function previewCustomFrameImageFile(event) {
+        let file = event.target.files[0];
+        if (file) {
+            compressImageFile(file, 200, 200, 0.6, function(compressedUrl) {
+                tempFrameImageBase64 = compressedUrl;
+                frameImageRemoved = false;
+                alert("✅ Custom frame image compressed & preview loaded!");
             });
-            localStorage.setItem('casino_withdrawal_requests', JSON.stringify(requests));
-            
-            closeWithdrawalModal();
+        }
+    }
+
+    function removeCustomFrameImage() {
+        tempFrameImageBase64 = null;
+        frameImageRemoved = true;
+        alert("🗑️ Frame image marked for deletion.");
+    }
+
+    function loadFrameSettingsForTarget(targetKey) {
+        let cfg = gameFrameConfigs[targetKey] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0, frameImageUrl: null };
+        let scale = cfg.scale !== undefined ? cfg.scale : 1.0;
+        let reelScale = cfg.reelScale !== undefined ? cfg.reelScale : 1.0;
+        let width = cfg.width !== undefined ? cfg.width : 100;
+        let height = cfg.height !== undefined ? cfg.height : 100;
+        let offsetX = cfg.offsetX !== undefined ? cfg.offsetX : 0;
+        let offsetY = cfg.offsetY !== undefined ? cfg.offsetY : 0;
+
+        document.getElementById('frameScaleRange').value = scale;
+        document.getElementById('frameScaleVal').innerText = scale;
+        document.getElementById('reelScaleRange').value = reelScale;
+        document.getElementById('reelScaleVal').innerText = reelScale;
+        document.getElementById('reelWidthRange').value = width;
+        document.getElementById('reelWidthVal').innerText = width;
+        document.getElementById('reelHeightRange').value = height;
+        document.getElementById('reelHeightVal').innerText = height;
+        document.getElementById('reelOffsetXRange').value = offsetX;
+        document.getElementById('reelOffsetXVal').innerText = offsetX;
+        document.getElementById('reelOffsetYRange').value = offsetY;
+        document.getElementById('reelOffsetYVal').innerText = offsetY;
+        tempFrameImageBase64 = cfg.frameImageUrl || null;
+        frameImageRemoved = false;
+    }
+
+    function previewFrameScaleLive(val) {
+        let targetKey = document.getElementById('adminFrameTargetSelect').value;
+        let frameBoxId = targetKey === 'groupA' ? 'slotFrameBoxA' : (targetKey === 'groupB' ? 'slotFrameBoxB' : 'slotFrameBoxDefault');
+        let el = document.getElementById(frameBoxId);
+        if (el) el.style.transform = `scale(${val})`;
+    }
+
+    function previewReelLiveConfigs() {
+        let scale = parseFloat(document.getElementById('frameScaleRange').value) || 1.0;
+        let width = parseInt(document.getElementById('reelWidthRange').value) || 100;
+        let height = parseInt(document.getElementById('reelHeightRange').value) || 100;
+        let offsetX = parseInt(document.getElementById('reelOffsetXRange').value) || 0;
+        let offsetY = parseInt(document.getElementById('reelOffsetYRange').value) || 0;
+
+        document.getElementById('reelWidthVal').innerText = width;
+        document.getElementById('reelHeightVal').innerText = height;
+        document.getElementById('reelOffsetXVal').innerText = offsetX;
+        document.getElementById('reelOffsetYVal').innerText = offsetY;
+
+        let targetKey = document.getElementById('adminFrameTargetSelect').value;
+        let frameBoxId = targetKey === 'groupA' ? 'slotFrameBoxA' : (targetKey === 'groupB' ? 'slotFrameBoxB' : 'slotFrameBoxDefault');
+        let el = document.getElementById(frameBoxId);
+        if (el) {
+            el.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+            el.style.width = `${width}%`;
+            el.style.height = `${height}%`;
+        }
+    }
+
+    function saveGameFrameConfig() {
+        let targetKey = document.getElementById('adminFrameTargetSelect').value;
+        let existingCfg = gameFrameConfigs[targetKey] || {};
+        let cfg = {
+            scale: parseFloat(document.getElementById('frameScaleRange').value) || 1.0,
+            reelScale: parseFloat(document.getElementById('reelScaleRange').value) || 1.0,
+            width: parseInt(document.getElementById('reelWidthRange').value) || 100,
+            height: parseInt(document.getElementById('reelHeightRange').value) || 100,
+            offsetX: parseInt(document.getElementById('reelOffsetXRange').value) || 0,
+            offsetY: parseInt(document.getElementById('reelOffsetYRange').value) || 0,
+            frameImageUrl: frameImageRemoved ? null : (tempFrameImageBase64 || existingCfg.frameImageUrl || null)
+        };
+        gameFrameConfigs[targetKey] = cfg;
+        if (safeSaveLocalStorage('slot_game_frame_configs', JSON.stringify(gameFrameConfigs))) {
+            alert("✅ Frame & Reel settings successfully saved permanently!");
+        }
+    }
+
+    function sendLoginOtp() {
+        let mobile = document.getElementById('loginMobileInput').value.trim();
+        if (mobile.length < 10) { alert("⚠️ Kripya valid mobile number enter karein!"); return; }
+        pendingMobile = mobile;
+        generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+        document.getElementById('mobileStepDiv').style.display = 'none';
+        document.getElementById('otpStepDiv').style.display = 'block';
+        document.getElementById('otpHintText').innerText = `🔐 OTP for ${mobile}: ${generatedOtp}`;
+    }
+
+    function verifyLoginOtp() {
+        let enteredOtp = document.getElementById('loginOtpInput').value.trim();
+        if (enteredOtp !== generatedOtp) { alert("⚠️ Invalid OTP!"); return; }
+        localStorage.setItem('casino_logged_in', 'true');
+        localStorage.setItem('casino_player_mobile', pendingMobile);
+        let uid = localStorage.getItem('casino_player_uid');
+        if (!uid) {
+            uid = '#LS-' + Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem('casino_player_uid', uid);
+        }
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('lobbyScreen').style.display = 'flex';
+        startContinuousBgm();
+        updateUIStats();
+    }
+
+    function openAdminPanel() {
+        document.getElementById('adminLoginMobileInput').value = "";
+        document.getElementById('adminLoginPasswordInput').value = "";
+        document.getElementById('adminLoginModal').style.display = 'flex';
+    }
+
+    function closeAdminLoginModal() { document.getElementById('adminLoginModal').style.display = 'none'; }
+
+    function verifyAdminLogin() {
+        let enteredMob = document.getElementById('adminLoginMobileInput').value.trim();
+        let enteredPass = document.getElementById('adminLoginPasswordInput').value.trim();
+        let savedAdminMob = localStorage.getItem('casino_admin_mobile') || "9876543210";
+        let savedAdminPass = localStorage.getItem('casino_admin_password') || "admin123";
+
+        if (enteredMob === savedAdminMob && enteredPass === savedAdminPass) {
+            closeAdminLoginModal();
+            hideAllScreens();
+            document.getElementById('adminScreen').style.display = 'block';
             updateUIStats();
-            renderProfileScreenData();
             renderAdminWithdrawals();
-            alert(`✅ Withdrawal request of 🪙 ${amt} sent to Admin successfully!`);
+            document.getElementById('changeAdminMobileInput').value = savedAdminMob;
+            document.getElementById('changeAdminPasswordInput').value = savedAdminPass;
+            document.getElementById('adminWhatsappInput').value = localStorage.getItem('slot_whatsapp_number') || "919876543210";
+            document.getElementById('adminDifficultySelect').value = localStorage.getItem('slot_difficulty_mode') || "normal";
+        } else {
+            alert("⚠️ Invalid Admin Mobile Number or Password!");
+        }
+    }
+
+    function saveNewAdminCredentials() {
+        let newMob = document.getElementById('changeAdminMobileInput').value.trim();
+        let newPass = document.getElementById('changeAdminPasswordInput').value.trim();
+        if (newMob.length < 10 || newPass === "") { alert("⚠️ Valid credentials enter karein!"); return; }
+        localStorage.setItem('casino_admin_mobile', newMob);
+        localStorage.setItem('casino_admin_password', newPass);
+        alert("✅ Admin credentials successfully saved permanently!");
+    }
+
+    function getPlayerUniqueId() {
+        let uid = localStorage.getItem('casino_player_uid');
+        if (!uid) {
+            uid = '#LS-' + Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem('casino_player_uid', uid);
+        }
+        return uid;
+    }
+
+    function getProfilePic() { return localStorage.getItem('casino_profile_pic') || null; }
+
+    function updateProfilePicture(event) {
+        let file = event.target.files[0];
+        if (file) {
+            compressImageFile(file, 100, 100, 0.5, function(compressedUrl) {
+                safeSaveLocalStorage('casino_profile_pic', compressedUrl);
+                renderProfileScreenData();
+                alert("✅ Profile picture compressed & updated successfully!");
+            });
+        }
+    }
+
+    function savePlayerPersonalDetails() {
+        let detailsText = document.getElementById('playerDetailsTextarea').value;
+        safeSaveLocalStorage('casino_player_saved_details', detailsText);
+        alert("✅ Player personal details saved successfully!");
+    }
+
+    function adminSearchPlayerProfile() {
+        let query = document.getElementById('adminSearchPlayerIdInput').value.trim().toLowerCase();
+        let resultBox = document.getElementById('adminPlayerSearchResultBox');
+        if (!query) { alert("⚠️ Player ID ya Mobile enter karein!"); return; }
+
+        let myUid = getPlayerUniqueId().toLowerCase();
+        let myMobile = (localStorage.getItem('casino_player_mobile') || "9876543210").toLowerCase();
+        let myBal = getWallet();
+        let myDetails = localStorage.getItem('casino_player_saved_details') || "No details saved yet.";
+        let myPic = getProfilePic();
+
+        if (myUid.includes(query) || myMobile.includes(query)) {
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = `
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+                    <div style="width:36px; height:36px; border-radius:50%; background:#222; overflow:hidden; border:1px solid #00c6ff; display:flex; align-items:center; justify-content:center;">
+                        ${myPic ? `<img src="${myPic}" style="width:100%; height:100%; object-fit:cover;" />` : `<span>👤</span>`}
+                    </div>
+                    <div>
+                        <strong style="color:#00c6ff;">LuckyPlayer_777</strong> (${getPlayerUniqueId()})<br>
+                        <span style="color:#00ffcc;">Mobile: ${myMobile} | Balance: 🪙 ${myBal.toFixed(2)}</span>
+                    </div>
+                </div>
+                <div style="background:rgba(0,0,0,0.6); padding:6px; border-radius:4px; font-size:9px; white-space:pre-wrap;"><strong>Saved Details:</strong><br>${myDetails}</div>
+            `;
+        } else {
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = `<span style="color:#ff4757;">⚠️ No player found with: "${query}"</span>`;
+        }
+    }
+
+    let tempFeedbackImageBase64 = null;
+    function previewFeedbackImage(event) {
+        let file = event.target.files[0];
+        if (file) {
+            compressImageFile(file, 200, 200, 0.5, function(compressedUrl) {
+                tempFeedbackImageBase64 = compressedUrl;
+                document.getElementById('feedbackImgStatus').innerText = "✅ Screenshot Compressed & Attached";
+            });
+        }
+    }
+
+    function submitPlayerFeedback() {
+        let text = document.getElementById('feedbackTextarea').value.trim();
+        if (text === "" && !tempFeedbackImageBase64) { alert("⚠️ Feedback likhein ya screenshot attach karein!"); return; }
+        let feedbacks = JSON.parse(localStorage.getItem('casino_player_feedbacks') || '[]');
+        feedbacks.unshift({
+            uid: getPlayerUniqueId(),
+            text: text,
+            image: tempFeedbackImageBase64,
+            time: new Date().toLocaleString()
+        });
+        safeSaveLocalStorage('casino_player_feedbacks', JSON.stringify(feedbacks));
+        document.getElementById('feedbackTextarea').value = "";
+        tempFeedbackImageBase64 = null;
+        document.getElementById('feedbackImgStatus').innerText = "No screenshot attached";
+        alert("✅ Feedback sent to admin successfully!");
+    }
+
+    function openWithdrawalModal() {
+        document.getElementById('modalWithdrawAmountInput').value = "";
+        document.getElementById('customWithdrawModal').style.display = 'flex';
+    }
+
+    function closeWithdrawalModal() { document.getElementById('customWithdrawModal').style.display = 'none'; }
+
+    function submitWithdrawalRequestFromModal() {
+        let amtStr = document.getElementById('modalWithdrawAmountInput').value.trim();
+        if (amtStr === "") { alert("⚠️ Amount enter karein!"); return; }
+        let amt = parseFloat(amtStr);
+        if (isNaN(amt) || amt <= 0) { alert("⚠️ Valid amount enter karein!"); return; }
+        let currentBal = getWallet();
+        if (amt > currentBal) { alert("⚠️ Insufficient balance!"); return; }
+        currentBal -= amt;
+        setWallet(currentBal);
+
+        let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
+        requests.unshift({
+            uid: getPlayerUniqueId(),
+            amount: amt,
+            status: 'Pending',
+            time: new Date().toLocaleString()
+        });
+        safeSaveLocalStorage('casino_withdrawal_requests', JSON.stringify(requests));
+        
+        closeWithdrawalModal();
+        updateUIStats();
+        renderProfileScreenData();
+        renderAdminWithdrawals();
+        alert(`✅ Withdrawal request of 🪙 ${amt} sent to Admin!`);
+    }
+
+    function renderAdminWithdrawals() {
+        let container = document.getElementById('adminWithdrawalListContainer');
+        if (!container) return;
+        let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
+        if (requests.length === 0) {
+            container.innerHTML = `<p style="color:#aaa;">No pending withdrawal requests.</p>`;
+        } else {
+            let html = '';
+            requests.forEach((req, idx) => {
+                html += `<div style="background:rgba(0,0,0,0.4); border:1px solid #00c6ff; padding:5px; border-radius:4px; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div><strong>Player:</strong> ${req.uid} | <span style="color:#00ffcc">🪙 ${req.amount}</span></div>
+                        <div style="font-size:8px; color:#aaa;">Time: ${req.time}</div>
+                    </div>
+                    <button onclick="clearWithdrawalRequest(${idx})" style="background:#2ed573; color:#fff; border:none; padding:3px 8px; border-radius:3px; font-size:9px; font-weight:bold; cursor:pointer;">✔ Paid</button>
+                </div>`;
+            });
+            container.innerHTML = html;
         }
 
-        function renderAdminWithdrawals() {
-            let container = document.getElementById('adminWithdrawalListContainer');
-            if (!container) return;
-            let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
-            if (requests.length === 0) {
-                container.innerHTML = `<p style="color:#aaa;">No pending withdrawal requests.</p>`;
+        let fContainer = document.getElementById('adminFeedbackListContainer');
+        if (fContainer) {
+            let feedbacks = JSON.parse(localStorage.getItem('casino_player_feedbacks') || '[]');
+            if (feedbacks.length === 0) {
+                fContainer.innerHTML = `<p style="color:#aaa;">No feedbacks received yet.</p>`;
             } else {
-                let html = '';
-                requests.forEach((req, idx) => {
-                    html += `<div style="background:rgba(0,0,0,0.4); border:1px solid #00c6ff; padding:5px; border-radius:4px; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <div><strong>Player:</strong> ${req.uid} | <span style="color:#00ffcc">🪙 ${req.amount}</span></div>
-                            <div style="font-size:8px; color:#aaa;">Time: ${req.time}</div>
-                        </div>
-                        <button onclick="clearWithdrawalRequest(${idx})" style="background:#2ed573; color:#fff; border:none; padding:3px 8px; border-radius:3px; font-size:9px; font-weight:bold; cursor:pointer;">✔ Paid</button>
+                let fHtml = '';
+                feedbacks.forEach(f => {
+                    fHtml += `<div style="background:rgba(0,0,0,0.4); border:1px solid #2ed573; padding:4px; border-radius:4px; margin-bottom:4px;">
+                        <div><strong>${f.uid}:</strong> ${f.text}</div>
+                        ${f.image ? `<img src="${f.image}" style="max-width:50px; max-height:50px; margin-top:2px; border-radius:4px;" />` : ''}
+                        <div style="font-size:8px; color:#aaa;">${f.time}</div>
                     </div>`;
                 });
-                container.innerHTML = html;
-            }
-
-            let fContainer = document.getElementById('adminFeedbackListContainer');
-            if (fContainer) {
-                let feedbacks = JSON.parse(localStorage.getItem('casino_player_feedbacks') || '[]');
-                if (feedbacks.length === 0) {
-                    fContainer.innerHTML = `<p style="color:#aaa;">No feedbacks received yet.</p>`;
-                } else {
-                    let fHtml = '';
-                    feedbacks.forEach(f => {
-                        fHtml += `<div style="background:rgba(0,0,0,0.4); border:1px solid #2ed573; padding:4px; border-radius:4px; margin-bottom:4px;">
-                            <div><strong>${f.uid}:</strong> ${f.text}</div>
-                            ${f.image ? `<img src="${f.image}" style="max-width:50px; max-height:50px; margin-top:2px; border-radius:4px;" />` : ''}
-                            <div style="font-size:8px; color:#aaa;">${f.time}</div>
-                        </div>`;
-                    });
-                    fContainer.innerHTML = fHtml;
-                }
+                fContainer.innerHTML = fHtml;
             }
         }
+    }
 
-        function clearWithdrawalRequest(index) {
-            let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
-            requests.splice(index, 1);
-            localStorage.setItem('casino_withdrawal_requests', JSON.stringify(requests));
-            renderAdminWithdrawals();
-            alert("✅ Withdrawal request marked as paid and removed!");
+    function clearWithdrawalRequest(index) {
+        let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
+        requests.splice(index, 1);
+        safeSaveLocalStorage('casino_withdrawal_requests', JSON.stringify(requests));
+        renderAdminWithdrawals();
+        alert("✅ Withdrawal request marked as paid and removed!");
+    }
+
+    function copyReferralLink() {
+        let input = document.getElementById('referralLinkInput');
+        input.select();
+        navigator.clipboard.writeText(input.value);
+        alert("✅ Referral link copied!");
+    }
+
+    function renderProfileScreenData() {
+        let uid = getPlayerUniqueId();
+        document.getElementById('profileUniqueIdDisplay').innerText = `ID: ${uid}`;
+        document.getElementById('referralLinkInput').value = `https://luckyspin.casino/ref=${uid.replace('#','')}`;
+        document.getElementById('playerDetailsTextarea').value = localStorage.getItem('casino_player_saved_details') || "";
+
+        let pic = getProfilePic();
+        let avatarDisp = document.getElementById('profileAvatarDisplay');
+        let avatarImg = document.getElementById('profileAvatarImg');
+        if (pic) {
+            avatarDisp.style.display = 'none';
+            avatarImg.style.display = 'block';
+            avatarImg.src = pic;
+        } else {
+            avatarDisp.style.display = 'block';
+            avatarImg.style.display = 'none';
         }
+        document.getElementById('profileWalletDisplay').innerText = getWallet().toFixed(2);
+    }
 
-        function copyReferralLink() {
-            let input = document.getElementById('referralLinkInput');
-            input.select();
-            navigator.clipboard.writeText(input.value);
-            alert("✅ Referral link copied to clipboard!");
+    function getWallet() {
+        let val = localStorage.getItem('casino_wallet');
+        if (val === null || val === undefined || isNaN(val)) {
+            val = 2670.00;
+            localStorage.setItem('casino_wallet', val);
         }
+        return parseFloat(parseFloat(val).toFixed(2));
+    }
 
-        function renderProfileScreenData() {
-            let uid = getPlayerUniqueId();
-            document.getElementById('profileUniqueIdDisplay').innerText = `ID: ${uid}`;
-            document.getElementById('referralLinkInput').value = `https://luckyspin.casino/ref=${uid.replace('#','')}`;
-            
-            let savedDetails = localStorage.getItem('casino_player_saved_details') || "";
-            document.getElementById('playerDetailsTextarea').value = savedDetails;
+    function setWallet(newVal) {
+        let cleanVal = parseFloat(Math.max(0, newVal).toFixed(2));
+        safeSaveLocalStorage('casino_wallet', cleanVal);
+        updateUIStats();
+    }
 
-            let pic = getProfilePic();
-            let avatarDisp = document.getElementById('profileAvatarDisplay');
-            let avatarImg = document.getElementById('profileAvatarImg');
-            if (pic) {
-                avatarDisp.style.display = 'none';
-                avatarImg.style.display = 'block';
-                avatarImg.src = pic;
-            } else {
-                avatarDisp.style.display = 'block';
-                avatarImg.style.display = 'none';
-            }
-            document.getElementById('profileWalletDisplay').innerText = getWallet().toFixed(2);
-
-            let refHistory = JSON.parse(localStorage.getItem('casino_referral_history') || '[]');
-            document.getElementById('referralCount').innerText = refHistory.length;
-            let totalRefEarned = refHistory.reduce((acc, curr) => acc + curr.earned, 0);
-            document.getElementById('referralEarnings').innerText = totalRefEarned.toFixed(2);
-
-            let histHtml = '';
-            if (refHistory.length === 0) {
-                histHtml = `<p style="color:#aaa; margin:0;">No referrals yet. Share link to earn!</p>`;
-            } else {
-                refHistory.forEach(r => {
-                    histHtml += `<div>👤 ${r.name} (${r.time}) - Earned 🪙 +${r.earned}</div>`;
-                });
-            }
-            document.getElementById('referralHistoryBox').innerHTML = histHtml;
-        }
-
-        function getWallet() {
-            let val = localStorage.getItem('casino_wallet');
-            if (val === null || val === undefined || isNaN(val)) {
-                val = 2670.00;
-                localStorage.setItem('casino_wallet', val);
-            }
-            return parseFloat(parseFloat(val).toFixed(2));
-        }
-
-        function setWallet(newVal) {
-            let cleanVal = parseFloat(Math.max(0, newVal).toFixed(2));
-            localStorage.setItem('casino_wallet', cleanVal);
-            updateUIStats();
-        }
-
-        function renderGroupTabs() {
-            let html = '';
-            groups.forEach(g => {
-                let activeCls = g === currentActiveGroup ? 'active' : '';
-                html += `<button class="group-tab ${activeCls}" onclick="switchGroup('${g}')">Group ${g}</button>`;
-            });
-            document.getElementById('groupNavBar').innerHTML = html;
-        }
-
-        function switchGroup(groupName) {
-            currentActiveGroup = groupName;
-            renderGroupTabs();
-            renderLobbyGridForGroup(groupName);
-        }
-
-        function renderLobbyGridForGroup(groupName) {
-            let filteredGames = gameList.filter(g => g.group === groupName);
-            document.getElementById('groupSectionTitle').innerText = `⭐ GROUP ${groupName} GAMES (10 Games)`;
-            
-            let html = '';
-            filteredGames.forEach(game => {
-                let logoCfg = lobbyLogoConfigs[game.id] || lobbyLogoConfigs[String(game.id)] || { url: null, scale: 100 };
-                let scalePct = logoCfg.scale !== undefined ? logoCfg.scale : 100;
-                let scaleMultiplier = scalePct / 100;
-                let displayIcon = game.icon;
-
-                if (logoCfg.url) {
-                    displayIcon = `<img src="${logoCfg.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: cover;" />`;
-                } else {
-                    let fontSize = Math.floor(26 * scaleMultiplier);
-                    displayIcon = `<span style="font-size:${fontSize}px; line-height:1;">${game.icon}</span>`;
-                }
-
-                let cardExtraStyle = groupName === 'B' ? 'border-radius: 50%; border: 2px solid #ffd700;' : '';
-
-                html += `
-                    <div class="game-card" style="${cardExtraStyle}" onclick="openGame(${game.id})">
-                        <span class="game-num">${game.id}</span>
-                        <div class="game-img">${displayIcon}</div>
-                        <div class="game-name">${game.name}</div>
-                    </div>
-                `;
-            });
-            document.getElementById('gamesGrid').innerHTML = html;
-        }
-
-        function initAppFlow() {
-            let isLoggedIn = localStorage.getItem('casino_logged_in');
-            if (isLoggedIn === 'true') {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('lobbyScreen').style.display = 'flex';
-                startContinuousBgm();
-            } else {
-                document.getElementById('loginScreen').style.display = 'flex';
-                document.getElementById('lobbyScreen').style.display = 'none';
-            }
-
-            renderGroupTabs();
-            renderLobbyGridForGroup('A');
-            loadFrameSettingsForTarget('groupA');
-            updateUIStats();
-            renderAdminWithdrawals();
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            if (!navigator.onLine) {
-                document.getElementById('offlineScreen').style.display = 'flex';
-                return;
-            }
-            initAppFlow();
+    function renderGroupTabs() {
+        let html = '';
+        groups.forEach(g => {
+            let activeCls = g === currentActiveGroup ? 'active' : '';
+            html += `<button class="group-tab ${activeCls}" onclick="switchGroup('${g}')">Group ${g}</button>`;
         });
+        document.getElementById('groupNavBar').innerHTML = html;
+    }
 
-        let activeGameId = 1;
-        let currentBet = 1;
-        let isSpinning = false;
-        let supportWhatsAppNumber = "919876543210";
-        let globalDifficulty = localStorage.getItem('slot_difficulty_mode') || "normal";
-        document.getElementById('adminDifficultySelect').value = globalDifficulty;
+    function switchGroup(groupName) {
+        currentActiveGroup = groupName;
+        renderGroupTabs();
+        renderLobbyGridForGroup(groupName);
+    }
 
-        let forceRule = JSON.parse(localStorage.getItem('slot_force_rule') || '{"mode": "none", "playerId": "9876543210"}');
-        document.getElementById('forcePlayerIdInput').value = forceRule.playerId || "9876543210";
-        document.getElementById('forceModeSelect').value = forceRule.mode || "none";
+    function renderLobbyGridForGroup(groupName) {
+        let filteredGames = gameList.filter(g => g.group === groupName);
+        document.getElementById('groupSectionTitle').innerText = `⭐ GROUP ${groupName} GAMES (10 Games)`;
+        let html = '';
+        filteredGames.forEach(game => {
+            let logoCfg = lobbyLogoConfigs[game.id] || lobbyLogoConfigs[String(game.id)] || { url: null, scale: 100 };
+            let scalePct = logoCfg.scale !== undefined ? logoCfg.scale : 100;
+            let scaleMultiplier = scalePct / 100;
+            let displayIcon = game.icon;
 
-        let groupCJackpotRule = JSON.parse(localStorage.getItem('slot_groupc_jackpot_rule') || '{"playerId": "9876543210", "type": "none"}');
-        document.getElementById('adminGroupCPlayerId').value = groupCJackpotRule.playerId || "9876543210";
-        document.getElementById('adminGroupCJackpotSelect').value = groupCJackpotRule.type || "none";
-
-        let freeGamesRemaining = 0;
-        let gameSymbolConfigs = JSON.parse(localStorage.getItem('slot_game_symbol_configs') || '{}');
-
-        let selectedTargetSymbolIdx = 0; 
-        let spinningColumns = [false, false, false, false, false, false];
-
-        let diffState = JSON.parse(localStorage.getItem('slot_advanced_diff_state') || JSON.stringify({
-            spinCount: 0,
-            netLoss: 0,
-            spinsSinceLastWin: 0
-        }));
-
-        const symbols = [
-            { icon: '🚗', mult: 50, name: 'Car' },
-            { icon: '🐶', mult: 30, name: 'Dog' },
-            { icon: '😼', mult: 20, name: 'Cat' },
-            { icon: '🙈', mult: 10, name: 'Monkey' },
-            { icon: '🥳', mult: 5, name: 'Party' },
-            { icon: '👑', mult: 15 }, { icon: '🍉', mult: 8 }, { icon: '💎', mult: 25 },
-            { icon: '🐉', mult: 40 }, { icon: '🎰', mult: 35 }, { icon: '🌟', mult: 12 }, { icon: '🪙', mult: 10 },
-            { icon: '🔥', mult: 45 }, { icon: '🧞', mult: 20 }, { icon: '🏴‍☠️', mult: 30 }, { icon: '🐃', mult: 15 },
-            { icon: '⭐', isWild: true, mult: 60 },
-            { icon: '🎟️', isScatter: true, mult: 0 }
-        ];
-
-        let gridData = [
-            [0,  1,  2,  3,  4,  15],  
-            [6,  3,  15, 2,  1,  5],  
-            [7,  15, 9,  10, 5,  1],  
-            [11, 0,  12, 8,  15, 7],  
-            [13, 14, 5,  1,  11, 0],  
-            [10, 2,  5,  1,  11, 12]  
-        ];
-
-        /* --- DAILY BONUS SCRATCH CARDS & LUCKY WHEEL --- */
-        function openDailyScratch() {
-            let todayStr = new Date().toDateString();
-            let lastClaim = localStorage.getItem('casino_last_scratch_date');
-            if (lastClaim === todayStr) {
-                alert("⚠️ Aapne aaj ka Daily Bonus scratch card pehle hi use kar liya hai! Kal fir koshish karein.");
-                return;
-            }
-
-            let grid = document.getElementById('scratchCardsGrid');
-            let html = '';
-            for (let i = 1; i <= 7; i++) {
-                html += `<div id="scard-${i}" onclick="revealScratchCard(${i})" style="background:#112244; border:2px solid #00c6ff; border-radius:8px; height:65px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:bold; cursor:pointer; color:#00c6ff; text-align:center; padding:2px;"><span>🎁</span>Card ${i}</div>`;
-            }
-            grid.innerHTML = html;
-            document.getElementById('scratchModal').style.display = 'flex';
-        }
-
-        function revealScratchCard(cardNum) {
-            let todayStr = new Date().toDateString();
-            localStorage.setItem('casino_last_scratch_date', todayStr);
-
-            let reward = Math.floor(Math.random() * 26) + 5;
-            let cardEl = document.getElementById(`scard-${cardNum}`);
-            cardEl.style.background = '#2ed573';
-            cardEl.style.color = '#000';
-            cardEl.innerHTML = `<span style="font-size:16px;">🪙</span>+${reward} Coins`;
-
-            let currentBal = getWallet();
-            currentBal += reward;
-            setWallet(currentBal);
-            updateUIStats();
-
-            for (let i = 1; i <= 7; i++) {
-                let el = document.getElementById(`scard-${i}`);
-                if (el) el.onclick = null;
-            }
-
-            setTimeout(() => {
-                document.getElementById('scratchModal').style.display = 'none';
-                alert(`🎉 Badhai ho! Aapko scratch card se 🪙 +${reward} coins mile hain.`);
-            }, 800);
-        }
-
-        function closeScratchModal() {
-            document.getElementById('scratchModal').style.display = 'none';
-        }
-
-        function getCurrentWheelSlot() {
-            let hour = new Date().getHours();
-            if (hour === 10) return 'slot_10am';
-            if (hour === 13) return 'slot_1pm';
-            if (hour === 22) return 'slot_10pm';
-            return null;
-        }
-
-        function openLuckyWheel() {
-            let slot = getCurrentWheelSlot();
-            let todayStr = new Date().toDateString();
-            let statusText = document.getElementById('wheelStatusText');
-            let spinBtn = document.getElementById('spinWheelBtn');
-            let wheelBox = document.getElementById('wheelDisplayBox');
-
-            wheelBox.innerText = '🎡';
-            document.getElementById('wheelResultDisplay').innerText = '';
-
-            if (!slot) {
-                statusText.innerHTML = "⚠️ Abhi spin karne ka samay nahi hai!<br><br><b>Sahi Samay:</b><br>☀️ Subah 10:00 baje<br>🌞 Dopahar 1:00 baje<br>🌙 Raat 10:00 baje";
-                spinBtn.style.display = 'none';
-                document.getElementById('wheelModal').style.display = 'flex';
-                return;
-            }
-
-            let claimedKey = `casino_wheel_${todayStr}_${slot}`;
-            let alreadyClaimed = localStorage.getItem(claimedKey);
-
-            if (alreadyClaimed === 'true') {
-                statusText.innerHTML = "⚠️ Aap is timing ka spin pehle hi use kar chuke hain!";
-                spinBtn.style.display = 'none';
+            if (logoCfg.url) {
+                displayIcon = `<img src="${logoCfg.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: cover;" />`;
             } else {
-                statusText.innerHTML = "🟢 Spin available for current time slot! Tap below to spin.";
-                spinBtn.style.display = 'block';
-            }
-            document.getElementById('wheelModal').style.display = 'flex';
-        }
-
-        function executeLuckyWheelSpin() {
-            let slot = getCurrentWheelSlot();
-            let todayStr = new Date().toDateString();
-            if (!slot) return;
-
-            let claimedKey = `casino_wheel_${todayStr}_${slot}`;
-            localStorage.setItem(claimedKey, 'true');
-
-            let spinBtn = document.getElementById('spinWheelBtn');
-            spinBtn.style.display = 'none';
-
-            let wheelBox = document.getElementById('wheelDisplayBox');
-            let resultDisplay = document.getElementById('wheelResultDisplay');
-            resultDisplay.innerText = "Spinning wheel...";
-
-            let count = 0;
-            let spinInterval = setInterval(() => {
-                let tempNum = Math.floor(Math.random() * 46) + 5;
-                wheelBox.innerText = ['🎡', '🎰', '🪙', '✨'][Math.floor(Math.random() * 4)];
-                resultDisplay.innerText = `Number: ${tempNum}`;
-                count++;
-                if (count > 12) {
-                    clearInterval(spinInterval);
-                    let finalCoin = Math.floor(Math.random() * 46) + 5;
-                    wheelBox.innerText = '🪙';
-                    resultDisplay.innerText = `🎉 Won +${finalCoin} Coins!`;
-
-                    let currentBal = getWallet();
-                    currentBal += finalCoin;
-                    setWallet(currentBal);
-                    updateUIStats();
-                }
-            }, 90);
-        }
-
-        function closeWheelModal() {
-            document.getElementById('wheelModal').style.display = 'none';
-        }
-
-        function playSpinSound() {
-            if (gameAudioConfigs.spin) {
-                new Audio(gameAudioConfigs.spin).play().catch(e => {});
-            } else {
-                try {
-                    let ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    let osc = ctx.createOscillator();
-                    let gain = ctx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(400, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.1);
-                } catch(err) {}
-            }
-        }
-
-        function playWinSound(amount) {
-            if (gameAudioConfigs.win) {
-                new Audio(gameAudioConfigs.win).play().catch(e => {});
-                return;
-            }
-            try {
-                let ctx = new (window.AudioContext || window.webkitAudioContext)();
-                let osc = ctx.createOscillator();
-                let gain = ctx.createGain();
-                if (amount > 100) {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(300, ctx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(800, ctx.currentTime + 0.4);
-                } else if (amount > 50) {
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(500, ctx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(700, ctx.currentTime + 0.3);
-                } else {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(600, ctx.currentTime);
-                }
-                gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.3);
-            } catch(e) {}
-        }
-
-        function openGame(gameId) {
-            let game = gameList.find(g => g.id === gameId);
-            if (!game) return;
-            activeGameId = game.id;
-            
-            hideAllScreens();
-            let gameScreenEl = document.getElementById('gameScreen');
-            gameScreenEl.style.display = 'flex';
-
-            if (game.group === 'A') {
-                gameScreenEl.classList.add('group-a-mode');
-                gameScreenEl.classList.remove('group-b-mode', 'group-c-to-o-mode');
-                document.getElementById('groupATopControlsContainer').style.display = 'flex';
-                document.getElementById('groupBTopControlsContainer').style.display = 'none';
-                document.getElementById('defaultGameControlsContainer').style.display = 'none';
-            } else if (game.group === 'B') {
-                gameScreenEl.classList.remove('group-a-mode', 'group-c-to-o-mode');
-                gameScreenEl.classList.add('group-b-mode');
-                document.getElementById('groupATopControlsContainer').style.display = 'none';
-                document.getElementById('groupBTopControlsContainer').style.display = 'flex';
-                document.getElementById('defaultGameControlsContainer').style.display = 'none';
-            } else {
-                gameScreenEl.classList.remove('group-a-mode', 'group-b-mode');
-                gameScreenEl.classList.add('group-c-to-o-mode');
-                document.getElementById('groupATopControlsContainer').style.display = 'none';
-                document.getElementById('groupBTopControlsContainer').style.display = 'none';
-                document.getElementById('defaultGameControlsContainer').style.display = 'flex';
-
-                if (game.group === 'C') {
-                    document.getElementById('defaultMultiplierBanner').style.display = 'none';
-                    document.getElementById('groupCJackpotBanner').style.display = 'flex';
-                } else {
-                    document.getElementById('defaultMultiplierBanner').style.display = 'flex';
-                    document.getElementById('groupCJackpotBanner').style.display = 'none';
-                }
+                let fontSize = Math.floor(26 * scaleMultiplier);
+                displayIcon = `<span style="font-size:${fontSize}px; line-height:1;">${game.icon}</span>`;
             }
 
-            startContinuousBgm();
-            renderSlotGrid();
-            applyCustomFrameToActiveGame(game.group, game.id);
-            updateUIStats();
-        }
+            let cardExtraStyle = groupName === 'B' ? 'border-radius: 50%; border: 2px solid #ffd700;' : '';
+            html += `
+                <div class="game-card" style="${cardExtraStyle}" onclick="openGame(${game.id})">
+                    <span class="game-num">${game.id}</span>
+                    <div class="game-img">${displayIcon}</div>
+                    <div class="game-name">${game.name}</div>
+                </div>
+            `;
+        });
+        document.getElementById('gamesGrid').innerHTML = html;
+    }
 
-        function hideAllScreens() {
+    function initAppFlow() {
+        let isLoggedIn = localStorage.getItem('casino_logged_in');
+        if (isLoggedIn === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('lobbyScreen').style.display = 'none';
-            document.getElementById('gameScreen').style.display = 'none';
-            document.getElementById('adminScreen').style.display = 'none';
-            document.getElementById('profileScreen').style.display = 'none';
-            document.getElementById('winPopupOverlay').style.display = 'none';
-            document.getElementById('adminLoginModal').style.display = 'none';
-            document.getElementById('scratchModal').style.display = 'none';
-            document.getElementById('wheelModal').style.display = 'none';
-        }
-
-        function backToLobby() {
-            hideAllScreens();
             document.getElementById('lobbyScreen').style.display = 'flex';
-            renderLobbyGridForGroup(currentActiveGroup);
-            updateUIStats();
+            startContinuousBgm();
+        } else {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('lobbyScreen').style.display = 'none';
+        }
+        renderGroupTabs();
+        renderLobbyGridForGroup('A');
+        loadFrameSettingsForTarget('groupA');
+        updateUIStats();
+        renderAdminWithdrawals();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        if (!navigator.onLine) {
+            document.getElementById('offlineScreen').style.display = 'flex';
+            return;
+        }
+        initAppFlow();
+    });
+
+    let activeGameId = 1;
+    let currentBet = 1;
+    let isSpinning = false;
+    let freeGamesRemaining = 0;
+    let isFreeGameActive = false;
+    let freeGameAccumulatedWin = 0;
+
+    let supportWhatsAppNumber = localStorage.getItem('slot_whatsapp_number') || "919876543210";
+    let globalDifficulty = localStorage.getItem('slot_difficulty_mode') || "normal";
+    document.getElementById('adminDifficultySelect').value = globalDifficulty;
+
+    let forceRule = JSON.parse(localStorage.getItem('slot_force_rule') || '{"mode": "none", "playerId": "9876543210"}');
+    document.getElementById('forcePlayerIdInput').value = forceRule.playerId || "9876543210";
+    document.getElementById('forceModeSelect').value = forceRule.mode || "none";
+
+    let groupCJackpotRule = JSON.parse(localStorage.getItem('slot_groupc_jackpot_rule') || '{"playerId": "9876543210", "type": "none"}');
+    document.getElementById('adminGroupCPlayerId').value = groupCJackpotRule.playerId || "9876543210";
+    document.getElementById('adminGroupCJackpotSelect').value = groupCJackpotRule.type || "none";
+    document.getElementById('adminWhatsappInput').value = supportWhatsAppNumber;
+
+    let gameSymbolConfigs = JSON.parse(localStorage.getItem('slot_game_symbol_configs') || '{}');
+    let selectedTargetSymbolIdx = 0; 
+    let spinningColumns = [false, false, false, false, false, false];
+
+    const symbols = [
+        { icon: '🚗', mult: 50, name: 'Car' },
+        { icon: '🐶', mult: 30, name: 'Dog' },
+        { icon: '😼', mult: 20, name: 'Cat' },
+        { icon: '🙈', mult: 10, name: 'Monkey' },
+        { icon: '🥳', mult: 5, name: 'Party' },
+        { icon: '👑', mult: 15 }, { icon: '🍉', mult: 8 }, { icon: '💎', mult: 25 },
+        { icon: '🐉', mult: 40 }, { icon: '🎰', mult: 35 }, { icon: '🌟', mult: 12 }, { icon: '🪙', mult: 10 },
+        { icon: '🔥', mult: 45 }, { icon: '🧞', mult: 20 }, { icon: '🏴‍☠️', mult: 30 }, { icon: '🐃', mult: 15 },
+        { icon: '⭐', isWild: true, mult: 60 },
+        { icon: '🎟️', isScatter: true, mult: 0 }
+    ];
+
+    let gridData = [
+        [0,  1,  2,  3,  4,  15],  
+        [6,  3,  15, 2,  1,  5],  
+        [7,  15, 9,  10, 5,  1],  
+        [11, 0,  12, 8,  15, 7],  
+        [13, 14, 5,  1,  11, 0],  
+        [10, 2,  5,  1,  11, 12]  
+    ];
+
+    function openDailyScratch() {
+        let todayStr = new Date().toDateString();
+        let lastClaim = localStorage.getItem('casino_last_scratch_date');
+        if (lastClaim === todayStr) {
+            alert("⚠️ Aaj ka Daily Bonus scratch card pehle hi use kar liya hai!");
+            return;
         }
 
-        function saveGroupCJackpotTarget() {
-            let pid = document.getElementById('adminGroupCPlayerId').value.trim();
-            let type = document.getElementById('adminGroupCJackpotSelect').value;
-            groupCJackpotRule = { playerId: pid, type: type };
-            localStorage.setItem('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule));
-            alert(`✅ Group C Jackpot Target Saved!\nPlayer: ${pid}\nTarget Jackpot: ${type}`);
+        let grid = document.getElementById('scratchCardsGrid');
+        let html = '';
+        for (let i = 1; i <= 7; i++) {
+            html += `<div id="scard-${i}" onclick="revealScratchCard(${i})" style="background:#112244; border:2px solid #00c6ff; border-radius:8px; height:65px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:11px; font-weight:bold; cursor:pointer; color:#00c6ff; text-align:center; padding:2px;"><span>🎁</span>Card ${i}</div>`;
+        }
+        grid.innerHTML = html;
+        document.getElementById('scratchModal').style.display = 'flex';
+    }
+
+    function revealScratchCard(cardNum) {
+        let todayStr = new Date().toDateString();
+        safeSaveLocalStorage('casino_last_scratch_date', todayStr);
+
+        let reward = Math.floor(Math.random() * 26) + 5;
+        let cardEl = document.getElementById(`scard-${cardNum}`);
+        cardEl.style.background = '#2ed573';
+        cardEl.style.color = '#000';
+        cardEl.innerHTML = `<span style="font-size:16px;">🪙</span>+${reward} Coins`;
+
+        let currentBal = getWallet();
+        currentBal += reward;
+        setWallet(currentBal);
+        updateUIStats();
+
+        for (let i = 1; i <= 7; i++) {
+            let el = document.getElementById(`scard-${i}`);
+            if (el) el.onclick = null;
         }
 
-        function searchAdminGame() {
-            let gNum = parseInt(document.getElementById('adminGameSearchInput').value);
-            let game = gameList.find(g => g.id === gNum);
-            if (!game) { alert("⚠️ Invalid Game Number!"); return; }
-            activeGameId = game.id;
-            document.getElementById('adminGamePreviewContainer').style.display = 'block';
-            document.getElementById('adminGameTitleDisplay').innerText = `[#${game.id}] ${game.name} (Group ${game.group})`;
-            renderAdminMasterPalette();
+        setTimeout(() => {
+            document.getElementById('scratchModal').style.display = 'none';
+            alert(`🎉 Badhai ho! Scratch card se 🪙 +${reward} coins mile.`);
+        }, 800);
+    }
+
+    function closeScratchModal() { document.getElementById('scratchModal').style.display = 'none'; }
+
+    function getCurrentWheelSlot() {
+        let hour = new Date().getHours();
+        if (hour === 10) return 'slot_10am';
+        if (hour === 13) return 'slot_1pm';
+        if (hour === 22) return 'slot_10pm';
+        return null;
+    }
+
+    function openLuckyWheel() {
+        let slot = getCurrentWheelSlot();
+        let todayStr = new Date().toDateString();
+        let statusText = document.getElementById('wheelStatusText');
+        let spinBtn = document.getElementById('spinWheelBtn');
+        let wheelBox = document.getElementById('wheelDisplayBox');
+
+        wheelBox.innerText = '🎡';
+        document.getElementById('wheelResultDisplay').innerText = '';
+
+        if (!slot) {
+            statusText.innerHTML = "⚠️ Abhi spin karne ka samay nahi hai!<br><br><b>Samay:</b> 10:00 AM, 1:00 PM, 10:00 PM";
+            spinBtn.style.display = 'none';
+            document.getElementById('wheelModal').style.display = 'flex';
+            return;
         }
 
-        function openSearchedGameDirectly() {
-            let gNum = parseInt(document.getElementById('adminGameSearchInput').value);
-            let game = gameList.find(g => g.id === gNum);
-            if (game) openGame(game.id);
+        let claimedKey = `casino_wheel_${todayStr}_${slot}`;
+        if (localStorage.getItem(claimedKey) === 'true') {
+            statusText.innerHTML = "⚠️ Is timing ka spin pehle hi use kar chuke hain!";
+            spinBtn.style.display = 'none';
+        } else {
+            statusText.innerHTML = "🟢 Spin available! Tap below.";
+            spinBtn.style.display = 'block';
+        }
+        document.getElementById('wheelModal').style.display = 'flex';
+    }
+
+    function executeLuckyWheelSpin() {
+        let slot = getCurrentWheelSlot();
+        let todayStr = new Date().toDateString();
+        if (!slot) return;
+        safeSaveLocalStorage(`casino_wheel_${todayStr}_${slot}`, 'true');
+
+        document.getElementById('spinWheelBtn').style.display = 'none';
+        let wheelBox = document.getElementById('wheelDisplayBox');
+        let resultDisplay = document.getElementById('wheelResultDisplay');
+        resultDisplay.innerText = "Spinning wheel...";
+
+        let count = 0;
+        let spinInterval = setInterval(() => {
+            wheelBox.innerText = ['🎡', '🎰', '🪙', '✨'][Math.floor(Math.random() * 4)];
+            count++;
+            if (count > 12) {
+                clearInterval(spinInterval);
+                let finalCoin = Math.floor(Math.random() * 46) + 5;
+                wheelBox.innerText = '🪙';
+                resultDisplay.innerText = `🎉 Won +${finalCoin} Coins!`;
+                setWallet(getWallet() + finalCoin);
+                updateUIStats();
+            }
+        }, 90);
+    }
+
+    function closeWheelModal() { document.getElementById('wheelModal').style.display = 'none'; }
+
+    function playSpinSound() {
+        if (gameAudioConfigs.spin) {
+            new Audio(gameAudioConfigs.spin).play().catch(e => {});
+        }
+    }
+
+    function playWinSound(amount) {
+        if (gameAudioConfigs.win) {
+            new Audio(gameAudioConfigs.win).play().catch(e => {});
+        }
+    }
+
+    // SPECIAL ALEX SOUND (FREE GAME TRIGGER CHIME)
+    function playAlexSound() {
+        try {
+            let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+            osc.frequency.exponentialRampToValueAtTime(1174.66, audioCtx.currentTime + 0.4); // D6
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.8);
+        } catch(e) {}
+    }
+
+    // COIN COUNTING & DROPPING SOUND AT THE END OF FREE GAMES
+    function playCoinCountingSound(callback) {
+        try {
+            let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let countSteps = 8;
+            for(let i=0; i<countSteps; i++) {
+                setTimeout(() => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(900 + (i * 120), audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                    if (i === countSteps - 1 && callback) callback();
+                }, i * 90);
+            }
+        } catch(e) {
+            if (callback) callback();
+        }
+    }
+
+    function openGame(gameId) {
+        let game = gameList.find(g => g.id === gameId);
+        if (!game) return;
+        activeGameId = game.id;
+        
+        hideAllScreens();
+        let gameScreenEl = document.getElementById('gameScreen');
+        gameScreenEl.style.display = 'flex';
+
+        if (game.group === 'A') {
+            gameScreenEl.classList.add('group-a-mode');
+            gameScreenEl.classList.remove('group-b-mode', 'group-c-to-o-mode');
+            document.getElementById('groupATopControlsContainer').style.display = 'flex';
+            document.getElementById('groupBTopControlsContainer').style.display = 'none';
+            document.getElementById('defaultGameControlsContainer').style.display = 'none';
+        } else if (game.group === 'B') {
+            gameScreenEl.classList.remove('group-a-mode', 'group-c-to-o-mode');
+            gameScreenEl.classList.add('group-b-mode');
+            document.getElementById('groupATopControlsContainer').style.display = 'none';
+            document.getElementById('groupBTopControlsContainer').style.display = 'flex';
+            document.getElementById('defaultGameControlsContainer').style.display = 'none';
+        } else {
+            gameScreenEl.classList.remove('group-a-mode', 'group-b-mode');
+            gameScreenEl.classList.add('group-c-to-o-mode');
+            document.getElementById('groupATopControlsContainer').style.display = 'none';
+            document.getElementById('groupBTopControlsContainer').style.display = 'none';
+            document.getElementById('defaultGameControlsContainer').style.display = 'flex';
+
+            if (game.group === 'C') {
+                document.getElementById('defaultMultiplierBanner').style.display = 'none';
+                document.getElementById('groupCJackpotBanner').style.display = 'flex';
+            } else {
+                document.getElementById('defaultMultiplierBanner').style.display = 'flex';
+                document.getElementById('groupCJackpotBanner').style.display = 'none';
+            }
         }
 
-        function renderAdminMasterPalette() {
-            let html = '';
-            symbols.forEach((sym, sIdx) => {
-                let config = getSymbolConfig(activeGameId, sIdx);
-                let scaleMultiplier = (config.scale || 100) / 100;
-                let cellContent = config.url ? `<img src="${config.url}" style="width: 100%; height: 100%; object-fit: cover; transform: scale(${scaleMultiplier});" />` : `<span style="font-size:20px;">${sym.icon}</span>`;
-                let activeBorder = sIdx === selectedTargetSymbolIdx ? 'border: 2px solid #00ffcc;' : 'border: 1px solid #ffd700;';
-                html += `<div onclick="selectAdminSymbol(${sIdx})" style="height:42px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); ${activeBorder} border-radius:4px; cursor:pointer; position:relative; overflow:hidden; box-sizing:border-box;">${cellContent}</div>`;
-            });
-            document.getElementById('adminMasterSymbolsPalette').innerHTML = html;
-            document.getElementById('selectedSymbolInfo').innerText = `Selected Symbol: Index ${selectedTargetSymbolIdx}`;
-        }
+        startContinuousBgm();
+        renderSlotGrid();
+        applyCustomFrameToActiveGame(game.group, game.id);
+        updateUIStats();
+        updateFreeGameUIIndicators();
+    }
 
-        function selectAdminSymbol(sIdx) {
-            selectedTargetSymbolIdx = sIdx;
+    function hideAllScreens() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('lobbyScreen').style.display = 'none';
+        document.getElementById('gameScreen').style.display = 'none';
+        document.getElementById('adminScreen').style.display = 'none';
+        document.getElementById('profileScreen').style.display = 'none';
+        document.getElementById('winPopupOverlay').style.display = 'none';
+        document.getElementById('adminLoginModal').style.display = 'none';
+        document.getElementById('scratchModal').style.display = 'none';
+        document.getElementById('wheelModal').style.display = 'none';
+    }
+
+    function backToLobby() {
+        hideAllScreens();
+        document.getElementById('lobbyScreen').style.display = 'flex';
+        renderLobbyGridForGroup(currentActiveGroup);
+        updateUIStats();
+    }
+
+    function saveGroupCJackpotTarget() {
+        let pid = document.getElementById('adminGroupCPlayerId').value.trim();
+        let type = document.getElementById('adminGroupCJackpotSelect').value;
+        groupCJackpotRule = { playerId: pid, type: type };
+        safeSaveLocalStorage('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule));
+        alert(`✅ Group C Jackpot Target Saved permanently!`);
+    }
+
+    function searchAdminGame() {
+        let gNum = parseInt(document.getElementById('adminGameSearchInput').value);
+        let game = gameList.find(g => g.id === gNum);
+        if (!game) { alert("⚠️ Invalid Game Number!"); return; }
+        activeGameId = game.id;
+        document.getElementById('adminGamePreviewContainer').style.display = 'block';
+        document.getElementById('adminGameTitleDisplay').innerText = `[#${game.id}] ${game.name} (Group ${game.group})`;
+        renderAdminMasterPalette();
+    }
+
+    function openSearchedGameDirectly() {
+        let gNum = parseInt(document.getElementById('adminGameSearchInput').value);
+        let game = gameList.find(g => g.id === gNum);
+        if (game) openGame(game.id);
+    }
+
+    function renderAdminMasterPalette() {
+        let html = '';
+        symbols.forEach((sym, sIdx) => {
             let config = getSymbolConfig(activeGameId, sIdx);
-            document.getElementById('symbolSizeRange').value = config.scale || 100;
-            document.getElementById('sizeValLabel').innerText = config.scale || 100;
-            renderAdminMasterPalette();
-        }
+            let scaleMultiplier = (config.scale || 100) / 100;
+            let cellContent = config.url ? `<div style="width:100%; height:100%; overflow:hidden; display:flex; align-items:center; justify-content:center;"><img src="${config.url}" style="width: 100%; height: 100%; object-fit: contain; transform: scale(${scaleMultiplier});" /></div>` : `<span style="font-size:20px;">${sym.icon}</span>`;
+            let activeBorder = sIdx === selectedTargetSymbolIdx ? 'border: 2px solid #00ffcc;' : 'border: 1px solid #ffd700;';
+            html += `<div onclick="selectAdminSymbol(${sIdx})" style="height:42px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); ${activeBorder} border-radius:4px; cursor:pointer; overflow:hidden; position:relative;">${cellContent}</div>`;
+        });
+        document.getElementById('adminMasterSymbolsPalette').innerHTML = html;
+        document.getElementById('selectedSymbolInfo').innerText = `Selected Symbol: Index ${selectedTargetSymbolIdx}`;
+    }
 
-        function updateSymbolScaleLive(val) {
-            document.getElementById('sizeValLabel').innerText = val;
-            if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
-            if (!gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx]) {
-                gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = { url: null, scale: 100 };
-            }
-            gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx].scale = parseInt(val);
-            renderAdminMasterPalette();
-            renderSlotGrid();
-        }
+    function selectAdminSymbol(sIdx) {
+        selectedTargetSymbolIdx = sIdx;
+        let config = getSymbolConfig(activeGameId, sIdx);
+        document.getElementById('symbolSizeRange').value = config.scale || 100;
+        document.getElementById('sizeValLabel').innerText = config.scale || 100;
+        renderAdminMasterPalette();
+    }
 
-        function previewCustomSymbolFile(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
-                    gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = {
-                        url: e.target.result,
-                        scale: parseInt(document.getElementById('symbolSizeRange').value)
-                    };
-                    renderAdminMasterPalette();
-                    renderSlotGrid();
-                    alert("✅ Custom symbol preview updated!");
+    function updateSymbolScaleLive(val) {
+        document.getElementById('sizeValLabel').innerText = val;
+        if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
+        if (!gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx]) {
+            gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = { url: null, scale: 100 };
+        }
+        gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx].scale = parseInt(val);
+        renderAdminMasterPalette();
+        renderSlotGrid();
+    }
+
+    function previewCustomSymbolFile(event) {
+        const file = event.target.files[0];
+        if (file) {
+            compressImageFile(file, 100, 100, 0.5, function(compressedUrl) {
+                if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
+                gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = {
+                    url: compressedUrl,
+                    scale: parseInt(document.getElementById('symbolSizeRange').value)
                 };
-                reader.readAsDataURL(file);
-            }
+                renderAdminMasterPalette();
+                renderSlotGrid();
+                alert("✅ Custom symbol compressed & preview updated!");
+            });
         }
+    }
 
-        function saveSymbolFitterConfig() {
-            localStorage.setItem('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs));
+    function saveSymbolFitterConfig() {
+        if (safeSaveLocalStorage('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs))) {
             renderSlotGrid();
             alert("✅ Symbol and size permanently saved successfully!");
         }
+    }
 
-        function removeCustomSymbol() {
-            let confGroup = gameSymbolConfigs[activeGameId] || gameSymbolConfigs[String(activeGameId)];
-            if (confGroup && (confGroup[selectedTargetSymbolIdx] || confGroup[String(selectedTargetSymbolIdx)])) {
-                delete confGroup[selectedTargetSymbolIdx];
-                delete confGroup[String(selectedTargetSymbolIdx)];
-                localStorage.setItem('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs));
-                renderAdminMasterPalette();
-                renderSlotGrid();
-                alert("🗑️ Custom symbol deleted!");
-            } else {
-                alert("⚠️ Is symbol par koi custom image nahi hai!");
-            }
-        }
-
-        function updateDifficultySetting(mode) {
-            globalDifficulty = mode;
-            localStorage.setItem('slot_difficulty_mode', mode);
-            alert("✅ Difficulty strictly updated to " + mode);
-        }
-
-        function saveForceRule() {
-            let pId = document.getElementById('forcePlayerIdInput').value.trim();
-            let mode = document.getElementById('forceModeSelect').value;
-            forceRule = { mode: mode, playerId: pId };
-            localStorage.setItem('slot_force_rule', JSON.stringify(forceRule));
-            alert("✅ Force rule strictly saved!");
-        }
-
-        function saveWhatsAppNumber() { alert("✅ WhatsApp number updated!"); }
-        function openWhatsAppSupport() { window.open(`https://wa.me/${supportWhatsAppNumber}?text=Hello`, '_blank'); }
-
-        function searchPlayerCoins() {
-            let inputVal = document.getElementById('searchCoinPlayerInput').value.trim();
-            let playerId = inputVal !== "" ? inputVal : "9876543210";
-            document.getElementById('playerCoinDetailsBox').style.display = 'block';
-            document.getElementById('foundPlayerName').innerText = `User (${playerId})`;
-            document.getElementById('foundPlayerBalance').innerText = getWallet().toFixed(2);
-        }
-
-        function applyCoinChange(action) {
-            let amtInput = document.getElementById('coinAmountChangeInput');
-            let amt = parseFloat(amtInput.value);
-            if (isNaN(amt) || amt <= 0) { alert("⚠️ Kripya valid amount enter karein!"); return; }
-            
-            let currentW = getWallet();
-            if (action === 'add') {
-                currentW += amt;
-            } else if (action === 'deduct') {
-                currentW -= amt;
-                if (currentW < 0) currentW = 0;
-            }
-            
-            setWallet(currentW);
-            document.getElementById('foundPlayerBalance').innerText = getWallet().toFixed(2);
-            amtInput.value = '';
-            alert(`✅ Coins successfully ${action === 'add' ? 'added' : 'deducted'}!`);
-        }
-
-        function switchNav(el, tabName) {
-            document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-            if (tabName === 'Profile') {
-                hideAllScreens();
-                document.getElementById('profileScreen').style.display = 'block';
-                renderProfileScreenData();
-            } else {
-                backToLobby();
-            }
-        }
-
-        function changeBet(amt) {
-            if (currentBet + amt >= 1 && currentBet + amt <= 100) {
-                currentBet += amt;
-                updateUIStats();
-            }
-        }
-
-        function updateUIStats() {
-            let currentBal = getWallet();
-            document.getElementById('walletDisplay').innerText = currentBal.toFixed(2);
-            document.getElementById('betDisplay').innerText = currentBet.toFixed(2);
-            document.getElementById('walletDisplayA').innerText = currentBal.toFixed(2);
-            let topWalA = document.getElementById('walletDisplayTopA');
-            if (topWalA) topWalA.innerText = currentBal.toFixed(2);
-            document.getElementById('walletDisplayB').innerText = currentBal.toFixed(2);
-            document.getElementById('betDisplayB').innerText = currentBet.toFixed(2);
-            
-            let betDispA = document.getElementById('betDisplayA');
-            if (betDispA) betDispA.innerText = currentBet.toFixed(2);
-
-            let profileBal = document.getElementById('profileWalletDisplay');
-            if (profileBal) profileBal.innerText = currentBal.toFixed(2);
-        }
-
-        function calculateDifficultyAdjustedWin(rawWin, bet) {
-            if (forceRule.mode === 'loss') {
-                // Force loss mode mein bhi 15% chance par chhote wins aayenge taaki player bore na ho
-                return Math.random() < 0.15 ? parseFloat((bet * (0.2 + Math.random() * 0.4)).toFixed(2)) : 0;
-            }
-            if (forceRule.mode === 'win') return bet * 120;
-
-            if (rawWin > 0) return rawWin;
-
-            diffState.spinCount++;
-            let finalWin = 0;
-
-            if (globalDifficulty === 'normal') {
-                finalWin = rawWin > 0 ? rawWin * 1.1 : (Math.random() < 0.38 ? bet * 1.2 : 0);
-            } 
-            else if (globalDifficulty === 'medium') {
-                diffState.spinsSinceLastWin++;
-                if (diffState.spinCount % 35 === 0) {
-                    finalWin = bet * 20; 
-                    diffState.spinsSinceLastWin = 0;
-                } else if (diffState.spinsSinceLastWin >= 10 && Math.random() < 0.6) {
-                    finalWin = parseFloat((bet * 0.5).toFixed(2));
-                    diffState.spinsSinceLastWin = 0;
-                } else if (diffState.spinsSinceLastWin >= 6 && Math.random() < 0.5) {
-                    finalWin = parseFloat((bet * 0.2).toFixed(2));
-                    diffState.spinsSinceLastWin = 0;
-                } else {
-                    finalWin = 0;
-                }
-            } 
-            else if (globalDifficulty === 'hard') {
-                diffState.spinsSinceLastWin++;
-                if (diffState.spinsSinceLastWin >= 18 && Math.random() < 0.25) {
-                    finalWin = parseFloat((bet * 0.2).toFixed(2));
-                    diffState.spinsSinceLastWin = 0;
-                } else {
-                    finalWin = 0;
-                }
-            }
-
-            localStorage.setItem('slot_advanced_diff_state', JSON.stringify(diffState));
-            return parseFloat(Math.max(0, finalWin).toFixed(2));
-        }
-
-        function handleSpin() {
-            if (isSpinning) return;
-            isSpinning = true;
-            
-            let winOverlay = document.getElementById('winPopupOverlay');
-            if (winOverlay) winOverlay.style.display = 'none';
+    function removeCustomSymbol() {
+        let confGroup = gameSymbolConfigs[activeGameId] || gameSymbolConfigs[String(activeGameId)];
+        if (confGroup && (confGroup[selectedTargetSymbolIdx] || confGroup[String(selectedTargetSymbolIdx)])) {
+            delete confGroup[selectedTargetSymbolIdx];
+            delete confGroup[String(selectedTargetSymbolIdx)];
+            safeSaveLocalStorage('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs));
+            renderAdminMasterPalette();
             renderSlotGrid();
+            alert("🗑️ Custom symbol deleted!");
+        } else {
+            alert("⚠️ Is symbol par koi custom image nahi hai!");
+        }
+    }
 
-            playSpinSound();
-            
-            let currentBal = getWallet();
+    function updateDifficultySetting(mode) {
+        globalDifficulty = mode;
+        safeSaveLocalStorage('slot_difficulty_mode', mode);
+        alert("✅ Difficulty permanently updated to " + mode);
+    }
 
-            if (freeGamesRemaining > 0) {
-                freeGamesRemaining--;
-                document.getElementById('freeGameCountDisplay').innerText = freeGamesRemaining;
-                if (freeGamesRemaining <= 0) {
-                    document.getElementById('freeGameBanner').style.display = 'none';
-                }
-            } else {
-                if (currentBal < currentBet) {
-                    alert("⚠️ Insufficient Balance!");
-                    isSpinning = false;
-                    return;
-                }
-                currentBal = parseFloat((currentBal - currentBet).toFixed(2));
-                setWallet(currentBal);
+    function saveForceRule() {
+        let pId = document.getElementById('forcePlayerIdInput').value.trim();
+        let mode = document.getElementById('forceModeSelect').value;
+        forceRule = { mode: mode, playerId: pId };
+        safeSaveLocalStorage('slot_force_rule', JSON.stringify(forceRule));
+        alert("✅ Force rule permanently saved!");
+    }
+
+    function saveWhatsAppNumber() {
+        let wNum = document.getElementById('adminWhatsappInput').value.trim();
+        if (wNum === "") { alert("⚠️ Kripya valid WhatsApp number enter karein!"); return; }
+        supportWhatsAppNumber = wNum;
+        safeSaveLocalStorage('slot_whatsapp_number', wNum);
+        alert("✅ WhatsApp number permanently saved!");
+    }
+
+    function openWhatsAppSupport() { window.open(`https://wa.me/${supportWhatsAppNumber}?text=Hello`, '_blank'); }
+
+    function searchPlayerCoins() {
+        let inputVal = document.getElementById('searchCoinPlayerInput').value.trim();
+        let playerId = inputVal !== "" ? inputVal : "9876543210";
+        document.getElementById('playerCoinDetailsBox').style.display = 'block';
+        document.getElementById('foundPlayerName').innerText = `User (${playerId})`;
+        document.getElementById('foundPlayerBalance').innerText = getWallet().toFixed(2);
+    }
+
+    function applyCoinChange(action) {
+        let amtInput = document.getElementById('coinAmountChangeInput');
+        let amt = parseFloat(amtInput.value);
+        if (isNaN(amt) || amt <= 0) { alert("⚠️ Valid amount enter karein!"); return; }
+        
+        let currentW = getWallet();
+        if (action === 'add') currentW += amt;
+        else if (action === 'deduct') currentW = Math.max(0, currentW - amt);
+        
+        setWallet(currentW);
+        document.getElementById('foundPlayerBalance').innerText = getWallet().toFixed(2);
+        amtInput.value = '';
+        alert(`✅ Coins successfully ${action === 'add' ? 'added' : 'deducted'} permanently!`);
+    }
+
+    function switchNav(el, tabName) {
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        if (tabName === 'Profile') {
+            hideAllScreens();
+            document.getElementById('profileScreen').style.display = 'block';
+            renderProfileScreenData();
+        } else {
+            backToLobby();
+        }
+    }
+
+    function changeBet(amt) {
+        if (currentBet + amt >= 1 && currentBet + amt <= 100) {
+            currentBet += amt;
+            updateUIStats();
+        }
+    }
+
+    function updateUIStats() {
+        let currentBal = getWallet();
+        document.getElementById('walletDisplay').innerText = currentBal.toFixed(2);
+        document.getElementById('betDisplay').innerText = currentBet.toFixed(2);
+        document.getElementById('walletDisplayA').innerText = currentBal.toFixed(2);
+        let topWalA = document.getElementById('walletDisplayTopA');
+        if (topWalA) topWalA.innerText = currentBal.toFixed(2);
+        document.getElementById('walletDisplayB').innerText = currentBal.toFixed(2);
+        document.getElementById('betDisplayB').innerText = currentBet.toFixed(2);
+        
+        let betDispA = document.getElementById('betDisplayA');
+        if (betDispA) betDispA.innerText = currentBet.toFixed(2);
+
+        let profileBal = document.getElementById('profileWalletDisplay');
+        if (profileBal) profileBal.innerText = currentBal.toFixed(2);
+    }
+
+    function updateFreeGameUIIndicators() {
+        let count = freeGamesRemaining;
+        let show = count > 0;
+        
+        ['A', 'B', 'Default'].forEach(pref => {
+            let ind = document.getElementById(`freeGameIndicator${pref}`);
+            let cntSpan = document.getElementById(`freeGameCount${pref}`);
+            if (ind && cntSpan) {
+                ind.style.display = show ? 'inline-block' : 'none';
+                cntSpan.innerText = count;
             }
+        });
 
-            spinningColumns = [true, true, true, true, true, true];
-            renderSlotGrid(spinningColumns);
+        let fgBox = document.getElementById('freeGameWinBox');
+        if (fgBox) {
+            fgBox.style.display = show || isFreeGameActive ? 'block' : 'none';
+        }
+    }
 
-            let activeGame = gameList.find(g => g.id === activeGameId);
-            let targetGrid = [];
+    function calculateDifficultyAdjustedWin(rawWin, bet) {
+        if (forceRule.mode === 'loss') return 0;
+        if (forceRule.mode === 'win') return bet * 50;
+        if (rawWin <= 0) return 0;
+        return parseFloat(Math.max(0, rawWin).toFixed(2));
+    }
 
-            let triggerJackpotType = "none";
-            if (activeGame && activeGame.group === 'C' && groupCJackpotRule.type !== 'none') {
-                triggerJackpotType = groupCJackpotRule.type;
+    function handleSpin() {
+        if (isSpinning) return;
+        isSpinning = true;
+        
+        let winOverlay = document.getElementById('winPopupOverlay');
+        if (winOverlay) winOverlay.style.display = 'none';
+        renderSlotGrid();
+        playSpinSound();
+        
+        let currentBal = getWallet();
+        
+        if (freeGamesRemaining > 0) {
+            freeGamesRemaining--;
+            isFreeGameActive = true;
+            updateFreeGameUIIndicators();
+        } else {
+            if (currentBal < currentBet) {
+                alert("⚠️ Insufficient Balance!");
+                isSpinning = false;
+                return;
             }
+            currentBal = parseFloat((currentBal - currentBet).toFixed(2));
+            setWallet(currentBal);
+        }
 
-            if (triggerJackpotType !== "none") {
-                let chosenSymIdx = Math.floor(Math.random() * (symbols.length - 2)); 
-                for (let r = 0; r < 6; r++) {
-                    targetGrid[r] = [];
-                    for (let c = 0; c < 6; c++) {
-                        targetGrid[r][c] = chosenSymIdx;
-                    }
-                }
-            } else {
-                let scatterIndex = symbols.length - 1;
-                let scatterChance = globalDifficulty === 'normal' ? 0.015 : 0.003;
-                let triggerFreeGameThisSpin = (Math.random() < scatterChance);
-                let scatterCountTarget = triggerFreeGameThisSpin && freeGamesRemaining === 0 ? 4 : (Math.random() < 0.88 ? 0 : 1);
+        spinningColumns = [true, true, true, true, true, true];
+        renderSlotGrid(spinningColumns);
 
-                for (let r = 0; r < 6; r++) {
-                    targetGrid[r] = [];
-                    for (let c = 0; c < 6; c++) {
-                        let randSym = Math.floor(Math.random() * scatterIndex);
-                        targetGrid[r][c] = randSym;
-                    }
-                }
+        let activeGame = gameList.find(g => g.id === activeGameId);
+        let targetGrid = [];
+        let triggerJackpotType = (activeGame && activeGame.group === 'C' && groupCJackpotRule.type !== 'none') ? groupCJackpotRule.type : "none";
 
-                let placedScatters = 0;
-                while (placedScatters < scatterCountTarget) {
-                    let rr = Math.floor(Math.random() * 6);
-                    let cc = Math.floor(Math.random() * 6);
-                    if (targetGrid[rr][cc] !== scatterIndex) {
-                        targetGrid[rr][cc] = scatterIndex;
-                        placedScatters++;
-                    }
-                }
+        if (triggerJackpotType !== "none") {
+            let chosenSymIdx = Math.floor(Math.random() * (symbols.length - 2)); 
+            for (let r = 0; r < 6; r++) {
+                targetGrid[r] = [];
+                for (let c = 0; c < 6; c++) targetGrid[r][c] = chosenSymIdx;
             }
-
-            const stopDelays = [500, 850, 1200, 1550, 1900, 2250];
-
-            for (let c = 0; c < 6; c++) {
-                let colIndex = c;
-                setTimeout(() => {
-                    spinningColumns[colIndex] = false;
-                    for (let r = 0; r < 6; r++) { gridData[r][colIndex] = targetGrid[r][colIndex]; }
-                    updateSingleColumn(colIndex, gridData);
-
-                    if (colIndex === 5) {
-                        spinningColumns = [false, false, false, false, false, false];
-                        renderSlotGrid(spinningColumns);
-
-                        let totalWin = 0;
-                        let winningCellsCoord = [];
-
-                        if (triggerJackpotType !== "none") {
-                            totalWin = parseFloat(triggerJackpotType);
-                            for(let r=0; r<6; r++) for(let col=0; col<6; col++) winningCellsCoord.push([r,col]);
-
-                            groupCJackpotRule.type = "none";
-                            localStorage.setItem('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule));
-                            document.getElementById('adminGroupCJackpotSelect').value = "none";
-
-                            if (winOverlay) {
-                                document.getElementById('winPopupTitle').innerText = `🎉 JACKPOT ${totalWin}!`;
-                                document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
-                                winOverlay.style.display = 'block';
-                            }
+        } else {
+            let scatterIndex = symbols.length - 1;
+            let scatterPlaced = 0;
+            for (let r = 0; r < 6; r++) {
+                targetGrid[r] = [];
+                for (let c = 0; c < 6; c++) {
+                    let randSym = Math.floor(Math.random() * symbols.length);
+                    if (symbols[randSym].isScatter) {
+                        if (scatterPlaced < 4) {
+                            scatterPlaced++;
                         } else {
-                            let finalScatterCount = 0;
-                            for (let r = 0; r < 6; r++) {
-                                for (let col = 0; col < 6; col++) {
-                                    if (symbols[gridData[r][col]].isScatter) finalScatterCount++;
-                                }
-                            }
-
-                            if (finalScatterCount >= 4) {
-                                freeGamesRemaining += 10;
-                                document.getElementById('freeGameCountDisplay').innerText = freeGamesRemaining;
-                                document.getElementById('freeGameBanner').style.display = 'block';
-                            }
-
-                            let evalResult = evaluateStrictPaylinesWithHighlight(gridData);
-                            totalWin = calculateDifficultyAdjustedWin(evalResult.rawWin, currentBet);
-                            winningCellsCoord = evalResult.winningCells;
-                        }
-                        
-                        if (winningCellsCoord.length > 0 && totalWin > 0) {
-                            highlightWinningCellsDOM(winningCellsCoord);
-                        }
-
-                        totalWin = parseFloat(totalWin.toFixed(2));
-                        
-                        let latestBal = getWallet();
-                        latestBal = parseFloat((latestBal + totalWin).toFixed(2));
-                        setWallet(latestBal);
-                        updateUIStats();
-                        
-                        document.getElementById('spinWinDisplay').innerText = totalWin.toFixed(2);
-                        let spinWinA = document.getElementById('spinWinDisplayA');
-                        if (spinWinA) spinWinA.innerText = totalWin.toFixed(2);
-                        let spinWinB = document.getElementById('spinWinDisplayB');
-                        if (spinWinB) spinWinB.innerText = totalWin.toFixed(2);
-
-                        if (totalWin > 0 && triggerJackpotType === "none") {
-                            playWinSound(totalWin);
-                            if (winOverlay) {
-                                if (totalWin >= 20) {
-                                    document.getElementById('winPopupTitle').innerText = "🔥 MEGA WIN!";
-                                    document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
-                                    winOverlay.style.display = 'block';
-                                } else {
-                                    document.getElementById('winPopupTitle').innerText = "WIN!";
-                                    document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
-                                    winOverlay.style.display = 'block';
-                                }
-                            }
-                        }
-
-                        isSpinning = false;
-
-                        if (freeGamesRemaining > 0) {
-                            setTimeout(() => { handleSpin(); }, 1200);
+                            randSym = Math.floor(Math.random() * (symbols.length - 1));
                         }
                     }
-                }, stopDelays[c]);
+                    targetGrid[r][c] = randSym;
+                }
             }
         }
 
-        function evaluateStrictPaylinesWithHighlight(grid) {
-            let totalWin = 0;
-            let baseMultiplier = 2.0;
-            let winningCells = [];
+        const stopDelays = [500, 850, 1200, 1550, 1900, 2250];
+        for (let c = 0; c < 6; c++) {
+            let colIndex = c;
+            setTimeout(() => {
+                spinningColumns[colIndex] = false;
+                for (let r = 0; r < 6; r++) gridData[r][colIndex] = targetGrid[r][colIndex];
+                updateSingleColumn(colIndex, gridData);
 
-            let patterns = [];
-            for (let r = 0; r < 6; r++) {
-                patterns.push({ type: 'straight', path: [[r,0], [r,1], [r,2], [r,3], [r,4], [r,5]] });
-            }
-            patterns.push({ type: 'v', path: [[0,0], [1,1], [2,2], [3,3], [2,4], [1,5]] });
-            patterns.push({ type: 'v', path: [[3,0], [2,1], [1,2], [0,3], [1,4], [2,5]] });
-            patterns.push({ type: 'v', path: [[0,0], [2,1], [4,2], [5,3], [4,4], [2,5]] });
-            patterns.push({ type: 'w', path: [[0,0], [3,1], [5,2], [3,3], [0,4], [3,5]] });
-            patterns.push({ type: 'w', path: [[5,0], [2,1], [0,2], [2,3], [5,4], [2,5]] });
+                if (colIndex === 5) {
+                    spinningColumns = [false, false, false, false, false, false];
+                    renderSlotGrid(spinningColumns);
 
-            patterns.forEach(pat => {
-                let matchSymbol = null;
-                let consecutiveCount = 0;
-                let currentPathCells = [];
+                    let totalScattersOnScreen = 0;
+                    for (let r = 0; r < 6; r++) {
+                        for (let col = 0; col < 6; col++) {
+                            if (symbols[gridData[r][col]].isScatter) {
+                                totalScattersOnScreen++;
+                            }
+                        }
+                    }
 
-                for (let i = 0; i < pat.path.length; i++) {
-                    let r = pat.path[i][0];
-                    let c = pat.path[i][1];
-                    let sIdx = grid[r][c];
-                    let sym = symbols[sIdx];
+                    if (totalScattersOnScreen === 4) {
+                        freeGamesRemaining += 15;
+                        if (!isFreeGameActive) {
+                            freeGameAccumulatedWin = 0;
+                            playAlexSound();
+                        }
+                        updateFreeGameUIIndicators();
+                        if (winOverlay) {
+                            document.getElementById('winPopupTitle').innerText = "✨ 15 FREE GAMES! ✨";
+                            document.getElementById('winPopupAmount').innerText = "+15 FREE SPINS";
+                            winOverlay.style.display = 'block';
+                        }
+                    }
 
-                    if (!sym) continue;
-                    if (sym.isScatter) break;
+                    let totalWin = 0;
+                    let winningCellsCoord = [];
 
-                    if (i === 0) {
-                        if (!sym.isWild) {
-                            matchSymbol = sIdx;
-                            consecutiveCount = 1;
-                            currentPathCells.push([r, c]);
-                        } else {
-                            consecutiveCount = 1;
-                            currentPathCells.push([r, c]);
+                    if (triggerJackpotType !== "none") {
+                        totalWin = parseFloat(triggerJackpotType);
+                        for(let r=0; r<6; r++) for(let col=0; col<6; col++) winningCellsCoord.push([r,col]);
+
+                        groupCJackpotRule.type = "none";
+                        safeSaveLocalStorage('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule));
+                        document.getElementById('adminGroupCJackpotSelect').value = "none";
+
+                        if (winOverlay && totalScattersOnScreen !== 4) {
+                            document.getElementById('winPopupTitle').innerText = `🎉 JACKPOT ${totalWin}!`;
+                            document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
+                            winOverlay.style.display = 'block';
                         }
                     } else {
-                        if (sym.isWild || sIdx === matchSymbol || matchSymbol === null) {
-                            if (matchSymbol === null && !sym.isWild) {
-                                matchSymbol = sIdx;
-                            }
-                            consecutiveCount++;
-                            currentPathCells.push([r, c]);
-                        } else {
-                            break;
+                        let evalResult = evaluateStrictPaylinesWithHighlight(gridData);
+                        totalWin = calculateDifficultyAdjustedWin(evalResult.rawWin, currentBet);
+                        winningCellsCoord = evalResult.winningCells;
+                        if (totalWin <= 0) winningCellsCoord = [];
+                    }
+                    
+                    if (winningCellsCoord.length > 0 && totalWin > 0) highlightWinningCellsDOM(winningCellsCoord);
+
+                    totalWin = parseFloat(totalWin.toFixed(2));
+                    
+                    // IF FREE GAME ACTIVE, ACCUMULATE WIN IN SEPARATE BOX INSTEAD OF DIRECT WALLET ADDITION
+                    if (isFreeGameActive) {
+                        freeGameAccumulatedWin += totalWin;
+                        let fgDisplay = document.getElementById('freeGameAccumulatedDisplay');
+                        if (fgDisplay) fgDisplay.innerText = `${freeGameAccumulatedWin.toFixed(2)} COINS`;
+                    } else {
+                        setWallet(getWallet() + totalWin);
+                    }
+
+                    updateUIStats();
+                    
+                    document.getElementById('spinWinDisplay').innerText = totalWin.toFixed(2);
+                    let spinWinA = document.getElementById('spinWinDisplayA');
+                    if (spinWinA) spinWinA.innerText = totalWin.toFixed(2);
+                    let spinWinB = document.getElementById('spinWinDisplayB');
+                    if (spinWinB) spinWinB.innerText = totalWin.toFixed(2);
+
+                    if (totalWin > 0 && triggerJackpotType === "none" && totalScattersOnScreen !== 4 && !isFreeGameActive) {
+                        playWinSound(totalWin);
+                        if (winOverlay) {
+                            document.getElementById('winPopupTitle').innerText = totalWin >= 20 ? "🔥 MEGA WIN!" : "WIN!";
+                            document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
+                            winOverlay.style.display = 'block';
                         }
                     }
-                }
 
-                if (consecutiveCount >= 3) {
-                    let effectiveSymIdx = matchSymbol !== null ? matchSymbol : 0;
-                    let symObj = symbols[effectiveSymIdx] || { mult: 10 };
-                    let lineWin = currentBet * (consecutiveCount * 0.5) * (symObj.mult * 0.2) * baseMultiplier;
-                    totalWin += lineWin;
-                    currentPathCells.forEach(cell => {
-                        if (!winningCells.some(wc => wc[0] === cell[0] && wc[1] === cell[1])) {
-                            winningCells.push(cell);
-                        }
-                    });
-                }
-            });
+                    isSpinning = false;
 
-            return { rawWin: parseFloat(totalWin.toFixed(2)), winningCells: winningCells };
+                    // CHECK IF FREE GAMES FINISHED
+                    if (isFreeGameActive && freeGamesRemaining === 0) {
+                        playCoinCountingSound(() => {
+                            let finalWin = freeGameAccumulatedWin;
+                            setWallet(getWallet() + finalWin);
+                            isFreeGameActive = false;
+                            freeGameAccumulatedWin = 0;
+                            updateFreeGameUIIndicators();
+
+                            if (winOverlay) {
+                                document.getElementById('winPopupTitle').innerText = "🏆 FREE GAMES COMPLETED!";
+                                document.getElementById('winPopupAmount').innerText = `+${finalWin.toFixed(2)} COINS ADDED`;
+                                winOverlay.style.display = 'block';
+                            }
+                        });
+                    } else if (isFreeGameActive && freeGamesRemaining > 0) {
+                        // AUTO SPINS CONTINUOUSLY IN FREE GAMES AFTER SHORT DELAY
+                        setTimeout(() => {
+                            if (!isSpinning) handleSpin();
+                        }, 1200);
+                    }
+                }
+            }, stopDelays[c]);
         }
+    }
 
-        function highlightWinningCellsDOM(winningCells) {
-            winningCells.forEach(cellCoord => {
-                let r = cellCoord[0];
-                let c = cellCoord[1];
-                let colEl = document.getElementById(`col-${c}`);
-                if (colEl) {
-                    let cellEl = colEl.children[r];
-                    if (cellEl) cellEl.classList.add('winning-highlight');
-                }
-            });
-        }
+    function evaluateStrictPaylinesWithHighlight(grid) {
+        let totalWin = 0;
+        let baseMultiplier = 2.0;
+        let winningCells = [];
 
-        function renderSlotGrid(isSpinningArray = [false,false,false,false,false,false]) {
-            let activeGame = gameList.find(g => g.id === activeGameId);
-            let cellExtraStyle = activeGame && activeGame.group === 'B' ? 'border-radius: 50%;' : '';
+        let patterns = [];
+        for (let r = 0; r < 6; r++) patterns.push({ type: 'straight', path: [[r,0], [r,1], [r,2], [r,3], [r,4], [r,5]] });
 
-            let html = '';
-            for (let c = 0; c < 6; c++) {
-                let isSpinningCol = isSpinningArray[c];
-                let blurClass = isSpinningCol ? 'spinning' : '';
-                html += `<div class="slot-reel-window"><div class="slot-column ${blurClass}" id="col-${c}">`;
-                
-                let repeatCount = isSpinningCol ? 16 : 6;
-                for (let r = 0; r < repeatCount; r++) {
-                    let sIdx = isSpinningCol ? Math.floor(Math.random() * symbols.length) : gridData[r % 6][c];
-                    let sym = symbols[sIdx];
-                    let config = getSymbolConfig(activeGameId, sIdx);
-                    let scaleMultiplier = (config.scale || 100) / 100;
-                    let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:85%; max-height:85%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
-                    let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
-                    html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
-                }
-                html += `</div></div>`;
-            }
-            let gridA = document.getElementById('slotGridGroupA');
-            let gridB = document.getElementById('slotGridGroupB');
-            let gridDef = document.getElementById('slotGridDefault');
-            if (gridA) gridA.innerHTML = html;
-            if (gridB) gridB.innerHTML = html;
-            if (gridDef) gridDef.innerHTML = html;
-        }
+        patterns.forEach(pat => {
+            let matchSymbol = null;
+            let consecutiveCount = 0;
+            let currentPathCells = [];
 
-        function updateSingleColumn(colIndex, currentGrid) {
-            let activeGame = gameList.find(g => g.id === activeGameId);
-            let cellExtraStyle = activeGame && activeGame.group === 'B' ? 'border-radius: 50%;' : '';
-            let colEls = document.querySelectorAll(`[id^="col-${colIndex}"]`);
-            colEls.forEach(colEl => {
-                colEl.classList.remove('spinning');
-                colEl.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
-                colEl.style.transform = 'translate3d(0, 0, 0)';
-                
-                let html = '';
-                for (let r = 0; r < 6; r++) {
-                    let sIdx = currentGrid[r][colIndex];
-                    let sym = symbols[sIdx];
-                    let config = getSymbolConfig(activeGameId, sIdx);
-                    let scaleMultiplier = (config.scale || 100) / 100;
-                    let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:85%; max-height:85%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
-                    let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
-                    html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
-                }
-                colEl.innerHTML = html;
-            });
-        }
+            for (let i = 0; i < pat.path.length; i++) {
+                let r = pat.path[i][0], c = pat.path[i][1];
+                let sIdx = grid[r][c], sym = symbols[sIdx];
+                if (!sym || sym.isScatter) break;
 
-        function getSymbolConfig(gameId, sIdx) {
-            let confGroup = gameSymbolConfigs[gameId] || gameSymbolConfigs[String(gameId)];
-            if (confGroup) {
-                let symConf = confGroup[sIdx] || confGroup[String(sIdx)];
-                if (symConf) {
-                    return symConf;
-                }
-            }
-            return { url: null, scale: 100 };
-        }
-
-        function applyCustomFrameToActiveGame(groupName, gameId) {
-            let targetKey = groupName === 'A' ? 'groupA' : (groupName === 'B' ? 'groupB' : 'default');
-            let frameCfg = gameFrameConfigs[targetKey] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0, frameImageUrl: null };
-            let frameBoxId = 'slotFrameBoxDefault';
-            if (groupName === 'A') frameBoxId = 'slotFrameBoxA';
-            if (groupName === 'B') frameBoxId = 'slotFrameBoxB';
-
-            let frameEl = document.getElementById(frameBoxId);
-            if (frameEl) {
-                let scale = frameCfg.scale !== undefined ? frameCfg.scale : 1.0;
-                let width = frameCfg.width !== undefined ? frameCfg.width : 100;
-                let height = frameCfg.height !== undefined ? frameCfg.height : 100;
-                let offsetX = frameCfg.offsetX !== undefined ? frameCfg.offsetX : 0;
-                let offsetY = frameCfg.offsetY !== undefined ? frameCfg.offsetY : 0;
-
-                frameEl.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
-                frameEl.style.width = `${width}%`;
-                frameEl.style.height = `${height}%`;
-
-                if (frameCfg.frameImageUrl) {
-                    frameEl.style.borderImage = `url(${frameCfg.frameImageUrl}) 30 round`;
-                    frameEl.style.borderWidth = '16px';
-                    frameEl.style.backgroundImage = `url(${frameCfg.frameImageUrl})`;
-                    frameEl.style.backgroundSize = 'cover';
+                if (i === 0) {
+                    if (!sym.isWild) matchSymbol = sIdx;
+                    consecutiveCount = 1;
+                    currentPathCells.push([r, c]);
                 } else {
-                    frameEl.style.borderImage = 'none';
-                    frameEl.style.borderWidth = '12px';
-                    frameEl.style.backgroundImage = 'none';
+                    if (sym.isWild || sIdx === matchSymbol || matchSymbol === null) {
+                        if (matchSymbol === null && !sym.isWild) matchSymbol = sIdx;
+                        consecutiveCount++;
+                        currentPathCells.push([r, c]);
+                    } else { break; }
                 }
             }
-        }
 
-        function showFeature(title, msg) { alert(`⭐ ${title}\n\n${msg}`); }
+            if (consecutiveCount >= 3) {
+                let symObj = symbols[matchSymbol !== null ? matchSymbol : 0] || { mult: 10 };
+                let lineWin = currentBet * (consecutiveCount * 0.5) * (symObj.mult * 0.2) * baseMultiplier;
+                totalWin += lineWin;
+                currentPathCells.forEach(cell => {
+                    if (!winningCells.some(wc => wc[0] === cell[0] && wc[1] === cell[1])) winningCells.push(cell);
+                });
+            }
+        });
+
+        return { rawWin: parseFloat(totalWin.toFixed(2)), winningCells: winningCells };
+    }
+
+    function highlightWinningCellsDOM(winningCells) {
+        let activeGame = gameList.find(g => g.id === activeGameId);
+        let prefix = activeGame ? (activeGame.group === 'A' ? 'A' : (activeGame.group === 'B' ? 'B' : 'Def')) : 'Def';
+        winningCells.forEach(cellCoord => {
+            let colEl = document.getElementById(`col-${prefix}-${cellCoord[1]}`);
+            if (colEl) {
+                let cellEl = colEl.children[cellCoord[0]];
+                if (cellEl) cellEl.classList.add('winning-highlight');
+            }
+        });
+    }
+
+    function renderSlotGrid(isSpinningArray = [false,false,false,false,false,false]) {
+        let activeGame = gameList.find(g => g.id === activeGameId);
+        let prefix = activeGame ? (activeGame.group === 'A' ? 'A' : (activeGame.group === 'B' ? 'B' : 'Def')) : 'Def';
+        let cellExtraStyle = activeGame && activeGame.group === 'B' ? 'border-radius: 50%;' : '';
+
+        let html = '';
+        for (let c = 0; c < 6; c++) {
+            let isSpinningCol = isSpinningArray[c];
+            html += `<div class="slot-reel-window"><div class="slot-column ${isSpinningCol ? 'spinning' : ''}" id="col-${prefix}-${c}">`;
+            
+            let repeatCount = isSpinningCol ? 16 : 6;
+            for (let r = 0; r < repeatCount; r++) {
+                let sIdx = isSpinningCol ? Math.floor(Math.random() * symbols.length) : gridData[r % 6][c];
+                let sym = symbols[sIdx];
+                let config = getSymbolConfig(activeGameId, sIdx);
+                let scaleMultiplier = (config.scale || 100) / 100;
+                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:85%; max-height:85%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
+                html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
+            }
+            html += `</div></div>`;
+        }
+        let gridA = document.getElementById('slotGridGroupA');
+        let gridB = document.getElementById('slotGridGroupB');
+        let gridDef = document.getElementById('slotGridDefault');
+        
+        if (activeGame) {
+            if (activeGame.group === 'A' && gridA) gridA.innerHTML = html;
+            else if (activeGame.group === 'B' && gridB) gridB.innerHTML = html;
+            else if (gridDef) gridDef.innerHTML = html;
+        } else if (gridDef) { gridDef.innerHTML = html; }
+    }
+
+    function updateSingleColumn(colIndex, currentGrid) {
+        let activeGame = gameList.find(g => g.id === activeGameId);
+        let prefix = activeGame ? (activeGame.group === 'A' ? 'A' : (activeGame.group === 'B' ? 'B' : 'Def')) : 'Def';
+        let cellExtraStyle = activeGame && activeGame.group === 'B' ? 'border-radius: 50%;' : '';
+        let colEl = document.getElementById(`col-${prefix}-${colIndex}`);
+        if (colEl) {
+            colEl.classList.remove('spinning');
+            colEl.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            colEl.style.transform = 'translate3d(0, 0, 0)';
+            
+            let html = '';
+            for (let r = 0; r < 6; r++) {
+                let sIdx = currentGrid[r][colIndex];
+                let sym = symbols[sIdx];
+                let config = getSymbolConfig(activeGameId, sIdx);
+                let scaleMultiplier = (config.scale || 100) / 100;
+                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:85%; max-height:85%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
+                html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
+            }
+            colEl.innerHTML = html;
+        }
+    }
+
+    function getSymbolConfig(gameId, sIdx) {
+        let confGroup = gameSymbolConfigs[gameId] || gameSymbolConfigs[String(gameId)];
+        if (confGroup) {
+            let symConf = confGroup[sIdx] || confGroup[String(sIdx)];
+            if (symConf) return symConf;
+        }
+        return { url: null, scale: 100 };
+    }
+
+    function applyCustomFrameToActiveGame(groupName, gameId) {
+        let targetKey = groupName === 'A' ? 'groupA' : (groupName === 'B' ? 'groupB' : 'default');
+        let frameCfg = gameFrameConfigs[targetKey] || { scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0, frameImageUrl: null };
+        let frameBoxId = groupName === 'A' ? 'slotFrameBoxA' : (groupName === 'B' ? 'slotFrameBoxB' : 'slotFrameBoxDefault');
+
+        let frameEl = document.getElementById(frameBoxId);
+        if (frameEl) {
+            let scale = frameCfg.scale !== undefined ? frameCfg.scale : 1.0;
+            let width = frameCfg.width !== undefined ? frameCfg.width : 100;
+            let height = frameCfg.height !== undefined ? frameCfg.height : 100;
+            let offsetX = frameCfg.offsetX !== undefined ? frameCfg.offsetX : 0;
+            let offsetY = frameCfg.offsetY !== undefined ? frameCfg.offsetY : 0;
+
+            frameEl.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+            frameEl.style.width = `${width}%`;
+            frameEl.style.height = `${height}%`;
+
+            if (frameCfg.frameImageUrl) {
+                frameEl.style.borderImage = `url(${frameCfg.frameImageUrl}) 30 round`;
+                frameEl.style.borderWidth = '16px';
+                frameEl.style.backgroundImage = `url(${frameCfg.frameImageUrl})`;
+                frameEl.style.backgroundSize = 'cover';
+            } else {
+                frameEl.style.borderImage = 'none';
+                frameEl.style.borderWidth = '12px';
+                frameEl.style.backgroundImage = 'none';
+            }
+        }
+    }
+
+    function showFeature(title, msg) { alert(`⭐ ${title}\n\n${msg}`); }
 </script>
 </body>
 </html>
