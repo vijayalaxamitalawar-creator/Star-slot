@@ -864,8 +864,8 @@
             box-shadow: inset 0 0 6px rgba(255, 215, 0, 0.6);
         }
         .slot-cell img {
-            max-width: 85%;
-            max-height: 85%;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
         }
         .badge-wild { 
@@ -1651,7 +1651,7 @@
     }
 
     const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
-    const iconsPool = ["👑", "🍉", "🐯", "💎", "🐉", "🎰", "🌟", "🪙", "🔥", "🧞", "🏴‍☠️", "🐃", "🍬", "⚡", "🗿", "👸", "🦁", "🐚", "🃏", "🐼", "🍇", "🔱", "🏦", "🌶️", "📖", "✨", "🎡", "⭐", "🍒", "🔔"];
+    const iconsPool = ["??", "??", "🐯", "💎", "🐉", "🎰", "🌟", "🪙", "🔥", "🧞", "🏴‍☠️", "🐃", "🍬", "⚡", "🗿", "👸", "🦁", "🐚", "🃏", "🐼", "🍇", "🔱", "🏦", "🌶️", "📖", "✨", "🎡", "⭐", "🍒", "🔔"];
     let gameList = [];
     
     let counter = 1;
@@ -2413,15 +2413,14 @@
         }
     }
 
-    // SPECIAL ALEX SOUND (FREE GAME TRIGGER CHIME)
     function playAlexSound() {
         try {
             let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-            osc.frequency.exponentialRampToValueAtTime(1174.66, audioCtx.currentTime + 0.4); // D6
+            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1174.66, audioCtx.currentTime + 0.4);
             gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
             osc.connect(gain);
@@ -2431,7 +2430,6 @@
         } catch(e) {}
     }
 
-    // COIN COUNTING & DROPPING SOUND AT THE END OF FREE GAMES
     function playCoinCountingSound(callback) {
         try {
             let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2672,6 +2670,10 @@
     }
 
     function changeBet(amt) {
+        if (freeGamesRemaining > 0 || isFreeGameActive) {
+            alert("⚠️ Free Games ke dauran bet change nahi kiya ja sakta!");
+            return;
+        }
         if (currentBet + amt >= 1 && currentBet + amt <= 100) {
             currentBet += amt;
             updateUIStats();
@@ -2840,7 +2842,6 @@
 
                     totalWin = parseFloat(totalWin.toFixed(2));
                     
-                    // IF FREE GAME ACTIVE, ACCUMULATE WIN IN SEPARATE BOX INSTEAD OF DIRECT WALLET ADDITION
                     if (isFreeGameActive) {
                         freeGameAccumulatedWin += totalWin;
                         let fgDisplay = document.getElementById('freeGameAccumulatedDisplay');
@@ -2868,7 +2869,6 @@
 
                     isSpinning = false;
 
-                    // CHECK IF FREE GAMES FINISHED
                     if (isFreeGameActive && freeGamesRemaining === 0) {
                         playCoinCountingSound(() => {
                             let finalWin = freeGameAccumulatedWin;
@@ -2884,7 +2884,6 @@
                             }
                         });
                     } else if (isFreeGameActive && freeGamesRemaining > 0) {
-                        // AUTO SPINS CONTINUOUSLY IN FREE GAMES AFTER SHORT DELAY
                         setTimeout(() => {
                             if (!isSpinning) handleSpin();
                         }, 1200);
@@ -2966,7 +2965,7 @@
                 let sym = symbols[sIdx];
                 let config = getSymbolConfig(activeGameId, sIdx);
                 let scaleMultiplier = (config.scale || 100) / 100;
-                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:85%; max-height:85%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
                 let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
                 html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
             }
@@ -2999,7 +2998,7 @@
                 let sym = symbols[sIdx];
                 let config = getSymbolConfig(activeGameId, sIdx);
                 let scaleMultiplier = (config.scale || 100) / 100;
-                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); max-width:85%; max-height:85%; object-fit:contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
                 let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
                 html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
             }
