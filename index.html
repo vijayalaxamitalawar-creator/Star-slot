@@ -285,6 +285,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            image-rendering: -webkit-optimize-contrast;
         }
         .game-name {
             position: relative;
@@ -867,6 +868,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
+            image-rendering: -webkit-optimize-contrast;
         }
         .badge-wild { 
             font-size: 6px; 
@@ -904,7 +906,6 @@
             100% { transform: scale(1.05); filter: brightness(1.3); }
         }
 
-        /* STYLISH FREE GAME BANNER & BOX */
         .stylish-free-banner {
             background: linear-gradient(135deg, #ff007f, #7928ca, #ffb800);
             background-size: 200% 200%;
@@ -1002,6 +1003,16 @@
         }
         .profile-withdraw-btn {
             background: linear-gradient(135deg, #2ed573, #1e90ff);
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-weight: bold;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .profile-deposit-btn {
+            background: linear-gradient(135deg, #ff9f43, #ee5253);
             color: #fff;
             border: 1px solid #fff;
             border-radius: 8px;
@@ -1137,7 +1148,6 @@
 
     <!-- GAMEPLAY SCREEN -->
     <div id="gameScreen">
-        <!-- FREE GAME ACCUMULATED WIN BOX -->
         <div id="freeGameWinBox" style="display:none; background:rgba(10,20,40,0.95); border:2px solid #ffb800; border-radius:8px; padding:4px 10px; text-align:center; margin:4px auto; box-shadow:0 0 12px #ffb800; flex-shrink:0; width:90%; z-index:20;">
             <div style="font-size:8px; color:#ffb800; font-weight:bold; letter-spacing:1px;">⭐ FREE GAMES TOTAL ACCUMULATED WIN ⭐</div>
             <div id="freeGameAccumulatedDisplay" style="font-size:16px; font-weight:900; color:#00ffcc;">0.00 COINS</div>
@@ -1317,6 +1327,7 @@
                 <div class="profile-balance-box">
                     <span>Balance: 🪙 <span id="profileWalletDisplay">2670</span></span>
                 </div>
+                <button class="profile-deposit-btn" onclick="openDepositScannerModal()">📥 Deposit</button>
                 <button class="profile-withdraw-btn" onclick="openWithdrawalModal()">💸 Withdrawal</button>
             </div>
         </div>
@@ -1364,6 +1375,19 @@
         </div>
     </div>
 
+    <!-- DEPOSIT SCANNER MODAL -->
+    <div id="depositScannerModal" class="custom-modal-overlay">
+        <div class="modal-card" style="max-width:320px;">
+            <h3 style="color:#00c6ff; margin-top:0; font-size:15px;">📥 Deposit QR Scanner</h3>
+            <p style="font-size:10px; color:#ccc; margin-bottom:8px;">Scan this QR code to deposit funds via UPI/Scanner.</p>
+            <div style="width:200px; height:200px; margin:0 auto 10px auto; background:#112244; border:2px solid #00c6ff; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                <span id="depositScannerPlaceholder" style="font-size:11px; color:#aaa;">No Scanner Uploaded by Admin</span>
+                <img id="depositScannerDisplayImg" src="" style="width:100%; height:100%; object-fit:contain; display:none;" />
+            </div>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeDepositScannerModal()">Close</button>
+        </div>
+    </div>
+
     <!-- WITHDRAWAL MODAL -->
     <div id="customWithdrawModal" class="custom-modal-overlay">
         <div class="modal-card">
@@ -1394,6 +1418,20 @@
         <button onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back to Lobby</button>
         <div style="clear: both; height: 8px;"></div>
         <h2 style="color: #00c6ff; margin-top: 0; font-size: 15px;">⚙️ Master Admin Control Panel</h2>
+
+        <div class="admin-card">
+            <h3>📱 DEPOSIT QR SCANNER MANAGER</h3>
+            <label class="admin-label">Upload Deposit Scanner QR Image:</label>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="file" id="adminDepositScannerInput" class="admin-input" accept="image/*" onchange="previewAdminDepositScanner(event)" style="margin-bottom:0;">
+                <button class="admin-btn" style="background:#ff4757; color:#fff; white-space:nowrap;" onclick="removeAdminDepositScanner()">🗑️ Delete</button>
+            </div>
+            <div id="adminScannerPreviewBox" style="width:90px; height:90px; margin-bottom:6px; background:#112244; border:1px solid #00c6ff; border-radius:4px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                <span style="font-size:8px; color:#aaa;" id="adminScannerNoImgText">No Image</span>
+                <img id="adminScannerPreviewImg" src="" style="width:100%; height:100%; object-fit:contain; display:none;" />
+            </div>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="saveAdminDepositScannerConfig()">💾 Save Deposit Scanner</button>
+        </div>
 
         <div class="admin-card">
             <h3>🔐 Change Admin Credentials</h3>
@@ -1651,7 +1689,7 @@
     }
 
     const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
-    const iconsPool = ["??", "??", "🐯", "💎", "🐉", "🎰", "🌟", "🪙", "🔥", "🧞", "🏴‍☠️", "🐃", "🍬", "⚡", "🗿", "👸", "🦁", "🐚", "🃏", "🐼", "🍇", "🔱", "🏦", "🌶️", "📖", "✨", "🎡", "⭐", "🍒", "🔔"];
+    const iconsPool = ["🚗", "🐶", "😼", "🙈", "🥳", "👑", "🍉", "💎", "🐉", "🎰", "🌟", "🪙", "🔥", "🧞", "🏴‍☠️", "🐃", "🍬", "⚡", "🗿", "👸", "🦁", "🐚", "🃏", "🐼", "🍇", "🔱", "🏦", "🌶️", "📖", "✨", "🎡", "⭐", "🍒", "🔔"];
     let gameList = [];
     
     let counter = 1;
@@ -1725,6 +1763,65 @@
         }
     }
 
+    // DEPOSIT SCANNER MANAGER LOGIC
+    let tempAdminDepositScannerBase64 = null;
+    let adminDepositScannerRemoved = false;
+
+    function previewAdminDepositScanner(event) {
+        let file = event.target.files[0];
+        if (file) {
+            compressImageFile(file, 600, 600, 0.9, function(compressedUrl) {
+                tempAdminDepositScannerBase64 = compressedUrl;
+                adminDepositScannerRemoved = false;
+                let prevImg = document.getElementById('adminScannerPreviewImg');
+                let noTxt = document.getElementById('adminScannerNoImgText');
+                prevImg.src = compressedUrl;
+                prevImg.style.display = 'block';
+                noTxt.style.display = 'none';
+                alert("✅ Deposit scanner QR image loaded!");
+            });
+        }
+    }
+
+    function removeAdminDepositScanner() {
+        tempAdminDepositScannerBase64 = null;
+        adminDepositScannerRemoved = true;
+        let prevImg = document.getElementById('adminScannerPreviewImg');
+        let noTxt = document.getElementById('adminScannerNoImgText');
+        prevImg.style.display = 'none';
+        noTxt.style.display = 'block';
+        alert("🗑️ Deposit scanner marked for deletion. Click 'Save Deposit Scanner' to apply.");
+    }
+
+    function saveAdminDepositScannerConfig() {
+        if (adminDepositScannerRemoved) {
+            localStorage.removeItem('slot_deposit_scanner_image');
+        } else if (tempAdminDepositScannerBase64) {
+            safeSaveLocalStorage('slot_deposit_scanner_image', tempAdminDepositScannerBase64);
+        }
+        alert("✅ Deposit QR Scanner successfully saved permanently!");
+    }
+
+    function openDepositScannerModal() {
+        let savedScanner = localStorage.getItem('slot_deposit_scanner_image');
+        let dispImg = document.getElementById('depositScannerDisplayImg');
+        let placeholder = document.getElementById('depositScannerPlaceholder');
+        
+        if (savedScanner) {
+            dispImg.src = savedScanner;
+            dispImg.style.display = 'block';
+            placeholder.style.display = 'none';
+        } else {
+            dispImg.style.display = 'none';
+            placeholder.style.display = 'block';
+        }
+        document.getElementById('depositScannerModal').style.display = 'flex';
+    }
+
+    function closeDepositScannerModal() {
+        document.getElementById('depositScannerModal').style.display = 'none';
+    }
+
     let selectedLobbyGameId = 1;
     let tempLobbyLogoDataUrl = null;
     let lobbyLogoRemoved = false;
@@ -1749,10 +1846,10 @@
     function previewCustomLobbyLogoFile(event) {
         let file = event.target.files[0];
         if (file) {
-            compressImageFile(file, 100, 100, 0.5, function(compressedUrl) {
+            compressImageFile(file, 800, 800, 0.95, function(compressedUrl) {
                 tempLobbyLogoDataUrl = compressedUrl;
                 lobbyLogoRemoved = false;
-                alert("✅ Lobby logo compressed & preview loaded successfully!");
+                alert("✅ Lobby logo loaded clearly without blur!");
             });
         }
     }
@@ -1954,6 +2051,19 @@
             document.getElementById('changeAdminPasswordInput').value = savedAdminPass;
             document.getElementById('adminWhatsappInput').value = localStorage.getItem('slot_whatsapp_number') || "919876543210";
             document.getElementById('adminDifficultySelect').value = localStorage.getItem('slot_difficulty_mode') || "normal";
+
+            // Load deposit scanner preview in admin panel
+            let savedScanner = localStorage.getItem('slot_deposit_scanner_image');
+            let prevImg = document.getElementById('adminScannerPreviewImg');
+            let noTxt = document.getElementById('adminScannerNoImgText');
+            if (savedScanner) {
+                prevImg.src = savedScanner;
+                prevImg.style.display = 'block';
+                noTxt.style.display = 'none';
+            } else {
+                prevImg.style.display = 'none';
+                noTxt.style.display = 'block';
+            }
         } else {
             alert("⚠️ Invalid Admin Mobile Number or Password!");
         }
@@ -1997,7 +2107,8 @@
     }
 
     function adminSearchPlayerProfile() {
-        let query = document.getElementById('adminSearchPlayerIdInput').value.trim().toLowerCase();
+        let rawQuery = document.getElementById('adminSearchPlayerIdInput').value;
+        let query = rawQuery.replace(/[|]/g, '').trim().toLowerCase();
         let resultBox = document.getElementById('adminPlayerSearchResultBox');
         if (!query) { alert("⚠️ Player ID ya Mobile enter karein!"); return; }
 
@@ -2007,7 +2118,7 @@
         let myDetails = localStorage.getItem('casino_player_saved_details') || "No details saved yet.";
         let myPic = getProfilePic();
 
-        if (myUid.includes(query) || myMobile.includes(query)) {
+        if (myUid.includes(query) || myMobile.includes(query) || query.includes(myUid.replace('#','').toLowerCase())) {
             resultBox.style.display = 'block';
             resultBox.innerHTML = `
                 <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
@@ -2019,12 +2130,19 @@
                         <span style="color:#00ffcc;">Mobile: ${myMobile} | Balance: 🪙 ${myBal.toFixed(2)}</span>
                     </div>
                 </div>
-                <div style="background:rgba(0,0,0,0.6); padding:6px; border-radius:4px; font-size:9px; white-space:pre-wrap;"><strong>Saved Details:</strong><br>${myDetails}</div>
+                <div style="background:rgba(0,0,0,0.6); padding:6px; border-radius:4px; font-size:9px; white-space:pre-wrap; margin-bottom:6px;"><strong>Saved Details:</strong><br>${myDetails}</div>
+                <button class="admin-btn" style="background:#00c6ff; color:#000; width:100%;" onclick="openPlayerProfileFromAdmin()">👤 Open Full Profile</button>
             `;
         } else {
             resultBox.style.display = 'block';
-            resultBox.innerHTML = `<span style="color:#ff4757;">⚠️ No player found with: "${query}"</span>`;
+            resultBox.innerHTML = `<span style="color:#ff4757;">⚠️ No player found with: "${rawQuery.trim()}"</span>`;
         }
+    }
+
+    function openPlayerProfileFromAdmin() {
+        hideAllScreens();
+        document.getElementById('profileScreen').style.display = 'block';
+        renderProfileScreenData();
     }
 
     let tempFeedbackImageBase64 = null;
@@ -2203,7 +2321,7 @@
             let displayIcon = game.icon;
 
             if (logoCfg.url) {
-                displayIcon = `<img src="${logoCfg.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: cover;" />`;
+                displayIcon = `<img src="${logoCfg.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;" />`;
             } else {
                 let fontSize = Math.floor(26 * scaleMultiplier);
                 displayIcon = `<span style="font-size:${fontSize}px; line-height:1;">${game.icon}</span>`;
@@ -2508,6 +2626,7 @@
         document.getElementById('adminLoginModal').style.display = 'none';
         document.getElementById('scratchModal').style.display = 'none';
         document.getElementById('wheelModal').style.display = 'none';
+        document.getElementById('depositScannerModal').style.display = 'none';
     }
 
     function backToLobby() {
@@ -2546,7 +2665,7 @@
         symbols.forEach((sym, sIdx) => {
             let config = getSymbolConfig(activeGameId, sIdx);
             let scaleMultiplier = (config.scale || 100) / 100;
-            let cellContent = config.url ? `<div style="width:100%; height:100%; overflow:hidden; display:flex; align-items:center; justify-content:center;"><img src="${config.url}" style="width: 100%; height: 100%; object-fit: contain; transform: scale(${scaleMultiplier});" /></div>` : `<span style="font-size:20px;">${sym.icon}</span>`;
+            let cellContent = config.url ? `<div style="width:100%; height:100%; overflow:hidden; display:flex; align-items:center; justify-content:center;"><img src="${config.url}" style="width: 100%; height: 100%; object-fit: contain; image-rendering: -webkit-optimize-contrast; transform: scale(${scaleMultiplier});" /></div>` : `<span style="font-size:20px;">${sym.icon}</span>`;
             let activeBorder = sIdx === selectedTargetSymbolIdx ? 'border: 2px solid #00ffcc;' : 'border: 1px solid #ffd700;';
             html += `<div onclick="selectAdminSymbol(${sIdx})" style="height:42px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); ${activeBorder} border-radius:4px; cursor:pointer; overflow:hidden; position:relative;">${cellContent}</div>`;
         });
@@ -2576,7 +2695,7 @@
     function previewCustomSymbolFile(event) {
         const file = event.target.files[0];
         if (file) {
-            compressImageFile(file, 100, 100, 0.5, function(compressedUrl) {
+            compressImageFile(file, 800, 800, 0.95, function(compressedUrl) {
                 if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
                 gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = {
                     url: compressedUrl,
@@ -2584,7 +2703,7 @@
                 };
                 renderAdminMasterPalette();
                 renderSlotGrid();
-                alert("✅ Custom symbol compressed & preview updated!");
+                alert("✅ Custom symbol loaded sharply without blur!");
             });
         }
     }
@@ -2965,7 +3084,7 @@
                 let sym = symbols[sIdx];
                 let config = getSymbolConfig(activeGameId, sIdx);
                 let scaleMultiplier = (config.scale || 100) / 100;
-                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: contain; image-rendering: -webkit-optimize-contrast;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
                 let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
                 html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
             }
@@ -2998,7 +3117,7 @@
                 let sym = symbols[sIdx];
                 let config = getSymbolConfig(activeGameId, sIdx);
                 let scaleMultiplier = (config.scale || 100) / 100;
-                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: contain;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+                let content = config.url ? `<img src="${config.url}" style="transform: scale(${scaleMultiplier}); width: 100%; height: 100%; object-fit: contain; image-rendering: -webkit-optimize-contrast;" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
                 let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
                 html += `<div class="slot-cell" style="${cellExtraStyle}">${content}${badge}</div>`;
             }
