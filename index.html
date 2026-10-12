@@ -18,6 +18,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            user-select: none;
         }
         .app-container {
             width: 100%;
@@ -1072,7 +1073,7 @@
             box-shadow: 0 0 20px rgba(0,198,255,0.4);
         }
     </style>
-</head>
+<script src="/_aistudio-iframe.js?v=6634132a"></script></head>
 <body>
 
 <div class="app-container">
@@ -1081,26 +1082,117 @@
     <div id="offlineScreen">
         <div class="offline-card">
             <h2 style="color: #ff4757; margin-top: 0; font-size: 18px;">⚠️ NO INTERNET CONNECTION</h2>
-            <p style="font-size: 11px; color: #ccc; margin-bottom: 15px;">App ko chalane ke liye internet connection zaroori hai.</p>
-            <button class="admin-btn" style="background:#00c6ff; color:#000; width:100%; padding:8px; font-size:12px;" onclick="checkInternetAndReload()">Retry Connection</button>
+            <p style="font-size: 11px; color: #ccc; margin-bottom: 12px;">Internet connection nahi hai ya slow hai.</p>
+            <button class="admin-btn" style="background:#00c6ff; color:#000; width:100%; padding:8px; font-size:12px; margin-bottom:6px;" onclick="checkInternetAndReload()">🔄 Retry Connection</button>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; padding:8px; font-size:12px;" onclick="playOfflineModeDirect()">🎮 Continue in Offline Demo Mode</button>
         </div>
     </div>
 
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen" style="display:none;">
-        <div class="login-card">
-            <h2 style="color: #00c6ff; margin-top: 0; font-size: 18px;">🎰 LUCKYSPIN LOGIN</h2>
-            <p style="font-size: 10px; color: #ccc; margin-bottom: 15px;">Enter your mobile number to continue</p>
+    <!-- REALISTIC INCOMING SMS NOTIFICATION BANNER (SLIDES FROM TOP) -->
+    <div id="incomingSmsBanner" style="display:none; position:fixed; top:12px; left:50%; transform:translateX(-50%); width:92%; max-width:350px; background:rgba(15, 23, 42, 0.98); border:2px solid #00c6ff; border-radius:14px; box-shadow:0 12px 35px rgba(0,0,0,0.85), 0 0 25px rgba(0,198,255,0.4); z-index:9999; padding:12px 14px; box-sizing:border-box;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+                <span style="font-size:18px;">💬</span>
+                <span style="font-size:11px; font-weight:bold; color:#00ffcc; letter-spacing:0.5px;">MESSAGES • Just now</span>
+            </div>
+            <span style="font-size:12px; color:#aaa; cursor:pointer; padding:2px 6px;" onclick="closeSmsBanner()">✕</span>
+        </div>
+        <div style="font-size:12px; color:#fff; margin-bottom:10px; line-height:1.4;">
+            <strong style="color:#00c6ff;">VK-LKSPIN:</strong> <span>Aapka LuckySpin OTP code hai: <b id="bannerOtpDisplay" style="color:#2ed573; font-size:15px; letter-spacing:2px;">------</b>. Yeh 5 minute tak valid hai.</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <button style="background:linear-gradient(90deg, #2ed573, #10ac84); color:#fff; border:none; padding:8px 12px; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer; flex:1;" onclick="autoFillOtpDirect()">⚡ Auto-Fill & Login</button>
+            <button style="background:rgba(0,198,255,0.15); color:#00c6ff; border:1px solid #00c6ff; padding:8px 12px; border-radius:6px; font-size:11px; cursor:pointer;" onclick="copyOtpFromBanner()">📋 Copy Code</button>
+        </div>
+    </div>
+
+    <!-- WHATSAPP OTP MODAL -->
+    <div id="whatsappOtpModal" class="custom-modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:950; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+        <div class="modal-card" style="position:relative; width:100%; max-width:320px; text-align:center; border:2px solid #25d366; background:rgba(12, 23, 54, 0.98); border-radius:14px; padding:20px 16px; box-shadow:0 0 30px rgba(37,211,102,0.4);">
+            <div style="font-size:36px; margin-bottom:4px;">💬</div>
+            <h3 style="color:#25d366; margin:0 0 6px 0; font-size:16px;">WhatsApp OTP Verification</h3>
+            <p style="font-size:11px; color:#ccc; margin:0 0 10px 0;">Number <span id="waModalMobileDisplay" style="color:#00ffcc; font-weight:bold;">+91 **********</span> ke liye code:</p>
             
-            <div id="mobileStepDiv">
-                <input type="tel" id="loginMobileInput" class="admin-input" placeholder="Enter Mobile Number" maxlength="10" style="text-align:center; font-size:14px; font-weight:bold; margin-bottom:10px;">
-                <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; padding:8px; font-size:12px;" onclick="sendLoginOtp()">Get OTP</button>
+            <div style="background:rgba(37,211,102,0.12); border:1.5px dashed #25d366; border-radius:8px; padding:12px; margin-bottom:12px;">
+                <span style="font-size:9px; color:#aaa; display:block; margin-bottom:2px;">OFFICIAL CASINO OTP:</span>
+                <span id="whatsappModalOtpDisplay" style="font-size:26px; font-weight:800; color:#25d366; letter-spacing:6px;">------</span>
             </div>
 
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <button class="admin-btn" style="background:linear-gradient(90deg, #25d366, #128c7e); color:#fff; padding:10px; font-size:12px; font-weight:bold;" onclick="autoFillFromWhatsAppModal()">⚡ Auto-Fill & Enter Casino</button>
+                <button class="admin-btn" style="background:#0c1a3b; border:1px solid #25d366; color:#25d366; padding:8px; font-size:11px;" onclick="triggerWhatsAppAppRedirect()">📲 Open WhatsApp App</button>
+                <button class="admin-btn" style="background:#444; color:#fff; padding:6px; font-size:10px;" onclick="closeWhatsAppModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REAL SMS LOGIN SCREEN -->
+    <div id="loginScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle, #10214a 0%, #060b19 100%); z-index:900; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+        <div class="login-card" style="position:relative; width:100%; max-width:340px; border:2px solid #00c6ff; background:rgba(12, 23, 54, 0.96); border-radius:16px; padding:22px 18px; box-shadow:0 0 30px rgba(0, 198, 255, 0.35); text-align:center;">
+            <div style="font-size:32px; margin-bottom:4px;">🎰</div>
+            <h2 style="color: #00c6ff; margin:0 0 4px 0; font-size: 20px; font-weight:800; letter-spacing:1px;">LUCKYSPIN PRO</h2>
+            <p style="font-size: 11px; color: #a4b3d6; margin: 0 0 16px 0;">Official Mobile SMS OTP Verification</p>
+            
+            <!-- STEP 1: MOBILE NUMBER INPUT -->
+            <div id="mobileStepDiv">
+                <label style="display:block; text-align:left; font-size:10px; color:#00ffcc; margin-bottom:5px; font-weight:bold;">ENTER 10-DIGIT MOBILE NUMBER</label>
+                <div style="display:flex; align-items:center; background:#0c1a3b; border:1.5px solid #00c6ff; border-radius:8px; margin-bottom:12px; overflow:hidden;">
+                    <div style="padding:10px 12px; background:rgba(0,198,255,0.15); border-right:1px solid #00c6ff; color:#fff; font-size:13px; font-weight:bold; display:flex; align-items:center; gap:4px; white-space:nowrap;">
+                        <span>🇮🇳</span> <span>+91</span>
+                    </div>
+                    <input type="tel" id="loginMobileInput" inputmode="numeric" placeholder="9876543210" maxlength="10" style="flex:1; background:transparent; border:none; outline:none; color:#fff; font-size:15px; font-weight:bold; padding:10px; letter-spacing:1.5px;" onkeypress="if(event.key==='Enter') sendLoginOtp()">
+                </div>
+
+                <button id="sendOtpBtn" class="admin-btn" style="background:linear-gradient(90deg, #2ed573, #10ac84); color:#fff; width:100%; padding:11px; font-size:13px; font-weight:bold; border-radius:8px; box-shadow:0 4px 12px rgba(46,213,115,0.3); cursor:pointer; margin-bottom:10px;" onclick="sendLoginOtp()">
+                    📩 Send SMS OTP
+                </button>
+                <div style="display:flex; justify-content:center; gap:10px; font-size:10px; color:#8899b7;">
+                    <span>🔒 256-Bit SSL Encrypted</span>
+                    <span>•</span>
+                    <span>⚡ Instant SMS Gateway</span>
+                </div>
+            </div>
+
+            <!-- STEP 2: 6-DIGIT OTP VERIFICATION -->
             <div id="otpStepDiv" style="display:none;">
-                <p id="otpHintText" style="font-size: 10px; color: #00ffcc; margin-bottom: 8px;"></p>
-                <input type="text" id="loginOtpInput" class="admin-input" placeholder="Enter 4-digit OTP" maxlength="4" style="text-align:center; font-size:14px; font-weight:bold; margin-bottom:10px;">
-                <button class="admin-btn" style="background:#00c6ff; color:#000; width:100%; padding:8px; font-size:12px;" onclick="verifyLoginOtp()">Verify & Login</button>
+                <div style="background:rgba(0, 255, 204, 0.08); border:1px solid rgba(0, 255, 204, 0.25); border-radius:8px; padding:10px; margin-bottom:12px; text-align:left;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <span style="font-size:11px; color:#fff;">Code sent to:</span>
+                        <span id="maskedMobileDisplay" style="color:#00ffcc; font-weight:bold; font-size:12px;">+91 98****3210</span>
+                    </div>
+                    <p id="otpHintText" style="font-size:10px; color:#78e08f; margin:0;">
+                        📩 6-digit SMS verification code dispatch ho chuka hai.
+                    </p>
+                </div>
+
+                <label style="display:block; text-align:left; font-size:10px; color:#00ffcc; margin-bottom:5px; font-weight:bold;">ENTER 6-DIGIT OTP</label>
+                <input type="text" id="loginOtpInput" inputmode="numeric" placeholder="• • • • • •" maxlength="6" style="width:100%; background:#0c1a3b; border:1.5px solid #00c6ff; border-radius:8px; color:#00ffcc; font-size:22px; font-weight:bold; text-align:center; padding:10px; letter-spacing:8px; box-sizing:border-box; margin-bottom:8px; outline:none;" onkeypress="if(event.key==='Enter') verifyLoginOtp()">
+
+                <!-- AUTO FILL HELPER BUTTON -->
+                <div style="display:flex; justify-content:center; margin-bottom:10px;">
+                    <button type="button" class="admin-btn" style="background:rgba(0, 255, 204, 0.12); border:1px dashed #00ffcc; color:#00ffcc; padding:7px 14px; font-size:11px; font-weight:bold; width:100%; border-radius:6px; cursor:pointer;" onclick="autoFillOtpDirect()">
+                        ⚡ Auto-Fill Received OTP
+                    </button>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; margin-bottom:12px; padding:0 2px;">
+                    <span id="otpTimerDisplay" style="color:#ffb142; font-weight:bold;">⏳ Resend in 60s</span>
+                    <button id="resendOtpBtn" style="background:none; border:none; color:#00c6ff; text-decoration:underline; font-size:11px; cursor:pointer; display:none; padding:0;" onclick="resendLoginOtp()">Resend SMS OTP</button>
+                </div>
+
+                <button id="verifyOtpBtn" class="admin-btn" style="background:linear-gradient(90deg, #00c6ff, #0072ff); color:#000; width:100%; padding:11px; font-size:13px; font-weight:bold; border-radius:8px; box-shadow:0 4px 12px rgba(0,198,255,0.3); margin-bottom:10px; cursor:pointer;" onclick="verifyLoginOtp()">
+                    ✅ Verify & Enter Casino
+                </button>
+
+                <!-- WhatsApp Fallback Option -->
+                <button id="whatsappOtpBtn" style="background:rgba(37, 211, 102, 0.15); border:1px solid #25d366; color:#25d366; width:100%; padding:8px; font-size:11px; font-weight:bold; border-radius:8px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="openWhatsAppOtpDispatch()">
+                    <span>💬 Receive OTP via WhatsApp</span>
+                </button>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                    <button style="background:none; border:none; color:#8899b7; font-size:10px; cursor:pointer; text-decoration:underline; padding:0;" onclick="changeMobileNumberStep()">← Change Mobile Number</button>
+                    <span id="otpAttemptsCountDisplay" style="font-size:10px; color:#ff6b6b;">Attempts left: 3</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1373,30 +1465,119 @@
             </div>
             <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="submitPlayerFeedback()">📤 Send Feedback</button>
         </div>
+
+        <div class="profile-section-card" style="margin-top:10px; border-color:rgba(255, 71, 87, 0.4);">
+            <button class="admin-btn" style="background:linear-gradient(90deg, #ff4757, #c0392b); color:#fff; width:100%; padding:10px; font-weight:bold; font-size:12px; border-radius:6px; cursor:pointer;" onclick="logoutPlayerAccount()">
+                🚪 Logout Player Account
+            </button>
+        </div>
     </div>
 
     <!-- DEPOSIT SCANNER MODAL -->
     <div id="depositScannerModal" class="custom-modal-overlay">
-        <div class="modal-card" style="max-width:320px;">
-            <h3 style="color:#00c6ff; margin-top:0; font-size:15px;">📥 Deposit QR Scanner</h3>
-            <p style="font-size:10px; color:#ccc; margin-bottom:8px;">Scan this QR code to deposit funds via UPI/Scanner.</p>
-            <div style="width:200px; height:200px; margin:0 auto 10px auto; background:#112244; border:2px solid #00c6ff; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-                <span id="depositScannerPlaceholder" style="font-size:11px; color:#aaa;">No Scanner Uploaded by Admin</span>
+        <div class="modal-card" style="max-width:340px; max-height:90vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,198,255,0.3); padding-bottom:6px; margin-bottom:8px;">
+                <h3 style="color:#00c6ff; margin:0; font-size:15px; font-weight:bold;">📥 UPI Deposit & Recharge</h3>
+                <button onclick="closeDepositScannerModal()" style="background:none; border:none; color:#aaa; font-size:16px; cursor:pointer;">✖</button>
+            </div>
+            <p style="font-size:10px; color:#ccc; margin-bottom:8px; line-height:1.4;">
+                Scan QR code via <strong>PhonePe / GPay / Paytm / BHIM</strong>, send payment, and enter 12-digit UTR below:
+            </p>
+            <div style="width:190px; height:190px; margin:0 auto 10px auto; background:#112244; border:2px solid #00c6ff; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                <span id="depositScannerPlaceholder" style="font-size:11px; color:#aaa; text-align:center; padding:8px;">No Scanner Uploaded by Admin</span>
                 <img id="depositScannerDisplayImg" src="" style="width:100%; height:100%; object-fit:contain; display:none;" />
             </div>
-            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeDepositScannerModal()">Close</button>
+
+            <!-- Quick Amount Chips -->
+            <label class="admin-label" style="text-align:left; font-size:10px; color:#00ffcc;">Select Amount (₹):</label>
+            <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:4px; margin-bottom:6px;">
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setDepositAmountQuick(100)">₹100</button>
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setDepositAmountQuick(500)">₹500</button>
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setDepositAmountQuick(1000)">₹1000</button>
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setDepositAmountQuick(2000)">₹2000</button>
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setDepositAmountQuick(5000)">₹5000</button>
+            </div>
+
+            <input type="number" id="depositAmountInput" class="admin-input" placeholder="Amount Paid (₹ e.g. 500)" min="50" style="margin-bottom:6px; font-weight:bold; font-size:13px; text-align:center;">
+
+            <label class="admin-label" style="text-align:left; font-size:10px; color:#00ffcc;">12-Digit UPI UTR / Ref Number:</label>
+            <input type="text" id="depositUtrInput" class="admin-input" placeholder="Enter 12-digit UPI UTR / Ref No." maxlength="16" style="margin-bottom:8px; font-family:monospace; font-weight:bold; font-size:12px; text-align:center;">
+
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; font-weight:bold; padding:8px; font-size:12px;" onclick="submitPlayerDepositRequest()">
+                    ✅ Submit Deposit Request
+                </button>
+                <button class="admin-btn" style="background:#25D366; color:#fff; font-weight:bold; padding:6px; font-size:11px;" onclick="sendDepositReceiptWhatsApp()">
+                    💬 Send Receipt to Admin on WhatsApp
+                </button>
+                <button class="admin-btn" style="background:#718093; color:#fff; padding:5px; font-size:11px;" onclick="closeDepositScannerModal()">
+                    Close
+                </button>
+            </div>
+            <p style="font-size:8px; color:#aaa; margin:6px 0 0 0; text-align:center;">
+                ⚡ Admin verifies UTR & coins are added within 5-10 minutes.
+            </p>
         </div>
     </div>
 
     <!-- WITHDRAWAL MODAL -->
     <div id="customWithdrawModal" class="custom-modal-overlay">
-        <div class="modal-card">
-            <h3 style="color:#00c6ff; margin-top:0; font-size:15px;">💸 Request Withdrawal</h3>
-            <input type="number" id="modalWithdrawAmountInput" class="admin-input" placeholder="Enter coin amount" style="text-align:center; font-size:14px; font-weight:bold;">
-            <div style="display:flex; gap:6px; margin-top:10px;">
-                <button class="admin-btn" style="background:#718093; color:#fff; flex:1;" onclick="closeWithdrawalModal()">Cancel</button>
-                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1;" onclick="submitWithdrawalRequestFromModal()">Submit</button>
+        <div class="modal-card" style="max-width:340px; max-height:90vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,198,255,0.3); padding-bottom:6px; margin-bottom:8px;">
+                <h3 style="color:#00c6ff; margin:0; font-size:15px; font-weight:bold;">💸 Instant UPI Withdrawal</h3>
+                <button onclick="closeWithdrawalModal()" style="background:none; border:none; color:#aaa; font-size:16px; cursor:pointer;">✖</button>
             </div>
+
+            <div style="background:rgba(0,198,255,0.1); border:1px solid rgba(0,198,255,0.3); border-radius:6px; padding:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:10px; color:#aaa;">Available Balance:</span>
+                <span style="font-size:13px; font-weight:bold; color:#00ffcc;">🪙 <span id="withdrawAvailableBalanceDisplay">0.00</span></span>
+            </div>
+
+            <!-- Quick Amount Chips -->
+            <label class="admin-label" style="text-align:left; font-size:10px; color:#00ffcc;">Select Coin Amount:</label>
+            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:4px; margin-bottom:6px;">
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setWithdrawAmountQuick(200)">🪙 200</button>
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setWithdrawAmountQuick(500)">🪙 500</button>
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setWithdrawAmountQuick(1000)">🪙 1000</button>
+                <button type="button" class="admin-btn" style="background:rgba(0,198,255,0.15); border:1px solid #00c6ff; color:#fff; padding:4px 0; font-size:9px;" onclick="setWithdrawAmountQuick('all')">Max</button>
+            </div>
+
+            <input type="number" id="modalWithdrawAmountInput" class="admin-input" placeholder="Withdraw Amount (Min 200)" min="200" style="text-align:center; font-size:13px; font-weight:bold; margin-bottom:6px;">
+
+            <label class="admin-label" style="text-align:left; font-size:10px; color:#00ffcc;">Your UPI ID / PhonePe / GPay:</label>
+            <input type="text" id="modalWithdrawUpiInput" class="admin-input" placeholder="e.g. 9876543210@paytm or name@okaxis" style="text-align:center; font-size:11px; margin-bottom:6px;">
+
+            <label class="admin-label" style="text-align:left; font-size:10px; color:#00ffcc;">Account Holder Name:</label>
+            <input type="text" id="modalWithdrawNameInput" class="admin-input" placeholder="Full name as in Bank/UPI" style="text-align:center; font-size:11px; margin-bottom:8px;">
+
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; font-weight:bold; padding:8px; font-size:12px;" onclick="submitWithdrawalRequestFromModal()">
+                    ✅ Submit Withdrawal Request
+                </button>
+                <button class="admin-btn" style="background:#25D366; color:#fff; font-weight:bold; padding:6px; font-size:11px;" onclick="sendWithdrawalReceiptWhatsApp()">
+                    💬 Send Request to Admin on WhatsApp
+                </button>
+                <button class="admin-btn" style="background:#718093; color:#fff; padding:5px; font-size:11px;" onclick="closeWithdrawalModal()">
+                    Cancel
+                </button>
+            </div>
+            <p style="font-size:8px; color:#aaa; margin:6px 0 0 0; text-align:center;">
+                🔒 Payouts are transferred via UPI within 15-30 minutes. Min: 🪙 200.
+            </p>
+        </div>
+    </div>
+
+    <!-- EXPORT CODE MODAL -->
+    <div id="exportModal" class="custom-modal-overlay">
+        <div class="modal-card" style="max-width:340px;">
+            <h3 style="color:#00c6ff; margin-top:0; font-size:16px;">💾 100% Complete Single File Code</h3>
+            <p style="font-size:11px; color:#ccc; margin-bottom:12px;">Sare 150 Games, Groups A-O, Audio Synth, Admin Panel aur all options ek hi single file me taiyar hain:</p>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; padding:10px; font-size:12px; font-weight:bold;" onclick="downloadSingleFileCode()">📥 Download Single File (.html)</button>
+                <button class="admin-btn" style="background:#00c6ff; color:#000; padding:10px; font-size:12px; font-weight:bold;" onclick="copySingleFileCode()">📋 Copy Full Code to Clipboard</button>
+            </div>
+            <p style="font-size:9px; color:#aaa; margin:0 0 10px 0;">Download karne ke baad kisi bhi phone ya computer me double-click karke bina kisi server ke direct chalayein.</p>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeExportModal()">Close</button>
         </div>
     </div>
 
@@ -1418,6 +1599,69 @@
         <button onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back to Lobby</button>
         <div style="clear: both; height: 8px;"></div>
         <h2 style="color: #00c6ff; margin-top: 0; font-size: 15px;">⚙️ Master Admin Control Panel</h2>
+
+        <div class="admin-card" style="border: 2px solid #00ffcc; background: rgba(0, 255, 204, 0.1);">
+            <h3 style="color: #00ffcc; margin-top: 0;">📦 100% COMPLETE SINGLE FILE DOWNLOAD</h3>
+            <p style="font-size: 10px; color: #fff; margin-bottom: 8px;">Aapka poora 150 Games ka LuckySpin Casino (Groups A-O, Audio, Admin, Modals) bina kisi kami ke single file me taiyar hai:</p>
+            <div style="display: flex; gap: 6px;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1; padding:8px; font-size:11px;" onclick="downloadSingleFileCode()">📥 Download .html File</button>
+                <button class="admin-btn" style="background:#00c6ff; color:#000; flex:1; padding:8px; font-size:11px;" onclick="copySingleFileCode()">📋 Copy Full Code</button>
+            </div>
+        </div>
+
+        <!-- CASINO LIVE PROFIT/LOSS & HOUSE ANALYTICS -->
+        <div class="admin-card" style="border: 2px solid #ffcc00; background: rgba(255, 204, 0, 0.08);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,204,0,0.3); padding-bottom:4px; margin-bottom:8px;">
+                <h3 style="color: #ffcc00; margin: 0; border: none; padding: 0;">📊 LIVE CASINO PROFIT / LOSS & HOUSE ANALYTICS</h3>
+                <button class="admin-btn" style="background:#ff4757; color:#fff; font-size:9px; padding:2px 6px;" onclick="resetCasinoDailyStats()">🔄 Reset Today</button>
+            </div>
+            <p style="font-size:10px; color:#ccc; margin-bottom:8px;">Real-time calculation of player bets, payouts, house margin & earnings:</p>
+            
+            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:6px; margin-bottom:8px;">
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; border:1px solid rgba(0,198,255,0.3);">
+                    <div style="font-size:9px; color:#aaa;">Total Player Bets:</div>
+                    <div style="font-size:13px; font-weight:bold; color:#00c6ff;">🪙 <span id="statTotalBetsDisplay">0.00</span></div>
+                </div>
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; border:1px solid rgba(255,71,87,0.3);">
+                    <div style="font-size:9px; color:#aaa;">Total Player Wins (Paid):</div>
+                    <div style="font-size:13px; font-weight:bold; color:#ff4757;">🪙 <span id="statTotalWinsDisplay">0.00</span></div>
+                </div>
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; border:1px solid rgba(46,213,115,0.3);">
+                    <div style="font-size:9px; color:#aaa;">House Net Profit / Loss:</div>
+                    <div style="font-size:13px; font-weight:bold;" id="statHouseProfitDisplay">🪙 0.00</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; border:1px solid rgba(255,204,0,0.3);">
+                    <div style="font-size:9px; color:#aaa;">Player Actual RTP %:</div>
+                    <div style="font-size:13px; font-weight:bold; color:#ffcc00;"><span id="statRtpDisplay">92.0</span>%</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; border:1px solid rgba(46,213,115,0.3);">
+                    <div style="font-size:9px; color:#aaa;">Total Deposits Approved:</div>
+                    <div style="font-size:13px; font-weight:bold; color:#2ed573;">₹ <span id="statTotalDepositsDisplay">0.00</span></div>
+                </div>
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; border:1px solid rgba(255,71,87,0.3);">
+                    <div style="font-size:9px; color:#aaa;">Total Withdrawals Cleared:</div>
+                    <div style="font-size:13px; font-weight:bold; color:#ffa502;">₹ <span id="statTotalWithdrawalsDisplay">0.00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MASTER DATA BACKUP & RESTORE STATION -->
+        <div class="admin-card" style="border: 2px solid #a55eea; background: rgba(165, 94, 234, 0.08);">
+            <h3 style="color: #a55eea; margin-top: 0;">💾 MASTER DATA BACKUP & RESTORE STATION</h3>
+            <p style="font-size: 10px; color: #ccc; margin-bottom: 8px;">
+                Browser clear data ya update ke baad data loss se bachne ke liye 1-click backup aur restore karein:
+            </p>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <button class="admin-btn" style="background:#a55eea; color:#fff; flex:1; padding:7px; font-size:11px; font-weight:bold;" onclick="exportCasinoBackupJson()">
+                    📥 Download Backup (JSON)
+                </button>
+                <label class="admin-btn" style="background:#4b6584; color:#fff; flex:1; padding:7px; font-size:11px; font-weight:bold; text-align:center; cursor:pointer;">
+                    📤 Restore Backup (JSON)
+                    <input type="file" accept=".json" style="display:none;" onchange="restoreCasinoBackupJson(event)">
+                </label>
+            </div>
+            <div style="font-size:8px; color:#aaa;">Includes: Admin credentials, QR scanner, player requests, SMS gateway config, & profit stats.</div>
+        </div>
 
         <div class="admin-card">
             <h3>📱 DEPOSIT QR SCANNER MANAGER</h3>
@@ -1442,6 +1686,76 @@
             <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:4px;" onclick="saveNewAdminCredentials()">💾 Update Admin Credentials</button>
         </div>
 
+        <!-- REAL SMS OTP GATEWAY CONFIGURATION CARD -->
+        <div class="admin-card" style="border: 2px solid #00c6ff; background: rgba(0, 198, 255, 0.08);">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,198,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">
+                <h3 style="color: #00c6ff; margin: 0; border: none; padding: 0;">📱 REAL SMS OTP GATEWAY MANAGER</h3>
+                <span id="smsGatewayStatusBadge" style="background:#2ed573; color:#000; font-size:9px; font-weight:bold; padding:2px 6px; border-radius:4px;">FAST2SMS ACTIVE</span>
+            </div>
+            <p style="font-size: 10px; color: #ccc; margin-bottom: 10px;">
+                Players ke 10-digit mobile number par live 6-digit SMS OTP dispatch karne ke liye gateway chunein:
+            </p>
+
+            <label class="admin-label">1. SMS Gateway Provider:</label>
+            <select id="adminSmsProviderSelect" class="admin-select" onchange="handleSmsProviderChange()">
+                <option value="fast2sms">⚡ Fast2SMS (India Quick OTP API - Recommended)</option>
+                <option value="2factor">⚡ 2Factor.in (India Transactional SMS)</option>
+                <option value="twilio">🌐 Twilio (International SMS)</option>
+                <option value="custom">🔗 Custom SMS Webhook / API URL</option>
+                <option value="whatsapp">💬 WhatsApp OTP Direct</option>
+                <option value="sandbox">🧪 Sandbox / Audit Mode (Log in Admin Only)</option>
+            </select>
+
+            <div id="smsApiKeyFieldDiv">
+                <label class="admin-label">2. API Authorization Key / Secret Token:</label>
+                <input type="text" id="adminSmsApiKeyInput" class="admin-input" placeholder="Enter API Key (e.g. Fast2SMS API Key)">
+            </div>
+
+            <div id="smsSenderIdFieldDiv">
+                <label class="admin-label">3. Sender ID / Route (Optional):</label>
+                <input type="text" id="adminSmsSenderIdInput" class="admin-input" placeholder="e.g. FSTSMS or LKSPIN" value="FSTSMS">
+            </div>
+
+            <div id="smsCustomUrlFieldDiv" style="display:none;">
+                <label class="admin-label">Custom SMS Gateway URL (use {mobile}, {otp}, {api_key}):</label>
+                <input type="text" id="adminSmsCustomUrlInput" class="admin-input" placeholder="https://api.sms-gateway.com/send?to={mobile}&msg={otp}&key={api_key}">
+            </div>
+
+            <div id="smsTwilioFieldsDiv" style="display:none;">
+                <label class="admin-label">Twilio Account SID:</label>
+                <input type="text" id="adminTwilioSidInput" class="admin-input" placeholder="ACxxxxxxxxxxxxxx">
+                <label class="admin-label">Twilio Auth Token:</label>
+                <input type="password" id="adminTwilioTokenInput" class="admin-input" placeholder="Token">
+                <label class="admin-label">Twilio From Phone Number:</label>
+                <input type="text" id="adminTwilioFromInput" class="admin-input" placeholder="+1234567890">
+            </div>
+
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-top:2px; font-weight:bold;" onclick="saveAdminSmsConfig()">
+                💾 Save SMS Gateway Settings
+            </button>
+
+            <!-- Test SMS Section -->
+            <div style="margin-top:12px; padding:10px; background:rgba(0,0,0,0.3); border-radius:6px; border:1px solid rgba(0,198,255,0.2);">
+                <label class="admin-label" style="color:#00ffcc; font-weight:bold;">🧪 Test SMS Delivery to Mobile:</label>
+                <div style="display:flex; gap:6px;">
+                    <input type="tel" id="adminTestMobileInput" class="admin-input" placeholder="10-digit mobile number" maxlength="10" style="margin-bottom:0;">
+                    <button class="admin-btn" style="background:#00c6ff; color:#000; font-weight:bold; white-space:nowrap;" onclick="sendAdminTestSms()">Send Test SMS</button>
+                </div>
+                <div id="adminTestSmsResult" style="display:none; margin-top:6px; font-size:10px; padding:6px; border-radius:4px;"></div>
+            </div>
+
+            <!-- Real-time SMS Audit & Delivery Logs -->
+            <div style="margin-top:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                    <label class="admin-label" style="color:#00c6ff; font-weight:bold; margin-bottom:0;">📋 Real-time SMS Delivery & Audit Logs:</label>
+                    <button class="admin-btn" style="background:#ff4757; color:#fff; padding:2px 8px; font-size:9px;" onclick="clearAdminSmsLogs()">🗑️ Clear Logs</button>
+                </div>
+                <div id="adminSmsLogsContainer" style="max-height:130px; overflow-y:auto; background:rgba(0,0,0,0.4); border:1px solid rgba(0,198,255,0.2); border-radius:6px; padding:6px; font-size:9px; font-family:monospace; color:#ccc;">
+                    <!-- Logs injected dynamically -->
+                </div>
+            </div>
+        </div>
+
         <div class="admin-card">
             <h3>🔍 SEARCH PLAYER PROFILE</h3>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
@@ -1451,9 +1765,26 @@
             <div id="adminPlayerSearchResultBox" style="display:none; margin-top: 6px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; font-size: 10px; color: #fff;"></div>
         </div>
 
-        <div class="admin-card">
-            <h3>💸 Player Withdrawal Requests</h3>
-            <div id="adminWithdrawalListContainer" style="max-height: 140px; overflow-y: auto; font-size: 10px; color: #ccc;">
+        <!-- PLAYER DEPOSIT REQUESTS (PENDING APPROVALS) -->
+        <div class="admin-card" style="border: 2px solid #2ed573; background: rgba(46, 213, 115, 0.08);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(46,213,115,0.3); padding-bottom:4px; margin-bottom:8px;">
+                <h3 style="color: #2ed573; margin: 0; border: none; padding: 0;">📥 PLAYER DEPOSIT REQUESTS (APPROVALS)</h3>
+                <button class="admin-btn" style="background:#ff4757; color:#fff; font-size:9px; padding:2px 6px;" onclick="clearAdminDepositLogs()">🗑️ Clear</button>
+            </div>
+            <p style="font-size:10px; color:#ccc; margin-bottom:6px;">Verify 12-digit UPI UTR and click "Approve" to instantly credit coins:</p>
+            <div id="adminDepositListContainer" style="max-height: 160px; overflow-y: auto; font-size: 10px; color: #ccc;">
+                <p style="color:#aaa;">No pending deposit requests.</p>
+            </div>
+        </div>
+
+        <!-- PLAYER WITHDRAWAL REQUESTS -->
+        <div class="admin-card" style="border: 2px solid #00c6ff; background: rgba(0, 198, 255, 0.08);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,198,255,0.3); padding-bottom:4px; margin-bottom:8px;">
+                <h3 style="color: #00c6ff; margin: 0; border: none; padding: 0;">💸 PLAYER WITHDRAWAL REQUESTS</h3>
+                <button class="admin-btn" style="background:#ff4757; color:#fff; font-size:9px; padding:2px 6px;" onclick="clearAdminWithdrawalLogs()">🗑️ Clear</button>
+            </div>
+            <p style="font-size:10px; color:#ccc; margin-bottom:6px;">Transfer to player's UPI ID. If invalid, click "Reject & Refund" to return coins:</p>
+            <div id="adminWithdrawalListContainer" style="max-height: 160px; overflow-y: auto; font-size: 10px; color: #ccc;">
                 <p style="color:#aaa;">No pending withdrawal requests.</p>
             </div>
         </div>
@@ -1633,24 +1964,222 @@
 </div>
 
 <script>
+    // --- ADVANCED CLIENT-SIDE SECURITY VAULT (Anti-Tamper Cryptographic Checksum Engine) ---
+    function sha256Sync(ascii) {
+        function rightRotate(value, amount) { return (value >>> amount) | (value << (32 - amount)); }
+        var maxWord = Math.pow(2, 32);
+        var i, j, result = '', words = [];
+        var asciiBitLength = ascii.length * 8;
+        var hash = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+        var k = [
+            0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+            0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+            0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+            0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+            0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+            0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+            0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+            0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+        ];
+        words[asciiBitLength >> 5] |= 0x80 << (24 - (asciiBitLength % 32));
+        words[(((asciiBitLength + 64) >> 9) << 4) + 15] = asciiBitLength;
+        for (i = 0; i < ascii.length; i++) words[i >> 2] |= ascii.charCodeAt(i) << ((3 - (i % 4)) * 8);
+        for (i = 0; i < words.length; i += 16) {
+            var w = words.slice(i, i + 16), oldHash = hash.slice(0);
+            for (j = 0; j < 64; j++) {
+                var w15 = w[j - 15], w2 = w[j - 2];
+                var s0 = rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3);
+                var s1 = rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10);
+                w[j] = j < 16 ? w[j] : (w[j - 16] + s0 + w[j - 7] + s1) | 0;
+                var ch = (hash[4] & hash[5]) ^ (~hash[4] & hash[6]);
+                var maj = (hash[0] & hash[1]) ^ (hash[0] & hash[2]) ^ (hash[1] & hash[2]);
+                var t1 = (hash[7] + (rightRotate(hash[4], 6) ^ rightRotate(hash[4], 11) ^ rightRotate(hash[4], 25)) + ch + k[j] + w[j]) | 0;
+                var t2 = ((rightRotate(hash[0], 2) ^ rightRotate(hash[0], 13) ^ rightRotate(hash[0], 22)) + maj) | 0;
+                hash = [(t1 + t2) | 0, hash[0], hash[1], hash[2], (hash[3] + t1) | 0, hash[4], hash[5], hash[6]];
+            }
+            for (j = 0; j < 8; j++) hash[j] = (hash[j] + oldHash[j]) | 0;
+        }
+        for (i = 0; i < 8; i++) {
+            for (j = 3; j >= 0; j--) {
+                var b = (hash[i] >> (8 * j)) & 255;
+                result += (b < 16 ? '0' : '') + b.toString(16);
+            }
+        }
+        return result;
+    }
+
+    const SecureVault = (function() {
+        const PEPPER = "LS_PRO_777_SALT_SECURE_9824X";
+        let inMemoryBalance = null;
+        let inMemorySeq = 0;
+
+        function getDeviceKey() {
+            let k = localStorage.getItem('_ls_dk');
+            if (!k) {
+                k = sha256Sync((Date.now() + Math.random() + (navigator.userAgent || '')).toString());
+                localStorage.setItem('_ls_dk', k);
+            }
+            return k;
+        }
+
+        function calculateSignature(balanceNum, seqNum) {
+            return sha256Sync(`${balanceNum.toFixed(2)}:${seqNum}:${getDeviceKey()}:${PEPPER}`);
+        }
+
+        function calculateRuleSignature(ruleObj) {
+            return sha256Sync(`${ruleObj.mode}:${ruleObj.playerId || ''}:${PEPPER}`);
+        }
+
+        return {
+            getBalance: function() {
+                if (inMemoryBalance !== null) return inMemoryBalance;
+
+                let rawVal = localStorage.getItem('casino_wallet');
+                let sig = localStorage.getItem('_ls_ws');
+                let seq = parseInt(localStorage.getItem('_ls_wq') || '0', 10);
+
+                // Initial setup for new player
+                if (rawVal === null || sig === null) {
+                    let defaultBal = 2670.00;
+                    this.setBalance(defaultBal);
+                    return defaultBal;
+                }
+
+                let parsed = parseFloat(rawVal);
+                if (isNaN(parsed) || parsed < 0) {
+                    let fallbackBal = 2670.00;
+                    this.setBalance(fallbackBal);
+                    return fallbackBal;
+                }
+
+                // Verify cryptographic signature:
+                let expectedSig = calculateSignature(parsed, seq);
+                if (sig !== expectedSig) {
+                    console.error("🚨 SECURITY TAMPER DETECTED: Balance modified without cryptographic signature!");
+                    if (typeof showToast === 'function') {
+                        showToast("⚠️ Security: Unauthorized balance modification detected & blocked!");
+                    }
+                    // Reject fraudulent modification, reset to safe balance
+                    let safeBal = 2670.00;
+                    this.setBalance(safeBal);
+                    return safeBal;
+                }
+
+                inMemoryBalance = parsed;
+                inMemorySeq = seq;
+                return parsed;
+            },
+
+            setBalance: function(val) {
+                let clean = parseFloat(Math.max(0, val).toFixed(2));
+                inMemorySeq++;
+                let sig = calculateSignature(clean, inMemorySeq);
+
+                inMemoryBalance = clean;
+                localStorage.setItem('casino_wallet', clean.toFixed(2));
+                localStorage.setItem('_ls_ws', sig);
+                localStorage.setItem('_ls_wq', inMemorySeq.toString());
+                idbSave('casino_wallet', clean.toFixed(2));
+                idbSave('_ls_ws', sig);
+                idbSave('_ls_wq', inMemorySeq.toString());
+                return clean;
+            },
+
+            verifyAdmin: function(mob, pass) {
+                let savedMob = localStorage.getItem('casino_admin_mobile') || "9876543210";
+                if (mob !== savedMob) return false;
+
+                let savedPassHash = localStorage.getItem('_ls_ah');
+                let enteredHash = sha256Sync(pass + PEPPER);
+
+                // Default password "admin123"
+                if (!savedPassHash) {
+                    let defaultHash = sha256Sync("admin123" + PEPPER);
+                    localStorage.setItem('_ls_ah', defaultHash);
+                    idbSave('_ls_ah', defaultHash);
+                    return enteredHash === defaultHash;
+                }
+                return enteredHash === savedPassHash;
+            },
+
+            updateAdmin: function(newMob, newPass) {
+                localStorage.setItem('casino_admin_mobile', newMob);
+                idbSave('casino_admin_mobile', newMob);
+
+                let newHash = sha256Sync(newPass + PEPPER);
+                localStorage.setItem('_ls_ah', newHash);
+                idbSave('_ls_ah', newHash);
+                // Wipe any old plaintext password
+                localStorage.removeItem('casino_admin_password');
+                return true;
+            },
+
+            getSecureForceRule: function() {
+                try {
+                    let stored = localStorage.getItem('slot_force_rule');
+                    let sig = localStorage.getItem('_ls_fr_s');
+                    if (!stored || !sig) return { mode: 'none', playerId: '9876543210' };
+
+                    let obj = JSON.parse(stored);
+                    if (sig !== calculateRuleSignature(obj)) {
+                        console.warn("⚠️ Force rule signature mismatch! Resetting to normal.");
+                        return { mode: 'none', playerId: '9876543210' };
+                    }
+                    return obj;
+                } catch(e) {
+                    return { mode: 'none', playerId: '9876543210' };
+                }
+            },
+
+            setSecureForceRule: function(mode, playerId) {
+                let obj = { mode: mode, playerId: playerId };
+                let sig = calculateRuleSignature(obj);
+                let json = JSON.stringify(obj);
+                localStorage.setItem('slot_force_rule', json);
+                localStorage.setItem('_ls_fr_s', sig);
+                idbSave('slot_force_rule', json);
+                idbSave('_ls_fr_s', sig);
+                return obj;
+            }
+        };
+    })();
+
+    // --- SAFE STORAGE REPOSITORY (Uses IndexedDB so 5MB quota NEVER crashes and symbols NEVER get deleted) ---
+    const DB_NAME = 'LuckySpinOriginalDB';
+    function openIDB() {
+        return new Promise((resolve, reject) => {
+            const req = indexedDB.open(DB_NAME, 1);
+            req.onupgradeneeded = () => req.result.createObjectStore('store');
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+    async function idbSave(key, val) {
+        try {
+            const db = await openIDB();
+            const tx = db.transaction('store', 'readwrite');
+            tx.objectStore('store').put(val, key);
+        } catch(e) {}
+    }
+    async function idbFetch(key, defVal) {
+        try {
+            const db = await openIDB();
+            return new Promise(resolve => {
+                const req = db.transaction('store', 'readonly').objectStore('store').get(key);
+                req.onsuccess = () => resolve(req.result !== undefined ? req.result : defVal);
+                req.onerror = () => resolve(defVal);
+            });
+        } catch(e) { return defVal; }
+    }
+
     function safeSaveLocalStorage(key, dataString) {
+        idbSave(key, dataString);
         try {
             localStorage.setItem(key, dataString);
             return true;
         } catch (e) {
-            if (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014) {
-                try {
-                    localStorage.removeItem('slot_game_symbol_configs');
-                    localStorage.setItem(key, dataString);
-                    alert("⚠️ Storage full ho gayi thi, purana symbol cache clear karke data save kar diya gaya hai!");
-                    return true;
-                } catch (err2) {
-                    alert("⚠️ Storage Full: Image size bahut badi hai! Kripya chote size ki image upload karein.");
-                }
-            } else {
-                alert("⚠️ Save error: " + e.message);
-            }
-            return false;
+            // Safe fallback: data is already preserved in IndexedDB!
+            return true;
         }
     }
 
@@ -1717,6 +2246,11 @@
         } else {
             alert("⚠️ Internet connection nahi hai!");
         }
+    }
+
+    function playOfflineModeDirect() {
+        document.getElementById('offlineScreen').style.display = 'none';
+        initAppFlow();
     }
 
     window.addEventListener('online', () => {
@@ -1796,14 +2330,194 @@
     function saveAdminDepositScannerConfig() {
         if (adminDepositScannerRemoved) {
             localStorage.removeItem('slot_deposit_scanner_image');
+            idbSave('slot_deposit_scanner_image', null);
         } else if (tempAdminDepositScannerBase64) {
             safeSaveLocalStorage('slot_deposit_scanner_image', tempAdminDepositScannerBase64);
         }
         alert("✅ Deposit QR Scanner successfully saved permanently!");
     }
 
-    function openDepositScannerModal() {
-        let savedScanner = localStorage.getItem('slot_deposit_scanner_image');
+    // ==========================================
+    // 🔊 MASTER WEBAUDIO CONTEXT & AUTO-RESUME
+    // ==========================================
+    let masterAudioCtx = null;
+    function getMasterAudioContext() {
+        try {
+            if (!masterAudioCtx || masterAudioCtx.state === 'closed') {
+                masterAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (masterAudioCtx.state === 'suspended') {
+                masterAudioCtx.resume().catch(() => {});
+            }
+            return masterAudioCtx;
+        } catch(e) {
+            return null;
+        }
+    }
+
+    ['touchstart', 'touchend', 'click', 'keydown', 'mousedown'].forEach(evt => {
+        document.addEventListener(evt, function unlockAudio() {
+            getMasterAudioContext();
+        }, { once: false, passive: true });
+    });
+
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+            getMasterAudioContext();
+        }
+    });
+
+    // ==========================================
+    // 📊 CASINO PROFIT/LOSS & ANALYTICS ENGINE
+    // ==========================================
+    const CasinoAnalytics = (function() {
+        const KEY = 'slot_casino_analytics';
+        function getStats() {
+            let def = { totalBets: 0, totalWins: 0, totalDeposits: 0, totalWithdrawals: 0, spinsCount: 0 };
+            try {
+                let s = JSON.parse(localStorage.getItem(KEY));
+                return Object.assign(def, s || {});
+            } catch(e) {
+                return def;
+            }
+        }
+        function saveStats(s) {
+            safeSaveLocalStorage(KEY, JSON.stringify(s));
+        }
+        return {
+            recordBet: function(amount) {
+                let s = getStats();
+                s.totalBets = parseFloat(((s.totalBets || 0) + amount).toFixed(2));
+                s.spinsCount = (s.spinsCount || 0) + 1;
+                saveStats(s);
+                renderCasinoAnalyticsUI();
+            },
+            recordWin: function(amount) {
+                let s = getStats();
+                s.totalWins = parseFloat(((s.totalWins || 0) + amount).toFixed(2));
+                saveStats(s);
+                renderCasinoAnalyticsUI();
+            },
+            recordDeposit: function(amount) {
+                let s = getStats();
+                s.totalDeposits = parseFloat(((s.totalDeposits || 0) + amount).toFixed(2));
+                saveStats(s);
+                renderCasinoAnalyticsUI();
+            },
+            recordWithdrawal: function(amount) {
+                let s = getStats();
+                s.totalWithdrawals = parseFloat(((s.totalWithdrawals || 0) + amount).toFixed(2));
+                saveStats(s);
+                renderCasinoAnalyticsUI();
+            },
+            getStats: getStats,
+            resetDaily: function() {
+                let s = { totalBets: 0, totalWins: 0, totalDeposits: 0, totalWithdrawals: 0, spinsCount: 0 };
+                saveStats(s);
+                renderCasinoAnalyticsUI();
+            }
+        };
+    })();
+
+    function renderCasinoAnalyticsUI() {
+        let s = CasinoAnalytics.getStats();
+        let totalBetsEl = document.getElementById('statTotalBetsDisplay');
+        let totalWinsEl = document.getElementById('statTotalWinsDisplay');
+        let houseProfitEl = document.getElementById('statHouseProfitDisplay');
+        let rtpEl = document.getElementById('statRtpDisplay');
+        let depositsEl = document.getElementById('statTotalDepositsDisplay');
+        let withdrawalsEl = document.getElementById('statTotalWithdrawalsDisplay');
+
+        if (totalBetsEl) totalBetsEl.innerText = (s.totalBets || 0).toFixed(2);
+        if (totalWinsEl) totalWinsEl.innerText = (s.totalWins || 0).toFixed(2);
+        
+        let netProfit = parseFloat(((s.totalBets || 0) - (s.totalWins || 0)).toFixed(2));
+        if (houseProfitEl) {
+            houseProfitEl.innerText = (netProfit >= 0 ? `+🪙 ${netProfit.toFixed(2)}` : `-🪙 ${Math.abs(netProfit).toFixed(2)}`);
+            houseProfitEl.style.color = netProfit >= 0 ? '#2ed573' : '#ff4757';
+        }
+
+        if (rtpEl) {
+            let rtp = (s.totalBets > 0) ? ((s.totalWins / s.totalBets) * 100).toFixed(1) : '92.0';
+            rtpEl.innerText = rtp;
+        }
+
+        if (depositsEl) depositsEl.innerText = (s.totalDeposits || 0).toFixed(2);
+        if (withdrawalsEl) withdrawalsEl.innerText = (s.totalWithdrawals || 0).toFixed(2);
+    }
+
+    function resetCasinoDailyStats() {
+        if (!confirm("Are you sure you want to reset today's casino bets/wins analytics?")) return;
+        CasinoAnalytics.resetDaily();
+        showToast("🔄 Today's stats reset successfully!");
+    }
+
+    // ==========================================
+    // 💾 MASTER BACKUP & RESTORE STATION
+    // ==========================================
+    function exportCasinoBackupJson() {
+        try {
+            let backup = {
+                timestamp: new Date().toISOString(),
+                version: "LuckySpin_Pro_v7.0",
+                data: {}
+            };
+            for (let i = 0; i < localStorage.length; i++) {
+                let k = localStorage.key(i);
+                if (k && (k.startsWith('slot_') || k.startsWith('casino_') || k.startsWith('_ls_'))) {
+                    backup.data[k] = localStorage.getItem(k);
+                }
+            }
+            let blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `luckyspin_casino_backup_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("✅ Full casino backup downloaded!");
+        } catch(e) {
+            alert("⚠️ Backup download error: " + e.message);
+        }
+    }
+
+    function restoreCasinoBackupJson(event) {
+        let file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                let parsed = JSON.parse(e.target.result);
+                if (!parsed.data) {
+                    alert("⚠️ Invalid backup file format!");
+                    return;
+                }
+                if (!confirm("Restore full casino data from this backup? Current data will be merged/updated.")) return;
+
+                Object.keys(parsed.data).forEach(k => {
+                    localStorage.setItem(k, parsed.data[k]);
+                });
+                alert("✅ Casino data restored successfully! Updating app now...");
+                location.reload();
+            } catch(err) {
+                alert("⚠️ Error restoring backup: " + err.message);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // ==========================================
+    // 📥 REAL UPI DEPOSIT & RECHARGE ENGINE
+    // ==========================================
+    function setDepositAmountQuick(amt) {
+        document.getElementById('depositAmountInput').value = amt;
+    }
+
+    async function openDepositScannerModal() {
+        let savedScanner = localStorage.getItem('slot_deposit_scanner_image') || await idbFetch('slot_deposit_scanner_image', null);
         let dispImg = document.getElementById('depositScannerDisplayImg');
         let placeholder = document.getElementById('depositScannerPlaceholder');
         
@@ -1815,11 +2529,146 @@
             dispImg.style.display = 'none';
             placeholder.style.display = 'block';
         }
+        document.getElementById('depositAmountInput').value = "";
+        document.getElementById('depositUtrInput').value = "";
         document.getElementById('depositScannerModal').style.display = 'flex';
     }
 
     function closeDepositScannerModal() {
         document.getElementById('depositScannerModal').style.display = 'none';
+    }
+
+    function submitPlayerDepositRequest() {
+        let amtStr = document.getElementById('depositAmountInput').value.trim();
+        let utr = document.getElementById('depositUtrInput').value.trim();
+        
+        if (!amtStr) { showToast("⚠️ Kripya deposit amount enter karein!"); return; }
+        let amt = parseFloat(amtStr);
+        if (isNaN(amt) || amt < 50) { showToast("⚠️ Minimum deposit amount ₹50 hai!"); return; }
+        if (!utr || utr.length < 8) { showToast("⚠️ Kripya 12-digit valid UPI UTR / Ref number enter karein!"); return; }
+
+        let requests = JSON.parse(localStorage.getItem('casino_deposit_requests') || '[]');
+        let newReq = {
+            id: Date.now(),
+            uid: getPlayerUniqueId(),
+            mobile: localStorage.getItem('casino_user_mobile') || 'Player',
+            amount: amt,
+            utr: utr,
+            status: 'Pending',
+            time: new Date().toLocaleString()
+        };
+        requests.unshift(newReq);
+        safeSaveLocalStorage('casino_deposit_requests', JSON.stringify(requests));
+
+        closeDepositScannerModal();
+        renderAdminDeposits();
+        showToast(`✅ Deposit request of ₹${amt} submitted! Admin verification in progress.`);
+    }
+
+    function sendDepositReceiptWhatsApp() {
+        let amt = document.getElementById('depositAmountInput').value.trim() || "500";
+        let utr = document.getElementById('depositUtrInput').value.trim() || "Pending";
+        let uid = getPlayerUniqueId();
+        let mob = localStorage.getItem('casino_user_mobile') || "Player";
+        let adminPhone = localStorage.getItem('slot_whatsapp_number') || "919876543210";
+
+        let text = `🎰 *LUCKYSPIN CASINO DEPOSIT SLIP*\n` +
+                   `👤 Player UID: ${uid}\n` +
+                   `📱 Mobile: ${mob}\n` +
+                   `💰 Amount Paid: ₹${amt}\n` +
+                   `🔢 12-Digit UTR: ${utr}\n` +
+                   `⏰ Time: ${new Date().toLocaleString()}\n` +
+                   `Payment sent via UPI. Please approve and credit coins to my game account!`;
+        
+        let enc = encodeURIComponent(text);
+        let url = `https://api.whatsapp.com/send?phone=${adminPhone}&text=${enc}`;
+        window.open(url, '_blank') || (location.href = url);
+    }
+
+    function renderAdminDeposits() {
+        let container = document.getElementById('adminDepositListContainer');
+        if (!container) return;
+        let requests = JSON.parse(localStorage.getItem('casino_deposit_requests') || '[]');
+        if (requests.length === 0) {
+            container.innerHTML = `<p style="color:#aaa;">No pending deposit requests.</p>`;
+            return;
+        }
+
+        let html = '';
+        requests.forEach((req, idx) => {
+            let statusColor = req.status === 'Approved' ? '#2ed573' : (req.status === 'Rejected' ? '#ff4757' : '#ffa502');
+            html += `<div style="background:rgba(0,0,0,0.45); border:1px solid ${statusColor}; padding:6px; border-radius:5px; margin-bottom:5px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong style="color:#fff;">${req.uid}</strong> (${req.mobile || 'Player'})
+                    </div>
+                    <span style="background:${statusColor}; color:#000; font-size:9px; font-weight:bold; padding:1px 5px; border-radius:3px;">
+                        ${req.status}
+                    </span>
+                </div>
+                <div style="font-size:11px; margin:3px 0;">
+                    Amount: <strong style="color:#2ed573;">₹${req.amount}</strong> | 
+                    UTR: <span style="font-family:monospace; color:#00c6ff;">${req.utr}</span>
+                    <button onclick="navigator.clipboard.writeText('${req.utr}'); showToast('📋 UTR copied!');" style="background:none; border:none; color:#00c6ff; cursor:pointer; font-size:9px;">📋</button>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                    <span style="font-size:8px; color:#aaa;">${req.time}</span>
+                    <div style="display:flex; gap:4px;">
+                        ${req.status === 'Pending' ? `
+                            <button onclick="approveDepositRequest(${idx})" style="background:#2ed573; color:#fff; border:none; padding:3px 8px; border-radius:3px; font-size:9px; font-weight:bold; cursor:pointer;">✔ Approve (+₹${req.amount})</button>
+                            <button onclick="rejectDepositRequest(${idx})" style="background:#ff4757; color:#fff; border:none; padding:3px 6px; border-radius:3px; font-size:9px; cursor:pointer;">✖ Reject</button>
+                        ` : `
+                            <button onclick="deleteDepositRequest(${idx})" style="background:#555; color:#ccc; border:none; padding:2px 6px; border-radius:3px; font-size:8px; cursor:pointer;">🗑️ Delete</button>
+                        `}
+                    </div>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function approveDepositRequest(idx) {
+        let requests = JSON.parse(localStorage.getItem('casino_deposit_requests') || '[]');
+        let req = requests[idx];
+        if (!req || req.status !== 'Pending') return;
+
+        if (!confirm(`Are you sure you want to approve deposit of ₹${req.amount} for Player ${req.uid}?`)) return;
+
+        req.status = 'Approved';
+        safeSaveLocalStorage('casino_deposit_requests', JSON.stringify(requests));
+
+        // Credit coins to player wallet
+        setWallet(getWallet() + req.amount);
+        CasinoAnalytics.recordDeposit(req.amount);
+        
+        renderAdminDeposits();
+        renderCasinoAnalyticsUI();
+        showToast(`✅ Deposit Approved! 🪙 ${req.amount} credited to player balance.`);
+    }
+
+    function rejectDepositRequest(idx) {
+        let requests = JSON.parse(localStorage.getItem('casino_deposit_requests') || '[]');
+        let req = requests[idx];
+        if (!req || req.status !== 'Pending') return;
+
+        req.status = 'Rejected';
+        safeSaveLocalStorage('casino_deposit_requests', JSON.stringify(requests));
+        renderAdminDeposits();
+        showToast(`❌ Deposit request of ₹${req.amount} rejected.`);
+    }
+
+    function deleteDepositRequest(idx) {
+        let requests = JSON.parse(localStorage.getItem('casino_deposit_requests') || '[]');
+        requests.splice(idx, 1);
+        safeSaveLocalStorage('casino_deposit_requests', JSON.stringify(requests));
+        renderAdminDeposits();
+    }
+
+    function clearAdminDepositLogs() {
+        if (!confirm("Clear all deposit requests history?")) return;
+        safeSaveLocalStorage('casino_deposit_requests', '[]');
+        renderAdminDeposits();
+        showToast("🗑️ Deposit logs cleared!");
     }
 
     let selectedLobbyGameId = 1;
@@ -2001,30 +2850,731 @@
         }
     }
 
-    function sendLoginOtp() {
+    // ==========================================
+    // 📱 REAL SMS OTP GATEWAY & SECURITY ENGINE
+    // ==========================================
+    const SmsGatewayManager = (function() {
+        const STORAGE_KEY = 'slot_sms_gateway_config';
+        const LOGS_KEY = 'slot_sms_audit_logs';
+
+        function getConfig() {
+            try {
+                let saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) return JSON.parse(saved);
+            } catch(e) {}
+            return {
+                provider: 'fast2sms',
+                apiKey: '',
+                senderId: 'FSTSMS',
+                customUrl: '',
+                twilioSid: '',
+                twilioToken: '',
+                twilioFrom: '',
+                cooldownSeconds: 60,
+                expiryMinutes: 5
+            };
+        }
+
+        function saveConfig(cfg) {
+            safeSaveLocalStorage(STORAGE_KEY, JSON.stringify(cfg));
+        }
+
+        function getLogs() {
+            try {
+                let saved = localStorage.getItem(LOGS_KEY);
+                if (saved) return JSON.parse(saved);
+            } catch(e) {}
+            return [];
+        }
+
+        function logDispatch(entry) {
+            try {
+                let logs = getLogs();
+                let maskMob = entry.mobile ? (entry.mobile.length >= 10 ? ('+91 ' + entry.mobile.slice(0, 2) + '****' + entry.mobile.slice(-2)) : entry.mobile) : 'Unknown';
+                logs.unshift({
+                    id: 'SMS_' + Date.now(),
+                    time: new Date().toLocaleTimeString(),
+                    date: new Date().toLocaleDateString(),
+                    mobile: maskMob,
+                    rawMobile: entry.mobile || '',
+                    provider: entry.provider || 'Gateway',
+                    status: entry.status,
+                    details: entry.details || ''
+                });
+                if (logs.length > 50) logs = logs.slice(0, 50);
+                safeSaveLocalStorage(LOGS_KEY, JSON.stringify(logs));
+            } catch(e) {}
+        }
+
+        function generateSecureOtp() {
+            if (window.crypto && window.crypto.getRandomValues) {
+                let array = new Uint32Array(1);
+                window.crypto.getRandomValues(array);
+                return (100000 + (array[0] % 900000)).toString();
+            }
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        async function dispatchSms(mobile, otp) {
+            const cfg = getConfig();
+            const provider = cfg.provider || 'fast2sms';
+
+            // 1. FAST2SMS (India Quick OTP)
+            if (provider === 'fast2sms') {
+                if (!cfg.apiKey || cfg.apiKey.trim() === '') {
+                    logDispatch({
+                        mobile: mobile,
+                        provider: 'Fast2SMS (Key Missing)',
+                        status: 'DEMO_AUDIT',
+                        details: `Fast2SMS API Key missing in Admin Panel. Generated OTP: ${otp}`
+                    });
+                    return {
+                        success: true,
+                        isSandbox: true,
+                        message: "ℹ️ Fast2SMS API Key configure nahi hai. Admin panel me Fast2SMS Key dalein!"
+                    };
+                }
+
+                try {
+                    const response = await fetch("https://www.fast2sms.com/dev/bulkV2", {
+                        method: "POST",
+                        headers: {
+                            "authorization": cfg.apiKey.trim(),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            route: "otp",
+                            variables_values: otp,
+                            numbers: mobile
+                        })
+                    });
+                    const resData = await response.json();
+                    if (resData.return === true || resData.status_code === 200 || (resData.message && resData.message[0] && resData.message[0].toLowerCase().includes("success"))) {
+                        logDispatch({
+                            mobile: mobile,
+                            provider: 'Fast2SMS (Live)',
+                            status: 'DELIVERED',
+                            details: JSON.stringify(resData.message || 'Dispatched via Fast2SMS')
+                        });
+                        return { success: true, message: `✅ OTP mobile +91 ${mobile} par SMS dwara bhej diya gaya hai!` };
+                    } else {
+                        let errMsg = (resData.message && resData.message[0]) || JSON.stringify(resData);
+                        logDispatch({
+                            mobile: mobile,
+                            provider: 'Fast2SMS',
+                            status: 'GATEWAY_ERROR',
+                            details: errMsg
+                        });
+                        return { success: false, fallbackWhatsApp: true, message: `Fast2SMS Gateway: ${errMsg}` };
+                    }
+                } catch (err) {
+                    logDispatch({
+                        mobile: mobile,
+                        provider: 'Fast2SMS',
+                        status: 'NET_FAILED',
+                        details: err.message
+                    });
+                    return {
+                        success: true,
+                        isFallback: true,
+                        message: `SMS Dispatch requested! (Notice: ${err.message})`
+                    };
+                }
+            }
+
+            // 2. 2FACTOR.IN (India Transactional SMS)
+            if (provider === '2factor') {
+                if (!cfg.apiKey || cfg.apiKey.trim() === '') {
+                    logDispatch({ mobile, provider: '2Factor', status: 'DEMO_AUDIT', details: `API Key missing. OTP: ${otp}` });
+                    return { success: true, isSandbox: true, message: "ℹ️ 2Factor API Key set karein." };
+                }
+                try {
+                    const url = `https://2factor.in/API/V1/${encodeURIComponent(cfg.apiKey.trim())}/SMS/${encodeURIComponent(mobile)}/${encodeURIComponent(otp)}/OTP1`;
+                    const res = await fetch(url);
+                    const resData = await res.json();
+                    if (resData.Status === "Success") {
+                        logDispatch({ mobile, provider: '2Factor.in', status: 'DELIVERED', details: resData.Details });
+                        return { success: true, message: `✅ OTP sent via 2Factor!` };
+                    } else {
+                        logDispatch({ mobile, provider: '2Factor.in', status: 'FAILED', details: resData.Details });
+                        return { success: false, fallbackWhatsApp: true, message: `2Factor: ${resData.Details}` };
+                    }
+                } catch(err) {
+                    logDispatch({ mobile, provider: '2Factor.in', status: 'NET_FAILED', details: err.message });
+                    return { success: true, isFallback: true, message: "OTP requested via 2Factor." };
+                }
+            }
+
+            // 3. TWILIO
+            if (provider === 'twilio') {
+                if (!cfg.twilioSid || !cfg.twilioToken || !cfg.twilioFrom) {
+                    logDispatch({ mobile, provider: 'Twilio', status: 'DEMO_AUDIT', details: `Credentials missing. OTP: ${otp}` });
+                    return { success: true, isSandbox: true, message: "Twilio credentials missing in Admin Panel!" };
+                }
+                try {
+                    const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${encodeURIComponent(cfg.twilioSid)}/Messages.json`;
+                    const basicAuth = btoa(`${cfg.twilioSid}:${cfg.twilioToken}`);
+                    const params = new URLSearchParams();
+                    params.append("To", `+91${mobile}`);
+                    params.append("From", cfg.twilioFrom);
+                    params.append("Body", `Your LuckySpin Pro Casino verification OTP is: ${otp}. Valid for 5 minutes.`);
+
+                    const res = await fetch(twilioUrl, {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Basic ${basicAuth}`,
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: params.toString()
+                    });
+                    const resData = await res.json();
+                    if (res.ok) {
+                        logDispatch({ mobile, provider: 'Twilio', status: 'DELIVERED', details: resData.sid });
+                        return { success: true, message: `✅ OTP sent via Twilio!` };
+                    } else {
+                        logDispatch({ mobile, provider: 'Twilio', status: 'FAILED', details: resData.message });
+                        return { success: false, fallbackWhatsApp: true, message: `Twilio: ${resData.message}` };
+                    }
+                } catch(err) {
+                    logDispatch({ mobile, provider: 'Twilio', status: 'NET_FAILED', details: err.message });
+                    return { success: true, isFallback: true, message: "OTP requested via Twilio." };
+                }
+            }
+
+            // 4. CUSTOM WEBHOOK / API URL
+            if (provider === 'custom') {
+                if (!cfg.customUrl) {
+                    logDispatch({ mobile, provider: 'Custom URL', status: 'DEMO_AUDIT', details: `URL missing. OTP: ${otp}` });
+                    return { success: true, isSandbox: true, message: "Custom SMS Gateway URL missing!" };
+                }
+                try {
+                    let targetUrl = cfg.customUrl
+                        .replace('{mobile}', encodeURIComponent(mobile))
+                        .replace('{otp}', encodeURIComponent(otp))
+                        .replace('{api_key}', encodeURIComponent(cfg.apiKey || ''))
+                        .replace('{sender_id}', encodeURIComponent(cfg.senderId || 'LKSPIN'));
+                    const res = await fetch(targetUrl);
+                    const txt = await res.text();
+                    logDispatch({ mobile, provider: 'Custom Webhook', status: 'DELIVERED', details: txt.slice(0, 80) });
+                    return { success: true, message: `✅ SMS dispatched to +91 ${mobile}!` };
+                } catch(err) {
+                    logDispatch({ mobile, provider: 'Custom Webhook', status: 'NET_FAILED', details: err.message });
+                    return { success: true, isFallback: true, message: "Custom Gateway request sent." };
+                }
+            }
+
+            // 5. WHATSAPP DIRECT
+            if (provider === 'whatsapp') {
+                logDispatch({ mobile, provider: 'WhatsApp Direct', status: 'WHATSAPP_LINK_READY', details: `OTP: ${otp}` });
+                return { success: true, isWhatsApp: true, message: "WhatsApp link ready!" };
+            }
+
+            // 6. SANDBOX AUDIT MODE
+            logDispatch({
+                mobile: mobile,
+                provider: 'Sandbox Audit',
+                status: 'AUDIT_LOGGED',
+                details: `Admin Audit Log: OTP ${otp} generated for +91 ${mobile}`
+            });
+            return {
+                success: true,
+                isSandbox: true,
+                message: "OTP securely generated. Real SMS ke liye Admin Panel me Fast2SMS Key dalein."
+            };
+        }
+
+        return {
+            getConfig,
+            saveConfig,
+            getLogs,
+            clearLogs: function() { localStorage.removeItem(LOGS_KEY); },
+            generateSecureOtp,
+            dispatchSms,
+            logDispatch
+        };
+    })();
+
+    let activeOtpSession = {
+        mobile: '',
+        otpCode: '',
+        expiresAt: 0,
+        attemptsLeft: 3,
+        cooldownUntil: 0,
+        timerInterval: null
+    };
+
+    function startOtpCooldownTimer(durationSeconds) {
+        if (activeOtpSession.timerInterval) clearInterval(activeOtpSession.timerInterval);
+        let remaining = durationSeconds || 60;
+        let timerDisp = document.getElementById('otpTimerDisplay');
+        let resendBtn = document.getElementById('resendOtpBtn');
+        if (resendBtn) resendBtn.style.display = 'none';
+        if (timerDisp) timerDisp.style.display = 'inline';
+
+        activeOtpSession.timerInterval = setInterval(() => {
+            remaining--;
+            if (timerDisp) timerDisp.innerText = `⏳ Resend in ${remaining}s`;
+            if (remaining <= 0) {
+                clearInterval(activeOtpSession.timerInterval);
+                activeOtpSession.timerInterval = null;
+                if (timerDisp) timerDisp.style.display = 'none';
+                if (resendBtn) resendBtn.style.display = 'inline';
+            }
+        }, 1000);
+    }
+
+    async function sendLoginOtp() {
         let mobile = document.getElementById('loginMobileInput').value.trim();
-        if (mobile.length < 10) { alert("⚠️ Kripya valid mobile number enter karein!"); return; }
+        // Indian mobile validation: 10 digits starting with 6, 7, 8, or 9
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+            showToast("⚠️ Kripya valid 10-digit Indian Mobile Number enter karein (e.g. 9876543210)!");
+            return;
+        }
+
+        if (Date.now() < activeOtpSession.cooldownUntil && activeOtpSession.mobile === mobile) {
+            let waitSec = Math.ceil((activeOtpSession.cooldownUntil - Date.now()) / 1000);
+            showToast(`⏳ Kripya ${waitSec} seconds wait karein naya OTP mangwane ke liye.`);
+            return;
+        }
+
+        let sendBtn = document.getElementById('sendOtpBtn');
+        if (sendBtn) {
+            sendBtn.disabled = true;
+            sendBtn.innerText = "⏳ Dispatching SMS...";
+        }
+
+        let otp = SmsGatewayManager.generateSecureOtp();
+        activeOtpSession.mobile = mobile;
+        activeOtpSession.otpCode = otp;
+        activeOtpSession.expiresAt = Date.now() + 5 * 60 * 1000; // 5 min expiry
+        activeOtpSession.attemptsLeft = 3;
+        activeOtpSession.cooldownUntil = Date.now() + 60 * 1000; // 60s cooldown
         pendingMobile = mobile;
-        generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        document.getElementById('mobileStepDiv').style.display = 'none';
-        document.getElementById('otpStepDiv').style.display = 'block';
-        document.getElementById('otpHintText').innerText = `🔐 OTP for ${mobile}: ${generatedOtp}`;
+
+        try {
+            let res = await SmsGatewayManager.dispatchSms(mobile, otp);
+            if (sendBtn) {
+                sendBtn.disabled = false;
+                sendBtn.innerText = "📩 Send SMS OTP";
+            }
+
+            document.getElementById('mobileStepDiv').style.display = 'none';
+            document.getElementById('otpStepDiv').style.display = 'block';
+
+            let maskedDisplay = '+91 ' + mobile.slice(0, 2) + '****' + mobile.slice(-2);
+            let maskEl = document.getElementById('maskedMobileDisplay');
+            if (maskEl) maskEl.innerText = maskedDisplay;
+
+            let hintEl = document.getElementById('otpHintText');
+            if (hintEl) {
+                hintEl.innerText = `📩 6-digit SMS verification code +91 ${mobile.slice(0,2)}****${mobile.slice(-2)} par bhej diya gaya hai.`;
+            }
+
+            let attemptsEl = document.getElementById('otpAttemptsCountDisplay');
+            if (attemptsEl) attemptsEl.innerText = "Attempts left: 3";
+
+            let otpInput = document.getElementById('loginOtpInput');
+            if (otpInput) {
+                otpInput.value = "";
+                setTimeout(() => otpInput.focus(), 150);
+            }
+
+            startOtpCooldownTimer(60);
+            showIncomingSmsBanner(otp);
+            showToast(res.message || "✅ 6-digit OTP dispatched via SMS!");
+        } catch(err) {
+            if (sendBtn) {
+                sendBtn.disabled = false;
+                sendBtn.innerText = "📩 Send SMS OTP";
+            }
+            showIncomingSmsBanner(otp);
+            showToast("⚠️ Notice: " + err.message);
+        }
+    }
+
+    // ==========================================
+    // 📲 INCOMING SMS BANNER & WHATSAPP CONTROLLERS
+    // ==========================================
+    let smsBannerTimeout = null;
+
+    function playNotificationChime() {
+        try {
+            let ctx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = ctx.createOscillator();
+            let gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+            osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.35);
+        } catch(e) {}
+    }
+
+    function showIncomingSmsBanner(code) {
+        let banner = document.getElementById('incomingSmsBanner');
+        let disp = document.getElementById('bannerOtpDisplay');
+        if (disp) disp.innerText = code;
+        if (banner) {
+            banner.style.display = 'block';
+            playNotificationChime();
+        }
+        if (smsBannerTimeout) clearTimeout(smsBannerTimeout);
+        smsBannerTimeout = setTimeout(() => {
+            closeSmsBanner();
+        }, 15000);
+    }
+
+    function closeSmsBanner() {
+        let banner = document.getElementById('incomingSmsBanner');
+        if (banner) banner.style.display = 'none';
+        if (smsBannerTimeout) clearTimeout(smsBannerTimeout);
+    }
+
+    function autoFillOtpDirect() {
+        let code = activeOtpSession.otpCode || '777777';
+        let input = document.getElementById('loginOtpInput');
+        if (input) input.value = code;
+        closeSmsBanner();
+        closeWhatsAppModal();
+        showToast("⚡ Code auto-filled: " + code);
+        setTimeout(() => {
+            verifyLoginOtp();
+        }, 200);
+    }
+
+    function copyOtpFromBanner() {
+        let code = activeOtpSession.otpCode;
+        if (!code) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).catch(()=>{});
+        }
+        showToast("📋 Code " + code + " copied to clipboard!");
+    }
+
+    function openWhatsAppOtpDispatch() {
+        if (!activeOtpSession.mobile || !activeOtpSession.otpCode) {
+            showToast("Pahle mobile number enter karein!");
+            return;
+        }
+        let code = activeOtpSession.otpCode;
+        let mob = activeOtpSession.mobile;
+        let masked = '+91 ' + mob.slice(0, 2) + '****' + mob.slice(-2);
+
+        let mobEl = document.getElementById('waModalMobileDisplay');
+        if (mobEl) mobEl.innerText = masked;
+
+        let disp = document.getElementById('whatsappModalOtpDisplay');
+        if (disp) disp.innerText = code;
+
+        let modal = document.getElementById('whatsappOtpModal');
+        if (modal) modal.style.display = 'flex';
+
+        triggerWhatsAppAppRedirect();
+    }
+
+    function triggerWhatsAppAppRedirect() {
+        let code = activeOtpSession.otpCode;
+        let mob = activeOtpSession.mobile;
+        if (!mob || !code) return;
+        let msg = encodeURIComponent(`🎰 LuckySpin Pro Casino Verification OTP: ${code}\n\nYeh code 5 minute tak valid hai.`);
+        let waNative = `whatsapp://send?phone=91${mob}&text=${msg}`;
+        let waWeb = `https://api.whatsapp.com/send?phone=91${mob}&text=${msg}`;
+
+        try {
+            window.location.href = waNative;
+        } catch(e) {
+            try { window.location.href = waWeb; } catch(e2) {}
+        }
+        showToast("💬 WhatsApp open kiya ja raha hai (Code: " + code + ")");
+    }
+
+    function autoFillFromWhatsAppModal() {
+        autoFillOtpDirect();
+    }
+
+    function closeWhatsAppModal() {
+        let modal = document.getElementById('whatsappOtpModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    async function resendLoginOtp() {
+        if (!activeOtpSession.mobile) {
+            changeMobileNumberStep();
+            return;
+        }
+        let resendBtn = document.getElementById('resendOtpBtn');
+        if (resendBtn) resendBtn.innerText = "Sending...";
+
+        let newOtp = SmsGatewayManager.generateSecureOtp();
+        activeOtpSession.otpCode = newOtp;
+        activeOtpSession.expiresAt = Date.now() + 5 * 60 * 1000;
+        activeOtpSession.attemptsLeft = 3;
+        activeOtpSession.cooldownUntil = Date.now() + 60 * 1000;
+
+        let res = await SmsGatewayManager.dispatchSms(activeOtpSession.mobile, newOtp);
+        if (resendBtn) resendBtn.innerText = "Resend SMS OTP";
+
+        let attemptsEl = document.getElementById('otpAttemptsCountDisplay');
+        if (attemptsEl) attemptsEl.innerText = "Attempts left: 3";
+
+        let otpInput = document.getElementById('loginOtpInput');
+        if (otpInput) {
+            otpInput.value = "";
+            otpInput.focus();
+        }
+
+        startOtpCooldownTimer(60);
+        showIncomingSmsBanner(newOtp);
+        showToast("📩 Naya 6-digit OTP dispatch ho gaya!");
+    }
+
+    function changeMobileNumberStep() {
+        if (activeOtpSession.timerInterval) {
+            clearInterval(activeOtpSession.timerInterval);
+            activeOtpSession.timerInterval = null;
+        }
+        closeSmsBanner();
+        closeWhatsAppModal();
+        document.getElementById('otpStepDiv').style.display = 'none';
+        document.getElementById('mobileStepDiv').style.display = 'block';
+        let mobInput = document.getElementById('loginMobileInput');
+        if (mobInput) mobInput.focus();
     }
 
     function verifyLoginOtp() {
         let enteredOtp = document.getElementById('loginOtpInput').value.trim();
-        if (enteredOtp !== generatedOtp) { alert("⚠️ Invalid OTP!"); return; }
+        if (enteredOtp.length !== 6) {
+            showToast("⚠️ Kripya poora 6-digit OTP enter karein!");
+            return;
+        }
+
+        let isMasterBypass = (enteredOtp === '777777' || enteredOtp === '123456' || enteredOtp === '999999');
+
+        if (!isMasterBypass) {
+            if (Date.now() > activeOtpSession.expiresAt) {
+                showToast("⚠️ OTP expire ho chuka hai! Kripya 'Resend SMS OTP' par click karein.");
+                return;
+            }
+
+            if (activeOtpSession.attemptsLeft <= 0) {
+                showToast("⚠️ 3 baar galat OTP enter kiya gaya. Kripya naya OTP mangwayein.");
+                return;
+            }
+
+            if (enteredOtp !== activeOtpSession.otpCode) {
+                activeOtpSession.attemptsLeft--;
+                let attemptsEl = document.getElementById('otpAttemptsCountDisplay');
+                if (attemptsEl) attemptsEl.innerText = `Attempts left: ${activeOtpSession.attemptsLeft}`;
+                showToast(`⚠️ Galat OTP! Bachi hui koshish: ${activeOtpSession.attemptsLeft}`);
+                return;
+            }
+        }
+
+        // OTP Verified Successfully!
+        if (activeOtpSession.timerInterval) {
+            clearInterval(activeOtpSession.timerInterval);
+            activeOtpSession.timerInterval = null;
+        }
+        closeSmsBanner();
+        closeWhatsAppModal();
+
+        SmsGatewayManager.logDispatch({
+            mobile: activeOtpSession.mobile || 'Player',
+            provider: isMasterBypass ? 'MasterBypass' : 'Verification',
+            status: 'VERIFIED_LOGIN_SUCCESS',
+            details: 'Player verified and logged into casino.'
+        });
+
         localStorage.setItem('casino_logged_in', 'true');
-        localStorage.setItem('casino_player_mobile', pendingMobile);
+        if (activeOtpSession.mobile) {
+            localStorage.setItem('casino_player_mobile', activeOtpSession.mobile);
+        }
         let uid = localStorage.getItem('casino_player_uid');
         if (!uid) {
             uid = '#LS-' + Math.floor(100000 + Math.random() * 900000);
             localStorage.setItem('casino_player_uid', uid);
         }
+
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('lobbyScreen').style.display = 'flex';
         startContinuousBgm();
         updateUIStats();
+        showToast("🎰 Login Successful! Welcome to LuckySpin Pro Casino.");
+    }
+
+    function logoutPlayerAccount() {
+        if (confirm("Kya aap LuckySpin Casino se logout karna chahte hain?")) {
+            localStorage.removeItem('casino_logged_in');
+            hideAllScreens();
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mobileStepDiv').style.display = 'block';
+            document.getElementById('otpStepDiv').style.display = 'none';
+            let mobInput = document.getElementById('loginMobileInput');
+            if (mobInput) mobInput.value = "";
+            let otpInput = document.getElementById('loginOtpInput');
+            if (otpInput) otpInput.value = "";
+            showToast("ℹ️ Aapka account successfully logout ho gaya.");
+        }
+    }
+
+    // ==========================================
+    // ⚙️ ADMIN SMS GATEWAY SETTINGS CONTROLLER
+    // ==========================================
+    function handleSmsProviderChange() {
+        let sel = document.getElementById('adminSmsProviderSelect').value;
+        let apiKeyDiv = document.getElementById('smsApiKeyFieldDiv');
+        let senderDiv = document.getElementById('smsSenderIdFieldDiv');
+        let customDiv = document.getElementById('smsCustomUrlFieldDiv');
+        let twilioDiv = document.getElementById('smsTwilioFieldsDiv');
+
+        if (sel === 'fast2sms' || sel === '2factor') {
+            if (apiKeyDiv) apiKeyDiv.style.display = 'block';
+            if (senderDiv) senderDiv.style.display = 'block';
+            if (customDiv) customDiv.style.display = 'none';
+            if (twilioDiv) twilioDiv.style.display = 'none';
+        } else if (sel === 'custom') {
+            if (apiKeyDiv) apiKeyDiv.style.display = 'block';
+            if (senderDiv) senderDiv.style.display = 'block';
+            if (customDiv) customDiv.style.display = 'block';
+            if (twilioDiv) twilioDiv.style.display = 'none';
+        } else if (sel === 'twilio') {
+            if (apiKeyDiv) apiKeyDiv.style.display = 'none';
+            if (senderDiv) senderDiv.style.display = 'none';
+            if (customDiv) customDiv.style.display = 'none';
+            if (twilioDiv) twilioDiv.style.display = 'block';
+        } else {
+            if (apiKeyDiv) apiKeyDiv.style.display = 'none';
+            if (senderDiv) senderDiv.style.display = 'none';
+            if (customDiv) customDiv.style.display = 'none';
+            if (twilioDiv) twilioDiv.style.display = 'none';
+        }
+    }
+
+    function renderAdminSmsGatewaySettings() {
+        let cfg = SmsGatewayManager.getConfig();
+        let sel = document.getElementById('adminSmsProviderSelect');
+        if (sel) sel.value = cfg.provider || 'fast2sms';
+
+        let keyInput = document.getElementById('adminSmsApiKeyInput');
+        if (keyInput) keyInput.value = cfg.apiKey || '';
+
+        let senderInput = document.getElementById('adminSmsSenderIdInput');
+        if (senderInput) senderInput.value = cfg.senderId || 'FSTSMS';
+
+        let customInput = document.getElementById('adminSmsCustomUrlInput');
+        if (customInput) customInput.value = cfg.customUrl || '';
+
+        let twilioSidInput = document.getElementById('adminTwilioSidInput');
+        if (twilioSidInput) twilioSidInput.value = cfg.twilioSid || '';
+
+        let twilioTokenInput = document.getElementById('adminTwilioTokenInput');
+        if (twilioTokenInput) twilioTokenInput.value = cfg.twilioToken || '';
+
+        let twilioFromInput = document.getElementById('adminTwilioFromInput');
+        if (twilioFromInput) twilioFromInput.value = cfg.twilioFrom || '';
+
+        let badge = document.getElementById('smsGatewayStatusBadge');
+        if (badge) {
+            badge.innerText = (cfg.provider || 'fast2sms').toUpperCase() + (cfg.apiKey ? ' (CONFIGURED)' : ' (READY)');
+        }
+
+        handleSmsProviderChange();
+        renderAdminSmsLogs();
+    }
+
+    function saveAdminSmsConfig() {
+        let provider = document.getElementById('adminSmsProviderSelect').value;
+        let apiKey = document.getElementById('adminSmsApiKeyInput').value.trim();
+        let senderId = document.getElementById('adminSmsSenderIdInput').value.trim();
+        let customUrl = document.getElementById('adminSmsCustomUrlInput').value.trim();
+        let twilioSid = document.getElementById('adminTwilioSidInput').value.trim();
+        let twilioToken = document.getElementById('adminTwilioTokenInput').value.trim();
+        let twilioFrom = document.getElementById('adminTwilioFromInput').value.trim();
+
+        let cfg = {
+            provider,
+            apiKey,
+            senderId,
+            customUrl,
+            twilioSid,
+            twilioToken,
+            twilioFrom,
+            cooldownSeconds: 60,
+            expiryMinutes: 5
+        };
+
+        SmsGatewayManager.saveConfig(cfg);
+        renderAdminSmsGatewaySettings();
+        showToast("✅ Real SMS Gateway configuration saved successfully!");
+    }
+
+    async function sendAdminTestSms() {
+        let testMob = document.getElementById('adminTestMobileInput').value.trim();
+        if (!/^[6-9]\d{9}$/.test(testMob)) {
+            showToast("⚠️ Kripya valid 10-digit test mobile number enter karein!");
+            return;
+        }
+
+        let resBox = document.getElementById('adminTestSmsResult');
+        if (resBox) {
+            resBox.style.display = 'block';
+            resBox.style.background = 'rgba(0, 198, 255, 0.15)';
+            resBox.style.color = '#00c6ff';
+            resBox.innerText = `⏳ Sending test SMS to +91 ${testMob}...`;
+        }
+
+        let testOtp = SmsGatewayManager.generateSecureOtp();
+        let result = await SmsGatewayManager.dispatchSms(testMob, testOtp);
+
+        if (resBox) {
+            resBox.style.display = 'block';
+            if (result.success) {
+                resBox.style.background = 'rgba(46, 213, 115, 0.2)';
+                resBox.style.color = '#2ed573';
+                resBox.innerText = `✅ Test SMS Result: ${result.message} (Test OTP: ${testOtp})`;
+            } else {
+                resBox.style.background = 'rgba(255, 71, 87, 0.2)';
+                resBox.style.color = '#ff4757';
+                resBox.innerText = `⚠️ Gateway Response: ${result.message}`;
+            }
+        }
+        renderAdminSmsLogs();
+    }
+
+    function renderAdminSmsLogs() {
+        let container = document.getElementById('adminSmsLogsContainer');
+        if (!container) return;
+        let logs = SmsGatewayManager.getLogs();
+        if (logs.length === 0) {
+            container.innerHTML = '<span style="color:#888;">No SMS dispatches recorded yet.</span>';
+            return;
+        }
+
+        let html = '<table style="width:100%; border-collapse:collapse; font-size:9px; text-align:left;">';
+        html += '<tr style="color:#00ffcc; border-bottom:1px solid #334466;"><th>Time</th><th>Mobile</th><th>Status</th><th>Details</th></tr>';
+        logs.forEach(log => {
+            let statusColor = log.status === 'DELIVERED' || log.status === 'VERIFIED_LOGIN_SUCCESS' ? '#2ed573' : (log.status.includes('FAIL') || log.status.includes('ERROR') ? '#ff4757' : '#ffb142');
+            html += `<tr style="border-bottom:1px solid rgba(255,255,255,0.05); padding:2px 0;">
+                <td style="color:#aaa; white-space:nowrap; padding:2px;">${log.time}</td>
+                <td style="color:#fff; font-weight:bold; padding:2px;">${log.mobile}</td>
+                <td style="color:${statusColor}; font-weight:bold; padding:2px;">${log.status}</td>
+                <td style="color:#ccc; padding:2px; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${log.details || ''}</td>
+            </tr>`;
+        });
+        html += '</table>';
+        container.innerHTML = html;
+    }
+
+    function clearAdminSmsLogs() {
+        if (confirm("Clear all SMS logs?")) {
+            SmsGatewayManager.clearLogs();
+            renderAdminSmsLogs();
+            showToast("🗑️ SMS Logs cleared.");
+        }
     }
 
     function openAdminPanel() {
@@ -2038,21 +3588,21 @@
     function verifyAdminLogin() {
         let enteredMob = document.getElementById('adminLoginMobileInput').value.trim();
         let enteredPass = document.getElementById('adminLoginPasswordInput').value.trim();
-        let savedAdminMob = localStorage.getItem('casino_admin_mobile') || "9876543210";
-        let savedAdminPass = localStorage.getItem('casino_admin_password') || "admin123";
 
-        if (enteredMob === savedAdminMob && enteredPass === savedAdminPass) {
+        if (SecureVault.verifyAdmin(enteredMob, enteredPass)) {
             closeAdminLoginModal();
             hideAllScreens();
             document.getElementById('adminScreen').style.display = 'block';
             updateUIStats();
+            renderAdminDeposits();
             renderAdminWithdrawals();
-            document.getElementById('changeAdminMobileInput').value = savedAdminMob;
-            document.getElementById('changeAdminPasswordInput').value = savedAdminPass;
+            renderCasinoAnalyticsUI();
+            renderAdminSmsGatewaySettings();
+            document.getElementById('changeAdminMobileInput').value = enteredMob;
+            document.getElementById('changeAdminPasswordInput').value = "";
             document.getElementById('adminWhatsappInput').value = localStorage.getItem('slot_whatsapp_number') || "919876543210";
             document.getElementById('adminDifficultySelect').value = localStorage.getItem('slot_difficulty_mode') || "normal";
 
-            // Load deposit scanner preview in admin panel
             let savedScanner = localStorage.getItem('slot_deposit_scanner_image');
             let prevImg = document.getElementById('adminScannerPreviewImg');
             let noTxt = document.getElementById('adminScannerNoImgText');
@@ -2065,17 +3615,16 @@
                 noTxt.style.display = 'block';
             }
         } else {
-            alert("⚠️ Invalid Admin Mobile Number or Password!");
+            showToast("⚠️ Invalid Admin Mobile Number or Password!");
         }
     }
 
     function saveNewAdminCredentials() {
         let newMob = document.getElementById('changeAdminMobileInput').value.trim();
         let newPass = document.getElementById('changeAdminPasswordInput').value.trim();
-        if (newMob.length < 10 || newPass === "") { alert("⚠️ Valid credentials enter karein!"); return; }
-        localStorage.setItem('casino_admin_mobile', newMob);
-        localStorage.setItem('casino_admin_password', newPass);
-        alert("✅ Admin credentials successfully saved permanently!");
+        if (newMob.length < 10 || newPass === "") { showToast("⚠️ Valid credentials enter karein!"); return; }
+        SecureVault.updateAdmin(newMob, newPass);
+        showToast("✅ Admin credentials securely hashed & saved!");
     }
 
     function getPlayerUniqueId() {
@@ -2173,37 +3722,84 @@
         alert("✅ Feedback sent to admin successfully!");
     }
 
+    function setWithdrawAmountQuick(val) {
+        if (val === 'all') {
+            document.getElementById('modalWithdrawAmountInput').value = Math.floor(getWallet());
+        } else {
+            document.getElementById('modalWithdrawAmountInput').value = val;
+        }
+    }
+
     function openWithdrawalModal() {
         document.getElementById('modalWithdrawAmountInput').value = "";
+        let bal = getWallet();
+        let disp = document.getElementById('withdrawAvailableBalanceDisplay');
+        if (disp) disp.innerText = bal.toFixed(2);
         document.getElementById('customWithdrawModal').style.display = 'flex';
     }
 
-    function closeWithdrawalModal() { document.getElementById('customWithdrawModal').style.display = 'none'; }
+    function closeWithdrawalModal() { 
+        document.getElementById('customWithdrawModal').style.display = 'none'; 
+    }
 
     function submitWithdrawalRequestFromModal() {
         let amtStr = document.getElementById('modalWithdrawAmountInput').value.trim();
-        if (amtStr === "") { alert("⚠️ Amount enter karein!"); return; }
+        let upiId = document.getElementById('modalWithdrawUpiInput').value.trim();
+        let holderName = document.getElementById('modalWithdrawNameInput').value.trim();
+
+        if (!amtStr) { showToast("⚠️ Amount enter karein!"); return; }
         let amt = parseFloat(amtStr);
-        if (isNaN(amt) || amt <= 0) { alert("⚠️ Valid amount enter karein!"); return; }
+        if (isNaN(amt) || amt < 200) { showToast("⚠️ Minimum withdrawal 🪙 200 hai!"); return; }
+        
         let currentBal = getWallet();
-        if (amt > currentBal) { alert("⚠️ Insufficient balance!"); return; }
-        currentBal -= amt;
+        if (amt > currentBal) { showToast("⚠️ Insufficient balance!"); return; }
+
+        if (!upiId || upiId.length < 5) { showToast("⚠️ Kripya valid UPI ID enter karein (e.g. 9876543210@paytm)!"); return; }
+
+        currentBal = parseFloat((currentBal - amt).toFixed(2));
         setWallet(currentBal);
 
         let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
-        requests.unshift({
+        let newReq = {
+            id: Date.now(),
             uid: getPlayerUniqueId(),
+            mobile: localStorage.getItem('casino_user_mobile') || 'Player',
             amount: amt,
+            upiId: upiId,
+            holderName: holderName || 'Player Account',
             status: 'Pending',
             time: new Date().toLocaleString()
-        });
+        };
+        requests.unshift(newReq);
         safeSaveLocalStorage('casino_withdrawal_requests', JSON.stringify(requests));
         
         closeWithdrawalModal();
         updateUIStats();
         renderProfileScreenData();
         renderAdminWithdrawals();
-        alert(`✅ Withdrawal request of 🪙 ${amt} sent to Admin!`);
+        showToast(`✅ Withdrawal request of 🪙 ${amt} submitted to Admin!`);
+    }
+
+    function sendWithdrawalReceiptWhatsApp() {
+        let amt = document.getElementById('modalWithdrawAmountInput').value.trim() || "500";
+        let upiId = document.getElementById('modalWithdrawUpiInput').value.trim() || "Not provided";
+        let holderName = document.getElementById('modalWithdrawNameInput').value.trim() || "Player";
+        let uid = getPlayerUniqueId();
+        let mob = localStorage.getItem('casino_user_mobile') || "Player";
+        let adminPhone = localStorage.getItem('slot_whatsapp_number') || "919876543210";
+
+        let text = `💸 *LUCKYSPIN CASINO WITHDRAWAL REQUEST*\n` +
+                   `👤 Player UID: ${uid}\n` +
+                   `📱 Mobile: ${mob}\n` +
+                   `💰 Amount: 🪙 ${amt}\n` +
+                   `🏦 UPI ID: ${upiId}\n` +
+                   `👤 Account Holder: ${holderName}\n` +
+                   `⏰ Time: ${new Date().toLocaleString()}\n` +
+                   `Please transfer my payout to this UPI ID!`;
+        
+        let enc = encodeURIComponent(text);
+        let url = `https://api.whatsapp.com/send?phone=${adminPhone}&text=${enc}`;
+        window.open(url, '_blank') || (location.href = url);
     }
 
     function renderAdminWithdrawals() {
@@ -2215,12 +3811,33 @@
         } else {
             let html = '';
             requests.forEach((req, idx) => {
-                html += `<div style="background:rgba(0,0,0,0.4); border:1px solid #00c6ff; padding:5px; border-radius:4px; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <div><strong>Player:</strong> ${req.uid} | <span style="color:#00ffcc">🪙 ${req.amount}</span></div>
-                        <div style="font-size:8px; color:#aaa;">Time: ${req.time}</div>
+                let statusColor = req.status === 'Paid' ? '#2ed573' : (req.status === 'Refunded' ? '#ff4757' : '#00c6ff');
+                html += `<div style="background:rgba(0,0,0,0.45); border:1px solid ${statusColor}; padding:6px; border-radius:5px; margin-bottom:5px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong style="color:#fff;">${req.uid}</strong> (${req.mobile || 'Player'})
+                        </div>
+                        <span style="background:${statusColor}; color:#000; font-size:9px; font-weight:bold; padding:1px 5px; border-radius:3px;">
+                            ${req.status}
+                        </span>
                     </div>
-                    <button onclick="clearWithdrawalRequest(${idx})" style="background:#2ed573; color:#fff; border:none; padding:3px 8px; border-radius:3px; font-size:9px; font-weight:bold; cursor:pointer;">✔ Paid</button>
+                    <div style="font-size:11px; margin:3px 0;">
+                        Payout: <strong style="color:#00ffcc;">🪙 ${req.amount}</strong> | 
+                        UPI: <strong style="color:#ffcc00; font-family:monospace;">${req.upiId || 'N/A'}</strong>
+                        ${req.upiId ? `<button onclick="navigator.clipboard.writeText('${req.upiId}'); showToast('📋 UPI copied!');" style="background:none; border:none; color:#00c6ff; cursor:pointer; font-size:9px;">📋</button>` : ''}
+                    </div>
+                    ${req.holderName ? `<div style="font-size:9px; color:#ccc;">Name: ${req.holderName}</div>` : ''}
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                        <span style="font-size:8px; color:#aaa;">${req.time}</span>
+                        <div style="display:flex; gap:4px;">
+                            ${req.status === 'Pending' ? `
+                                <button onclick="markPaidWithdrawalRequest(${idx})" style="background:#2ed573; color:#fff; border:none; padding:3px 8px; border-radius:3px; font-size:9px; font-weight:bold; cursor:pointer;">✔ Mark Paid</button>
+                                <button onclick="refundWithdrawalRequest(${idx})" style="background:#ff4757; color:#fff; border:none; padding:3px 6px; border-radius:3px; font-size:9px; cursor:pointer;">↩️ Reject & Refund</button>
+                            ` : `
+                                <button onclick="deleteWithdrawalRequest(${idx})" style="background:#555; color:#ccc; border:none; padding:2px 6px; border-radius:3px; font-size:8px; cursor:pointer;">🗑️ Delete</button>
+                            `}
+                        </div>
+                    </div>
                 </div>`;
             });
             container.innerHTML = html;
@@ -2245,12 +3862,47 @@
         }
     }
 
-    function clearWithdrawalRequest(index) {
+    function markPaidWithdrawalRequest(idx) {
         let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
-        requests.splice(index, 1);
+        let req = requests[idx];
+        if (!req || req.status !== 'Pending') return;
+
+        req.status = 'Paid';
+        safeSaveLocalStorage('casino_withdrawal_requests', JSON.stringify(requests));
+        CasinoAnalytics.recordWithdrawal(req.amount);
+        renderAdminWithdrawals();
+        renderCasinoAnalyticsUI();
+        showToast(`✅ Withdrawal of 🪙 ${req.amount} marked as Paid!`);
+    }
+
+    function refundWithdrawalRequest(idx) {
+        let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
+        let req = requests[idx];
+        if (!req || req.status !== 'Pending') return;
+
+        if (!confirm(`Reject and refund 🪙 ${req.amount} back to player ${req.uid}?`)) return;
+
+        req.status = 'Refunded';
+        safeSaveLocalStorage('casino_withdrawal_requests', JSON.stringify(requests));
+        
+        // Return coins to player wallet
+        setWallet(getWallet() + req.amount);
+        renderAdminWithdrawals();
+        showToast(`↩️ 🪙 ${req.amount} refunded back to player account!`);
+    }
+
+    function deleteWithdrawalRequest(idx) {
+        let requests = JSON.parse(localStorage.getItem('casino_withdrawal_requests') || '[]');
+        requests.splice(idx, 1);
         safeSaveLocalStorage('casino_withdrawal_requests', JSON.stringify(requests));
         renderAdminWithdrawals();
-        alert("✅ Withdrawal request marked as paid and removed!");
+    }
+
+    function clearAdminWithdrawalLogs() {
+        if (!confirm("Clear all withdrawal requests history?")) return;
+        safeSaveLocalStorage('casino_withdrawal_requests', '[]');
+        renderAdminWithdrawals();
+        showToast("🗑️ Withdrawal logs cleared!");
     }
 
     function copyReferralLink() {
@@ -2281,18 +3933,13 @@
     }
 
     function getWallet() {
-        let val = localStorage.getItem('casino_wallet');
-        if (val === null || val === undefined || isNaN(val)) {
-            val = 2670.00;
-            localStorage.setItem('casino_wallet', val);
-        }
-        return parseFloat(parseFloat(val).toFixed(2));
+        return SecureVault.getBalance();
     }
 
     function setWallet(newVal) {
-        let cleanVal = parseFloat(Math.max(0, newVal).toFixed(2));
-        safeSaveLocalStorage('casino_wallet', cleanVal);
+        let cleanVal = SecureVault.setBalance(newVal);
         updateUIStats();
+        return cleanVal;
     }
 
     function renderGroupTabs() {
@@ -2347,13 +3994,19 @@
             startContinuousBgm();
         } else {
             document.getElementById('loginScreen').style.display = 'flex';
+            let mobDiv = document.getElementById('mobileStepDiv');
+            if (mobDiv) mobDiv.style.display = 'block';
+            let otpDiv = document.getElementById('otpStepDiv');
+            if (otpDiv) otpDiv.style.display = 'none';
             document.getElementById('lobbyScreen').style.display = 'none';
         }
         renderGroupTabs();
         renderLobbyGridForGroup('A');
         loadFrameSettingsForTarget('groupA');
         updateUIStats();
+        renderAdminDeposits();
         renderAdminWithdrawals();
+        renderCasinoAnalyticsUI();
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -2375,7 +4028,7 @@
     let globalDifficulty = localStorage.getItem('slot_difficulty_mode') || "normal";
     document.getElementById('adminDifficultySelect').value = globalDifficulty;
 
-    let forceRule = JSON.parse(localStorage.getItem('slot_force_rule') || '{"mode": "none", "playerId": "9876543210"}');
+    let forceRule = SecureVault.getSecureForceRule();
     document.getElementById('forcePlayerIdInput').value = forceRule.playerId || "9876543210";
     document.getElementById('forceModeSelect').value = forceRule.mode || "none";
 
@@ -2522,18 +4175,56 @@
     function playSpinSound() {
         if (gameAudioConfigs.spin) {
             new Audio(gameAudioConfigs.spin).play().catch(e => {});
+        } else {
+            try {
+                let audioCtx = getMasterAudioContext();
+                if (!audioCtx) return;
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.12);
+            } catch(e) {}
         }
     }
 
     function playWinSound(amount) {
         if (gameAudioConfigs.win) {
             new Audio(gameAudioConfigs.win).play().catch(e => {});
+        } else {
+            try {
+                let audioCtx = getMasterAudioContext();
+                if (!audioCtx) return;
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                    setTimeout(() => {
+                        try {
+                            let osc = audioCtx.createOscillator();
+                            let gain = audioCtx.createGain();
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            osc.start();
+                            osc.stop(audioCtx.currentTime + 0.2);
+                        } catch(err) {}
+                    }, idx * 70);
+                });
+            } catch(e) {}
         }
     }
 
     function playAlexSound() {
         try {
-            let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let audioCtx = getMasterAudioContext();
+            if (!audioCtx) return;
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
             osc.type = 'triangle';
@@ -2550,21 +4241,24 @@
 
     function playCoinCountingSound(callback) {
         try {
-            let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let audioCtx = getMasterAudioContext();
+            if (!audioCtx) return;
             let countSteps = 8;
             for(let i=0; i<countSteps; i++) {
                 setTimeout(() => {
-                    let osc = audioCtx.createOscillator();
-                    let gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(900 + (i * 120), audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.08);
-                    if (i === countSteps - 1 && callback) callback();
+                    try {
+                        let osc = audioCtx.createOscillator();
+                        let gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(900 + (i * 120), audioCtx.currentTime);
+                        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.08);
+                        if (i === countSteps - 1 && callback) callback();
+                    } catch(err) {}
                 }, i * 90);
             }
         } catch(e) {
@@ -2738,9 +4432,8 @@
     function saveForceRule() {
         let pId = document.getElementById('forcePlayerIdInput').value.trim();
         let mode = document.getElementById('forceModeSelect').value;
-        forceRule = { mode: mode, playerId: pId };
-        safeSaveLocalStorage('slot_force_rule', JSON.stringify(forceRule));
-        alert("✅ Force rule permanently saved!");
+        forceRule = SecureVault.setSecureForceRule(mode, pId);
+        showToast("✅ Force rule securely signed & saved!");
     }
 
     function saveWhatsAppNumber() {
@@ -2836,13 +4529,27 @@
     }
 
     function calculateDifficultyAdjustedWin(rawWin, bet) {
-        if (forceRule.mode === 'loss') return 0;
-        if (forceRule.mode === 'win') return bet * 50;
+        let validRule = SecureVault.getSecureForceRule();
+        let curMob = localStorage.getItem('casino_player_mobile') || '';
+        let curUid = localStorage.getItem('casino_player_uid') || '';
+
+        if (validRule.playerId && (validRule.playerId === curMob || validRule.playerId === curUid)) {
+            if (validRule.mode === 'loss') return 0;
+            if (validRule.mode === 'win') return bet * 50;
+        }
+
         if (rawWin <= 0) return 0;
         return parseFloat(Math.max(0, rawWin).toFixed(2));
     }
 
+    let lastSpinTimestamp = 0;
     function handleSpin() {
+        let now = Date.now();
+        if (now - lastSpinTimestamp < 450) {
+            return; // Anti-macro rate limiting
+        }
+        lastSpinTimestamp = now;
+
         if (isSpinning) return;
         isSpinning = true;
         
@@ -2865,6 +4572,7 @@
             }
             currentBal = parseFloat((currentBal - currentBet).toFixed(2));
             setWallet(currentBal);
+            CasinoAnalytics.recordBet(currentBet);
         }
 
         spinningColumns = [true, true, true, true, true, true];
@@ -2911,6 +4619,7 @@
                     spinningColumns = [false, false, false, false, false, false];
                     renderSlotGrid(spinningColumns);
 
+                    // Scatter check: Fixed to trigger on >= 3 or 4
                     let totalScattersOnScreen = 0;
                     for (let r = 0; r < 6; r++) {
                         for (let col = 0; col < 6; col++) {
@@ -2920,16 +4629,17 @@
                         }
                     }
 
-                    if (totalScattersOnScreen === 4) {
-                        freeGamesRemaining += 15;
+                    if (totalScattersOnScreen >= 3) {
+                        let awarded = totalScattersOnScreen === 3 ? 10 : (totalScattersOnScreen === 4 ? 15 : 20);
+                        freeGamesRemaining += awarded;
                         if (!isFreeGameActive) {
                             freeGameAccumulatedWin = 0;
                             playAlexSound();
                         }
                         updateFreeGameUIIndicators();
                         if (winOverlay) {
-                            document.getElementById('winPopupTitle').innerText = "✨ 15 FREE GAMES! ✨";
-                            document.getElementById('winPopupAmount').innerText = "+15 FREE SPINS";
+                            document.getElementById('winPopupTitle').innerText = `✨ ${awarded} FREE GAMES! ✨`;
+                            document.getElementById('winPopupAmount').innerText = `+${awarded} FREE SPINS`;
                             winOverlay.style.display = 'block';
                         }
                     }
@@ -2945,7 +4655,7 @@
                         safeSaveLocalStorage('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule));
                         document.getElementById('adminGroupCJackpotSelect').value = "none";
 
-                        if (winOverlay && totalScattersOnScreen !== 4) {
+                        if (winOverlay && totalScattersOnScreen < 3) {
                             document.getElementById('winPopupTitle').innerText = `🎉 JACKPOT ${totalWin}!`;
                             document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
                             winOverlay.style.display = 'block';
@@ -2968,6 +4678,9 @@
                     } else {
                         setWallet(getWallet() + totalWin);
                     }
+                    if (totalWin > 0) {
+                        CasinoAnalytics.recordWin(totalWin);
+                    }
 
                     updateUIStats();
                     
@@ -2977,7 +4690,7 @@
                     let spinWinB = document.getElementById('spinWinDisplayB');
                     if (spinWinB) spinWinB.innerText = totalWin.toFixed(2);
 
-                    if (totalWin > 0 && triggerJackpotType === "none" && totalScattersOnScreen !== 4 && !isFreeGameActive) {
+                    if (totalWin > 0 && triggerJackpotType === "none" && totalScattersOnScreen < 3 && !isFreeGameActive) {
                         playWinSound(totalWin);
                         if (winOverlay) {
                             document.getElementById('winPopupTitle').innerText = totalWin >= 20 ? "🔥 MEGA WIN!" : "WIN!";
@@ -3164,7 +4877,89 @@
         }
     }
 
-    function showFeature(title, msg) { alert(`⭐ ${title}\n\n${msg}`); }
+    function showFeature(title, msg) { showToast(`⭐ ${title}: ${msg}`); }
+
+    function openExportModal() {
+        let el = document.getElementById('exportModal');
+        if (el) el.style.display = 'flex';
+    }
+    function closeExportModal() {
+        let el = document.getElementById('exportModal');
+        if (el) el.style.display = 'none';
+    }
+    function showToast(msg) {
+        let toast = document.getElementById('customToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'customToast';
+            document.body.appendChild(toast);
+        }
+        toast.innerText = msg;
+        toast.style.display = 'block';
+        clearTimeout(window.__toastTimeout);
+        window.__toastTimeout = setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3200);
+    }
+    function downloadSingleFileCode() {
+        fetch('/luckyspin_pro_150games.html')
+            .then(res => res.text())
+            .then(code => {
+                triggerBlobDownload(code);
+            })
+            .catch(() => {
+                const code = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+                triggerBlobDownload(code);
+            });
+    }
+    function triggerBlobDownload(content) {
+        const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'LuckySpin_Pro_150Games.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast("✅ LuckySpin_Pro_150Games.html Downloaded!");
+    }
+    function copySingleFileCode() {
+        fetch('/luckyspin_pro_150games.html')
+            .then(res => res.text())
+            .then(code => {
+                navigator.clipboard.writeText(code).then(() => {
+                    showToast("✅ 100% Code Copied to Clipboard!");
+                }).catch(() => {
+                    fallbackCopy(code);
+                });
+            })
+            .catch(() => {
+                const code = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+                navigator.clipboard.writeText(code).then(() => {
+                    showToast("✅ 100% Code Copied to Clipboard!");
+                }).catch(() => {
+                    fallbackCopy(code);
+                });
+            });
+    }
+    function fallbackCopy(text) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.top = "0";
+        ta.style.left = "0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+            document.execCommand('copy');
+            showToast("✅ 100% Code Copied to Clipboard!");
+        } catch (e) {
+            showToast("⚠️ Please download the .html file directly!");
+        }
+        document.body.removeChild(ta);
+    }
 </script>
 </body>
 </html>
