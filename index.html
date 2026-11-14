@@ -35,6 +35,7 @@
         .m-status { font-size: 10px; padding: 3px 8px; border-radius: 12px; font-weight: bold; }
         .status-open { background: rgba(46, 204, 113, 0.2); color: var(--green); border: 1px solid var(--green); }
         .status-closed { background: rgba(231, 76, 60, 0.2); color: var(--red); border: 1px solid var(--red); }
+        .status-holiday { background: rgba(243, 156, 18, 0.2); color: var(--primary); border: 1px solid var(--primary); }
 
         .m-times { display: flex; justify-content: space-between; font-size: 11px; color: #aaa; margin: 6px 0; }
         .m-timers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
@@ -68,6 +69,11 @@
         .admin-section { background: #14181f; border: 1px dashed var(--primary); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
         .admin-section h4 { color: var(--primary); margin-bottom: 10px; font-size: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
 
+        .pnl-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0; }
+        .pnl-card { background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 8px; text-align: center; }
+        .pnl-val { font-size: 15px; font-weight: 800; color: #fff; }
+        .pnl-lbl { font-size: 10px; color: #aaa; margin-top: 3px; }
+
         .profile-top { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center; }
         .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; background: #333; display: inline-block; }
 
@@ -77,6 +83,45 @@
         .ref-stat-val { font-size: 16px; font-weight: 800; color: var(--green); }
         .ref-stat-lbl { font-size: 10px; color: #aaa; margin-top: 2px; }
         .ref-link-box { background: #0e1116; border: 1px dashed var(--primary); padding: 8px; border-radius: 8px; font-size: 11px; color: #f1c40f; word-break: break-all; margin-bottom: 8px; text-align: center; }
+
+        /* Professional Guessing Forum Styles */
+        .gf-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+        .gf-icon-group { display: flex; align-items: center; gap: 6px; }
+        .gf-icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #334155; background: #161d26; color: #fff; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .gf-icon-btn.active { border-color: var(--primary); color: var(--primary); background: #261e12; }
+        .gf-post-cta { background: linear-gradient(135deg, #d81b60, #1e3a8a); color: #fff; border: none; padding: 9px 15px; border-radius: 22px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 3px 10px rgba(216,27,96,0.35); }
+        .gf-toggle-bar { background: #14181f; border: 1px solid #2c3e50; border-radius: 12px; padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; }
+        .gf-switch-pill { padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 800; border: 1px solid #444; cursor: pointer; background: #1e293b; color: #94a3b8; }
+        .gf-switch-pill.on { background: var(--green); color: #000; border-color: var(--green); }
+
+        .gf-card { background: #18202a; border: 1px solid #334155; border-radius: 14px; padding: 12px 0 10px 0; margin-bottom: 14px; box-shadow: 0 4px 14px rgba(0,0,0,0.45); overflow: hidden; }
+        .gf-card-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 0 10px 12px; gap: 6px; }
+        .gf-author-wrap { display: flex; align-items: center; gap: 10px; }
+        .gf-avatar-wrap { position: relative; width: 42px; height: 42px; flex-shrink: 0; }
+        .gf-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .gf-online-dot { position: absolute; bottom: 1px; right: 1px; width: 10px; height: 10px; background: #2ecc71; border: 2px solid #18202a; border-radius: 50%; }
+        .gf-author-name { font-size: 14px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+        .gf-role-badge { font-size: 10px; padding: 2px 8px; border-radius: 12px; border: 1px solid #e91e63; color: #ff6b9d; background: rgba(233,30,99,0.12); font-weight: 700; }
+        .gf-role-badge.vip { border-color: var(--primary); color: var(--primary); background: rgba(243,156,18,0.15); }
+        .gf-time { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+        .gf-ribbon { background: linear-gradient(135deg, #1e3a8a, #6d28d9); color: #fff; font-size: 11px; font-weight: 800; padding: 6px 10px 6px 18px; clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%); letter-spacing: 0.4px; white-space: nowrap; max-width: 145px; overflow: hidden; text-overflow: ellipsis; }
+
+        .gf-guess-body { margin: 0 10px 10px 10px; background: linear-gradient(180deg, #2a2115, #1f1911); border: 1px solid #6b4f24; border-radius: 10px; padding: 14px 10px; text-align: center; color: #ffe7b8; font-size: 14px; font-weight: 700; line-height: 1.65; white-space: pre-wrap; word-break: break-word; }
+        .gf-quote-box { margin: 0 10px 10px 10px; background: #111720; border: 1px solid #2c3e50; border-left: 3px solid #a855f7; border-radius: 8px; padding: 10px; }
+        .gf-quote-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 11px; color: #94a3b8; }
+        .gf-quote-text { font-size: 13px; color: #e2e8f0; white-space: pre-wrap; line-height: 1.45; }
+
+        .gf-meta-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px 12px; }
+        .gf-chip-btn { background: #121820; border: 1px solid #2d3748; color: #e2e8f0; padding: 5px 10px; border-radius: 16px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .gf-chip-btn.liked { background: rgba(231,76,60,0.2); border-color: var(--red); color: #ff7675; }
+
+        .gf-footer-bar { display: flex; align-items: center; gap: 6px; padding: 8px 10px 0 10px; border-top: 1px solid #293548; }
+        .gf-stat-mini { font-size: 12px; color: #cbd5e1; display: inline-flex; align-items: center; gap: 3px; cursor: pointer; background: transparent; border: none; padding: 4px; }
+        .gf-comment-pill { flex: 1; display: flex; align-items: center; background: #0f141b; border: 1px solid #334155; border-radius: 20px; padding: 3px 6px 3px 12px; }
+        .gf-comment-pill input { flex: 1; background: transparent; border: none; color: #fff; font-size: 12px; outline: none; min-width: 60px; }
+        .gf-send-icon { background: transparent; border: none; color: #e91e63; font-size: 16px; cursor: pointer; padding: 2px 5px; }
+        .gf-quote-btn { background: #1e293b; border: 1px solid #38bdf8; color: #e2e8f0; border-radius: 8px; padding: 6px 9px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .gf-comments-list { padding: 6px 12px 2px 12px; }
 
         .tab-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
         .tab-btn { padding: 9px; border-radius: 8px; border: 1px solid #444; background: #111; color: #bbb; font-weight: bold; font-size: 13px; cursor: pointer; }
@@ -238,6 +283,17 @@
             return `${year}-${month}-${day}`;
         }
 
+        function formatForumDateTime(d = new Date()) {
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const day = String(d.getDate()).padStart(2, "0");
+            const mon = months[d.getMonth()];
+            let hrs = d.getHours();
+            const mins = String(d.getMinutes()).padStart(2, "0");
+            const ampm = hrs >= 12 ? "PM" : "AM";
+            hrs = hrs % 12 || 12;
+            return `${day} ${mon} ${String(hrs).padStart(2, "0")}:${mins} ${ampm}`;
+        }
+
         function isStrictPositiveInt(str) {
             return /^\d+$/.test(String(str || "").trim()) && parseInt(str, 10) > 0;
         }
@@ -253,17 +309,22 @@
             }
         }
 
+        const todayInitial = getLocalDateString();
+
         const defaultMarkets = [
-            { id: 1, name: "MILAN MORNING", openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM", result: "145-06-268", chart: ["123-65-456"] },
-            { id: 2, name: "KALYAN MORNING", openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM", result: "369-81-579", chart: ["127-05-230"] },
-            { id: 3, name: "MAIN BAZAR", openTime: "09:35", openAmPm: "PM", closeTime: "11:59", closeAmPm: "PM", result: "***-**-***", chart: ["468-89-270"] }
+            { id: 1, name: "MILAN MORNING", openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM", result: "145-06-268", resultDate: todayInitial, isHoliday: false, chart: ["123-65-456"] },
+            { id: 2, name: "KALYAN MORNING", openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM", result: "369-81-579", resultDate: todayInitial, isHoliday: false, chart: ["127-05-230"] },
+            { id: 3, name: "MAIN BAZAR", openTime: "09:35", openAmPm: "PM", closeTime: "11:59", closeAmPm: "PM", result: "***-**-***", resultDate: todayInitial, isHoliday: false, chart: ["468-89-270"] }
         ];
 
         const defaultRates = [
             { name: "Single Digit", rate: "10 ka 95" },
             { name: "Jodi Digit", rate: "10 ka 950" },
             { name: "Single Panna", rate: "10 ka 1400" },
-            { name: "Double Panna", rate: "10 ka 2800" }
+            { name: "Double Panna", rate: "10 ka 2800" },
+            { name: "Triple Panna", rate: "10 ka 6000" },
+            { name: "Half Sangam", rate: "10 ka 10000" },
+            { name: "Full Sangam", rate: "10 ka 100000" }
         ];
 
         function safeJSONParse(key, fallback) {
@@ -294,7 +355,7 @@
             forgotRequests: safeJSONParse('mk_forgot', []),
             transactions: safeJSONParse('mk_txns', []),
             guessingPosts: safeJSONParse('mk_guessing', [
-                { id: 1, phone: DEFAULT_VIP_PHONE, name: "M.KING VIP", avatar: "", market: "KALYAN MORNING", text: "Open: 3 - 8 | Jodi: 38, 83 | Panna: 148, 260", time: "Today", likes: 5, likedBy: [], comments: [], wishes: [], chats: {} }
+                { id: 1, phone: DEFAULT_VIP_PHONE, name: "M.KING VIP", avatar: "", market: "KALYAN MORNING", text: "KALYAN MORNING OPEN\n\n3\n8\n\n38___83___33___88\n\n148___260___139___468\n\nBest of luck 🤞👍", time: formatForumDateTime(), likes: 5, likedBy: [], comments: [], wishes: [], chats: {} }
             ]),
             selectedMarket: null,
             selectedGameType: null,
@@ -302,7 +363,13 @@
             activeChatBuyerPhone: null,
             authTab: initialUrlRef ? 'register' : 'login',
             pendingRefCode: initialUrlRef,
-            bidCart: []
+            bidCart: [],
+            guessShowComposer: false,
+            guessShowSearchBar: false,
+            guessFilterOriginalOnly: false,
+            guessFilterMarket: "ALL",
+            guessSearchQuery: "",
+            guessQuoteTargetId: null
         };
 
         let homeTimerInterval = null;
@@ -310,6 +377,12 @@
 
         if (!state.markets || state.markets.length === 0) state.markets = defaultMarkets;
         if (!state.gameRates || state.gameRates.length === 0) state.gameRates = defaultRates;
+
+        defaultRates.forEach(dr => {
+            if (!state.gameRates.some(r => r.name === dr.name)) {
+                state.gameRates.push({ ...dr });
+            }
+        });
 
         if (!state.users[DEFAULT_VIP_PHONE]) {
             state.users[DEFAULT_VIP_PHONE] = {
@@ -336,6 +409,8 @@
                 openAmPm: m.openAmPm || def.openAmPm,
                 closeTime: (m.closeTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.closeTime).trim())) ? String(m.closeTime).trim() : def.closeTime,
                 closeAmPm: m.closeAmPm || def.closeAmPm,
+                isHoliday: Boolean(m.isHoliday),
+                resultDate: m.resultDate || null,
                 chart: Array.isArray(m.chart) ? m.chart : []
             };
         });
@@ -383,6 +458,51 @@
                 alert("डेटा सेव करने में समस्या आई (Storage Limit)। कृपया बड़ी इमेज न डालें।");
                 return false;
             }
+        }
+
+        function enforceNotBlocked() {
+            if (!state.currentUserPhone) return false;
+            let u = state.users[state.currentUserPhone];
+            if (u && u.isBlocked) {
+                alert("🚫 आपका अकाउंट एडमिन द्वारा ब्लॉक कर दिया गया है!" + (u.blockReason ? `\nकारण: ${u.blockReason}` : ""));
+                logoutPlayer();
+                return true;
+            }
+            return false;
+        }
+
+        function getMarketCycleDate(market, now = new Date()) {
+            let openTarget = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", now);
+            let closeTarget = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", now);
+            if (closeTarget.getTime() <= openTarget.getTime()) {
+                let yesterdayOpen = new Date(openTarget.getTime());
+                yesterdayOpen.setDate(yesterdayOpen.getDate() - 1);
+                if (now.getTime() < closeTarget.getTime()) {
+                    openTarget = yesterdayOpen;
+                }
+            }
+            return getLocalDateString(openTarget);
+        }
+
+        function syncDailyMarketResults() {
+            let now = new Date();
+            let changed = false;
+            state.markets.forEach(m => {
+                let cycleDate = getMarketCycleDate(m, now);
+                if (!m.resultDate) {
+                    m.resultDate = cycleDate;
+                    changed = true;
+                } else if (m.resultDate !== cycleDate) {
+                    if (m.result !== "***-**-***") {
+                        m.result = "***-**-***";
+                        let resEl = document.getElementById(`resultText_${m.id}`);
+                        if (resEl) resEl.innerText = "***-**-***";
+                    }
+                    m.resultDate = cycleDate;
+                    changed = true;
+                }
+            });
+            if (changed) saveState();
         }
 
         function processReferralDeposit(depositorPhone, depositAmount) {
@@ -488,7 +608,7 @@
                         </div>
                         <div class="input-group">
                             <label>Referral Code / Friend Mobile (Optional)</label>
-                            <input type="text" id="regRefCode" value="${escapeHTML(state.pendingRefCode || '')}" placeholder="दोस्त का मोबाइल नंबर (अगर है तो)">
+                            <input type="text" id="regRefCode" value="${escapeHTML(state.pendingRefCode || '')}" placeholder="दोस्त का मोबाइल नंबर (अगर है तो)" onkeydown="if(event.key==='Enter') handlePlayerRegister()">
                         </div>
                         <button class="btn" style="background:var(--green); color:#000; width:100%; font-size:15px; padding:12px;" onclick="handlePlayerRegister()">Create Account</button>
                     ` : `
@@ -496,7 +616,7 @@
                             <input type="tel" id="playerPhone" maxlength="10" placeholder="Mobile Number (10 Digits)">
                         </div>
                         <div class="input-group">
-                            <input type="password" id="playerPass" placeholder="Password">
+                            <input type="password" id="playerPass" placeholder="Password" onkeydown="if(event.key==='Enter') handlePlayerLogin()">
                         </div>
                         <button class="btn" style="background:var(--green); color:#000; width:100%; font-size:15px; padding:12px; margin-bottom:10px;" onclick="handlePlayerLogin()">Login</button>
                         <button class="btn" style="background:transparent; color:var(--primary); border:none; font-size:12px; cursor:pointer;" onclick="renderForgotScreen()">❓ Forgot Password?</button>
@@ -514,7 +634,7 @@
                     <h3 style="color:var(--red); margin-bottom:10px;">🔒 Forgot Password</h3>
                     <p style="color:#aaa; font-size:12px; margin-bottom:15px;">अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें। रिकवरी रिक्वेस्ट एडमिन के पास भेज दी जाएगी।</p>
                     <div class="input-group">
-                        <input type="tel" id="forgotPhone" maxlength="10" placeholder="Mobile Number">
+                        <input type="tel" id="forgotPhone" maxlength="10" placeholder="Mobile Number" onkeydown="if(event.key==='Enter') submitForgotPassword()">
                     </div>
                     <button class="btn" style="background:var(--primary); color:#000; width:100%; margin-bottom:10px;" onclick="submitForgotPassword()">Send Request to Admin</button>
                     <button class="btn" style="background:#333; color:#fff; width:100%;" onclick="renderLoginScreen()">← Back to Login</button>
@@ -597,6 +717,10 @@
             }
 
             let existing = state.users[phone];
+            if (existing && existing.isBlocked) {
+                alert("🚫 यह मोबाइल नंबर एडमिन द्वारा ब्लॉक किया गया है!");
+                return;
+            }
             if (existing && existing.password) {
                 alert("यह नंबर पहले से रजिस्टर है! कृपया Login टैब से लॉगिन करें।");
                 state.authTab = 'login';
@@ -627,6 +751,8 @@
                     referralHistory: [],
                     referralFirstBonusPaid: false,
                     referralTotalDeposited: 0,
+                    isBlocked: false,
+                    blockReason: "",
                     joinedAt: new Date().toLocaleDateString()
                 };
             }
@@ -665,6 +791,11 @@
                 return;
             }
 
+            if (user.isBlocked) {
+                alert("🚫 आपका अकाउंट एडमिन द्वारा ब्लॉक कर दिया गया है!" + (user.blockReason ? `\nकारण: ${user.blockReason}` : "\nअधिक जानकारी के लिए WhatsApp सपोर्ट से संपर्क करें।"));
+                return;
+            }
+
             if (!isHashedPassword(user.password)) {
                 user.password = hashPassword(pass);
             }
@@ -686,6 +817,8 @@
                 return;
             }
 
+            if (screen !== 'adminLogin' && enforceNotBlocked()) return;
+
             if (screen !== 'home' && homeTimerInterval) {
                 clearInterval(homeTimerInterval);
                 homeTimerInterval = null;
@@ -697,6 +830,7 @@
 
             const root = document.getElementById('appRoot');
             if (!root) return;
+            syncDailyMarketResults();
             saveState();
 
             if (screen === 'home') renderHome(root);
@@ -744,6 +878,17 @@
                 }
             }
 
+            if (market.isHoliday) {
+                return {
+                    openTarget,
+                    closeTarget,
+                    isOpenSessionActive: false,
+                    isCloseSessionActive: false,
+                    isMarketActive: false,
+                    isHoliday: true
+                };
+            }
+
             let isMarketActive = now.getTime() < closeTarget.getTime();
             let isOpenSessionActive = now.getTime() < openTarget.getTime();
             let isCloseSessionActive = isMarketActive;
@@ -753,7 +898,8 @@
                 closeTarget,
                 isOpenSessionActive,
                 isCloseSessionActive,
-                isMarketActive
+                isMarketActive,
+                isHoliday: false
             };
         }
 
@@ -763,6 +909,7 @@
 
         function renderHome(root) {
             if (homeTimerInterval) clearInterval(homeTimerInterval);
+            syncDailyMarketResults();
 
             let waNum = encodeURIComponent((state.adminWhatsApp || "").replace(/\D/g, ""));
             let waLink = `https://wa.me/${waNum}?text=Hello%20Admin,%20I%20need%20help`;
@@ -780,9 +927,11 @@
                 let now = new Date();
                 state.markets.forEach(m => {
                     let status = getMarketSessionStatus(m, now);
-                    let statusBadge = status.isMarketActive
-                        ? `<span class="m-status status-open" id="badgeText_${m.id}">RUNNING</span>`
-                        : `<span class="m-status status-closed" id="badgeText_${m.id}">CLOSED</span>`;
+                    let statusBadge = status.isHoliday
+                        ? `<span class="m-status status-holiday">HOLIDAY</span>`
+                        : (status.isMarketActive
+                            ? `<span class="m-status status-open">RUNNING</span>`
+                            : `<span class="m-status status-closed">CLOSED</span>`);
 
                     html += `
                         <div class="market-card" id="marketCard_${m.id}">
@@ -792,7 +941,7 @@
                                 <div class="m-timer-box" id="openTimer_${m.id}">⏳ Open: ...</div>
                                 <div class="m-timer-box" id="closeTimer_${m.id}">⏳ Close: ...</div>
                             </div>
-                            <div class="m-result-box"><div class="m-result-text">${escapeHTML(m.result || '***-**-***')}</div></div>
+                            <div class="m-result-box"><div class="m-result-text" id="resultText_${m.id}">${escapeHTML(m.result || '***-**-***')}</div></div>
                             <div class="m-btns">
                                 <button class="btn btn-chart" onclick="navigate('chart', ${m.id})">📅 CHART</button>
                                 <button class="btn btn-play" id="playBtn_${m.id}" onclick="handlePlayClick(${m.id})">▶ PLAY</button>
@@ -818,6 +967,7 @@
 
         function updateMarketTimers() {
             if (!state.markets) return;
+            syncDailyMarketResults();
             let now = new Date();
             state.markets.forEach(m => {
                 let openTimerEl = document.getElementById(`openTimer_${m.id}`);
@@ -827,6 +977,19 @@
                 if (!openTimerEl || !closeTimerEl) return;
 
                 let status = getMarketSessionStatus(m, now);
+
+                if (status.isHoliday) {
+                    openTimerEl.innerHTML = "🏖️ Market Holiday";
+                    openTimerEl.style.color = "var(--primary)";
+                    closeTimerEl.innerHTML = "🔴 Closed Today";
+                    closeTimerEl.style.color = "var(--red)";
+                    if (badgeContainer && !badgeContainer.innerHTML.includes('HOLIDAY')) {
+                        badgeContainer.innerHTML = `<span class="m-status status-holiday">HOLIDAY</span>`;
+                    }
+                    if (playBtn) playBtn.style.opacity = "0.5";
+                    return;
+                }
+
                 let openDiff = status.openTarget.getTime() - now.getTime();
                 let closeDiff = status.closeTarget.getTime() - now.getTime();
 
@@ -857,9 +1020,16 @@
         }
 
         function handlePlayClick(marketId) {
+            if (enforceNotBlocked()) return;
             let market = state.markets.find(m => m.id === marketId);
-            if (!market || !checkMarketTiming(market)) { alert("❌ इस मार्केट का समय समाप्त हो चुका है!"); return; }
+            if (!market) return;
+            if (market.isHoliday) { alert("🏖️ आज इस मार्केट की छुट्टी (Holiday) है!"); return; }
+            if (!checkMarketTiming(market)) { alert("❌ इस मार्केट का समय समाप्त हो चुका है!"); return; }
             navigate('gameSelect', marketId);
+        }
+
+        function isOpenRequiredGame(gameName) {
+            return gameName === "Jodi Digit" || gameName === "Half Sangam" || gameName === "Full Sangam";
         }
 
         function renderGameSelect(root, marketId) {
@@ -868,15 +1038,20 @@
             state.selectedMarket = market;
             let status = getMarketSessionStatus(market, new Date());
 
+            if (status.isHoliday || !status.isMarketActive) {
+                navigate('home');
+                return;
+            }
+
             let html = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(market.name)}</h3></div><div class="game-grid">`;
             state.gameRates.forEach((g, idx) => {
-                let isJodiLocked = (g.name === "Jodi Digit" && !status.isOpenSessionActive);
-                let lockBadge = isJodiLocked ? `<div style="font-size:10px; color:var(--red); margin-top:4px;">🔒 Open Closed</div>` : '';
-                let clickAction = isJodiLocked
+                let isLocked = (isOpenRequiredGame(g.name) && !status.isOpenSessionActive);
+                let lockBadge = isLocked ? `<div style="font-size:10px; color:var(--red); margin-top:4px;">🔒 Open Closed</div>` : '';
+                let clickAction = isLocked
                     ? `alert('❌ ओपन का समय समाप्त हो चुका है! अब सिर्फ क्लोज सेशन के गेम ही खेल सकते हैं।')`
                     : `openGameByIndex(${market.id}, ${idx})`;
 
-                html += `<div class="game-box" style="opacity:${isJodiLocked ? '0.5' : '1'}" onclick="${clickAction}"><div class="game-label">${escapeHTML(g.name)}</div><div class="game-rate">${escapeHTML(g.rate)}</div>${lockBadge}</div>`;
+                html += `<div class="game-box" style="opacity:${isLocked ? '0.5' : '1'}" onclick="${clickAction}"><div class="game-label">${escapeHTML(g.name)}</div><div class="game-rate">${escapeHTML(g.rate)}</div>${lockBadge}</div>`;
             });
             html += `</div>`;
             root.innerHTML = html;
@@ -910,16 +1085,60 @@
             if (gameType === "Double Panna") {
                 return a <= b && b <= c && (a === b || b === c) && !(a === b && b === c);
             }
-            return true;
+            if (gameType === "Triple Panna") {
+                return digit[0] === digit[1] && digit[1] === digit[2];
+            }
+            return a <= b && b <= c;
         }
 
-        function enforceDigitLimit(inputEl) {
-            let maxLen = getRequiredDigitLength(state.selectedGameType || "");
+        function isValidAnyPanna(digit) {
+            if (!/^\d{3}$/.test(digit)) return false;
+            const a = pannaDigitVal(digit[0]);
+            const b = pannaDigitVal(digit[1]);
+            const c = pannaDigitVal(digit[2]);
+            return a <= b && b <= c;
+        }
+
+        function enforceDigitLimit(inputEl, fixedMax = null) {
+            let maxLen = fixedMax !== null ? fixedMax : getRequiredDigitLength(state.selectedGameType || "");
             let cleaned = inputEl.value.replace(/\D/g, '');
             if (cleaned.length > maxLen) {
                 cleaned = cleaned.slice(0, maxLen);
             }
             inputEl.value = cleaned;
+        }
+
+        function updateHalfSangamLabels() {
+            let modeEl = document.getElementById('halfSangamMode');
+            let l1 = document.getElementById('sangamLbl1');
+            let l2 = document.getElementById('sangamLbl2');
+            let p1 = document.getElementById('sangamPart1');
+            let p2 = document.getElementById('sangamPart2');
+            if (!modeEl || !l1 || !l2 || !p1 || !p2) return;
+
+            p1.value = '';
+            p2.value = '';
+            if (modeEl.value === 'OPEN_ANK_CLOSE_PANNA') {
+                l1.innerText = 'Open Ank (1 Digit)';
+                p1.maxLength = 1;
+                p1.placeholder = '0 से 9 तक 1 अंक';
+                p1.setAttribute('oninput', 'enforceDigitLimit(this, 1)');
+
+                l2.innerText = 'Close Panna (3 Digits)';
+                p2.maxLength = 3;
+                p2.placeholder = 'जैसे: 128, 112, 000';
+                p2.setAttribute('oninput', 'enforceDigitLimit(this, 3)');
+            } else {
+                l1.innerText = 'Open Panna (3 Digits)';
+                p1.maxLength = 3;
+                p1.placeholder = 'जैसे: 128, 112, 000';
+                p1.setAttribute('oninput', 'enforceDigitLimit(this, 3)');
+
+                l2.innerText = 'Close Ank (1 Digit)';
+                p2.maxLength = 1;
+                p2.placeholder = '0 से 9 तक 1 अंक';
+                p2.setAttribute('oninput', 'enforceDigitLimit(this, 1)');
+            }
         }
 
         function renderPlayGame(root, marketId, gameType) {
@@ -930,15 +1149,62 @@
             state.bidCart = [];
             let status = getMarketSessionStatus(market, new Date());
 
-            if (!status.isCloseSessionActive) {
-                alert("❌ इस मार्केट का समय समाप्त हो चुका है!");
+            if (status.isHoliday || !status.isCloseSessionActive) {
+                alert(status.isHoliday ? "🏖️ आज इस मार्केट की छुट्टी है!" : "❌ इस मार्केट का समय समाप्त हो चुका है!");
                 navigate('home');
                 return;
             }
 
-            if (gameType === "Jodi Digit" && !status.isOpenSessionActive) {
-                alert("❌ ओपन का समय समाप्त होने के बाद जोड़ी नहीं खेल सकते!");
+            if (isOpenRequiredGame(gameType) && !status.isOpenSessionActive) {
+                alert(`❌ ओपन का समय समाप्त होने के बाद ${gameType} नहीं खेल सकते!`);
                 navigate('gameSelect', marketId);
+                return;
+            }
+
+            if (gameType === "Half Sangam") {
+                root.innerHTML = `
+                    <div class="sub-header"><button class="back-btn" onclick="navigate('gameSelect', ${market.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(market.name)}</h4><small>Half Sangam</small></div></div>
+                    <div class="form-card">
+                        <div class="input-group">
+                            <label>Sangam Type</label>
+                            <select id="halfSangamMode" onchange="updateHalfSangamLabels()">
+                                <option value="OPEN_ANK_CLOSE_PANNA">Open Ank (1) + Close Panna (3)</option>
+                                <option value="OPEN_PANNA_CLOSE_ANK">Open Panna (3) + Close Ank (1)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label id="sangamLbl1">Open Ank (1 Digit)</label>
+                            <input type="tel" id="sangamPart1" maxlength="1" oninput="enforceDigitLimit(this, 1)" placeholder="0 से 9 तक 1 अंक">
+                        </div>
+                        <div class="input-group">
+                            <label id="sangamLbl2">Close Panna (3 Digits)</label>
+                            <input type="tel" id="sangamPart2" maxlength="3" oninput="enforceDigitLimit(this, 3)" placeholder="जैसे: 128, 112, 000">
+                        </div>
+                        <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" min="10" placeholder="राशि (केवल पूरे अंक)"></div>
+                        <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button>
+                    </div>
+                    <div id="cartContainer"></div>
+                `;
+                return;
+            }
+
+            if (gameType === "Full Sangam") {
+                root.innerHTML = `
+                    <div class="sub-header"><button class="back-btn" onclick="navigate('gameSelect', ${market.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(market.name)}</h4><small>Full Sangam</small></div></div>
+                    <div class="form-card">
+                        <div class="input-group">
+                            <label>Open Panna (3 Digits)</label>
+                            <input type="tel" id="sangamPart1" maxlength="3" oninput="enforceDigitLimit(this, 3)" placeholder="जैसे: 128, 112, 000">
+                        </div>
+                        <div class="input-group">
+                            <label>Close Panna (3 Digits)</label>
+                            <input type="tel" id="sangamPart2" maxlength="3" oninput="enforceDigitLimit(this, 3)" placeholder="जैसे: 459, 228, 777">
+                        </div>
+                        <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" min="10" placeholder="राशि (केवल पूरे अंक)"></div>
+                        <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button>
+                    </div>
+                    <div id="cartContainer"></div>
+                `;
                 return;
             }
 
@@ -953,7 +1219,10 @@
             let reqLen = getRequiredDigitLength(gameType);
             let placeholderText = reqLen === 1
                 ? "0 से 9 तक एक अंक लिखें"
-                : (reqLen === 2 ? "00 से 99 तक दो अंक लिखें" : (gameType === "Single Panna" ? "जैसे: 128, 120 (बढ़ते क्रम में, 0 सबसे बड़ा)" : "जैसे: 112, 122, 100 (बढ़ते क्रम में, 0 सबसे बड़ा)"));
+                : (reqLen === 2 ? "00 से 99 तक दो अंक लिखें"
+                : (gameType === "Single Panna" ? "जैसे: 128, 120 (बढ़ते क्रम में, 0 सबसे बड़ा)"
+                : (gameType === "Double Panna" ? "जैसे: 112, 122, 100 (बढ़ते क्रम में, 0 सबसे बड़ा)"
+                : "जैसे: 000, 111, 222 ... 999")));
 
             root.innerHTML = `
                 <div class="sub-header"><button class="back-btn" onclick="navigate('gameSelect', ${market.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(market.name)}</h4><small>${escapeHTML(gameType)}</small></div></div>
@@ -985,17 +1254,78 @@
         }
 
         function addToCart() {
-            let digInput = document.getElementById('bidDigitInput');
+            if (enforceNotBlocked()) return;
             let amtInput = document.getElementById('bidAmountInput');
-            let sesInput = document.getElementById('bidSession');
-            if (!digInput || !amtInput || !sesInput) return;
-
-            let digit = digInput.value.trim();
+            if (!amtInput) return;
             let rawAmt = amtInput.value.trim();
-            let session = sesInput.value;
-            let reqLen = getRequiredDigitLength(state.selectedGameType);
 
             let status = getMarketSessionStatus(state.selectedMarket, new Date());
+            if (status.isHoliday || !status.isCloseSessionActive) {
+                alert("❌ यह मार्केट अभी बंद है!");
+                return;
+            }
+
+            if (state.selectedGameType === "Half Sangam" || state.selectedGameType === "Full Sangam") {
+                if (!status.isOpenSessionActive) {
+                    alert(`❌ इस मार्केट का OPEN सेशन समय समाप्त हो चुका है! ${state.selectedGameType} अब नहीं खेल सकते।`);
+                    return;
+                }
+                let p1El = document.getElementById('sangamPart1');
+                let p2El = document.getElementById('sangamPart2');
+                if (!p1El || !p2El) return;
+                let p1 = p1El.value.trim();
+                let p2 = p2El.value.trim();
+
+                if (state.selectedGameType === "Half Sangam") {
+                    let modeEl = document.getElementById('halfSangamMode');
+                    let mode = modeEl ? modeEl.value : 'OPEN_ANK_CLOSE_PANNA';
+                    if (mode === 'OPEN_ANK_CLOSE_PANNA') {
+                        if (!/^\d$/.test(p1) || !isValidAnyPanna(p2)) {
+                            alert("❌ कृपया सही 1 अंक का Open Ank और सही 3 अंकों का Close Panna (बढ़ते क्रम में, जैसे 128, 112, 000) दर्ज करें!");
+                            return;
+                        }
+                    } else {
+                        if (!isValidAnyPanna(p1) || !/^\d$/.test(p2)) {
+                            alert("❌ कृपया सही 3 अंकों का Open Panna (जैसे 128, 112, 000) और सही 1 अंक का Close Ank दर्ज करें!");
+                            return;
+                        }
+                    }
+                } else {
+                    if (!isValidAnyPanna(p1) || !isValidAnyPanna(p2)) {
+                        alert("❌ कृपया सही 3 अंकों का Open Panna और Close Panna (जैसे 128, 112, 000) दर्ज करें!");
+                        return;
+                    }
+                }
+
+                if (!isStrictPositiveInt(rawAmt) || parseInt(rawAmt, 10) < 10) {
+                    alert("कृपया कम से कम ₹10 (केवल पूरे अंक) दर्ज करें!");
+                    return;
+                }
+
+                state.bidCart.push({
+                    id: Date.now() + Math.floor(Math.random() * 1000),
+                    marketId: state.selectedMarket.id,
+                    marketName: state.selectedMarket.name,
+                    gameType: state.selectedGameType,
+                    session: state.selectedGameType.toUpperCase(),
+                    digit: `${p1}-${p2}`,
+                    amount: parseInt(rawAmt, 10),
+                    phone: state.currentUserPhone
+                });
+                p1El.value = '';
+                p2El.value = '';
+                amtInput.value = '';
+                renderCartList();
+                return;
+            }
+
+            let digInput = document.getElementById('bidDigitInput');
+            let sesInput = document.getElementById('bidSession');
+            if (!digInput || !sesInput) return;
+
+            let digit = digInput.value.trim();
+            let session = sesInput.value;
+            let reqLen = getRequiredDigitLength(state.selectedGameType);
 
             if (session === "OPEN" && !status.isOpenSessionActive) {
                 alert("❌ इस मार्केट का OPEN सेशन समय समाप्त हो चुका है!");
@@ -1014,7 +1344,8 @@
                 return;
             }
             if (state.selectedGameType.includes("Panna") && !isValidPannaDigit(digit, state.selectedGameType)) {
-                alert(`❌ ${state.selectedGameType} नियम: अंक बढ़ते क्रम में होने चाहिए (0 को सबसे बड़ा मानें, जैसे: ${state.selectedGameType === 'Single Panna' ? '128, 120' : '112, 100'})!`);
+                let ex = state.selectedGameType === 'Single Panna' ? '128, 120' : (state.selectedGameType === 'Double Panna' ? '112, 100' : '000, 111, 777');
+                alert(`❌ ${state.selectedGameType} नियम: सही पाना दर्ज करें (जैसे: ${ex})!`);
                 return;
             }
             if (!isStrictPositiveInt(rawAmt) || parseInt(rawAmt, 10) < 10) {
@@ -1057,6 +1388,7 @@
         }
 
         function submitBids() {
+            if (enforceNotBlocked()) return;
             if (isSubmittingBids || !state.bidCart || state.bidCart.length === 0) return;
             isSubmittingBids = true;
 
@@ -1069,7 +1401,9 @@
                     const m = state.markets.find(mk => mk.id === b.marketId);
                     if (!m) { alert("❌ मार्केट उपलब्ध नहीं है!"); return; }
                     const st = getMarketSessionStatus(m, now);
-                    if ((b.session === "OPEN" && !st.isOpenSessionActive) || (b.session === "CLOSE" && !st.isCloseSessionActive)) {
+                    if (st.isHoliday) { alert(`🏖️ ${m.name} आज छुट्टी (Holiday) पर है!`); return; }
+                    let needOpen = (b.session === "OPEN" || isOpenRequiredGame(b.gameType));
+                    if ((needOpen && !st.isOpenSessionActive) || (!needOpen && !st.isCloseSessionActive)) {
                         alert(`❌ ${m.name} (${b.session}) का समय समाप्त हो चुका है! कृपया इसे कार्ट से हटाएं।`);
                         return;
                     }
@@ -1089,6 +1423,7 @@
                     phone: state.currentUserPhone,
                     type: `Bids Placed (${state.bidCart.length})`,
                     amount: -total,
+                    date: today,
                     time: now.toLocaleString()
                 });
 
@@ -1131,37 +1466,193 @@
             root.innerHTML = html;
         }
 
+        // Professional Guessing Forum Functions
+        function toggleGuessComposer() {
+            state.guessShowComposer = !state.guessShowComposer;
+            state.guessQuoteTargetId = null;
+            renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function toggleGuessSearchBar() {
+            state.guessShowSearchBar = !state.guessShowSearchBar;
+            renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function toggleOriginalPostFilter() {
+            state.guessFilterOriginalOnly = !state.guessFilterOriginalOnly;
+            renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function applyGuessFilters() {
+            let sEl = document.getElementById('gfSearchInput');
+            let mEl = document.getElementById('gfMarketFilter');
+            if (sEl) state.guessSearchQuery = sEl.value;
+            if (mEl) state.guessFilterMarket = mEl.value;
+            renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function insertGuessTemplate() {
+            let mEl = document.getElementById('guessMarket');
+            let tEl = document.getElementById('guessText');
+            if (!tEl) return;
+            let mName = mEl ? mEl.value : "MARKET";
+            tEl.value = `${mName} OPEN\n\n4\n9\n8\n\n48___49___98___97___87___82\n\n167___112___126___667\n260___125___170___117\n\nBest of luck 🤞🤞👍👍`;
+            tEl.focus();
+        }
+
+        function openQuoteBox(postId) {
+            state.guessQuoteTargetId = (state.guessQuoteTargetId === postId) ? null : postId;
+            state.guessShowComposer = false;
+            renderGuessingForum(document.getElementById('appRoot'));
+            if (state.guessQuoteTargetId) {
+                let qInput = document.getElementById(`quoteText_${postId}`);
+                if (qInput) qInput.focus();
+            }
+        }
+
+        function setQuickQuoteText(postId, txt) {
+            let qInput = document.getElementById(`quoteText_${postId}`);
+            if (qInput) qInput.value = txt;
+        }
+
+        function submitQuotePost(targetPostId) {
+            if (enforceNotBlocked()) return;
+            let target = state.guessingPosts.find(p => p.id === targetPostId);
+            let qInput = document.getElementById(`quoteText_${targetPostId}`);
+            if (!target || !qInput) return;
+            let text = qInput.value.trim();
+            if (!text) { alert("कृपया अपना Quote या बधाई संदेश लिखें!"); return; }
+
+            let user = state.users[state.currentUserPhone];
+            state.guessingPosts.push({
+                id: Date.now(),
+                phone: state.currentUserPhone,
+                name: user.name,
+                market: target.market,
+                text: text,
+                time: formatForumDateTime(),
+                likes: 0,
+                likedBy: [],
+                comments: [],
+                wishes: [],
+                chats: {},
+                quoteOf: {
+                    id: target.id,
+                    name: target.name,
+                    phone: target.phone,
+                    time: target.time,
+                    text: target.text
+                }
+            });
+            state.guessQuoteTargetId = null;
+            saveState();
+            renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function shareGuessPost(postId) {
+            let p = state.guessingPosts.find(x => x.id === postId);
+            if (!p) return;
+            let shareMsg = `🎯 M.KING Guessing (${p.market})\nBy ${p.name}:\n\n${p.text}\n\nJoin: ${REFERRAL_BASE_URL}`;
+            if (navigator.share) {
+                navigator.share({ title: `M.KING - ${p.market}`, text: shareMsg }).catch(() => {});
+            } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(shareMsg).then(() => alert("✅ गेसिंग पोस्ट कॉपी हो गई! अब WhatsApp पर शेयर करें।")).catch(() => fallbackCopyText(shareMsg));
+            } else {
+                fallbackCopyText(shareMsg);
+            }
+        }
+
+        function getGuesserRoleBadge(post) {
+            if (post.phone === DEFAULT_VIP_PHONE) return `<span class="gf-role-badge vip">VIP</span>`;
+            if ((post.likes || 0) >= 3) return `<span class="gf-role-badge">Expert</span>`;
+            return `<span class="gf-role-badge" style="border-color:#38bdf8; color:#38bdf8; background:rgba(56,189,248,0.1);">Guesser</span>`;
+        }
+
         function renderGuessingForum(root) {
             let marketOptions = state.markets.map(m => `<option value="${escapeHTML(m.name)}">${escapeHTML(m.name)}</option>`).join('');
+            let filterMarketOptions = `<option value="ALL" ${state.guessFilterMarket === 'ALL' ? 'selected' : ''}>All Markets</option>` +
+                state.markets.map(m => `<option value="${escapeHTML(m.name)}" ${state.guessFilterMarket === m.name ? 'selected' : ''}>${escapeHTML(m.name)}</option>`).join('');
+
             let html = `
-                <h3 style="margin-bottom:12px; color:var(--primary);">🔮 Guessing Forum</h3>
-                <div class="form-card">
-                    <h4 style="margin-bottom:8px; color:#ccc; font-size:13px;">अपनी गेसिंग (लकी नंबर) पोस्ट करें:</h4>
-                    <div class="input-group">
-                        <select id="guessMarket">${marketOptions}</select>
+                <div class="gf-toolbar">
+                    <div class="gf-icon-group">
+                        <button class="gf-icon-btn" onclick="renderGuessingForum(document.getElementById('appRoot'))" title="Refresh">🔄</button>
+                        <button class="gf-icon-btn ${state.guessShowSearchBar ? 'active' : ''}" onclick="toggleGuessSearchBar()" title="Search">🔍</button>
+                        <button class="gf-icon-btn ${state.guessFilterMarket !== 'ALL' ? 'active' : ''}" onclick="toggleGuessSearchBar()" title="Filter Market">🎛️</button>
+                        <button class="gf-icon-btn" onclick="alert('📌 Guessing Forum Rules:\\n1. यहाँ केवल अपने लकी नंबर और बधाई पोस्ट करें।\\n2. गाली-गलौज या स्पैम करने पर आपकी ID एडमिन द्वारा ब्लॉक कर दी जाएगी।')" title="Info">ℹ️</button>
                     </div>
-                    <div class="input-group">
-                        <textarea id="guessText" rows="2" placeholder="उदाहरण: Open 4 - 9 | Jodi 49, 94 | Panna 149"></textarea>
-                    </div>
-                    <button class="btn btn-play" style="width:100%;" onclick="postGuessing()">📤 Post Guessing</button>
+                    <button class="gf-post-cta" onclick="toggleGuessComposer()">Post Your Guess 💡</button>
                 </div>
-                <h4 style="margin-bottom:10px; color:#aaa; font-size:13px;">Live Guessing Posts:</h4>
+
+                <div class="gf-toggle-bar">
+                    <span style="color:#e2e8f0; font-weight:600;">💠 Original Post</span>
+                    <button class="gf-switch-pill ${state.guessFilterOriginalOnly ? 'on' : ''}" onclick="toggleOriginalPostFilter()">${state.guessFilterOriginalOnly ? 'ON' : 'OFF'}</button>
+                </div>
             `;
 
-            if (state.guessingPosts.length === 0) {
-                html += `<p style="text-align:center; color:#777;">कोई पोस्ट नहीं है।</p>`;
+            if (state.guessShowSearchBar) {
+                html += `
+                    <div class="form-card" style="padding:10px; margin-bottom:12px;">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                            <input type="text" id="gfSearchInput" value="${escapeHTML(state.guessSearchQuery)}" placeholder="नाम या अंक खोजें..." style="background:#111; border:1px solid #444; color:#fff; padding:8px; border-radius:8px; font-size:12px;" oninput="applyGuessFilters()">
+                            <select id="gfMarketFilter" style="background:#111; border:1px solid #444; color:#fff; padding:8px; border-radius:8px; font-size:12px;" onchange="applyGuessFilters()">${filterMarketOptions}</select>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (state.guessShowComposer) {
+                html += `
+                    <div class="form-card" style="border:1px solid var(--primary);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <h4 style="color:var(--primary); font-size:14px;">💡 Post Your Guess</h4>
+                            <button class="btn" style="background:#2c3e50; color:#fff; padding:4px 8px; font-size:11px;" onclick="insertGuessTemplate()">📋 Format</button>
+                        </div>
+                        <div class="input-group">
+                            <label>Market चुनें</label>
+                            <select id="guessMarket">${marketOptions}</select>
+                        </div>
+                        <div class="input-group">
+                            <label>आपकी गेसिंग (Open / Jodi / Panna)</label>
+                            <textarea id="guessText" rows="5" placeholder="जैसे:\nOPEN: 4 - 9 - 8\nJODI: 48, 49, 98\nPANNA: 167, 112, 260\nBest of luck 🤞👍"></textarea>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 2fr; gap:6px;">
+                            <button class="btn" style="background:#333; color:#fff;" onclick="toggleGuessComposer()">Cancel</button>
+                            <button class="btn btn-play" onclick="postGuessing()">📤 Publish Guess</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            let filteredPosts = state.guessingPosts.slice().reverse().filter(p => {
+                if (state.guessFilterOriginalOnly && p.quoteOf) return false;
+                if (state.guessFilterMarket !== "ALL" && p.market !== state.guessFilterMarket) return false;
+                if (state.guessSearchQuery.trim()) {
+                    let q = state.guessSearchQuery.trim().toLowerCase();
+                    let inName = (p.name || '').toLowerCase().includes(q);
+                    let inText = (p.text || '').toLowerCase().includes(q);
+                    let inMkt = (p.market || '').toLowerCase().includes(q);
+                    if (!inName && !inText && !inMkt) return false;
+                }
+                return true;
+            });
+
+            if (filteredPosts.length === 0) {
+                html += `<p style="text-align:center; color:#777; margin-top:25px;">कोई गेसिंग पोस्ट नहीं मिली।</p>`;
             } else {
-                state.guessingPosts.slice().reverse().forEach(p => {
+                filteredPosts.forEach(p => {
                     let userObj = state.users[p.phone] || { avatar: "" };
                     let avatarImg = safeImageURL(userObj.avatar, DEFAULT_AVATAR_SVG);
                     let isLiked = p.likedBy && p.likedBy.includes(state.currentUserPhone);
                     let likesCount = p.likes || 0;
+                    let commentsArr = Array.isArray(p.comments) ? p.comments : [];
                     let canDelete = (p.phone === state.currentUserPhone) || state.isAdminLoggedIn;
+                    let canAdminBlock = state.isAdminLoggedIn && p.phone !== DEFAULT_VIP_PHONE;
 
                     let commentsHtml = '';
-                    if (p.comments && p.comments.length > 0) {
-                        p.comments.forEach(c => {
-                            commentsHtml += `<div style="background:#111; padding:6px; margin-top:4px; border-radius:4px; font-size:11px; color:#ddd;"><b>${escapeHTML(c.name)}:</b> ${escapeHTML(c.text)}</div>`;
+                    if (commentsArr.length > 0) {
+                        commentsArr.forEach(c => {
+                            commentsHtml += `<div style="background:#11161d; padding:6px 9px; margin-top:4px; border-radius:6px; font-size:11px; color:#e2e8f0; border-left:2px solid var(--primary);"><b>${escapeHTML(c.name)}:</b> ${escapeHTML(c.text)}</div>`;
                         });
                     }
 
@@ -1170,38 +1661,81 @@
                         wishesHtml = `🎉 Wishes: ${p.wishes.map(escapeHTML).join(', ')}`;
                     }
 
+                    let bodyHtml = '';
+                    if (p.quoteOf) {
+                        let qUser = state.users[p.quoteOf.phone] || { avatar: "" };
+                        let qAvatar = safeImageURL(qUser.avatar, DEFAULT_AVATAR_SVG);
+                        bodyHtml = `
+                            <div class="gf-quote-box">
+                                <div class="gf-quote-head">
+                                    <span style="display:flex; align-items:center; gap:6px;"><img src="${qAvatar}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;"> <b style="color:#fff;">${escapeHTML(p.quoteOf.name)}</b> • ${escapeHTML(p.quoteOf.time || '')}</span>
+                                    <span style="font-size:15px;">❞</span>
+                                </div>
+                                <div class="gf-quote-text" style="color:#ffd89b; font-size:12px;">${escapeHTML(p.quoteOf.text)}</div>
+                            </div>
+                            <div class="gf-guess-body" style="padding:10px; font-size:13px;">${escapeHTML(p.text)}</div>
+                        `;
+                    } else {
+                        bodyHtml = `<div class="gf-guess-body">${escapeHTML(p.text)}</div>`;
+                    }
+
+                    let quoteComposerHtml = state.guessQuoteTargetId === p.id ? `
+                        <div style="margin:8px 10px; background:#11161d; border:1px solid #38bdf8; border-radius:10px; padding:10px;">
+                            <div style="font-size:11px; color:#38bdf8; margin-bottom:6px; font-weight:bold;">🔁 Quoting ${escapeHTML(p.name)}:</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px;">
+                                <button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id}, 'BIG CONGRATULATIONS 🎉🎉')">🎉 Congrats</button>
+                                <button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id}, 'PASS 🎯🔥')">🎯 Pass</button>
+                                <button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id}, 'Dil se badhai Boss! 👏')">👏 Badhai</button>
+                            </div>
+                            <textarea id="quoteText_${p.id}" rows="2" placeholder="अपना जवाब या बधाई लिखें..." style="width:100%; background:#0b0c10; border:1px solid #444; color:#fff; padding:8px; border-radius:8px; font-size:12px; margin-bottom:6px;"></textarea>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn" style="background:#333; color:#fff; padding:6px 10px; font-size:11px; flex:1;" onclick="openQuoteBox(${p.id})">Cancel</button>
+                                <button class="btn btn-play" style="padding:6px 10px; font-size:11px; flex:2;" onclick="submitQuotePost(${p.id})">Post Quote</button>
+                            </div>
+                        </div>
+                    ` : '';
+
                     html += `
-                        <div class="list-card" id="guessPostCard_${p.id}" style="border-left-color:var(--primary);">
-                            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:6px;">
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <img src="${avatarImg}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid var(--primary);">
+                        <div class="gf-card" id="guessPostCard_${p.id}">
+                            <div class="gf-card-head">
+                                <div class="gf-author-wrap">
+                                    <div class="gf-avatar-wrap">
+                                        <img src="${avatarImg}" class="gf-avatar" alt="Avatar">
+                                        <span class="gf-online-dot"></span>
+                                    </div>
                                     <div>
-                                        <b style="color:#fff; font-size:13px;">${escapeHTML(p.name)}</b><br>
-                                        <span style="font-size:10px; color:var(--green);">${escapeHTML(p.market)} • ${escapeHTML(p.time)}</span>
+                                        <div class="gf-author-name">${escapeHTML(p.name)} ${getGuesserRoleBadge(p)}</div>
+                                        <div class="gf-time">${escapeHTML(p.time)}</div>
                                     </div>
                                 </div>
-                                <div style="display:flex; gap:4px;">
-                                    <button class="btn" style="background:var(--blue); color:#fff; padding:5px 10px; font-size:11px;" onclick="openChatWithGuesser(${p.id})">💬 Chat / Gift</button>
-                                    ${canDelete ? `<button class="btn" style="background:var(--red); color:#fff; padding:5px 8px; font-size:11px;" onclick="deleteGuessingPost(${p.id})">🗑️</button>` : ''}
-                                </div>
-                            </div>
-                            
-                            <div style="font-size:14px; color:#fff; margin:8px 0; background:#111; padding:10px; border-radius:6px; border:1px dashed #444;">${escapeHTML(p.text)}</div>
-                            
-                            <div id="wishesContainer_${p.id}" style="margin-top:6px; font-size:11px; color:var(--green); ${wishesHtml ? '' : 'display:none;'}">${wishesHtml}</div>
-
-                            <div style="display:flex; gap:10px; margin-top:10px; font-size:12px; border-top:1px solid #333; padding-top:8px;">
-                                <button class="btn" id="likeBtn_${p.id}" style="background:${isLiked ? 'var(--red)' : '#333'}; color:#fff; padding:4px 10px; font-size:11px;" onclick="toggleLike(${p.id})">❤️ Like (${likesCount})</button>
-                                <button class="btn" style="background:#27ae60; color:#000; padding:4px 10px; font-size:11px;" onclick="sendWish(${p.id})">🎉 Wish Pass</button>
+                                <div class="gf-ribbon" title="${escapeHTML(p.market)}">${escapeHTML(p.market)}</div>
                             </div>
 
-                            <div style="margin-top:8px;">
-                                <div id="commentsContainer_${p.id}">${commentsHtml}</div>
-                                <div style="display:flex; gap:5px; margin-top:6px;">
-                                    <input type="text" id="commentInput_${p.id}" placeholder="कमेंट लिखें..." style="background:#111; border:1px solid #444; color:#fff; padding:6px; border-radius:4px; font-size:12px; flex:1;">
-                                    <button class="btn" style="background:var(--primary); color:#000; padding:6px 10px; font-size:11px;" onclick="addComment(${p.id})">Send</button>
-                                </div>
+                            ${bodyHtml}
+
+                            <div id="wishesContainer_${p.id}" style="margin:0 12px 8px 12px; font-size:11px; color:var(--green); ${wishesHtml ? '' : 'display:none;'}">${wishesHtml}</div>
+
+                            <div class="gf-meta-actions">
+                                <button class="gf-chip-btn ${isLiked ? 'liked' : ''}" id="likeBtn_${p.id}" onclick="toggleLike(${p.id})">❤️ Like (${likesCount})</button>
+                                <button class="gf-chip-btn" style="border-color:#27ae60; color:#2ecc71;" onclick="sendWish(${p.id})">🎉 Wish Pass</button>
+                                <button class="gf-chip-btn" style="border-color:#3498db; color:#63b3ed;" onclick="openChatWithGuesser(${p.id})">💬 Chat / Gift</button>
+                                ${canDelete ? `<button class="gf-chip-btn" style="border-color:var(--red); color:#ff7675;" onclick="deleteGuessingPost(${p.id})">🗑️</button>` : ''}
+                                ${canAdminBlock ? `<button class="gf-chip-btn" style="border-color:#a855f7; color:#d8b4fe;" data-phone="${escapeHTML(p.phone)}" data-postid="${p.id}" onclick="adminToggleBlockUser(this.dataset.phone, Number(this.dataset.postid))" title="Block User ID">🚫 Block</button>` : ''}
                             </div>
+
+                            ${quoteComposerHtml}
+
+                            <div class="gf-footer-bar">
+                                <span class="gf-stat-mini" title="Comments">💬 <span id="commentCount_${p.id}">${commentsArr.length}</span></span>
+                                <button class="gf-stat-mini" onclick="shareGuessPost(${p.id})" title="Share">🔗</button>
+                                <div class="gf-comment-pill">
+                                    <input type="text" id="commentInput_${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') addComment(${p.id})">
+                                    <button class="gf-send-icon" onclick="addComment(${p.id})">➤</button>
+                                </div>
+                                <button class="gf-quote-btn" onclick="openQuoteBox(${p.id})">🔁 Quote</button>
+                            </div>
+
+                            <div class="gf-comments-list" id="commentsContainer_${p.id}">${commentsHtml}</div>
                         </div>
                     `;
                 });
@@ -1210,6 +1744,7 @@
         }
 
         function postGuessing() {
+            if (enforceNotBlocked()) return;
             let mElem = document.getElementById('guessMarket');
             let tElem = document.getElementById('guessText');
             if (!mElem || !tElem) return;
@@ -1225,13 +1760,14 @@
                 name: user.name,
                 market: market,
                 text: text,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                time: formatForumDateTime(),
                 likes: 0,
                 likedBy: [],
                 comments: [],
                 wishes: [],
                 chats: {}
             });
+            state.guessShowComposer = false;
             saveState();
             renderGuessingForum(document.getElementById('appRoot'));
         }
@@ -1249,6 +1785,7 @@
         }
 
         function toggleLike(postId) {
+            if (enforceNotBlocked()) return;
             let post = state.guessingPosts.find(p => p.id === postId);
             if (!post) return;
             if (!post.likedBy) post.likedBy = [];
@@ -1265,12 +1802,13 @@
             saveState();
             let btn = document.getElementById(`likeBtn_${postId}`);
             if (btn) {
-                btn.style.background = nowLiked ? 'var(--red)' : '#333';
+                btn.classList.toggle('liked', nowLiked);
                 btn.innerText = `❤️ Like (${post.likes})`;
             }
         }
 
         function addComment(postId) {
+            if (enforceNotBlocked()) return;
             let input = document.getElementById(`commentInput_${postId}`);
             if (!input) return;
             let text = input.value.trim();
@@ -1285,14 +1823,17 @@
             let container = document.getElementById(`commentsContainer_${postId}`);
             if (container) {
                 let div = document.createElement('div');
-                div.style.cssText = "background:#111; padding:6px; margin-top:4px; border-radius:4px; font-size:11px; color:#ddd;";
+                div.style.cssText = "background:#11161d; padding:6px 9px; margin-top:4px; border-radius:6px; font-size:11px; color:#e2e8f0; border-left:2px solid var(--primary);";
                 div.innerHTML = `<b>${escapeHTML(user.name)}:</b> ${escapeHTML(text)}`;
                 container.appendChild(div);
                 input.value = '';
             }
+            let cnt = document.getElementById(`commentCount_${postId}`);
+            if (cnt) cnt.innerText = post.comments.length;
         }
 
         function sendWish(postId) {
+            if (enforceNotBlocked()) return;
             let post = state.guessingPosts.find(p => p.id === postId);
             if (!post) return;
             let user = state.users[state.currentUserPhone];
@@ -1387,7 +1928,7 @@
 
                 ${canChat ? `
                     <div style="display:flex; gap:6px;">
-                        <input type="text" id="chatInputText" placeholder="संदेश लिखें..." style="background:#111; border:1px solid #444; color:#fff; padding:10px; border-radius:8px; font-size:13px; flex:1;">
+                        <input type="text" id="chatInputText" placeholder="संदेश लिखें..." style="background:#111; border:1px solid #444; color:#fff; padding:10px; border-radius:8px; font-size:13px; flex:1;" data-postid="${postId}" data-buyer="${escapeHTML(targetBuyerPhone || '')}" onkeydown="if(event.key==='Enter') sendChatMessage(Number(this.dataset.postid), this.dataset.buyer)">
                         <button class="btn btn-play" data-postid="${postId}" data-buyer="${escapeHTML(targetBuyerPhone || '')}" onclick="sendChatMessage(Number(this.dataset.postid), this.dataset.buyer)">Send</button>
                     </div>
                 ` : `
@@ -1401,6 +1942,7 @@
         }
 
         function sendGift(postId, giftName, amount) {
+            if (enforceNotBlocked()) return;
             let currentUser = state.users[state.currentUserPhone];
             let post = state.guessingPosts.find(p => p.id === postId);
             if (!post || post.phone === state.currentUserPhone) return;
@@ -1426,9 +1968,10 @@
                 time: new Date().toLocaleTimeString()
             });
 
-            state.transactions.push({ phone: state.currentUserPhone, type: "Gift Sent to " + post.name, amount: -amount, time: new Date().toLocaleString() });
+            let today = getLocalDateString();
+            state.transactions.push({ phone: state.currentUserPhone, type: "Gift Sent to " + post.name, amount: -amount, date: today, time: new Date().toLocaleString() });
             if (guesserUser) {
-                state.transactions.push({ phone: post.phone, type: "Gift Received from " + currentUser.name, amount: amount, time: new Date().toLocaleString() });
+                state.transactions.push({ phone: post.phone, type: "Gift Received from " + currentUser.name, amount: amount, date: today, time: new Date().toLocaleString() });
             }
 
             saveState();
@@ -1437,6 +1980,7 @@
         }
 
         function sendChatMessage(postId, buyerPhone) {
+            if (enforceNotBlocked()) return;
             let input = document.getElementById('chatInputText');
             if (!input) return;
             let text = input.value.trim();
@@ -1508,18 +2052,28 @@
         }
 
         function submitDepositRequest() {
+            if (enforceNotBlocked()) return;
             let amtEl = document.getElementById('depAmtInput');
             let utrEl = document.getElementById('depUtrInput');
             if (!amtEl || !utrEl) return;
 
             let rawAmt = amtEl.value.trim();
-            let utr = utrEl.value.trim();
+            let utr = utrEl.value.trim().replace(/\s+/g, '').toUpperCase();
             if (!isStrictPositiveInt(rawAmt) || parseInt(rawAmt, 10) < 100) {
                 alert("❌ कृपया कम से कम ₹100 (केवल पूरे अंक) दर्ज करें!");
                 return;
             }
-            if (utr.length < 6) {
-                alert("❌ कृपया सही UTR / Transaction Ref नंबर दर्ज करें!");
+            if (!/^[A-Z0-9_-]{6,40}$/.test(utr)) {
+                alert("❌ कृपया कम से कम 6 अक्षर/अंकों का सही UTR / Transaction Ref नंबर दर्ज करें!");
+                return;
+            }
+
+            let isDuplicate = state.depositRequests.some(d =>
+                String(d.utr || '').replace(/\s+/g, '').toUpperCase() === utr &&
+                (d.status === "PENDING" || d.status === "APPROVED")
+            );
+            if (isDuplicate) {
+                alert("❌ यह UTR / Transaction नंबर पहले ही सबमिट या अप्रूव हो चुका है! कृपया डुप्लिकेट UTR न डालें।");
                 return;
             }
 
@@ -1531,8 +2085,11 @@
                 amount: parseInt(rawAmt, 10),
                 utr: utr,
                 status: "PENDING",
+                date: getLocalDateString(),
                 time: new Date().toLocaleString()
             });
+            amtEl.value = '';
+            utrEl.value = '';
             saveState();
             alert("डिपॉजिट रिक्वेस्ट एडमिन के पास भेज दी गई है! अप्रूव होते ही वॉलेट में बैलेंस जुड़ जाएगा।");
             navigate('profile');
@@ -1558,14 +2115,15 @@
             ta.select();
             try {
                 document.execCommand('copy');
-                alert("✅ Referral Link कॉपी हो गया:\n" + text);
+                alert("✅ Copied!\n" + text);
             } catch (e) {
-                prompt("नीचे से Referral Link कॉपी करें:", text);
+                prompt("नीचे से कॉपी करें:", text);
             }
             document.body.removeChild(ta);
         }
 
         function claimReferralToWallet() {
+            if (enforceNotBlocked()) return;
             let user = state.users[state.currentUserPhone];
             if (!user) return;
             let refBal = Number(user.referralBalance || 0);
@@ -1579,11 +2137,53 @@
                 phone: user.phone,
                 type: "Referral Commission Added to Wallet",
                 amount: refBal,
+                date: getLocalDateString(),
                 time: new Date().toLocaleString()
             });
             saveState();
             alert(`✅ ₹${refBal} रेफरल कमीशन आपके मेन वॉलेट में जुड़ गया है!`);
             navigate('profile');
+        }
+
+        function changePlayerPassword() {
+            if (enforceNotBlocked()) return;
+            let oldEl = document.getElementById('chgOldPass');
+            let newEl = document.getElementById('chgNewPass');
+            let confEl = document.getElementById('chgConfPass');
+            if (!oldEl || !newEl || !confEl) return;
+
+            let oldPass = oldEl.value.trim();
+            let newPass = newEl.value.trim();
+            let confPass = confEl.value.trim();
+            let user = state.users[state.currentUserPhone];
+
+            if (!oldPass || !newPass || !confPass) {
+                alert("❌ कृपया सभी पासवर्ड बॉक्स भरें!");
+                return;
+            }
+            if (!verifyPassword(oldPass, user.password)) {
+                alert("❌ आपका वर्तमान (Current) पासवर्ड गलत है!");
+                return;
+            }
+            if (newPass.length < 4) {
+                alert("❌ नया पासवर्ड कम से कम 4 अक्षर का होना चाहिए!");
+                return;
+            }
+            if (newPass !== confPass) {
+                alert("❌ दोनों नए पासवर्ड एक जैसे होने चाहिए!");
+                return;
+            }
+            if (newPass === oldPass) {
+                alert("❌ नया पासवर्ड पुराने पासवर्ड से अलग होना चाहिए!");
+                return;
+            }
+
+            user.password = hashPassword(newPass);
+            oldEl.value = '';
+            newEl.value = '';
+            confEl.value = '';
+            saveState();
+            alert("✅ आपका पासवर्ड सफलतापूर्वक बदल गया है!");
         }
 
         function renderProfile(root) {
@@ -1746,6 +2346,14 @@
                     </div>
                 </div>
 
+                <div class="form-card">
+                    <h4 style="margin-bottom:8px; color:var(--primary);">🔐 Change Password</h4>
+                    <div class="input-group"><label>Current Password</label><input type="password" id="chgOldPass" placeholder="पुराना पासवर्ड"></div>
+                    <div class="input-group"><label>New Password</label><input type="password" id="chgNewPass" placeholder="नया पासवर्ड (कम से कम 4 अक्षर)"></div>
+                    <div class="input-group"><label>Confirm New Password</label><input type="password" id="chgConfPass" placeholder="नया पासवर्ड दोबारा लिखें"></div>
+                    <button class="btn" style="background:var(--primary); color:#000; width:100%;" onclick="changePlayerPassword()">🔑 Update Password</button>
+                </div>
+
                 <div style="text-align:center; margin-top:15px;">
                     <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn" style="background:#27ae60; color:#fff; display:block; text-decoration:none; padding:12px; margin-bottom:8px;">💬 WhatsApp Support Team</a>
                     <button class="btn" style="background:#c0392b; color:#fff; width:100%; padding:10px;" onclick="logoutPlayer()">🔒 Logout</button>
@@ -1813,6 +2421,7 @@
         }
 
         function sendWithdrawalRequest() {
+            if (enforceNotBlocked()) return;
             let amtElem = document.getElementById('withdrawAmt');
             if (!amtElem) return;
             let rawAmt = amtElem.value.trim();
@@ -1836,14 +2445,17 @@
                 name: user.name,
                 amount: amt,
                 status: "PENDING",
+                date: getLocalDateString(),
                 time: new Date().toLocaleString()
             });
             state.transactions.push({
                 phone: user.phone,
                 type: "Withdrawal Requested",
                 amount: -amt,
+                date: getLocalDateString(),
                 time: new Date().toLocaleString()
             });
+            amtElem.value = '';
             saveState();
             alert("विड्रॉल रिक्वेस्ट एडमिन के पास भेज दी गई है!");
             navigate('profile');
@@ -1879,7 +2491,7 @@
                 <div class="form-card" style="max-width:350px; margin:40px auto; text-align:center;">
                     <h3 style="color:var(--primary); margin-bottom:15px;">🔐 Admin Login</h3>
                     <div class="input-group"><input type="text" id="admLoginPhone" placeholder="Admin Mobile Number"></div>
-                    <div class="input-group"><input type="password" id="admLoginPass" placeholder="Password"></div>
+                    <div class="input-group"><input type="password" id="admLoginPass" placeholder="Password" onkeydown="if(event.key==='Enter') verifyAdminLogin()"></div>
                     <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="verifyAdminLogin()">Login to Admin</button>
                 </div>
             `;
@@ -1910,8 +2522,304 @@
             navigate('adminLogin');
         }
 
+        function computeAdminPnL(dateFilter = null) {
+            let validBids = state.bids.filter(b => b.status !== "REFUNDED" && (!dateFilter || b.date === dateFilter));
+            let totalBidAmt = 0;
+            let totalWinPayout = 0;
+            let pendingBidAmt = 0;
+            validBids.forEach(b => {
+                totalBidAmt += Number(b.amount || 0);
+                if (b.status === "WON") totalWinPayout += Number(b.winAmount || 0);
+                if (b.status === "PENDING") pendingBidAmt += Number(b.amount || 0);
+            });
+            let netGamePnL = Math.round((totalBidAmt - totalWinPayout) * 100) / 100;
+
+            let approvedDeposits = state.depositRequests.filter(d => d.status === "APPROVED" && (!dateFilter || d.date === dateFilter))
+                .reduce((s, d) => s + Number(d.amount || 0), 0);
+            let approvedWithdrawals = state.withdrawRequests.filter(w => w.status === "APPROVED" && (!dateFilter || w.date === dateFilter))
+                .reduce((s, w) => s + Number(w.amount || 0), 0);
+
+            let totalWalletLiability = 0;
+            let totalRefEarnedAll = 0;
+            Object.values(state.users).forEach(u => {
+                if (!u.isSystem) {
+                    totalWalletLiability += Number(u.balance || 0) + Number(u.referralBalance || 0);
+                    totalRefEarnedAll += Number(u.referralTotalEarned || 0);
+                }
+            });
+
+            return {
+                bidsCount: validBids.length,
+                totalBidAmt: Math.round(totalBidAmt * 100) / 100,
+                totalWinPayout: Math.round(totalWinPayout * 100) / 100,
+                pendingBidAmt: Math.round(pendingBidAmt * 100) / 100,
+                netGamePnL,
+                approvedDeposits: Math.round(approvedDeposits * 100) / 100,
+                approvedWithdrawals: Math.round(approvedWithdrawals * 100) / 100,
+                totalWalletLiability: Math.round(totalWalletLiability * 100) / 100,
+                totalRefEarnedAll: Math.round(totalRefEarnedAll * 100) / 100
+            };
+        }
+
+        function renderPnLBox(dateFilter = null) {
+            let box = document.getElementById('admPnlBox');
+            if (!box) return;
+            let pnl = computeAdminPnL(dateFilter);
+            let pnlColor = pnl.netGamePnL >= 0 ? 'var(--green)' : 'var(--red)';
+            let pnlLabel = pnl.netGamePnL >= 0 ? 'Net Profit' : 'Net Loss';
+            let titleTag = dateFilter ? `Date: ${dateFilter}` : 'All Time';
+
+            box.innerHTML = `
+                <div style="font-size:11px; color:#aaa; margin-bottom:6px; text-align:center;">Showing: <b style="color:var(--primary)">${escapeHTML(titleTag)}</b> (${pnl.bidsCount} Bids)</div>
+                <div class="pnl-grid">
+                    <div class="pnl-card"><div class="pnl-val">₹${pnl.totalBidAmt}</div><div class="pnl-lbl">Total Bid Collection</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:var(--red);">₹${pnl.totalWinPayout}</div><div class="pnl-lbl">Winning Payout</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:${pnlColor};">₹${pnl.netGamePnL}</div><div class="pnl-lbl">Game ${pnlLabel}</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:var(--primary);">₹${pnl.pendingBidAmt}</div><div class="pnl-lbl">Pending Bids</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:var(--green);">₹${pnl.approvedDeposits}</div><div class="pnl-lbl">Approved Deposits</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:var(--blue);">₹${pnl.approvedWithdrawals}</div><div class="pnl-lbl">Approved Withdrawals</div></div>
+                </div>
+                <div style="background:#111; padding:8px; border-radius:6px; font-size:11px; display:flex; justify-content:space-between; border:1px solid #333;">
+                    <span>Players Wallet Liability: <b style="color:var(--primary)">₹${pnl.totalWalletLiability}</b></span>
+                    <span>Total Ref Given: <b style="color:var(--green)">₹${pnl.totalRefEarnedAll}</b></span>
+                </div>
+            `;
+        }
+
+        function adminFilterPnL(isAllTime) {
+            if (isAllTime) {
+                renderPnLBox(null);
+            } else {
+                let dEl = document.getElementById('admPnlDate');
+                renderPnLBox(dEl && dEl.value ? dEl.value : getLocalDateString());
+            }
+        }
+
+        function getPlayerPnLStats(phone) {
+            let userBids = state.bids.filter(b => b.phone === phone);
+            let validBids = userBids.filter(b => b.status !== "REFUNDED");
+            let settledBids = userBids.filter(b => b.status === "WON" || b.status === "LOST");
+
+            let totalBetAmt = validBids.reduce((s, b) => s + Number(b.amount || 0), 0);
+            let settledBetAmt = settledBids.reduce((s, b) => s + Number(b.amount || 0), 0);
+            let totalWonAmt = userBids.filter(b => b.status === "WON").reduce((s, b) => s + Number(b.winAmount || 0), 0);
+            let pendingAmt = userBids.filter(b => b.status === "PENDING").reduce((s, b) => s + Number(b.amount || 0), 0);
+
+            let playerNet = Math.round((totalWonAmt - settledBetAmt) * 100) / 100;
+            let houseNet = Math.round((settledBetAmt - totalWonAmt) * 100) / 100;
+
+            let approvedDeposits = state.depositRequests
+                .filter(d => d.phone === phone && d.status === "APPROVED")
+                .reduce((s, d) => s + Number(d.amount || 0), 0);
+            let adminAdded = state.transactions
+                .filter(t => t.phone === phone && t.type === "Admin Added")
+                .reduce((s, t) => s + Number(t.amount || 0), 0);
+            let approvedWithdraws = state.withdrawRequests
+                .filter(w => w.phone === phone && w.status === "APPROVED")
+                .reduce((s, w) => s + Number(w.amount || 0), 0);
+
+            return {
+                totalBidsCount: validBids.length,
+                totalBetAmt: Math.round(totalBetAmt * 100) / 100,
+                settledBetAmt: Math.round(settledBetAmt * 100) / 100,
+                totalWonAmt: Math.round(totalWonAmt * 100) / 100,
+                pendingAmt: Math.round(pendingAmt * 100) / 100,
+                playerNet,
+                houseNet,
+                totalDepositIn: Math.round((approvedDeposits + adminAdded) * 100) / 100,
+                approvedWithdraws: Math.round(approvedWithdraws * 100) / 100
+            };
+        }
+
+        function adminRenderPlayerDirectory(filterMode = 'search') {
+            let inputEl = document.getElementById('admProfSearchPhone');
+            let box = document.getElementById('admProfResultBox');
+            if (!box) return;
+
+            let query = inputEl ? inputEl.value.trim().toLowerCase() : '';
+            let players = Object.values(state.users).filter(u => !u.isSystem);
+
+            if (filterMode === 'blocked') {
+                players = players.filter(u => u.isBlocked);
+            } else if (query) {
+                players = players.filter(u =>
+                    u.phone.toLowerCase().includes(query) ||
+                    (u.name || '').toLowerCase().includes(query)
+                );
+            }
+
+            if (players.length === 0) {
+                box.innerHTML = `<p style="color:#aaa; padding:6px 0;">कोई मैचिंग प्लेयर नहीं मिला।</p>`;
+                return;
+            }
+
+            let html = `<div style="margin-bottom:6px; color:var(--primary); font-size:12px;"><b>Players Found: ${players.length}</b></div>`;
+            players.forEach(u => {
+                let stats = getPlayerPnLStats(u.phone);
+                let pColor = stats.playerNet >= 0 ? 'var(--green)' : 'var(--red)';
+                let pSign = stats.playerNet >= 0 ? '+' : '';
+                let statusBadge = u.isBlocked
+                    ? `<span class="loss-badge">BLOCKED</span>`
+                    : `<span class="win-badge">ACTIVE</span>`;
+                let blockBtnLabel = u.isBlocked ? '✅ Unblock' : '🚫 Block';
+                let blockBtnColor = u.isBlocked ? 'var(--green)' : 'var(--red)';
+                let blockBtnText = u.isBlocked ? '#000' : '#fff';
+
+                html += `
+                    <div style="background:#111; padding:8px; margin-bottom:6px; border-radius:6px; border-left:3px solid ${u.isBlocked ? 'var(--red)' : 'var(--green)'};">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                            <span><b>${escapeHTML(u.name)}</b> (ID: <b>${escapeHTML(u.phone)}</b>)</span>
+                            ${statusBadge}
+                        </div>
+                        <div style="font-size:11px; color:#ccc; margin-bottom:6px;">
+                            Wallet: <b style="color:var(--green)">₹${u.balance}</b> | Bet: <b>₹${stats.totalBetAmt}</b> | Win: <b>₹${stats.totalWonAmt}</b><br>
+                            Player P&L: <b style="color:${pColor}">${pSign}₹${stats.playerNet}</b> (${stats.playerNet >= 0 ? 'Player Profit' : 'Player Loss'})
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn" style="background:var(--blue); color:#fff; padding:5px 8px; font-size:11px; flex:1;" data-phone="${escapeHTML(u.phone)}" onclick="adminViewPlayerFullHistory(this.dataset.phone)">📊 Full History & P&L</button>
+                            <button class="btn" style="background:${blockBtnColor}; color:${blockBtnText}; padding:5px 8px; font-size:11px;" data-phone="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.phone)">${blockBtnLabel}</button>
+                        </div>
+                    </div>
+                `;
+            });
+            box.innerHTML = html;
+        }
+
+        function adminViewPlayerFullHistory(phone) {
+            let box = document.getElementById('admProfResultBox');
+            if (!box) return;
+            let user = state.users[phone];
+            if (!user || user.isSystem) {
+                box.innerHTML = `<span style="color:var(--red);">यह यूज़र रजिस्टर नहीं है!</span>`;
+                return;
+            }
+
+            let stats = getPlayerPnLStats(phone);
+            let referredCount = Object.values(state.users).filter(u => !u.isSystem && u.referredBy === phone).length;
+            let pColor = stats.playerNet >= 0 ? 'var(--green)' : 'var(--red)';
+            let hColor = stats.houseNet >= 0 ? 'var(--green)' : 'var(--red)';
+
+            let userBids = state.bids.filter(b => b.phone === phone).slice().reverse();
+            let bidsHtml = userBids.length === 0
+                ? `<small style="color:#aaa;">कोई बिड हिस्ट्री नहीं है।</small>`
+                : userBids.map(b => {
+                    let c = b.status === "WON" ? "var(--green)" : (b.status === "LOST" ? "var(--red)" : (b.status === "REFUNDED" ? "var(--blue)" : "var(--primary)"));
+                    return `<div style="background:#0b0c10; padding:6px; margin-bottom:4px; border-radius:4px; border-left:2px solid ${c}; font-size:11px;">
+                        <div style="display:flex; justify-content:space-between;"><b>${escapeHTML(b.marketName)} (${escapeHTML(b.session)})</b><b style="color:${c}">${escapeHTML(b.status)}</b></div>
+                        <div>${escapeHTML(b.gameType)} | Digit: <b>${escapeHTML(b.digit)}</b> | Bet: ₹${b.amount} ${b.status === 'WON' ? '| Win: ₹' + b.winAmount : ''}</div>
+                        <small style="color:#888">${escapeHTML(b.date)} ${escapeHTML(b.time)}</small>
+                    </div>`;
+                }).join('');
+
+            let userTxns = state.transactions.filter(t => t.phone === phone).slice().reverse();
+            let txnHtml = userTxns.length === 0
+                ? `<small style="color:#aaa;">कोई ट्रांजैक्शन नहीं है।</small>`
+                : userTxns.map(t => {
+                    let c = t.amount >= 0 ? 'var(--green)' : 'var(--red)';
+                    let s = t.amount >= 0 ? '+' : '';
+                    return `<div style="font-size:11px; color:#ccc; border-bottom:1px solid #222; padding:4px 0; display:flex; justify-content:space-between;"><span>${escapeHTML(t.type)}<br><small style="color:#777">${escapeHTML(t.time)}</small></span><b style="color:${c}">${s}₹${t.amount}</b></div>`;
+                }).join('');
+
+            let blockBtnLabel = user.isBlocked ? '✅ Unblock Player ID' : '🚫 Block Player ID';
+            let blockBtnColor = user.isBlocked ? 'var(--green)' : 'var(--red)';
+            let blockBtnText = user.isBlocked ? '#000' : '#fff';
+
+            box.innerHTML = `
+                <div style="background:#111; padding:10px; border-radius:6px; border:1px solid var(--primary);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <button class="btn" style="background:#333; color:#fff; padding:4px 8px; font-size:11px;" onclick="adminRenderPlayerDirectory('search')">← Back to List</button>
+                        <button class="btn" style="background:${blockBtnColor}; color:${blockBtnText}; padding:4px 8px; font-size:11px;" data-phone="${escapeHTML(user.phone)}" onclick="adminToggleBlockUser(this.dataset.phone)">${blockBtnLabel}</button>
+                    </div>
+
+                    <div style="font-size:12px; line-height:1.6; margin-bottom:8px;">
+                        <b>Name:</b> ${escapeHTML(user.name)} | <b>ID (Mobile):</b> ${escapeHTML(user.phone)} ${user.isBlocked ? '<span class="loss-badge">BLOCKED</span>' : '<span class="win-badge">ACTIVE</span>'}<br>
+                        ${user.isBlocked && user.blockReason ? `<b>Block Reason:</b> <span style="color:var(--red)">${escapeHTML(user.blockReason)}</span><br>` : ''}
+                        <b>Wallet Balance:</b> <b style="color:var(--green)">₹${user.balance}</b> | <b>Joined:</b> ${escapeHTML(user.joinedAt || 'N/A')}<br>
+                        <b>Referred By:</b> ${escapeHTML(user.referredBy || 'None')} | <b>Referred Friends:</b> ${referredCount} | <b>Ref Box:</b> ₹${Number(user.referralBalance || 0)}<br>
+                        <b>Bank:</b> ${escapeHTML(user.bankDetails || 'Not Provided')} | <b>UPI:</b> ${escapeHTML(user.upiDetails || 'Not Provided')}
+                    </div>
+
+                    <div class="pnl-grid">
+                        <div class="pnl-card"><div class="pnl-val">₹${stats.totalDepositIn}</div><div class="pnl-lbl">Total Deposited</div></div>
+                        <div class="pnl-card"><div class="pnl-val" style="color:var(--blue);">₹${stats.approvedWithdraws}</div><div class="pnl-lbl">Total Withdrawn</div></div>
+                        <div class="pnl-card"><div class="pnl-val">₹${stats.totalBetAmt} (${stats.totalBidsCount})</div><div class="pnl-lbl">Total Bids Placed</div></div>
+                        <div class="pnl-card"><div class="pnl-val" style="color:var(--green);">₹${stats.totalWonAmt}</div><div class="pnl-lbl">Total Winning</div></div>
+                        <div class="pnl-card"><div class="pnl-val" style="color:${pColor};">${stats.playerNet >= 0 ? '+' : ''}₹${stats.playerNet}</div><div class="pnl-lbl">Player Net ${stats.playerNet >= 0 ? 'Profit' : 'Loss'}</div></div>
+                        <div class="pnl-card"><div class="pnl-val" style="color:${hColor};">${stats.houseNet >= 0 ? '+' : ''}₹${stats.houseNet}</div><div class="pnl-lbl">Admin Net ${stats.houseNet >= 0 ? 'Profit' : 'Loss'}</div></div>
+                    </div>
+
+                    <div style="margin-top:8px; border-top:1px solid #333; padding-top:8px;">
+                        <b style="color:var(--primary); font-size:12px;">📜 Full Game Bids History (${userBids.length})</b>
+                        <div style="max-height:180px; overflow-y:auto; margin-top:5px;">${bidsHtml}</div>
+                    </div>
+
+                    <div style="margin-top:8px; border-top:1px solid #333; padding-top:8px;">
+                        <b style="color:var(--primary); font-size:12px;">📒 Full Wallet Transactions (${userTxns.length})</b>
+                        <div style="max-height:180px; overflow-y:auto; margin-top:5px;">${txnHtml}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function adminToggleBlockUser(phone, deletePostId = null) {
+            if (!phone || phone === DEFAULT_VIP_PHONE) {
+                alert("❌ सिस्टम VIP अकाउंट को ब्लॉक नहीं किया जा सकता!");
+                return;
+            }
+            let user = state.users[phone];
+            if (!user) {
+                alert("❌ यह मोबाइल नंबर रजिस्टर नहीं है!");
+                return;
+            }
+
+            if (!user.isBlocked) {
+                let reason = prompt(`${user.name} (${phone}) की ID ब्लॉक करने का कारण लिखें:`, "Abuse language / Spam in Guessing Forum");
+                if (reason === null) return;
+                user.isBlocked = true;
+                user.blockReason = reason.trim() || "Rule Violation";
+                if (deletePostId) {
+                    state.guessingPosts = state.guessingPosts.filter(p => p.id !== deletePostId);
+                }
+                saveState();
+                alert(`🚫 यूज़र ${phone} की ID ब्लॉक कर दी गई है! अब वह लॉगिन या गेम नहीं खेल पाएगा।`);
+            } else {
+                if (!confirm(`क्या आप ${user.name} (${phone}) की ID को अनब्लॉक (Unblock) करना चाहते हैं?`)) return;
+                user.isBlocked = false;
+                user.blockReason = "";
+                saveState();
+                alert(`✅ यूज़र ${phone} की ID अनब्लॉक हो गई है!`);
+            }
+
+            if (document.getElementById('admProfResultBox')) {
+                navigate('adminLogin');
+            } else if (document.getElementById('guessPostCard_' + deletePostId) || document.querySelector('.gf-toolbar')) {
+                renderGuessingForum(document.getElementById('appRoot'));
+            }
+        }
+
+        function adminBlockByInput() {
+            let el = document.getElementById('admBlockPhoneInput');
+            if (!el) return;
+            let phone = el.value.replace(/\D/g, '');
+            if (phone.length !== 10) {
+                alert("❌ कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!");
+                return;
+            }
+            adminToggleBlockUser(phone);
+        }
+
+        function adminDeleteGuessPost(postId) {
+            if (!confirm("क्या आप वाकई इस गेसिंग पोस्ट को डिलीट करना चाहते हैं?")) return;
+            state.guessingPosts = state.guessingPosts.filter(p => p.id !== postId);
+            saveState();
+            navigate('adminLogin');
+        }
+
         function renderAdmin(root) {
-            let marketOptions = state.markets.map(m => `<option value="${m.id}">${escapeHTML(m.name)} (${escapeHTML(m.openTime || '')} ${escapeHTML(m.openAmPm || '')} - ${escapeHTML(m.closeTime || '')} ${escapeHTML(m.closeAmPm || '')})</option>`).join('');
+            let marketOptions = state.markets.map(m => `<option value="${m.id}">${escapeHTML(m.name)} (${escapeHTML(m.openTime || '')} ${escapeHTML(m.openAmPm || '')} - ${escapeHTML(m.closeTime || '')} ${escapeHTML(m.closeAmPm || '')})${m.isHoliday ? ' [HOLIDAY]' : ''}</option>`).join('');
+
+            let allPlayersCount = Object.values(state.users).filter(u => !u.isSystem).length;
+            let blockedCount = Object.values(state.users).filter(u => !u.isSystem && u.isBlocked).length;
 
             let depositList = state.depositRequests.filter(d => d.status === "PENDING");
             let dHtml = depositList.length === 0 ? `<p style="color:#777; font-size:12px;">कोई नई डिपॉजिट रिक्वेस्ट नहीं है।</p>` : '';
@@ -1926,6 +2834,10 @@
                     </div>`;
             });
 
+            let pastDeposits = state.depositRequests.filter(d => d.status !== "PENDING").slice(-5).reverse();
+            let pastDHtml = pastDeposits.length === 0 ? '' : `<div style="margin-top:8px; border-top:1px solid #333; padding-top:6px;"><small style="color:#aaa;">Recent Processed Deposits:</small>` +
+                pastDeposits.map(d => `<div style="font-size:11px; color:#ccc; padding:3px 0; display:flex; justify-content:space-between;"><span>${escapeHTML(d.phone)} • ₹${d.amount} (${escapeHTML(d.utr)})</span><b style="color:${d.status === 'APPROVED' ? 'var(--green)' : 'var(--red)'}">${escapeHTML(d.status)}</b></div>`).join('') + `</div>`;
+
             let withdrawList = state.withdrawRequests.filter(w => w.status === "PENDING");
             let wHtml = withdrawList.length === 0 ? `<p style="color:#777; font-size:12px;">कोई नई विड्रॉल रिक्वेस्ट नहीं है।</p>` : '';
             withdrawList.forEach(w => {
@@ -1939,6 +2851,10 @@
                     </div>`;
             });
 
+            let pastWithdraws = state.withdrawRequests.filter(w => w.status !== "PENDING").slice(-5).reverse();
+            let pastWHtml = pastWithdraws.length === 0 ? '' : `<div style="margin-top:8px; border-top:1px solid #333; padding-top:6px;"><small style="color:#aaa;">Recent Processed Withdrawals:</small>` +
+                pastWithdraws.map(w => `<div style="font-size:11px; color:#ccc; padding:3px 0; display:flex; justify-content:space-between;"><span>${escapeHTML(w.phone)} • ₹${w.amount}</span><b style="color:${w.status === 'APPROVED' ? 'var(--green)' : 'var(--red)'}">${escapeHTML(w.status)}</b></div>`).join('') + `</div>`;
+
             let forgotListHtml = state.forgotRequests.length === 0 ? `<p style="color:#777; font-size:12px;">कोई पासवर्ड रिकवरी रिक्वेस्ट नहीं है।</p>` : '';
             state.forgotRequests.slice().reverse().forEach(f => {
                 forgotListHtml += `
@@ -1949,12 +2865,76 @@
                 `;
             });
 
+            let guessModList = state.guessingPosts.slice().reverse().slice(0, 15);
+            let guessModHtml = guessModList.length === 0
+                ? `<p style="color:#777; font-size:12px;">कोई गेसिंग पोस्ट नहीं है।</p>`
+                : guessModList.map(p => {
+                    let author = state.users[p.phone];
+                    let isVip = p.phone === DEFAULT_VIP_PHONE;
+                    let isBlk = author && author.isBlocked;
+                    return `
+                        <div style="background:#111; padding:8px; margin-bottom:6px; border-radius:6px; font-size:11px; border-left:3px solid ${isBlk ? 'var(--red)' : 'var(--primary)'};">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+                                <b>${escapeHTML(p.name)} (${escapeHTML(p.phone)})</b>
+                                <span style="color:var(--green)">${escapeHTML(p.market)}</span>
+                            </div>
+                            <div style="color:#ddd; margin-bottom:6px; background:#0b0c10; padding:5px; border-radius:4px; white-space:pre-wrap;">${escapeHTML(p.text)}</div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn" style="background:var(--red); color:#fff; padding:4px 8px; font-size:10px;" onclick="adminDeleteGuessPost(${p.id})">🗑️ Delete Post</button>
+                                ${!isVip ? `<button class="btn" style="background:${isBlk ? 'var(--green)' : '#8e44ad'}; color:${isBlk ? '#000' : '#fff'}; padding:4px 8px; font-size:10px;" data-phone="${escapeHTML(p.phone)}" data-postid="${p.id}" onclick="adminToggleBlockUser(this.dataset.phone, ${isBlk ? 'null' : 'Number(this.dataset.postid)'})">${isBlk ? '✅ Unblock ID' : '🚫 Block ID & Del'}</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            let ratesHtml = state.gameRates.map((r, idx) => `
+                <div class="input-group">
+                    <label>${escapeHTML(r.name)} Rate</label>
+                    <input type="text" id="rateInput_${idx}" value="${escapeHTML(r.rate)}">
+                </div>
+            `).join('');
+
             let todayStr = getLocalDateString();
 
             root.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <h3 style="color:var(--primary);">⚙️ Admin Dashboard</h3>
                     <button class="btn" style="background:var(--red); color:#fff; padding:6px 10px; font-size:11px;" onclick="adminLogout()">Logout</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4>📈 Profit / Loss & Business Dashboard</h4>
+                    <div style="display:grid; grid-template-columns:2fr 1fr; gap:6px; margin-bottom:8px;">
+                        <input type="date" id="admPnlDate" value="${todayStr}" onchange="adminFilterPnL(false)" style="background:#111; border:1px solid #444; color:#fff; padding:8px; border-radius:8px; font-size:13px;">
+                        <button class="btn" style="background:var(--blue); color:#fff; font-size:12px;" onclick="adminFilterPnL(true)">All Time</button>
+                    </div>
+                    <div id="admPnlBox"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h4>🔍 Search Players & Full Loss/Profit History (Total: ${allPlayersCount} | Blocked: ${blockedCount})</h4>
+                    <div class="input-group">
+                        <input type="text" id="admProfSearchPhone" oninput="adminRenderPlayerDirectory('search')" placeholder="🔍 Search by Player Mobile Number (ID) or Name...">
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">
+                        <button class="btn" style="background:var(--blue); color:#fff; font-size:11px;" onclick="adminRenderPlayerDirectory('search')">🔍 Search</button>
+                        <button class="btn" style="background:#2c3e50; color:#fff; font-size:11px;" onclick="document.getElementById('admProfSearchPhone').value=''; adminRenderPlayerDirectory('all')">👥 All (${allPlayersCount})</button>
+                        <button class="btn" style="background:#8e44ad; color:#fff; font-size:11px;" onclick="adminRenderPlayerDirectory('blocked')">🚫 Blocked (${blockedCount})</button>
+                    </div>
+                    <div id="admProfResultBox" style="margin-top:10px; font-size:12px; max-height:360px; overflow-y:auto;"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h4>🚫 Block / Unblock Player ID & Guessing Moderation</h4>
+                    <div class="input-group">
+                        <label>Mobile Number (ID) से सीधे Block / Unblock करें</label>
+                        <div style="display:flex; gap:6px;">
+                            <input type="tel" id="admBlockPhoneInput" maxlength="10" placeholder="Player Mobile Number (10 Digits)">
+                            <button class="btn" style="background:var(--red); color:#fff; white-space:nowrap;" onclick="adminBlockByInput()">🚫 Block / Unblock</button>
+                        </div>
+                    </div>
+                    <div style="font-size:12px; color:#aaa; margin-bottom:6px;">Recent Guessing Forum Posts (Abuse Language Control):</div>
+                    <div style="max-height:240px; overflow-y:auto;">${guessModHtml}</div>
                 </div>
 
                 <div class="admin-section">
@@ -1965,6 +2945,7 @@
                 <div class="admin-section">
                     <h4>💰 Player Deposit Requests (${depositList.length})</h4>
                     ${dHtml}
+                    ${pastDHtml}
                 </div>
 
                 <div class="admin-section">
@@ -2000,18 +2981,9 @@
                 </div>
 
                 <div class="admin-section">
-                    <h4>👤 Player Profile & Wallet Check</h4>
-                    <div class="input-group"><input type="text" id="admProfSearchPhone" placeholder="Player Mobile Number"></div>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-                        <button class="btn" style="background:var(--blue); color:#fff;" onclick="adminSearchPlayerProfile()">Search Player</button>
-                        <button class="btn" style="background:#2c3e50; color:#fff;" onclick="adminShowAllUsers()">👥 All Players</button>
-                    </div>
-                    <div id="admProfResultBox" style="margin-top:10px; font-size:12px; max-height:240px; overflow-y:auto;"></div>
-                </div>
-
-                <div class="admin-section">
                     <h4>5️⃣ Player Withdrawal Requests (${withdrawList.length})</h4>
                     ${wHtml}
+                    ${pastWHtml}
                 </div>
 
                 <div class="admin-section">
@@ -2027,7 +2999,7 @@
                 </div>
 
                 <div class="admin-section">
-                    <h4>2️⃣ Market & AM/PM Timing Management</h4>
+                    <h4>2️⃣ Market, Timing & Holiday Management</h4>
                     <div class="input-group"><input type="text" id="admMarketName" placeholder="Market Name (e.g. KALYAN)"></div>
                     <div style="display:grid; grid-template-columns:2fr 1fr; gap:5px;">
                         <div class="input-group"><input type="text" id="admOpenTime" placeholder="Open Time (04:15)"></div>
@@ -2039,19 +3011,17 @@
                     </div>
                     <button class="btn" style="background:var(--blue); color:#fff; width:100%; margin-bottom:12px;" onclick="adminAddMarket()">➕ Add Market</button>
 
-                    <div class="input-group"><label>Edit / Delete Existing Market</label><select id="admDelMarketId" onchange="loadMarketForEdit()">${marketOptions}</select></div>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                    <div class="input-group"><label>Select Market (Edit / Holiday / Delete)</label><select id="admDelMarketId" onchange="loadMarketForEdit()">${marketOptions}</select></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
                         <button class="btn" style="background:var(--primary); color:#000;" onclick="adminEditMarket()">✏️ Update Selected</button>
-                        <button class="btn" style="background:var(--red); color:#fff;" onclick="adminDelMarket()">❌ Delete Market</button>
+                        <button class="btn" style="background:#8e44ad; color:#fff;" onclick="toggleMarketHoliday()">🏖️ Holiday ON/OFF</button>
                     </div>
+                    <button class="btn" style="background:var(--red); color:#fff; width:100%;" onclick="adminDelMarket()">❌ Delete Market</button>
                 </div>
 
                 <div class="admin-section">
                     <h4>📊 Manage Game Rates</h4>
-                    <div class="input-group"><label>Single Digit Rate</label><input type="text" id="rateSingle" value="${escapeHTML(state.gameRates[0]?.rate || '10 ka 95')}"></div>
-                    <div class="input-group"><label>Jodi Digit Rate</label><input type="text" id="rateJodi" value="${escapeHTML(state.gameRates[1]?.rate || '10 ka 950')}"></div>
-                    <div class="input-group"><label>Single Panna Rate</label><input type="text" id="rateSP" value="${escapeHTML(state.gameRates[2]?.rate || '10 ka 1400')}"></div>
-                    <div class="input-group"><label>Double Panna Rate</label><input type="text" id="rateDP" value="${escapeHTML(state.gameRates[3]?.rate || '10 ka 2800')}"></div>
+                    ${ratesHtml}
                     <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="adminSaveRates()">💾 Save Rates</button>
                 </div>
 
@@ -2060,7 +3030,10 @@
                     <div class="input-group"><label>Market</label><select id="admResMarket">${marketOptions}</select></div>
                     <div class="input-group"><label>Bids Date (किस तारीख की बिड्स सेटल करनी हैं)</label><input type="date" id="admResDate" value="${todayStr}"></div>
                     <div class="input-group"><label>Result String</label><input type="text" id="admResStr" placeholder="जैसे: 123-6*-*** (सिर्फ Open) या 123-68-459 (Full)"></div>
-                    <button class="btn" style="background:var(--primary); color:#000; width:100%;" onclick="adminDeclare()">Publish Result</button>
+                    <div style="display:grid; grid-template-columns:2fr 1fr; gap:6px;">
+                        <button class="btn" style="background:var(--primary); color:#000;" onclick="adminDeclare()">Publish Result</button>
+                        <button class="btn" style="background:#2c3e50; color:#fff;" onclick="adminResetMarketResult()">🔄 Reset (***)</button>
+                    </div>
                 </div>
 
                 <div class="admin-section">
@@ -2077,6 +3050,9 @@
                     <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="adminSaveSettings()">Save Settings</button>
                 </div>
             `;
+
+            renderPnLBox(todayStr);
+            adminRenderPlayerDirectory('all');
         }
 
         function adminResetUserPassword(phone, reqId) {
@@ -2096,13 +3072,14 @@
             if (!req || req.status !== "PENDING") return;
             req.status = "APPROVED";
             if (!state.users[req.phone]) {
-                state.users[req.phone] = { name: req.name || ("Player " + req.phone.slice(-4)), balance: 0, phone: req.phone, password: "", avatar: "", bankDetails: "", upiDetails: "", referredBy: null, referralBalance: 0, referralTotalEarned: 0, referralHistory: [], referralFirstBonusPaid: false, referralTotalDeposited: 0, joinedAt: new Date().toLocaleDateString() };
+                state.users[req.phone] = { name: req.name || ("Player " + req.phone.slice(-4)), balance: 0, phone: req.phone, password: "", avatar: "", bankDetails: "", upiDetails: "", referredBy: null, referralBalance: 0, referralTotalEarned: 0, referralHistory: [], referralFirstBonusPaid: false, referralTotalDeposited: 0, isBlocked: false, blockReason: "", joinedAt: new Date().toLocaleDateString() };
             }
             state.users[req.phone].balance = Math.round((state.users[req.phone].balance + req.amount) * 100) / 100;
             state.transactions.push({
                 phone: req.phone,
                 type: `Deposit Approved (UTR: ${req.utr})`,
                 amount: req.amount,
+                date: getLocalDateString(),
                 time: new Date().toLocaleString()
             });
             processReferralDeposit(req.phone, req.amount);
@@ -2225,58 +3202,6 @@
             box.innerHTML = html;
         }
 
-        function adminSearchPlayerProfile() {
-            let phoneElem = document.getElementById('admProfSearchPhone');
-            let box = document.getElementById('admProfResultBox');
-            if (!phoneElem || !box) return;
-
-            let phone = phoneElem.value.trim();
-            if (!phone) { alert("कृपया मोबाइल नंबर दर्ज करें!"); return; }
-            let user = state.users[phone];
-
-            if (!user) {
-                box.innerHTML = `<span style="color:var(--red);">यह यूजर रजिस्टर नहीं है!</span>`;
-                return;
-            }
-
-            let referredCount = Object.values(state.users).filter(u => !u.isSystem && u.referredBy === phone).length;
-            let userTxns = state.transactions.filter(t => t.phone === phone);
-            let txnHtml = userTxns.length === 0 ? `<small style="color:#aaa">कोई ट्रांजैक्शन नहीं है।</small>` : '';
-            userTxns.slice().reverse().forEach(t => {
-                txnHtml += `<div style="font-size:11px; color:#ccc; border-bottom:1px solid #333; padding:2px 0;">${escapeHTML(t.type)}: <b>₹${t.amount}</b> (${escapeHTML(t.time)})</div>`;
-            });
-
-            box.innerHTML = `
-                <div style="background:#111; padding:10px; border-radius:6px; margin-top:5px;">
-                    <b>Name:</b> ${escapeHTML(user.name)}<br>
-                    <b>Phone:</b> ${escapeHTML(user.phone)}<br>
-                    <b>Current Balance:</b> <b style="color:var(--green)">₹${user.balance}</b><br>
-                    <b>Referred By:</b> ${escapeHTML(user.referredBy || 'None')}<br>
-                    <b>Total Referred:</b> ${referredCount} | <b>Ref Box:</b> ₹${Number(user.referralBalance || 0)} (Total Earned: ₹${Number(user.referralTotalEarned || 0)})<br>
-                    <b>Bank Details:</b> ${escapeHTML(user.bankDetails || 'Not Provided')}<br>
-                    <b>UPI Details:</b> ${escapeHTML(user.upiDetails || 'Not Provided')}<br>
-                    <hr style="border-color:#333; margin:6px 0;">
-                    <b>Wallet Transactions:</b><br>
-                    ${txnHtml}
-                </div>
-            `;
-        }
-
-        function adminShowAllUsers() {
-            let box = document.getElementById('admProfResultBox');
-            if (!box) return;
-            let players = Object.values(state.users).filter(u => !u.isSystem);
-            if (players.length === 0) {
-                box.innerHTML = `<p style="color:#aaa;">कोई प्लेयर रजिस्टर नहीं है।</p>`;
-                return;
-            }
-            let html = `<div style="margin-bottom:6px; color:var(--primary);"><b>Total Players: ${players.length}</b></div>`;
-            players.forEach(u => {
-                html += `<div style="background:#111; padding:6px 8px; margin-bottom:4px; border-radius:4px; display:flex; justify-content:space-between;"><span><b>${escapeHTML(u.name)}</b> (${escapeHTML(u.phone)})</span><b style="color:var(--green)">₹${u.balance}</b></div>`;
-            });
-            box.innerHTML = html;
-        }
-
         function approveWithdraw(id) {
             let req = state.withdrawRequests.find(w => w.id === id);
             if (req && req.status === "PENDING") {
@@ -2297,6 +3222,7 @@
                         phone: req.phone,
                         type: "Withdrawal Rejected (Refund)",
                         amount: req.amount,
+                        date: getLocalDateString(),
                         time: new Date().toLocaleString()
                     });
                 }
@@ -2322,12 +3248,13 @@
             }
             let amt = parseInt(rawAmt, 10);
             if (!state.users[phone]) {
-                state.users[phone] = { name: "Player " + phone.slice(-4), balance: 0, phone, password: "", avatar: "", bankDetails: "", upiDetails: "", referredBy: null, referralBalance: 0, referralTotalEarned: 0, referralHistory: [], referralFirstBonusPaid: false, referralTotalDeposited: 0, joinedAt: new Date().toLocaleDateString() };
+                state.users[phone] = { name: "Player " + phone.slice(-4), balance: 0, phone, password: "", avatar: "", bankDetails: "", upiDetails: "", referredBy: null, referralBalance: 0, referralTotalEarned: 0, referralHistory: [], referralFirstBonusPaid: false, referralTotalDeposited: 0, isBlocked: false, blockReason: "", joinedAt: new Date().toLocaleDateString() };
             }
 
+            let today = getLocalDateString();
             if (action === 'add') {
                 state.users[phone].balance = Math.round((state.users[phone].balance + amt) * 100) / 100;
-                state.transactions.push({ phone, type: "Admin Added", amount: amt, time: new Date().toLocaleString() });
+                state.transactions.push({ phone, type: "Admin Added", amount: amt, date: today, time: new Date().toLocaleString() });
                 if (depChk && depChk.checked) {
                     processReferralDeposit(phone, amt);
                 }
@@ -2337,11 +3264,12 @@
                     return;
                 }
                 state.users[phone].balance = Math.round((state.users[phone].balance - amt) * 100) / 100;
-                state.transactions.push({ phone, type: "Admin Deducted", amount: -amt, time: new Date().toLocaleString() });
+                state.transactions.push({ phone, type: "Admin Deducted", amount: -amt, date: today, time: new Date().toLocaleString() });
             }
             amtElem.value = '';
             saveState();
             alert("बैलेंस अपडेट हो गया!");
+            navigate('adminLogin');
         }
 
         function isValidTimeFormat(str) {
@@ -2367,7 +3295,7 @@
                 return;
             }
             let newId = state.markets.length > 0 ? Math.max(...state.markets.map(m => m.id)) + 1 : 1;
-            state.markets.push({ id: newId, name, openTime, openAmPm, closeTime, closeAmPm, result: "***-**-***", chart: [] });
+            state.markets.push({ id: newId, name, openTime, openAmPm, closeTime, closeAmPm, result: "***-**-***", resultDate: getLocalDateString(), isHoliday: false, chart: [] });
             saveState();
             alert("मार्केट जुड़ गई!");
             navigate('adminLogin');
@@ -2424,6 +3352,19 @@
             navigate('adminLogin');
         }
 
+        function toggleMarketHoliday() {
+            let sel = document.getElementById('admDelMarketId');
+            if (!sel) return;
+            let mId = parseInt(sel.value, 10);
+            let market = state.markets.find(m => m.id === mId);
+            if (!market) return;
+
+            market.isHoliday = !market.isHoliday;
+            saveState();
+            alert(`🏖️ "${market.name}" अब ${market.isHoliday ? 'HOLIDAY (आज बंद)' : 'ACTIVE (चालू)'} है!`);
+            navigate('adminLogin');
+        }
+
         function adminDelMarket() {
             let delElem = document.getElementById('admDelMarketId');
             if (!delElem) return;
@@ -2434,6 +3375,7 @@
             if (!confirm(`क्या आप वाकई "${market.name}" मार्केट डिलीट करना चाहते हैं? इसकी सभी PENDING बिड्स का पैसा यूज़र्स को वापस कर दिया जाएगा।`)) return;
 
             let refundedCount = 0;
+            let today = getLocalDateString();
             state.bids.forEach(b => {
                 if (b.marketId === mId && b.status === "PENDING") {
                     b.status = "REFUNDED";
@@ -2443,6 +3385,7 @@
                             phone: b.phone,
                             type: `Market Deleted Refund (${b.marketName})`,
                             amount: b.amount,
+                            date: today,
                             time: new Date().toLocaleString()
                         });
                     }
@@ -2457,27 +3400,22 @@
         }
 
         function adminSaveRates() {
-            let r1 = document.getElementById('rateSingle');
-            let r2 = document.getElementById('rateJodi');
-            let r3 = document.getElementById('rateSP');
-            let r4 = document.getElementById('rateDP');
-            if (!r1 || !r2 || !r3 || !r4) return;
-
             const ratePattern = /^\d+(?:\.\d+)?\s*ka\s*\d+(?:\.\d+)?$/i;
-            let vals = [r1.value.trim(), r2.value.trim(), r3.value.trim(), r4.value.trim()];
-            if (vals.some(v => !ratePattern.test(v))) {
-                alert("❌ कृपया सभी रेट्स '10 ka 95' के फॉर्मेट में लिखें!");
-                return;
+            let updated = [];
+            for (let i = 0; i < state.gameRates.length; i++) {
+                let el = document.getElementById(`rateInput_${i}`);
+                if (!el) return;
+                let val = el.value.trim();
+                if (!ratePattern.test(val)) {
+                    alert(`❌ कृपया "${state.gameRates[i].name}" का रेट '10 ka 95' के फॉर्मेट में लिखें!`);
+                    return;
+                }
+                updated.push({ name: state.gameRates[i].name, rate: val });
             }
 
-            state.gameRates = [
-                { name: "Single Digit", rate: vals[0] },
-                { name: "Jodi Digit", rate: vals[1] },
-                { name: "Single Panna", rate: vals[2] },
-                { name: "Double Panna", rate: vals[3] }
-            ];
+            state.gameRates = updated;
             saveState();
-            alert("गेम रेट्स सफलतापूर्वक अपडेट हो गए!");
+            alert("सभी गेम रेट्स सफलतापूर्वक अपडेट हो गए!");
         }
 
         function getRateMultiplier(gameType) {
@@ -2494,11 +3432,26 @@
             if (gameType === "Jodi Digit") return 95;
             if (gameType === "Single Panna") return 140;
             if (gameType === "Double Panna") return 280;
+            if (gameType === "Triple Panna") return 600;
+            if (gameType === "Half Sangam") return 1000;
+            if (gameType === "Full Sangam") return 10000;
             return 0;
         }
 
         function pannaSumDigit(pannaStr) {
             return String((parseInt(pannaStr[0], 10) + parseInt(pannaStr[1], 10) + parseInt(pannaStr[2], 10)) % 10);
+        }
+
+        function adminResetMarketResult() {
+            let mElem = document.getElementById('admResMarket');
+            if (!mElem) return;
+            let mId = parseInt(mElem.value, 10);
+            let market = state.markets.find(m => m.id === mId);
+            if (!market) return;
+            market.result = "***-**-***";
+            market.resultDate = getMarketCycleDate(market, new Date());
+            saveState();
+            alert(`"${market.name}" का रिजल्ट ***-**-*** पर रीसेट हो गया!`);
         }
 
         function adminDeclare() {
@@ -2542,7 +3495,12 @@
                 return;
             }
 
-            market.result = resStr;
+            let currentCycleDate = getMarketCycleDate(market, new Date());
+            if (targetDate >= currentCycleDate) {
+                market.result = resStr;
+                market.resultDate = targetDate;
+            }
+
             if (hasFullJodi) {
                 if (!(market.lastChartDate === targetDate && market.chart[market.chart.length - 1] === resStr)) {
                     market.chart.push(resStr);
@@ -2555,6 +3513,7 @@
             let settledCount = 0;
             let wonCount = 0;
             let totalPayout = 0;
+            let nowDateStr = getLocalDateString();
 
             state.bids.forEach(b => {
                 if (b.marketId !== mId || b.status !== "PENDING" || b.date !== targetDate) return;
@@ -2575,13 +3534,30 @@
                         canSettle = true;
                         win = (b.digit === jodi);
                     }
-                } else if (b.gameType === "Single Panna" || b.gameType === "Double Panna") {
+                } else if (b.gameType === "Single Panna" || b.gameType === "Double Panna" || b.gameType === "Triple Panna") {
                     if (b.session === "OPEN" && hasOpen) {
                         canSettle = true;
                         win = (b.digit === openPanna);
                     } else if (b.session === "CLOSE" && hasClose) {
                         canSettle = true;
                         win = (b.digit === closePanna);
+                    }
+                } else if (b.gameType === "Half Sangam") {
+                    if (hasOpen && hasClose && hasFullJodi) {
+                        canSettle = true;
+                        let segs = String(b.digit || "").split('-');
+                        if (segs.length === 2) {
+                            if (segs[0].length === 1 && segs[1].length === 3) {
+                                win = (segs[0] === openDigit && segs[1] === closePanna);
+                            } else if (segs[0].length === 3 && segs[1].length === 1) {
+                                win = (segs[0] === openPanna && segs[1] === closeDigit);
+                            }
+                        }
+                    }
+                } else if (b.gameType === "Full Sangam") {
+                    if (hasOpen && hasClose && hasFullJodi) {
+                        canSettle = true;
+                        win = (b.digit === `${openPanna}-${closePanna}`);
                     }
                 }
 
@@ -2599,6 +3575,7 @@
                                 phone: b.phone,
                                 type: `Won (${b.marketName} - ${b.gameType})`,
                                 amount: b.winAmount,
+                                date: nowDateStr,
                                 time: new Date().toLocaleString()
                             });
                         }
@@ -2637,7 +3614,13 @@
             alert("सेटिंग्स सेव हो गई!");
         }
 
-        if (!state.currentUserPhone || !state.users[state.currentUserPhone]) {
+        syncDailyMarketResults();
+
+        if (!state.currentUserPhone || !state.users[state.currentUserPhone] || state.users[state.currentUserPhone].isBlocked) {
+            if (state.currentUserPhone && state.users[state.currentUserPhone] && state.users[state.currentUserPhone].isBlocked) {
+                localStorage.removeItem('mk_logged_in_phone');
+                state.currentUserPhone = null;
+            }
             renderLoginScreen();
         } else {
             let mh = document.getElementById('mainHeader');
