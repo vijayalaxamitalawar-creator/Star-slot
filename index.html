@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -52,7 +53,7 @@
         .game-rate { font-size: 11px; color: var(--green); margin-top: 3px; }
 
         .form-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #333; margin-bottom: 15px; }
-        .input-group { margin-bottom: 12px; }
+        .input-group { margin-bottom: 12px; text-align: left; }
         .input-group label { display: block; font-size: 12px; color: #bbb; margin-bottom: 5px; }
         .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 11px; background: #111; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 14px; }
         .bid-cart-item { background: #14181f; padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--primary); font-size: 13px; }
@@ -62,12 +63,24 @@
         .win-badge { background: var(--green); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
         .loss-badge { background: var(--red); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
         .pend-badge { background: #f39c12; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .ref-badge { background: var(--blue); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
 
         .admin-section { background: #14181f; border: 1px dashed var(--primary); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
         .admin-section h4 { color: var(--primary); margin-bottom: 10px; font-size: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
 
         .profile-top { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center; }
         .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; background: #333; display: inline-block; }
+
+        .ref-box { background: linear-gradient(145deg, #1b2430, #14181f); border: 1px solid var(--primary); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .ref-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+        .ref-stat-item { background: #111; border: 1px solid #333; border-radius: 8px; padding: 8px 4px; text-align: center; }
+        .ref-stat-val { font-size: 16px; font-weight: 800; color: var(--green); }
+        .ref-stat-lbl { font-size: 10px; color: #aaa; margin-top: 2px; }
+        .ref-link-box { background: #0e1116; border: 1px dashed var(--primary); padding: 8px; border-radius: 8px; font-size: 11px; color: #f1c40f; word-break: break-all; margin-bottom: 8px; text-align: center; }
+
+        .tab-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
+        .tab-btn { padding: 9px; border-radius: 8px; border: 1px solid #444; background: #111; color: #bbb; font-weight: bold; font-size: 13px; cursor: pointer; }
+        .tab-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
 
         nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #14181f; justify-content: space-around; padding: 8px 0; border-top: 1px solid #2c3e50; z-index: 200; display: none; }
         .nav-item { color: #888; text-align: center; font-size: 10px; cursor: pointer; flex: 1; }
@@ -113,6 +126,91 @@
     <script>
         const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="#2c3e50"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="26" font-weight="bold">U</text></svg>');
         const DEFAULT_QR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect width="180" height="180" fill="#ffffff"/><rect x="16" y="16" width="148" height="148" fill="none" stroke="#111" stroke-width="4" stroke-dasharray="8 6"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#111" font-family="sans-serif" font-size="14" font-weight="bold">Upload QR</text><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#555" font-family="sans-serif" font-size="11">from Admin Panel</text></svg>');
+        const DEFAULT_VIP_PHONE = "9990009990";
+        const REFERRAL_BASE_URL = "https://star-slot.vercel.app";
+
+        function sha256(ascii) {
+            function rightRotate(value, amount) {
+                return (value >>> amount) | (value << (32 - amount));
+            }
+            const mathPow = Math.pow;
+            const maxWord = mathPow(2, 32);
+            let i, j;
+            let result = '';
+            const words = [];
+            const asciiBitLength = ascii.length * 8;
+            if (!sha256.h) {
+                sha256.h = [];
+                sha256.k = [];
+                let primeCounter = 0;
+                const isComposite = {};
+                for (let candidate = 2; primeCounter < 64; candidate++) {
+                    if (!isComposite[candidate]) {
+                        for (i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+                        sha256.h[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+                        sha256.k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+                    }
+                }
+            }
+            let hash = sha256.h.slice(0, 8);
+            const k = sha256.k;
+            ascii += '\x80';
+            while (ascii.length % 64 - 56) ascii += '\x00';
+            for (i = 0; i < ascii.length; i++) {
+                j = ascii.charCodeAt(i);
+                words[i >> 2] |= j << ((3 - i) % 4) * 8;
+            }
+            words[words.length] = ((asciiBitLength / maxWord) | 0);
+            words[words.length] = asciiBitLength;
+            for (j = 0; j < words.length;) {
+                const w = words.slice(j, j += 16);
+                const oldHash = hash;
+                hash = hash.slice(0, 8);
+                for (i = 0; i < 64; i++) {
+                    const w15 = w[i - 15], w2 = w[i - 2];
+                    const a = hash[0], e = hash[4];
+                    const temp1 = hash[7]
+                        + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25))
+                        + ((e & hash[5]) ^ ((~e) & hash[6]))
+                        + k[i]
+                        + (w[i] = (i < 16) ? w[i] : (
+                            w[i - 16]
+                            + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3))
+                            + w[i - 7]
+                            + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))
+                        ) | 0);
+                    const temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22))
+                        + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+                    hash = [(temp1 + temp2) | 0].concat(hash);
+                    hash[4] = (hash[4] + temp1) | 0;
+                }
+                for (i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
+            }
+            for (i = 0; i < 8; i++) {
+                for (j = 3; j + 1; j--) {
+                    const b = (hash[i] >> (j * 8)) & 255;
+                    result += ((b < 16) ? '0' : '') + b.toString(16);
+                }
+            }
+            return result;
+        }
+
+        function hashPassword(pw) {
+            const utf8 = unescape(encodeURIComponent("mking_salt_v1:" + String(pw)));
+            return "sha256:" + sha256(utf8);
+        }
+
+        function isHashedPassword(stored) {
+            return typeof stored === "string" && stored.startsWith("sha256:");
+        }
+
+        function verifyPassword(inputPw, storedPw) {
+            if (!storedPw) return false;
+            if (isHashedPassword(storedPw)) {
+                return hashPassword(inputPw) === storedPw;
+            }
+            return inputPw === storedPw;
+        }
 
         function escapeHTML(str) {
             if (str === null || str === undefined) return "";
@@ -140,6 +238,21 @@
             return `${year}-${month}-${day}`;
         }
 
+        function isStrictPositiveInt(str) {
+            return /^\d+$/.test(String(str || "").trim()) && parseInt(str, 10) > 0;
+        }
+
+        function getUrlRefCode() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                let ref = params.get('ref') || "";
+                ref = ref.replace(/^MK/i, '').replace(/\D/g, '');
+                return ref.length === 10 ? ref : "";
+            } catch (e) {
+                return "";
+            }
+        }
+
         const defaultMarkets = [
             { id: 1, name: "MILAN MORNING", openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM", result: "145-06-268", chart: ["123-65-456"] },
             { id: 2, name: "KALYAN MORNING", openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM", result: "369-81-579", chart: ["127-05-230"] },
@@ -162,10 +275,12 @@
             }
         }
 
+        const initialUrlRef = getUrlRefCode();
+
         let state = {
             currentUserPhone: localStorage.getItem('mk_logged_in_phone') || null,
-            isAdminLoggedIn: false,
-            adminCreds: safeJSONParse('mk_admin_creds', { phone: "9999999999", pass: "admin123" }),
+            isAdminLoggedIn: sessionStorage.getItem('mk_admin_logged_in') === '1',
+            adminCreds: safeJSONParse('mk_admin_creds', { phone: "9999999999", pass: hashPassword("admin123") }),
             users: safeJSONParse('mk_users', {}),
             adminWhatsApp: localStorage.getItem('mk_whatsapp') || "919876543210",
             noticeText: localStorage.getItem('mk_notice') || "M.KING Me Sabhi Player Ka Swagat Hai",
@@ -174,34 +289,68 @@
             markets: safeJSONParse('mk_markets', defaultMarkets),
             gameRates: safeJSONParse('mk_gamerates', defaultRates),
             bids: safeJSONParse('mk_bids', []),
+            depositRequests: safeJSONParse('mk_deposits', []),
             withdrawRequests: safeJSONParse('mk_withdraws', []),
             forgotRequests: safeJSONParse('mk_forgot', []),
             transactions: safeJSONParse('mk_txns', []),
             guessingPosts: safeJSONParse('mk_guessing', [
-                { id: 1, phone: "9990009990", name: "M.KING VIP", avatar: "", market: "KALYAN MORNING", text: "Open: 3 - 8 | Jodi: 38, 83 | Panna: 148, 260", time: "Today", likes: 5, likedBy: [], comments: [], wishes: [], chatMessages: [] }
+                { id: 1, phone: DEFAULT_VIP_PHONE, name: "M.KING VIP", avatar: "", market: "KALYAN MORNING", text: "Open: 3 - 8 | Jodi: 38, 83 | Panna: 148, 260", time: "Today", likes: 5, likedBy: [], comments: [], wishes: [], chats: {} }
             ]),
             selectedMarket: null,
             selectedGameType: null,
             activeChatPostId: null,
+            activeChatBuyerPhone: null,
+            authTab: initialUrlRef ? 'register' : 'login',
+            pendingRefCode: initialUrlRef,
             bidCart: []
         };
 
         let homeTimerInterval = null;
+        let isSubmittingBids = false;
 
         if (!state.markets || state.markets.length === 0) state.markets = defaultMarkets;
         if (!state.gameRates || state.gameRates.length === 0) state.gameRates = defaultRates;
 
-        // पुराने localStorage मार्केट्स में खाली या अधूरे openTime/closeTime को डिफ़ॉल्ट टाइमिंग से ठीक करना
+        if (!state.users[DEFAULT_VIP_PHONE]) {
+            state.users[DEFAULT_VIP_PHONE] = {
+                name: "M.KING VIP",
+                balance: 0,
+                phone: DEFAULT_VIP_PHONE,
+                password: hashPassword("vip_system_" + Date.now()),
+                avatar: "",
+                bankDetails: "",
+                upiDetails: "",
+                isSystem: true
+            };
+        }
+
+        if (state.adminCreds && state.adminCreds.pass && !isHashedPassword(state.adminCreds.pass)) {
+            state.adminCreds.pass = hashPassword(state.adminCreds.pass);
+        }
+
         state.markets = state.markets.map((m, idx) => {
             const def = defaultMarkets[idx] || { openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM" };
             return {
                 ...m,
-                openTime: (m.openTime && /^\d{1,2}:\d{2}$/.test(String(m.openTime).trim())) ? String(m.openTime).trim() : def.openTime,
+                openTime: (m.openTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.openTime).trim())) ? String(m.openTime).trim() : def.openTime,
                 openAmPm: m.openAmPm || def.openAmPm,
-                closeTime: (m.closeTime && /^\d{1,2}:\d{2}$/.test(String(m.closeTime).trim())) ? String(m.closeTime).trim() : def.closeTime,
+                closeTime: (m.closeTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.closeTime).trim())) ? String(m.closeTime).trim() : def.closeTime,
                 closeAmPm: m.closeAmPm || def.closeAmPm,
                 chart: Array.isArray(m.chart) ? m.chart : []
             };
+        });
+
+        state.guessingPosts = state.guessingPosts.map(p => {
+            if (!p.chats || typeof p.chats !== "object") {
+                p.chats = {};
+                if (Array.isArray(p.chatMessages) && p.chatMessages.length > 0) {
+                    const firstBuyer = p.chatMessages.find(m => m.sender !== p.phone);
+                    if (firstBuyer) {
+                        p.chats[firstBuyer.sender] = p.chatMessages;
+                    }
+                }
+            }
+            return p;
         });
 
         function saveState() {
@@ -210,6 +359,7 @@
                 localStorage.setItem('mk_markets', JSON.stringify(state.markets));
                 localStorage.setItem('mk_gamerates', JSON.stringify(state.gameRates));
                 localStorage.setItem('mk_bids', JSON.stringify(state.bids));
+                localStorage.setItem('mk_deposits', JSON.stringify(state.depositRequests));
                 localStorage.setItem('mk_withdraws', JSON.stringify(state.withdrawRequests));
                 localStorage.setItem('mk_forgot', JSON.stringify(state.forgotRequests));
                 localStorage.setItem('mk_txns', JSON.stringify(state.transactions));
@@ -227,10 +377,77 @@
                 }
                 let nb = document.getElementById('noticeBoardDisplay');
                 if (nb) nb.innerHTML = `📌 <b>Notice:</b> ${escapeHTML(state.noticeText)}`;
+                return true;
             } catch (err) {
                 console.error("Storage save failed:", err);
                 alert("डेटा सेव करने में समस्या आई (Storage Limit)। कृपया बड़ी इमेज न डालें।");
+                return false;
             }
+        }
+
+        function processReferralDeposit(depositorPhone, depositAmount) {
+            let depositor = state.users[depositorPhone];
+            if (!depositor || !depositor.referredBy) return;
+            let referrer = state.users[depositor.referredBy];
+            if (!referrer || referrer.phone === depositorPhone || referrer.isSystem) return;
+
+            depositor.referralTotalDeposited = (depositor.referralTotalDeposited || 0) + depositAmount;
+            if (!Array.isArray(referrer.referralHistory)) referrer.referralHistory = [];
+            if (typeof referrer.referralBalance !== "number") referrer.referralBalance = 0;
+            if (typeof referrer.referralTotalEarned !== "number") referrer.referralTotalEarned = 0;
+
+            if (!depositor.referralFirstBonusPaid) {
+                if (depositor.referralTotalDeposited >= 200) {
+                    depositor.referralFirstBonusPaid = true;
+                    let bonus = 100;
+                    referrer.referralBalance = Math.round((referrer.referralBalance + bonus) * 100) / 100;
+                    referrer.referralTotalEarned = Math.round((referrer.referralTotalEarned + bonus) * 100) / 100;
+                    referrer.referralHistory.push({
+                        id: Date.now() + Math.floor(Math.random() * 1000),
+                        friendPhone: depositor.phone,
+                        friendName: depositor.name,
+                        depositAmount: depositAmount,
+                        commission: bonus,
+                        type: "Starting Bonus (₹200+ Deposit)",
+                        time: new Date().toLocaleString()
+                    });
+                } else {
+                    let comm = Math.round((depositAmount * 0.03) * 100) / 100;
+                    if (comm > 0) {
+                        referrer.referralBalance = Math.round((referrer.referralBalance + comm) * 100) / 100;
+                        referrer.referralTotalEarned = Math.round((referrer.referralTotalEarned + comm) * 100) / 100;
+                        referrer.referralHistory.push({
+                            id: Date.now() + Math.floor(Math.random() * 1000),
+                            friendPhone: depositor.phone,
+                            friendName: depositor.name,
+                            depositAmount: depositAmount,
+                            commission: comm,
+                            type: "3% Commission",
+                            time: new Date().toLocaleString()
+                        });
+                    }
+                }
+            } else {
+                let comm = Math.round((depositAmount * 0.03) * 100) / 100;
+                if (comm > 0) {
+                    referrer.referralBalance = Math.round((referrer.referralBalance + comm) * 100) / 100;
+                    referrer.referralTotalEarned = Math.round((referrer.referralTotalEarned + comm) * 100) / 100;
+                    referrer.referralHistory.push({
+                        id: Date.now() + Math.floor(Math.random() * 1000),
+                        friendPhone: depositor.phone,
+                        friendName: depositor.name,
+                        depositAmount: depositAmount,
+                        commission: comm,
+                        type: "3% Commission",
+                        time: new Date().toLocaleString()
+                    });
+                }
+            }
+        }
+
+        function switchAuthTab(tab) {
+            state.authTab = tab;
+            renderLoginScreen();
         }
 
         function renderLoginScreen() {
@@ -244,18 +461,46 @@
 
             let root = document.getElementById('appRoot');
             if (!root) return;
+
+            let isReg = state.authTab === 'register';
             root.innerHTML = `
-                <div class="form-card" style="max-width:350px; margin:40px auto; text-align:center; border: 2px solid var(--primary);">
+                <div class="form-card" style="max-width:350px; margin:30px auto; text-align:center; border: 2px solid var(--primary);">
                     <h2 style="color:var(--primary); margin-bottom:5px;">M.KING 👑</h2>
-                    <p style="color:#aaa; font-size:12px; margin-bottom:20px;">मोबाइल नंबर और पासवर्ड दर्ज करें</p>
-                    <div class="input-group">
-                        <input type="tel" id="playerPhone" maxlength="10" placeholder="Mobile Number (10 Digits)">
+                    <p style="color:#aaa; font-size:12px; margin-bottom:15px;">${isReg ? 'नया खाता बनाएं' : 'अपने खाते में लॉगिन करें'}</p>
+
+                    <div class="tab-row">
+                        <button class="tab-btn ${!isReg ? 'active' : ''}" onclick="switchAuthTab('login')">Login</button>
+                        <button class="tab-btn ${isReg ? 'active' : ''}" onclick="switchAuthTab('register')">New Register</button>
                     </div>
-                    <div class="input-group">
-                        <input type="password" id="playerPass" placeholder="Password">
-                    </div>
-                    <button class="btn" style="background:var(--green); color:#000; width:100%; font-size:15px; padding:12px; margin-bottom:10px;" onclick="handlePlayerLogin()">Login / Register</button>
-                    <button class="btn" style="background:transparent; color:var(--primary); border:none; font-size:12px; cursor:pointer;" onclick="renderForgotScreen()">❓ Forgot Password?</button>
+
+                    ${isReg ? `
+                        <div class="input-group">
+                            <input type="text" id="regName" placeholder="आपका नाम (Optional)">
+                        </div>
+                        <div class="input-group">
+                            <input type="tel" id="regPhone" maxlength="10" placeholder="Mobile Number (10 Digits)">
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="regPass" placeholder="Password (कम से कम 4 अक्षर)">
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="regPassConfirm" placeholder="Confirm Password">
+                        </div>
+                        <div class="input-group">
+                            <label>Referral Code / Friend Mobile (Optional)</label>
+                            <input type="text" id="regRefCode" value="${escapeHTML(state.pendingRefCode || '')}" placeholder="दोस्त का मोबाइल नंबर (अगर है तो)">
+                        </div>
+                        <button class="btn" style="background:var(--green); color:#000; width:100%; font-size:15px; padding:12px;" onclick="handlePlayerRegister()">Create Account</button>
+                    ` : `
+                        <div class="input-group">
+                            <input type="tel" id="playerPhone" maxlength="10" placeholder="Mobile Number (10 Digits)">
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="playerPass" placeholder="Password">
+                        </div>
+                        <button class="btn" style="background:var(--green); color:#000; width:100%; font-size:15px; padding:12px; margin-bottom:10px;" onclick="handlePlayerLogin()">Login</button>
+                        <button class="btn" style="background:transparent; color:var(--primary); border:none; font-size:12px; cursor:pointer;" onclick="renderForgotScreen()">❓ Forgot Password?</button>
+                    `}
                 </div>
             `;
         }
@@ -282,9 +527,15 @@
             if (!phoneElem) return;
             let phone = phoneElem.value.replace(/\D/g, '');
             if (phone.length !== 10) { alert("कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!"); return; }
-            if (!state.users[phone]) { alert("यह मोबाइल नंबर रजिस्टर नहीं है!"); return; }
+            if (!state.users[phone] || state.users[phone].isSystem) { alert("यह मोबाइल नंबर रजिस्टर नहीं है!"); return; }
 
             let user = state.users[phone];
+            let alreadyPending = state.forgotRequests.some(r => r.phone === phone);
+            if (alreadyPending) {
+                alert("आपकी पासवर्ड रीसेट रिक्वेस्ट पहले से पेंडिंग है! कृपया एडमिन से WhatsApp पर संपर्क करें।");
+                renderLoginScreen();
+                return;
+            }
             state.forgotRequests.push({
                 id: Date.now(),
                 phone: phone,
@@ -294,6 +545,95 @@
             saveState();
             alert("पासवर्ड रीसेट रिक्वेस्ट एडमिन के पास भेज दी गई है! एडमिन से WhatsApp पर संपर्क करें।");
             renderLoginScreen();
+        }
+
+        function completeUserLogin(phone) {
+            state.currentUserPhone = phone;
+            localStorage.setItem('mk_logged_in_phone', phone);
+            saveState();
+
+            let mh = document.getElementById('mainHeader');
+            let nb = document.getElementById('noticeBoardDisplay');
+            let bn = document.getElementById('bottomNav');
+            if (mh) mh.style.display = 'flex';
+            if (nb) nb.style.display = 'block';
+            if (bn) bn.style.display = 'flex';
+
+            navigate('home');
+        }
+
+        function handlePlayerRegister() {
+            let nameElem = document.getElementById('regName');
+            let phoneElem = document.getElementById('regPhone');
+            let passElem = document.getElementById('regPass');
+            let passConfElem = document.getElementById('regPassConfirm');
+            let refElem = document.getElementById('regRefCode');
+            if (!phoneElem || !passElem || !passConfElem) return;
+
+            let name = nameElem ? nameElem.value.trim() : "";
+            let phone = phoneElem.value.replace(/\D/g, '');
+            let pass = passElem.value.trim();
+            let passConf = passConfElem.value.trim();
+            let refCode = refElem ? refElem.value.trim().replace(/^MK/i, '').replace(/\D/g, '') : '';
+
+            if (phone.length !== 10 || pass.length < 4) {
+                alert("कृपया 10 अंकों का सही मोबाइल नंबर और कम से कम 4 अक्षर का पासवर्ड दर्ज करें!");
+                return;
+            }
+            if (pass !== passConf) {
+                alert("दोनों पासवर्ड एक जैसे होने चाहिए!");
+                return;
+            }
+
+            if (refCode) {
+                if (refCode === phone) {
+                    alert("❌ आप खुद का Referral Code उपयोग नहीं कर सकते!");
+                    return;
+                }
+                if (refCode.length !== 10 || !state.users[refCode] || state.users[refCode].isSystem) {
+                    alert("❌ दर्ज किया गया Referral Code सही नहीं है! कृपया सही नंबर डालें या इसे खाली छोड़ दें।");
+                    return;
+                }
+            }
+
+            let existing = state.users[phone];
+            if (existing && existing.password) {
+                alert("यह नंबर पहले से रजिस्टर है! कृपया Login टैब से लॉगिन करें।");
+                state.authTab = 'login';
+                renderLoginScreen();
+                return;
+            }
+
+            if (existing && !existing.password) {
+                existing.password = hashPassword(pass);
+                if (name) existing.name = name;
+                if (refCode && !existing.referredBy) existing.referredBy = refCode;
+                if (typeof existing.referralBalance !== "number") existing.referralBalance = 0;
+                if (typeof existing.referralTotalEarned !== "number") existing.referralTotalEarned = 0;
+                if (!Array.isArray(existing.referralHistory)) existing.referralHistory = [];
+                if (!existing.joinedAt) existing.joinedAt = new Date().toLocaleDateString();
+            } else {
+                state.users[phone] = {
+                    name: name || ("Player " + phone.slice(-4)),
+                    balance: 0,
+                    phone: phone,
+                    password: hashPassword(pass),
+                    avatar: "",
+                    bankDetails: "",
+                    upiDetails: "",
+                    referredBy: refCode || null,
+                    referralBalance: 0,
+                    referralTotalEarned: 0,
+                    referralHistory: [],
+                    referralFirstBonusPaid: false,
+                    referralTotalDeposited: 0,
+                    joinedAt: new Date().toLocaleDateString()
+                };
+            }
+
+            state.pendingRefCode = "";
+            alert("नया खाता सफलतापूर्वक बन गया है!");
+            completeUserLogin(phone);
         }
 
         function handlePlayerLogin() {
@@ -309,44 +649,34 @@
                 return;
             }
 
-            if (!state.users[phone]) {
-                state.users[phone] = {
-                    name: "Player " + phone.slice(-4),
-                    balance: 0,
-                    phone: phone,
-                    password: pass,
-                    avatar: "",
-                    bankDetails: "",
-                    upiDetails: ""
-                };
-                alert("नया खाता सफलतापूर्वक बन गया है!");
-            } else {
-                if (state.users[phone].password && state.users[phone].password !== pass) {
-                    alert("गलत पासवर्ड! कृपया सही पासवर्ड दर्ज करें।");
-                    return;
-                } else if (!state.users[phone].password) {
-                    state.users[phone].password = pass;
-                }
+            let user = state.users[phone];
+            if (!user || user.isSystem) {
+                alert("यह मोबाइल नंबर रजिस्टर नहीं है! कृपया 'New Register' पर क्लिक करके नया खाता बनाएं।");
+                return;
             }
 
-            state.currentUserPhone = phone;
-            localStorage.setItem('mk_logged_in_phone', phone);
-            saveState();
+            if (!user.password) {
+                alert("कृपया पहले 'New Register' टैब में जाकर अपना पासवर्ड सेट करें!");
+                return;
+            }
 
-            let mh = document.getElementById('mainHeader');
-            let nb = document.getElementById('noticeBoardDisplay');
-            let bn = document.getElementById('bottomNav');
-            if (mh) mh.style.display = 'flex';
-            if (nb) nb.style.display = 'block';
-            if (bn) bn.style.display = 'flex';
+            if (!verifyPassword(pass, user.password)) {
+                alert("गलत पासवर्ड! कृपया सही पासवर्ड दर्ज करें।");
+                return;
+            }
 
-            navigate('home');
+            if (!isHashedPassword(user.password)) {
+                user.password = hashPassword(pass);
+            }
+
+            completeUserLogin(phone);
         }
 
         function logoutPlayer() {
             if (homeTimerInterval) clearInterval(homeTimerInterval);
             localStorage.removeItem('mk_logged_in_phone');
             state.currentUserPhone = null;
+            state.authTab = 'login';
             renderLoginScreen();
         }
 
@@ -404,7 +734,6 @@
             let openTarget = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", now);
             let closeTarget = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", now);
 
-            // रात 12 बजे के पार चलने वाले मार्केट (जैसे 10:00 PM से 02:00 AM) की सही गणना
             if (closeTarget.getTime() <= openTarget.getTime()) {
                 let yesterdayOpen = new Date(openTarget.getTime());
                 yesterdayOpen.setDate(yesterdayOpen.getDate() - 1);
@@ -566,14 +895,20 @@
             return 3;
         }
 
+        function pannaDigitVal(ch) {
+            return ch === '0' ? 10 : parseInt(ch, 10);
+        }
+
         function isValidPannaDigit(digit, gameType) {
-            if (digit.length !== 3) return false;
-            const [a, b, c] = digit.split('');
+            if (!/^\d{3}$/.test(digit)) return false;
+            const a = pannaDigitVal(digit[0]);
+            const b = pannaDigitVal(digit[1]);
+            const c = pannaDigitVal(digit[2]);
             if (gameType === "Single Panna") {
-                return a !== b && b !== c && a !== c;
+                return a < b && b < c;
             }
             if (gameType === "Double Panna") {
-                return (a === b && b !== c) || (a === c && a !== b) || (b === c && a !== b);
+                return a <= b && b <= c && (a === b || b === c) && !(a === b && b === c);
             }
             return true;
         }
@@ -618,7 +953,7 @@
             let reqLen = getRequiredDigitLength(gameType);
             let placeholderText = reqLen === 1
                 ? "0 से 9 तक एक अंक लिखें"
-                : (reqLen === 2 ? "00 से 99 तक दो अंक लिखें" : "000 से 999 तक तीन अंकों का पाना लिखें");
+                : (reqLen === 2 ? "00 से 99 तक दो अंक लिखें" : (gameType === "Single Panna" ? "जैसे: 128, 120 (बढ़ते क्रम में, 0 सबसे बड़ा)" : "जैसे: 112, 122, 100 (बढ़ते क्रम में, 0 सबसे बड़ा)"));
 
             root.innerHTML = `
                 <div class="sub-header"><button class="back-btn" onclick="navigate('gameSelect', ${market.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(market.name)}</h4><small>${escapeHTML(gameType)}</small></div></div>
@@ -633,7 +968,7 @@
                         <label>${escapeHTML(gameType)} (${reqLen} Digit Only)</label>
                         <input type="tel" id="bidDigitInput" maxlength="${reqLen}" oninput="enforceDigitLimit(this)" placeholder="${placeholderText}">
                     </div>
-                    <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" min="10" placeholder="राशि"></div>
+                    <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" min="10" placeholder="राशि (केवल पूरे अंक)"></div>
                     <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button>
                 </div>
                 <div id="cartContainer"></div>
@@ -656,7 +991,7 @@
             if (!digInput || !amtInput || !sesInput) return;
 
             let digit = digInput.value.trim();
-            let amount = parseInt(amtInput.value, 10);
+            let rawAmt = amtInput.value.trim();
             let session = sesInput.value;
             let reqLen = getRequiredDigitLength(state.selectedGameType);
 
@@ -679,14 +1014,15 @@
                 return;
             }
             if (state.selectedGameType.includes("Panna") && !isValidPannaDigit(digit, state.selectedGameType)) {
-                alert(`❌ कृपया ${state.selectedGameType} के सही नियम के अनुसार 3 अंक डालें!`);
+                alert(`❌ ${state.selectedGameType} नियम: अंक बढ़ते क्रम में होने चाहिए (0 को सबसे बड़ा मानें, जैसे: ${state.selectedGameType === 'Single Panna' ? '128, 120' : '112, 100'})!`);
                 return;
             }
-            if (!amount || amount < 10) {
-                alert("कृपया कम से कम ₹10 राशि दर्ज करें!");
+            if (!isStrictPositiveInt(rawAmt) || parseInt(rawAmt, 10) < 10) {
+                alert("कृपया कम से कम ₹10 (केवल पूरे अंक) दर्ज करें!");
                 return;
             }
 
+            let amount = parseInt(rawAmt, 10);
             state.bidCart.push({
                 id: Date.now() + Math.floor(Math.random() * 1000),
                 marketId: state.selectedMarket.id,
@@ -711,7 +1047,7 @@
             state.bidCart.forEach(item => {
                 html += `<div class="bid-cart-item"><div><b>${escapeHTML(item.digit)}</b> (${escapeHTML(item.session)}) - <b>₹${item.amount}</b></div><button class="del-btn" onclick="removeFromCart(${item.id})">X</button></div>`;
             });
-            html += `<button class="btn" style="background:var(--green); color:#000; width:100%; margin-top:8px;" onclick="submitBids()">✅ SUBMIT ALL (₹${total})</button>`;
+            html += `<button class="btn" id="submitBidsBtn" style="background:var(--green); color:#000; width:100%; margin-top:8px;" onclick="submitBids()">✅ SUBMIT ALL (₹${total})</button>`;
             container.innerHTML = html;
         }
 
@@ -721,43 +1057,48 @@
         }
 
         function submitBids() {
-            if (!state.bidCart || state.bidCart.length === 0) return;
+            if (isSubmittingBids || !state.bidCart || state.bidCart.length === 0) return;
+            isSubmittingBids = true;
 
-            let total = state.bidCart.reduce((s, i) => s + i.amount, 0);
-            if (total <= 0) return;
+            try {
+                let total = state.bidCart.reduce((s, i) => s + i.amount, 0);
+                if (total <= 0) return;
 
-            let now = new Date();
-            for (const b of state.bidCart) {
-                const m = state.markets.find(mk => mk.id === b.marketId);
-                if (!m) { alert("❌ मार्केट उपलब्ध नहीं है!"); return; }
-                const st = getMarketSessionStatus(m, now);
-                if ((b.session === "OPEN" && !st.isOpenSessionActive) || (b.session === "CLOSE" && !st.isCloseSessionActive)) {
-                    alert(`❌ ${m.name} (${b.session}) का समय समाप्त हो चुका है! कृपया इसे कार्ट से हटाएं।`);
-                    return;
+                let now = new Date();
+                for (const b of state.bidCart) {
+                    const m = state.markets.find(mk => mk.id === b.marketId);
+                    if (!m) { alert("❌ मार्केट उपलब्ध नहीं है!"); return; }
+                    const st = getMarketSessionStatus(m, now);
+                    if ((b.session === "OPEN" && !st.isOpenSessionActive) || (b.session === "CLOSE" && !st.isCloseSessionActive)) {
+                        alert(`❌ ${m.name} (${b.session}) का समय समाप्त हो चुका है! कृपया इसे कार्ट से हटाएं।`);
+                        return;
+                    }
                 }
+
+                let user = state.users[state.currentUserPhone];
+                if (!user || user.balance < total) { alert("पर्याप्त बैलेंस नहीं है!"); return; }
+
+                user.balance = Math.round((user.balance - total) * 100) / 100;
+                let today = getLocalDateString(now);
+                let nowTime = now.toLocaleTimeString();
+
+                state.bidCart.forEach(b => {
+                    state.bids.push({ ...b, date: today, status: "PENDING", winAmount: 0, time: nowTime });
+                });
+                state.transactions.push({
+                    phone: state.currentUserPhone,
+                    type: `Bids Placed (${state.bidCart.length})`,
+                    amount: -total,
+                    time: now.toLocaleString()
+                });
+
+                state.bidCart = [];
+                saveState();
+                alert("बिड सफलतापूर्वक लग गई!");
+                navigate('bids');
+            } finally {
+                isSubmittingBids = false;
             }
-
-            let user = state.users[state.currentUserPhone];
-            if (!user || user.balance < total) { alert("पर्याप्त बैलेंस नहीं है!"); return; }
-
-            user.balance -= total;
-            let today = getLocalDateString(now);
-            let nowTime = now.toLocaleTimeString();
-
-            state.bidCart.forEach(b => {
-                state.bids.push({ ...b, date: today, status: "PENDING", winAmount: 0, time: nowTime });
-            });
-            state.transactions.push({
-                phone: state.currentUserPhone,
-                type: `Bids Placed (${state.bidCart.length})`,
-                amount: -total,
-                time: now.toLocaleString()
-            });
-
-            state.bidCart = [];
-            saveState();
-            alert("बिड सफलतापूर्वक लग गई!");
-            navigate('bids');
         }
 
         function renderChart(root, marketId) {
@@ -765,7 +1106,7 @@
             if (!market) { navigate('home'); return; }
             let html = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(market.name)} Chart</h3></div><div class="form-card" style="text-align:center;">`;
             if (market.chart && market.chart.length > 0) {
-                market.chart.forEach(c => html += `<div style="padding:10px; border-bottom:1px solid #333; color:var(--primary); font-weight:bold;">${escapeHTML(c)}</div>`);
+                market.chart.slice().reverse().forEach(c => html += `<div style="padding:10px; border-bottom:1px solid #333; color:var(--primary); font-weight:bold;">${escapeHTML(c)}</div>`);
             } else {
                 html += `<p style="color:#777;">कोई पुराना चार्ट नहीं है।</p>`;
             }
@@ -782,7 +1123,8 @@
                 myBids.slice().reverse().forEach(b => {
                     let badge = b.status === "WON"
                         ? `<span class="win-badge">WON ₹${b.winAmount}</span>`
-                        : (b.status === "LOST" ? `<span class="loss-badge">LOST</span>` : `<span class="pend-badge">PENDING</span>`);
+                        : (b.status === "LOST" ? `<span class="loss-badge">LOST</span>`
+                        : (b.status === "REFUNDED" ? `<span class="ref-badge">REFUNDED</span>` : `<span class="pend-badge">PENDING</span>`));
                     html += `<div class="list-card"><div style="display:flex; justify-content:space-between;"><b>${escapeHTML(b.marketName)} (${escapeHTML(b.session)})</b> ${badge}</div><div>${escapeHTML(b.gameType)} | Digit: <b>${escapeHTML(b.digit)}</b></div><div style="color:#aaa; font-size:11px;">₹${b.amount} • ${escapeHTML(b.date)}</div></div>`;
                 });
             }
@@ -814,6 +1156,7 @@
                     let avatarImg = safeImageURL(userObj.avatar, DEFAULT_AVATAR_SVG);
                     let isLiked = p.likedBy && p.likedBy.includes(state.currentUserPhone);
                     let likesCount = p.likes || 0;
+                    let canDelete = (p.phone === state.currentUserPhone) || state.isAdminLoggedIn;
 
                     let commentsHtml = '';
                     if (p.comments && p.comments.length > 0) {
@@ -824,12 +1167,12 @@
 
                     let wishesHtml = '';
                     if (p.wishes && p.wishes.length > 0) {
-                        wishesHtml += `<div style="margin-top:6px; font-size:11px; color:var(--green);">🎉 Wishes: ${p.wishes.map(escapeHTML).join(', ')}</div>`;
+                        wishesHtml = `🎉 Wishes: ${p.wishes.map(escapeHTML).join(', ')}`;
                     }
 
                     html += `
-                        <div class="list-card" style="border-left-color:var(--primary);">
-                            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                        <div class="list-card" id="guessPostCard_${p.id}" style="border-left-color:var(--primary);">
+                            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:6px;">
                                 <div style="display:flex; align-items:center; gap:8px;">
                                     <img src="${avatarImg}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid var(--primary);">
                                     <div>
@@ -837,15 +1180,18 @@
                                         <span style="font-size:10px; color:var(--green);">${escapeHTML(p.market)} • ${escapeHTML(p.time)}</span>
                                     </div>
                                 </div>
-                                <button class="btn" style="background:var(--blue); color:#fff; padding:5px 10px; font-size:11px;" onclick="openChatWithGuesser(${p.id})">💬 Chat / Gift</button>
+                                <div style="display:flex; gap:4px;">
+                                    <button class="btn" style="background:var(--blue); color:#fff; padding:5px 10px; font-size:11px;" onclick="openChatWithGuesser(${p.id})">💬 Chat / Gift</button>
+                                    ${canDelete ? `<button class="btn" style="background:var(--red); color:#fff; padding:5px 8px; font-size:11px;" onclick="deleteGuessingPost(${p.id})">🗑️</button>` : ''}
+                                </div>
                             </div>
                             
                             <div style="font-size:14px; color:#fff; margin:8px 0; background:#111; padding:10px; border-radius:6px; border:1px dashed #444;">${escapeHTML(p.text)}</div>
                             
-                            ${wishesHtml}
+                            <div id="wishesContainer_${p.id}" style="margin-top:6px; font-size:11px; color:var(--green); ${wishesHtml ? '' : 'display:none;'}">${wishesHtml}</div>
 
                             <div style="display:flex; gap:10px; margin-top:10px; font-size:12px; border-top:1px solid #333; padding-top:8px;">
-                                <button class="btn" style="background:${isLiked ? 'var(--red)' : '#333'}; color:#fff; padding:4px 10px; font-size:11px;" onclick="toggleLike(${p.id})">❤️ Like (${likesCount})</button>
+                                <button class="btn" id="likeBtn_${p.id}" style="background:${isLiked ? 'var(--red)' : '#333'}; color:#fff; padding:4px 10px; font-size:11px;" onclick="toggleLike(${p.id})">❤️ Like (${likesCount})</button>
                                 <button class="btn" style="background:#27ae60; color:#000; padding:4px 10px; font-size:11px;" onclick="sendWish(${p.id})">🎉 Wish Pass</button>
                             </div>
 
@@ -884,10 +1230,22 @@
                 likedBy: [],
                 comments: [],
                 wishes: [],
-                chatMessages: []
+                chats: {}
             });
             saveState();
             renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function deleteGuessingPost(postId) {
+            let post = state.guessingPosts.find(p => p.id === postId);
+            if (!post) return;
+            if (post.phone !== state.currentUserPhone && !state.isAdminLoggedIn) return;
+            if (!confirm("क्या आप वाकई यह पोस्ट डिलीट करना चाहते हैं?")) return;
+            state.guessingPosts = state.guessingPosts.filter(p => p.id !== postId);
+            saveState();
+            let card = document.getElementById(`guessPostCard_${postId}`);
+            if (card) card.remove();
+            else renderGuessingForum(document.getElementById('appRoot'));
         }
 
         function toggleLike(postId) {
@@ -895,15 +1253,21 @@
             if (!post) return;
             if (!post.likedBy) post.likedBy = [];
             let index = post.likedBy.indexOf(state.currentUserPhone);
+            let nowLiked = false;
             if (index > -1) {
                 post.likedBy.splice(index, 1);
                 post.likes = Math.max(0, (post.likes || 1) - 1);
             } else {
                 post.likedBy.push(state.currentUserPhone);
                 post.likes = (post.likes || 0) + 1;
+                nowLiked = true;
             }
             saveState();
-            renderGuessingForum(document.getElementById('appRoot'));
+            let btn = document.getElementById(`likeBtn_${postId}`);
+            if (btn) {
+                btn.style.background = nowLiked ? 'var(--red)' : '#333';
+                btn.innerText = `❤️ Like (${post.likes})`;
+            }
         }
 
         function addComment(postId) {
@@ -917,7 +1281,15 @@
             if (!post.comments) post.comments = [];
             post.comments.push({ name: user.name, text: text });
             saveState();
-            renderGuessingForum(document.getElementById('appRoot'));
+
+            let container = document.getElementById(`commentsContainer_${postId}`);
+            if (container) {
+                let div = document.createElement('div');
+                div.style.cssText = "background:#111; padding:6px; margin-top:4px; border-radius:4px; font-size:11px; color:#ddd;";
+                div.innerHTML = `<b>${escapeHTML(user.name)}:</b> ${escapeHTML(text)}`;
+                container.appendChild(div);
+                input.value = '';
+            }
         }
 
         function sendWish(postId) {
@@ -928,8 +1300,12 @@
             if (!post.wishes.includes(user.name)) {
                 post.wishes.push(user.name);
                 saveState();
+                let wBox = document.getElementById(`wishesContainer_${postId}`);
+                if (wBox) {
+                    wBox.style.display = 'block';
+                    wBox.innerHTML = `🎉 Wishes: ${post.wishes.map(escapeHTML).join(', ')}`;
+                }
                 alert("आपने बधाई भेज दी है!");
-                renderGuessingForum(document.getElementById('appRoot'));
             } else {
                 alert("आप पहले ही बधाई दे चुके हैं!");
             }
@@ -937,19 +1313,48 @@
 
         function openChatWithGuesser(postId) {
             state.activeChatPostId = postId;
+            state.activeChatBuyerPhone = null;
             navigate('chatBox', postId);
+        }
+
+        function selectChatBuyer(postId, buyerPhone) {
+            state.activeChatBuyerPhone = buyerPhone;
+            renderChatBox(document.getElementById('appRoot'), postId);
         }
 
         function renderChatBox(root, postId) {
             let post = state.guessingPosts.find(p => p.id === postId);
             if (!post) { navigate('guessing'); return; }
+            if (!post.chats || typeof post.chats !== "object") post.chats = {};
+
             let isPostAuthor = post.phone === state.currentUserPhone;
-            let hasGifted = post.chatMessages && post.chatMessages.some(m => m.sender === state.currentUserPhone && m.isGift);
-            let canChat = isPostAuthor || hasGifted;
+            let buyerPhones = Object.keys(post.chats);
+            let targetBuyerPhone = isPostAuthor
+                ? (state.activeChatBuyerPhone && post.chats[state.activeChatBuyerPhone] ? state.activeChatBuyerPhone : (buyerPhones[0] || null))
+                : state.currentUserPhone;
+
+            let thread = targetBuyerPhone ? (post.chats[targetBuyerPhone] || []) : [];
+            let hasGifted = !isPostAuthor && thread.some(m => m.sender === state.currentUserPhone && m.isGift);
+            let canChat = isPostAuthor ? Boolean(targetBuyerPhone) : hasGifted;
+
+            let buyerSelectorHtml = '';
+            if (isPostAuthor) {
+                if (buyerPhones.length === 0) {
+                    buyerSelectorHtml = `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:10px; font-size:12px; color:#aaa; text-align:center;">अभी तक किसी यूज़र ने आपको गिफ्ट/चैट नहीं भेजा है।</div>`;
+                } else {
+                    let pills = buyerPhones.map(bp => {
+                        let bUser = state.users[bp];
+                        let bName = bUser ? bUser.name : ("User " + bp.slice(-4));
+                        let active = bp === targetBuyerPhone;
+                        return `<button class="btn" style="background:${active ? 'var(--primary)' : '#333'}; color:${active ? '#000' : '#fff'}; padding:5px 10px; font-size:11px;" data-postid="${postId}" data-phone="${escapeHTML(bp)}" onclick="selectChatBuyer(Number(this.dataset.postid), this.dataset.phone)">${escapeHTML(bName)}</button>`;
+                    }).join('');
+                    buyerSelectorHtml = `<div class="form-card" style="padding:10px; margin-bottom:10px;"><div style="font-size:11px; color:#aaa; margin-bottom:6px;">प्राइवेट चैट चुनें (केवल आप और वह यूज़र देख सकते हैं):</div><div style="display:flex; flex-wrap:wrap; gap:6px;">${pills}</div></div>`;
+                }
+            }
 
             let messagesHtml = '';
-            if (post.chatMessages && post.chatMessages.length > 0) {
-                post.chatMessages.forEach(msg => {
+            if (thread.length > 0) {
+                thread.forEach(msg => {
                     let isMe = msg.sender === state.currentUserPhone;
                     messagesHtml += `
                         <div style="margin-bottom:8px; text-align:${isMe ? 'right' : 'left'};">
@@ -960,21 +1365,21 @@
                     `;
                 });
             } else {
-                messagesHtml = `<p style="text-align:center; color:#777; font-size:12px; margin-top:20px;">चैट शुरू करने के लिए नीचे से कोई गिफ्ट भेजें!</p>`;
+                messagesHtml = `<p style="text-align:center; color:#777; font-size:12px; margin-top:20px;">${isPostAuthor ? 'कोई संदेश नहीं है।' : 'प्राइवेट चैट शुरू करने के लिए नीचे से कोई गिफ्ट भेजें!'}</p>`;
             }
 
             root.innerHTML = `
-                <div class="sub-header"><button class="back-btn" onclick="navigate('guessing')">← Back</button><h3>💬 Chat with ${escapeHTML(post.name)}</h3></div>
+                <div class="sub-header"><button class="back-btn" onclick="navigate('guessing')">← Back</button><h3>💬 Private Chat - ${escapeHTML(post.name)}</h3></div>
                 
                 ${!isPostAuthor ? `
                 <div class="form-card" style="background:#111; border:1px solid #444;">
-                    <div style="font-size:12px; color:var(--primary); margin-bottom:8px; text-align:center;">🎁 गिफ्ट भेजकर चैट अनलॉक करें (पैसे आपके वॉलेट से कटेंगे):</div>
+                    <div style="font-size:12px; color:var(--primary); margin-bottom:8px; text-align:center;">🎁 गिफ्ट भेजकर प्राइवेट चैट अनलॉक करें (पैसे आपके वॉलेट से कटेंगे):</div>
                     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; margin-bottom:10px;">
                         <button class="btn" style="background:#e74c3c; color:#fff; font-size:11px;" onclick="sendGift(${postId}, '🌸 Flower (₹50)', 50)">🌸 ₹50<br>Flower</button>
                         <button class="btn" style="background:#f39c12; color:#000; font-size:11px;" onclick="sendGift(${postId}, '⭐ Star (₹100)', 100)">⭐ ₹100<br>Star</button>
                         <button class="btn" style="background:#8e44ad; color:#fff; font-size:11px;" onclick="sendGift(${postId}, '💣 Bomb (₹150)', 150)">💣 ₹150<br>Bomb</button>
                     </div>
-                </div>` : ''}
+                </div>` : buyerSelectorHtml}
 
                 <div class="form-card" style="height:250px; overflow-y:auto; background:#14181f; margin-bottom:10px;" id="chatMsgArea">
                     ${messagesHtml}
@@ -983,14 +1388,16 @@
                 ${canChat ? `
                     <div style="display:flex; gap:6px;">
                         <input type="text" id="chatInputText" placeholder="संदेश लिखें..." style="background:#111; border:1px solid #444; color:#fff; padding:10px; border-radius:8px; font-size:13px; flex:1;">
-                        <button class="btn btn-play" onclick="sendChatMessage(${postId})">Send</button>
+                        <button class="btn btn-play" data-postid="${postId}" data-buyer="${escapeHTML(targetBuyerPhone || '')}" onclick="sendChatMessage(Number(this.dataset.postid), this.dataset.buyer)">Send</button>
                     </div>
                 ` : `
                     <div style="text-align:center; background:#1f2833; padding:10px; border-radius:8px; color:#f1c40f; font-size:12px;">
-                        🔒 चैट करने के लिए ऊपर से कोई भी गिफ्ट भेजना अनिवार्य है।
+                        ${isPostAuthor ? '🔒 रिप्लाई करने के लिए पहले किसी यूज़र का गिफ्ट आना ज़रूरी है।' : '🔒 चैट करने के लिए ऊपर से कोई भी गिफ्ट भेजना अनिवार्य है।'}
                     </div>
                 `}
             `;
+            let area = document.getElementById('chatMsgArea');
+            if (area) area.scrollTop = area.scrollHeight;
         }
 
         function sendGift(postId, giftName, amount) {
@@ -1003,14 +1410,15 @@
                 return;
             }
 
-            currentUser.balance -= amount;
+            currentUser.balance = Math.round((currentUser.balance - amount) * 100) / 100;
             let guesserUser = state.users[post.phone];
             if (guesserUser) {
-                guesserUser.balance += amount;
+                guesserUser.balance = Math.round((guesserUser.balance + amount) * 100) / 100;
             }
 
-            if (!post.chatMessages) post.chatMessages = [];
-            post.chatMessages.push({
+            if (!post.chats || typeof post.chats !== "object") post.chats = {};
+            if (!post.chats[state.currentUserPhone]) post.chats[state.currentUserPhone] = [];
+            post.chats[state.currentUserPhone].push({
                 sender: state.currentUserPhone,
                 senderName: currentUser.name,
                 text: `🎁 Sent a gift: ${giftName}`,
@@ -1024,11 +1432,11 @@
             }
 
             saveState();
-            alert(`सफलतापूर्वक ${giftName} भेज दिया गया! चैट अब खुल गई है।`);
+            alert(`सफलतापूर्वक ${giftName} भेज दिया गया! प्राइवेट चैट अब खुल गई है।`);
             renderChatBox(document.getElementById('appRoot'), postId);
         }
 
-        function sendChatMessage(postId) {
+        function sendChatMessage(postId, buyerPhone) {
             let input = document.getElementById('chatInputText');
             if (!input) return;
             let text = input.value.trim();
@@ -1036,10 +1444,13 @@
 
             let post = state.guessingPosts.find(p => p.id === postId);
             if (!post) return;
-            let currentUser = state.users[state.currentUserPhone];
-            if (!post.chatMessages) post.chatMessages = [];
+            if (!post.chats || typeof post.chats !== "object") post.chats = {};
+            let key = post.phone === state.currentUserPhone ? buyerPhone : state.currentUserPhone;
+            if (!key) return;
+            if (!post.chats[key]) post.chats[key] = [];
 
-            post.chatMessages.push({
+            let currentUser = state.users[state.currentUserPhone];
+            post.chats[key].push({
                 sender: state.currentUserPhone,
                 senderName: currentUser.name,
                 text: text,
@@ -1051,29 +1462,128 @@
             renderChatBox(document.getElementById('appRoot'), postId);
         }
 
+        function getQrDownloadFilename(src) {
+            if (src.startsWith('data:image/jpeg')) return 'Deposit_QR.jpg';
+            if (src.startsWith('data:image/svg+xml')) return 'Deposit_QR.svg';
+            return 'Deposit_QR.png';
+        }
+
         function renderDeposit(root) {
             let waNum = encodeURIComponent((state.adminWhatsApp || "").replace(/\D/g, ""));
             let waLink = `https://wa.me/${waNum}?text=Hello%20Admin,%20I%20have%20made%20payment,%20please%20add%20balance`;
             let qrSrc = safeImageURL(state.depositQR, DEFAULT_QR_SVG);
+            let dlName = getQrDownloadFilename(qrSrc);
 
             root.innerHTML = `
                 <div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>➕ Add Points / Deposit</h3></div>
                 <div class="form-card" style="text-align:center;">
-                    <p style="color:#aaa; font-size:12px; margin-bottom:15px;">नीचे दिए गए QR कोड को स्कैन करें या PhonePe/GPay नंबर पर पेमेंट करें। पेमेंट के बाद स्क्रीनशॉट WhatsApp पर भेजें।</p>
+                    <p style="color:#aaa; font-size:12px; margin-bottom:15px;">नीचे दिए गए QR कोड को स्कैन करें या PhonePe/GPay नंबर पर पेमेंट करें। पेमेंट के बाद नीचे UTR नंबर सबमिट करें या WhatsApp पर स्क्रीनशॉट भेजें।</p>
                     
                     <div style="background:#fff; padding:10px; display:inline-block; border-radius:8px; margin-bottom:15px;">
                         <img src="${qrSrc}" alt="Deposit QR Code" style="width:180px; height:180px; object-fit:contain; display:block;">
                     </div>
-                    <div style="margin-bottom:10px;"><a href="${qrSrc}" download="Deposit_QR.png" class="btn" style="background:#333; color:#fff; padding:6px 12px; font-size:11px; text-decoration:none; display:inline-block;">📥 Download QR Code</a></div>
+                    <div style="margin-bottom:10px;"><a href="${qrSrc}" download="${dlName}" class="btn" style="background:#333; color:#fff; padding:6px 12px; font-size:11px; text-decoration:none; display:inline-block;">📥 Download QR Code</a></div>
 
                     <div style="background:#111; padding:12px; border-radius:8px; margin-bottom:15px; border:1px dashed var(--primary);">
                         <div style="font-size:12px; color:#aaa;">PhonePe / Google Pay / Paytm Number:</div>
                         <div style="font-size:18px; font-weight:bold; color:var(--primary); margin-top:4px;">${escapeHTML(state.depositUPI)}</div>
                     </div>
 
+                    <div style="background:#14181f; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #333;">
+                        <h4 style="color:var(--primary); font-size:13px; margin-bottom:10px;">💳 Submit Deposit Request (App के अंदर)</h4>
+                        <div class="input-group">
+                            <label>Amount (Min ₹100)</label>
+                            <input type="number" id="depAmtInput" min="100" placeholder="राशि (जैसे: 200, 500)">
+                        </div>
+                        <div class="input-group">
+                            <label>UTR / Transaction Ref No.</label>
+                            <input type="text" id="depUtrInput" placeholder="12 अंकों का UTR / Ref नंबर">
+                        </div>
+                        <button class="btn" style="background:var(--primary); color:#000; width:100%;" onclick="submitDepositRequest()">✅ Submit Deposit Request</button>
+                    </div>
+
                     <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn" style="background:#27ae60; color:#fff; display:block; text-decoration:none; padding:12px;">💬 Send Payment Screenshot on WhatsApp</a>
                 </div>
             `;
+        }
+
+        function submitDepositRequest() {
+            let amtEl = document.getElementById('depAmtInput');
+            let utrEl = document.getElementById('depUtrInput');
+            if (!amtEl || !utrEl) return;
+
+            let rawAmt = amtEl.value.trim();
+            let utr = utrEl.value.trim();
+            if (!isStrictPositiveInt(rawAmt) || parseInt(rawAmt, 10) < 100) {
+                alert("❌ कृपया कम से कम ₹100 (केवल पूरे अंक) दर्ज करें!");
+                return;
+            }
+            if (utr.length < 6) {
+                alert("❌ कृपया सही UTR / Transaction Ref नंबर दर्ज करें!");
+                return;
+            }
+
+            let user = state.users[state.currentUserPhone];
+            state.depositRequests.push({
+                id: Date.now(),
+                phone: user.phone,
+                name: user.name,
+                amount: parseInt(rawAmt, 10),
+                utr: utr,
+                status: "PENDING",
+                time: new Date().toLocaleString()
+            });
+            saveState();
+            alert("डिपॉजिट रिक्वेस्ट एडमिन के पास भेज दी गई है! अप्रूव होते ही वॉलेट में बैलेंस जुड़ जाएगा।");
+            navigate('profile');
+        }
+
+        function copyReferralLink() {
+            let link = `${REFERRAL_BASE_URL}/?ref=${state.currentUserPhone}`;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(link).then(() => {
+                    alert("✅ Referral Link कॉपी हो गया:\n" + link);
+                }).catch(() => fallbackCopyText(link));
+            } else {
+                fallbackCopyText(link);
+            }
+        }
+
+        function fallbackCopyText(text) {
+            let ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                alert("✅ Referral Link कॉपी हो गया:\n" + text);
+            } catch (e) {
+                prompt("नीचे से Referral Link कॉपी करें:", text);
+            }
+            document.body.removeChild(ta);
+        }
+
+        function claimReferralToWallet() {
+            let user = state.users[state.currentUserPhone];
+            if (!user) return;
+            let refBal = Number(user.referralBalance || 0);
+            if (refBal <= 0) {
+                alert("❌ ट्रांसफर करने के लिए अभी आपके Referral Commission Box में कोई बैलेंस नहीं है!");
+                return;
+            }
+            user.balance = Math.round((user.balance + refBal) * 100) / 100;
+            user.referralBalance = 0;
+            state.transactions.push({
+                phone: user.phone,
+                type: "Referral Commission Added to Wallet",
+                amount: refBal,
+                time: new Date().toLocaleString()
+            });
+            saveState();
+            alert(`✅ ₹${refBal} रेफरल कमीशन आपके मेन वॉलेट में जुड़ गया है!`);
+            navigate('profile');
         }
 
         function renderProfile(root) {
@@ -1082,11 +1592,65 @@
             let waLink = `https://wa.me/${waNum}?text=Hello%20Admin`;
             let avatarSrc = safeImageURL(user.avatar, DEFAULT_AVATAR_SVG);
 
+            let refLink = `${REFERRAL_BASE_URL}/?ref=${encodeURIComponent(user.phone)}`;
+            let refShareText = encodeURIComponent(`M.KING App जॉइन करें और रोज़ जीतें! मेरे रेफरल लिंक से रजिस्टर करें:\n${refLink}`);
+            let refWaShareLink = `https://wa.me/?text=${refShareText}`;
+
+            let refBal = Number(user.referralBalance || 0);
+            let refTotalEarned = Number(user.referralTotalEarned || 0);
+            let referredFriends = Object.values(state.users).filter(u => !u.isSystem && u.referredBy === user.phone);
+            let refHistory = Array.isArray(user.referralHistory) ? user.referralHistory.slice().reverse() : [];
+
+            let refFriendsHtml = referredFriends.length === 0
+                ? `<p style="color:#777; font-size:11px;">अभी तक आपने किसी को रेफर नहीं किया है।</p>`
+                : referredFriends.map(f => {
+                    let fBonusDone = Boolean(f.referralFirstBonusPaid);
+                    let fDeposited = Number(f.referralTotalDeposited || 0);
+                    let badge = fBonusDone
+                        ? `<span class="win-badge">₹100 Bonus Unlocked</span>`
+                        : `<span class="pend-badge">Deposit ₹${fDeposited}/200</span>`;
+                    return `<div style="background:#111; padding:7px 8px; margin-bottom:5px; border-radius:6px; font-size:11px; display:flex; justify-content:space-between; align-items:center; gap:6px;"><div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#aaa">Total Deposit: ₹${fDeposited} • Joined: ${escapeHTML(f.joinedAt || 'Recent')}</small></div>${badge}</div>`;
+                }).join('');
+
+            let refHistoryHtml = refHistory.length === 0
+                ? `<p style="color:#777; font-size:11px;">अभी कोई रेफरल कमीशन हिस्ट्री नहीं है।</p>`
+                : refHistory.map(h => `
+                    <div style="background:#111; padding:7px 8px; margin-bottom:5px; border-radius:6px; font-size:11px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                        <div><b>${escapeHTML(h.type)}</b><br><small style="color:#aaa">${escapeHTML(h.friendName)} (${escapeHTML(h.friendPhone)}) • Deposit: ₹${h.depositAmount}<br>${escapeHTML(h.time)}</small></div>
+                        <b style="color:var(--green); font-size:13px;">+₹${h.commission}</b>
+                    </div>
+                `).join('');
+
+            let myWithdraws = state.withdrawRequests.filter(w => w.phone === user.phone).slice().reverse();
+            let wHistHtml = myWithdraws.length === 0 ? `<p style="color:#777; font-size:12px;">कोई विड्रॉल रिक्वेस्ट नहीं है।</p>` : '';
+            myWithdraws.forEach(w => {
+                let badge = w.status === "APPROVED" ? `<span class="win-badge">APPROVED</span>` : (w.status === "REJECTED" ? `<span class="loss-badge">REJECTED (Refunded)</span>` : `<span class="pend-badge">PENDING</span>`);
+                wHistHtml += `<div style="background:#111; padding:8px; margin-bottom:5px; border-radius:4px; font-size:12px; display:flex; justify-content:space-between; align-items:center;"><div><b>₹${w.amount}</b><br><small style="color:#aaa">${escapeHTML(w.time)}</small></div>${badge}</div>`;
+            });
+
+            let myDeposits = state.depositRequests.filter(d => d.phone === user.phone).slice().reverse();
+            let dHistHtml = myDeposits.length === 0 ? `<p style="color:#777; font-size:12px;">कोई डिपॉजिट रिक्वेस्ट नहीं है।</p>` : '';
+            myDeposits.forEach(d => {
+                let badge = d.status === "APPROVED" ? `<span class="win-badge">APPROVED</span>` : (d.status === "REJECTED" ? `<span class="loss-badge">REJECTED</span>` : `<span class="pend-badge">PENDING</span>`);
+                dHistHtml += `<div style="background:#111; padding:8px; margin-bottom:5px; border-radius:4px; font-size:12px; display:flex; justify-content:space-between; align-items:center;"><div><b>₹${d.amount}</b> (UTR: ${escapeHTML(d.utr)})<br><small style="color:#aaa">${escapeHTML(d.time)}</small></div>${badge}</div>`;
+            });
+
+            let myTxns = state.transactions.filter(t => t.phone === user.phone).slice().reverse();
+            let txnHtml = myTxns.length === 0 ? `<p style="color:#777; font-size:12px;">कोई ट्रांजैक्शन नहीं है।</p>` : '';
+            myTxns.slice(0, 30).forEach(t => {
+                let color = t.amount >= 0 ? 'var(--green)' : 'var(--red)';
+                let sign = t.amount >= 0 ? '+' : '';
+                txnHtml += `<div style="background:#111; padding:7px; margin-bottom:4px; border-radius:4px; font-size:11px; display:flex; justify-content:space-between; align-items:center;"><div><b>${escapeHTML(t.type)}</b><br><small style="color:#888">${escapeHTML(t.time)}</small></div><b style="color:${color}">${sign}₹${t.amount}</b></div>`;
+            });
+
             root.innerHTML = `
                 <div class="profile-top">
                     <div class="profile-pic-box">
                         <img class="profile-img" src="${avatarSrc}" alt="Profile">
-                        <div style="margin-top:5px;"><button class="btn" style="padding:4px 8px; font-size:10px; background:#333; color:#fff;" onclick="changeAvatar()">Change Photo</button></div>
+                        <div style="margin-top:6px; display:flex; justify-content:center; gap:6px;">
+                            <label class="btn" style="padding:4px 8px; font-size:10px; background:#333; color:#fff; cursor:pointer;">📷 Upload Photo<input type="file" accept="image/*" style="display:none;" onchange="changeAvatarGallery(event)"></label>
+                            <button class="btn" style="padding:4px 8px; font-size:10px; background:#2c3e50; color:#fff;" onclick="changeAvatarUrl()">🔗 Image URL</button>
+                        </div>
                     </div>
                     <div style="margin-top:10px;">
                         <input type="text" id="profileNameInput" value="${escapeHTML(user.name)}" style="background:#111; border:1px solid #444; color:#fff; padding:6px; border-radius:6px; text-align:center; font-weight:bold; font-size:15px; width:80%; margin-bottom:5px;" placeholder="अपना नाम लिखें">
@@ -1097,6 +1661,47 @@
 
                 <div class="form-card" style="text-align:center;">
                     <button class="btn" style="background:var(--green); color:#000; width:100%; padding:12px; font-size:15px; font-weight:bold; margin-bottom:10px;" onclick="navigate('deposit')">➕ Deposit Points (QR & UPI)</button>
+                </div>
+
+                <div class="ref-box">
+                    <h4 style="color:var(--primary); margin-bottom:6px; font-size:15px;">🎁 Refer & Earn (Referral Commission Box)</h4>
+                    <p style="font-size:11px; color:#ddd; line-height:1.4; margin-bottom:8px;">
+                        दोस्त को रेफर करें: दोस्त <b>₹200</b> डिपॉजिट करेगा तो आपको <b>₹100 Starting Bonus</b> मिलेगा, और उसके बाद दोस्त के हर डिपॉजिट पर <b>3% Commission</b> (जैसे ₹100 पर ₹3) इसी बॉक्स में जुड़ेगा!
+                    </p>
+
+                    <div class="ref-stats">
+                        <div class="ref-stat-item">
+                            <div class="ref-stat-val">₹${refBal}</div>
+                            <div class="ref-stat-lbl">Commission Box</div>
+                        </div>
+                        <div class="ref-stat-item">
+                            <div class="ref-stat-val" style="color:var(--primary);">₹${refTotalEarned}</div>
+                            <div class="ref-stat-lbl">Total Earning</div>
+                        </div>
+                        <div class="ref-stat-item">
+                            <div class="ref-stat-val" style="color:var(--blue);">${referredFriends.length}</div>
+                            <div class="ref-stat-lbl">Total Referred</div>
+                        </div>
+                    </div>
+
+                    <button class="btn" style="background:var(--green); color:#000; width:100%; margin-bottom:12px; font-size:13px;" onclick="claimReferralToWallet()">💸 Transfer ₹${refBal} to Main Wallet</button>
+
+                    <div style="font-size:11px; color:#bbb; margin-bottom:4px;">आपका Referral Code: <b style="color:#fff;">${escapeHTML(user.phone)}</b></div>
+                    <div class="ref-link-box">${escapeHTML(refLink)}</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px;">
+                        <button class="btn" style="background:var(--primary); color:#000; font-size:12px;" onclick="copyReferralLink()">📋 Copy Link</button>
+                        <a href="${refWaShareLink}" target="_blank" rel="noopener noreferrer" class="btn" style="background:#27ae60; color:#fff; text-decoration:none; font-size:12px;">💬 Share WhatsApp</a>
+                    </div>
+
+                    <div style="margin-top:10px; border-top:1px solid #333; padding-top:10px;">
+                        <div style="font-size:12px; font-weight:bold; color:var(--primary); margin-bottom:6px;">👥 Referred Friends (${referredFriends.length})</div>
+                        <div style="max-height:140px; overflow-y:auto;">${refFriendsHtml}</div>
+                    </div>
+
+                    <div style="margin-top:10px; border-top:1px solid #333; padding-top:10px;">
+                        <div style="font-size:12px; font-weight:bold; color:var(--primary); margin-bottom:6px;">📜 Referral Commission History (${refHistory.length})</div>
+                        <div style="max-height:160px; overflow-y:auto;">${refHistoryHtml}</div>
+                    </div>
                 </div>
 
                 <div class="form-card">
@@ -1119,8 +1724,23 @@
                 </div>
 
                 <div class="form-card">
+                    <h4 style="margin-bottom:8px; color:var(--primary);">📤 My Withdrawal Status</h4>
+                    <div style="max-height:160px; overflow-y:auto;">${wHistHtml}</div>
+                </div>
+
+                <div class="form-card">
+                    <h4 style="margin-bottom:8px; color:var(--primary);">📥 My Deposit Status</h4>
+                    <div style="max-height:160px; overflow-y:auto;">${dHistHtml}</div>
+                </div>
+
+                <div class="form-card">
+                    <h4 style="margin-bottom:8px; color:var(--primary);">📒 Wallet Passbook (Recent Transactions)</h4>
+                    <div style="max-height:200px; overflow-y:auto;">${txnHtml}</div>
+                </div>
+
+                <div class="form-card">
                     <h4 style="margin-bottom:8px; color:var(--primary);">📅 Filter Game History by Date</h4>
-                    <div class="input-group"><input type="date" id="filterDate" onchange="filterHistory()"></div>
+                    <div class="input-group"><label>तारीख चुनें</label><input type="date" id="filterDate" onchange="filterHistory()"></div>
                     <div id="historyFilteredBox" style="max-height:200px; overflow-y:auto;">
                         <p style="color:#777; font-size:12px;">तारीख चुनें...</p>
                     </div>
@@ -1133,7 +1753,31 @@
             `;
         }
 
-        function changeAvatar() {
+        function changeAvatarGallery(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                let img = new Image();
+                img.onload = function () {
+                    const maxDim = 180;
+                    let w = img.width, h = img.height;
+                    if (w > h && w > maxDim) { h = Math.round((h * maxDim) / w); w = maxDim; }
+                    else if (h > maxDim) { w = Math.round((w * maxDim) / h); h = maxDim; }
+                    let canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    state.users[state.currentUserPhone].avatar = canvas.toDataURL('image/jpeg', 0.7);
+                    saveState();
+                    navigate('profile');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function changeAvatarUrl() {
             let url = prompt("अपनी प्रोफाइल फोटो का HTTPS Image URL डालें:", "");
             if (url === null) return;
             let cleaned = url.trim();
@@ -1171,17 +1815,21 @@
         function sendWithdrawalRequest() {
             let amtElem = document.getElementById('withdrawAmt');
             if (!amtElem) return;
-            let amt = parseInt(amtElem.value, 10);
+            let rawAmt = amtElem.value.trim();
             let user = state.users[state.currentUserPhone];
 
             if (!user.bankDetails && !user.upiDetails) {
                 alert("❌ कृपया पहले अपनी Bank या UPI डिटेल्स सेव करें!");
                 return;
             }
-            if (isNaN(amt) || amt < 500) { alert("कम से कम ₹500 दर्ज करें!"); return; }
+            if (!isStrictPositiveInt(rawAmt) || parseInt(rawAmt, 10) < 500) {
+                alert("कम से कम ₹500 (केवल पूरे अंक) दर्ज करें!");
+                return;
+            }
+            let amt = parseInt(rawAmt, 10);
             if (user.balance < amt) { alert("पर्याप्त बैलेंस नहीं है!"); return; }
 
-            user.balance -= amt;
+            user.balance = Math.round((user.balance - amt) * 100) / 100;
             state.withdrawRequests.push({
                 id: Date.now(),
                 phone: user.phone,
@@ -1243,16 +1891,41 @@
             if (!pElem || !pwElem) return;
             let phone = pElem.value.trim();
             let pass = pwElem.value.trim();
-            if (phone === state.adminCreds.phone && pass === state.adminCreds.pass) {
+            if (phone === state.adminCreds.phone && verifyPassword(pass, state.adminCreds.pass)) {
+                if (!isHashedPassword(state.adminCreds.pass)) {
+                    state.adminCreds.pass = hashPassword(pass);
+                    saveState();
+                }
                 state.isAdminLoggedIn = true;
+                sessionStorage.setItem('mk_admin_logged_in', '1');
                 navigate('adminLogin');
             } else {
                 alert("गलत मोबाइल नंबर या पासवर्ड!");
             }
         }
 
+        function adminLogout() {
+            state.isAdminLoggedIn = false;
+            sessionStorage.removeItem('mk_admin_logged_in');
+            navigate('adminLogin');
+        }
+
         function renderAdmin(root) {
-            let marketOptions = state.markets.map(m => `<option value="${m.id}">${escapeHTML(m.name)} (${escapeHTML(m.openTime || '')} ${escapeHTML(m.openAmPm || '')})</option>`).join('');
+            let marketOptions = state.markets.map(m => `<option value="${m.id}">${escapeHTML(m.name)} (${escapeHTML(m.openTime || '')} ${escapeHTML(m.openAmPm || '')} - ${escapeHTML(m.closeTime || '')} ${escapeHTML(m.closeAmPm || '')})</option>`).join('');
+
+            let depositList = state.depositRequests.filter(d => d.status === "PENDING");
+            let dHtml = depositList.length === 0 ? `<p style="color:#777; font-size:12px;">कोई नई डिपॉजिट रिक्वेस्ट नहीं है।</p>` : '';
+            depositList.forEach(d => {
+                dHtml += `
+                    <div style="background:#111; padding:8px; margin-bottom:6px; border-radius:6px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                        <div><b>${escapeHTML(d.name)}</b> (${escapeHTML(d.phone)})<br>Amt: <b style="color:var(--green)">₹${d.amount}</b> | UTR: <b>${escapeHTML(d.utr)}</b></div>
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn" style="background:var(--green); color:#000; padding:4px 8px; font-size:11px;" onclick="approveDeposit(${d.id})">Approve</button>
+                            <button class="btn" style="background:var(--red); color:#fff; padding:4px 8px; font-size:11px;" onclick="rejectDeposit(${d.id})">Reject</button>
+                        </div>
+                    </div>`;
+            });
+
             let withdrawList = state.withdrawRequests.filter(w => w.status === "PENDING");
             let wHtml = withdrawList.length === 0 ? `<p style="color:#777; font-size:12px;">कोई नई विड्रॉल रिक्वेस्ट नहीं है।</p>` : '';
             withdrawList.forEach(w => {
@@ -1271,20 +1944,27 @@
                 forgotListHtml += `
                     <div style="background:#111; padding:8px; margin-bottom:6px; border-radius:6px; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                         <div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#aaa">${escapeHTML(f.time)}</small></div>
-                        <button class="btn" style="background:var(--primary); color:#000; padding:6px 10px; font-size:11px;" onclick="adminResetUserPassword('${escapeHTML(f.phone)}', ${f.id})">🔑 Reset Pass</button>
+                        <button class="btn" style="background:var(--primary); color:#000; padding:6px 10px; font-size:11px;" data-phone="${escapeHTML(f.phone)}" data-reqid="${f.id}" onclick="adminResetUserPassword(this.dataset.phone, Number(this.dataset.reqid))">🔑 Reset Pass</button>
                     </div>
                 `;
             });
 
+            let todayStr = getLocalDateString();
+
             root.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <h3 style="color:var(--primary);">⚙️ Admin Dashboard</h3>
-                    <button class="btn" style="background:var(--red); color:#fff; padding:6px 10px; font-size:11px;" onclick="state.isAdminLoggedIn=false; navigate('adminLogin');">Logout</button>
+                    <button class="btn" style="background:var(--red); color:#fff; padding:6px 10px; font-size:11px;" onclick="adminLogout()">Logout</button>
                 </div>
 
                 <div class="admin-section">
                     <h4>🔑 Forgot Password Requests (${state.forgotRequests.length})</h4>
                     ${forgotListHtml}
+                </div>
+
+                <div class="admin-section">
+                    <h4>💰 Player Deposit Requests (${depositList.length})</h4>
+                    ${dHtml}
                 </div>
 
                 <div class="admin-section">
@@ -1304,9 +1984,17 @@
                 </div>
 
                 <div class="admin-section">
+                    <h4>📊 Market Bid Load / Jantri Summary</h4>
+                    <div class="input-group"><label>Market चुनें</label><select id="admLoadMarket">${marketOptions}</select></div>
+                    <div class="input-group"><label>Date चुनें</label><input type="date" id="admLoadDate" value="${todayStr}"></div>
+                    <button class="btn" style="background:var(--primary); color:#000; width:100%;" onclick="adminCheckBidLoad()">Check Total Bid Load</button>
+                    <div id="admLoadResultBox" style="margin-top:10px; font-size:12px; max-height:220px; overflow-y:auto;"></div>
+                </div>
+
+                <div class="admin-section">
                     <h4>🔍 Player Game History Check</h4>
-                    <div class="input-group"><input type="text" id="admGameSearchPhone" placeholder="Player Mobile Number"></div>
-                    <div class="input-group"><input type="date" id="admGameSearchDate"></div>
+                    <div class="input-group"><label>Player Mobile Number</label><input type="text" id="admGameSearchPhone" placeholder="Player Mobile Number"></div>
+                    <div class="input-group"><label>Filter by Date (Optional)</label><input type="date" id="admGameSearchDate"></div>
                     <button class="btn" style="background:var(--blue); color:#fff; width:100%;" onclick="adminSearchGameHistory()">Search Game History</button>
                     <div id="admGameResultBox" style="margin-top:10px; font-size:12px; max-height:220px; overflow-y:auto;"></div>
                 </div>
@@ -1314,8 +2002,11 @@
                 <div class="admin-section">
                     <h4>👤 Player Profile & Wallet Check</h4>
                     <div class="input-group"><input type="text" id="admProfSearchPhone" placeholder="Player Mobile Number"></div>
-                    <button class="btn" style="background:var(--blue); color:#fff; width:100%;" onclick="adminSearchPlayerProfile()">Search Player Profile</button>
-                    <div id="admProfResultBox" style="margin-top:10px; font-size:12px;"></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <button class="btn" style="background:var(--blue); color:#fff;" onclick="adminSearchPlayerProfile()">Search Player</button>
+                        <button class="btn" style="background:#2c3e50; color:#fff;" onclick="adminShowAllUsers()">👥 All Players</button>
+                    </div>
+                    <div id="admProfResultBox" style="margin-top:10px; font-size:12px; max-height:240px; overflow-y:auto;"></div>
                 </div>
 
                 <div class="admin-section">
@@ -1328,6 +2019,10 @@
                     <div class="input-group"><input type="text" id="admPhone" placeholder="Player Mobile Number"></div>
                     <div class="input-group"><select id="admAction"><option value="add">Add</option><option value="deduct">Deduct</option></select></div>
                     <div class="input-group"><input type="number" id="admAmount" min="1" placeholder="Amount"></div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:12px; color:#ccc;">
+                        <input type="checkbox" id="admCountAsDeposit" checked style="width:auto;">
+                        <label for="admCountAsDeposit" style="margin:0; cursor:pointer;">Deposit मानें (Referral ₹100 Bonus / 3% Commission दें)</label>
+                    </div>
                     <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="adminModBal()">Update Balance</button>
                 </div>
 
@@ -1342,9 +2037,13 @@
                         <div class="input-group"><input type="text" id="admCloseTime" placeholder="Close Time (06:15)"></div>
                         <div class="input-group"><select id="admCloseAmPm"><option value="AM">AM</option><option value="PM" selected>PM</option></select></div>
                     </div>
-                    <button class="btn" style="background:var(--blue); color:#fff; width:100%; margin-bottom:8px;" onclick="adminAddMarket()">➕ Add Market</button>
-                    <div class="input-group"><select id="admDelMarketId">${marketOptions}</select></div>
-                    <button class="btn" style="background:var(--red); color:#fff; width:100%;" onclick="adminDelMarket()">❌ Delete Market</button>
+                    <button class="btn" style="background:var(--blue); color:#fff; width:100%; margin-bottom:12px;" onclick="adminAddMarket()">➕ Add Market</button>
+
+                    <div class="input-group"><label>Edit / Delete Existing Market</label><select id="admDelMarketId" onchange="loadMarketForEdit()">${marketOptions}</select></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <button class="btn" style="background:var(--primary); color:#000;" onclick="adminEditMarket()">✏️ Update Selected</button>
+                        <button class="btn" style="background:var(--red); color:#fff;" onclick="adminDelMarket()">❌ Delete Market</button>
+                    </div>
                 </div>
 
                 <div class="admin-section">
@@ -1358,22 +2057,23 @@
 
                 <div class="admin-section">
                     <h4>📢 Declare Result</h4>
-                    <div class="input-group"><select id="admResMarket">${marketOptions}</select></div>
-                    <div class="input-group"><input type="text" id="admResStr" placeholder="जैसे: 123-6*-*** (सिर्फ Open) या 123-68-459 (Full)"></div>
+                    <div class="input-group"><label>Market</label><select id="admResMarket">${marketOptions}</select></div>
+                    <div class="input-group"><label>Bids Date (किस तारीख की बिड्स सेटल करनी हैं)</label><input type="date" id="admResDate" value="${todayStr}"></div>
+                    <div class="input-group"><label>Result String</label><input type="text" id="admResStr" placeholder="जैसे: 123-6*-*** (सिर्फ Open) या 123-68-459 (Full)"></div>
                     <button class="btn" style="background:var(--primary); color:#000; width:100%;" onclick="adminDeclare()">Publish Result</button>
                 </div>
 
                 <div class="admin-section">
                     <h4>4️⃣ Change Admin Password</h4>
-                    <div class="input-group"><input type="text" id="newAdminPhone" value="${escapeHTML(state.adminCreds.phone)}"></div>
-                    <div class="input-group"><input type="password" id="newAdminPass" value="${escapeHTML(state.adminCreds.pass)}"></div>
+                    <div class="input-group"><label>Admin Mobile Number</label><input type="text" id="newAdminPhone" value="${escapeHTML(state.adminCreds.phone)}"></div>
+                    <div class="input-group"><label>New Password (बदलने के लिए लिखें)</label><input type="password" id="newAdminPass" placeholder="नया पासवर्ड दर्ज करें (कम से कम 4 अक्षर)"></div>
                     <button class="btn" style="background:var(--blue); color:#fff; width:100%;" onclick="adminChangeCreds()">Save New Password</button>
                 </div>
 
                 <div class="admin-section">
                     <h4>Settings (WhatsApp & Notice)</h4>
-                    <div class="input-group"><input type="text" id="admWa" value="${escapeHTML(state.adminWhatsApp)}"></div>
-                    <div class="input-group"><textarea id="admNotice" rows="2">${escapeHTML(state.noticeText)}</textarea></div>
+                    <div class="input-group"><label>WhatsApp Support Number</label><input type="text" id="admWa" value="${escapeHTML(state.adminWhatsApp)}"></div>
+                    <div class="input-group"><label>Notice Board Text</label><textarea id="admNotice" rows="2">${escapeHTML(state.noticeText)}</textarea></div>
                     <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="adminSaveSettings()">Save Settings</button>
                 </div>
             `;
@@ -1384,10 +2084,39 @@
             if (!user) return;
             let newPass = prompt(`${phone} के लिए नया अस्थायी पासवर्ड लिखें (कम से कम 4 अक्षर):`);
             if (!newPass || newPass.trim().length < 4) return;
-            user.password = newPass.trim();
+            user.password = hashPassword(newPass.trim());
             state.forgotRequests = state.forgotRequests.filter(r => r.id !== reqId);
             saveState();
             alert(`नया पासवर्ड सेट हो गया! कृपया यूज़र को सूचित करें।`);
+            navigate('adminLogin');
+        }
+
+        function approveDeposit(id) {
+            let req = state.depositRequests.find(d => d.id === id);
+            if (!req || req.status !== "PENDING") return;
+            req.status = "APPROVED";
+            if (!state.users[req.phone]) {
+                state.users[req.phone] = { name: req.name || ("Player " + req.phone.slice(-4)), balance: 0, phone: req.phone, password: "", avatar: "", bankDetails: "", upiDetails: "", referredBy: null, referralBalance: 0, referralTotalEarned: 0, referralHistory: [], referralFirstBonusPaid: false, referralTotalDeposited: 0, joinedAt: new Date().toLocaleDateString() };
+            }
+            state.users[req.phone].balance = Math.round((state.users[req.phone].balance + req.amount) * 100) / 100;
+            state.transactions.push({
+                phone: req.phone,
+                type: `Deposit Approved (UTR: ${req.utr})`,
+                amount: req.amount,
+                time: new Date().toLocaleString()
+            });
+            processReferralDeposit(req.phone, req.amount);
+            saveState();
+            alert("डिपॉजिट अप्रूव हो गया, बैलेंस जुड़ गया और रेफरल कमीशन (यदि लागू हो) अपडेट हो गया!");
+            navigate('adminLogin');
+        }
+
+        function rejectDeposit(id) {
+            let req = state.depositRequests.find(d => d.id === id);
+            if (!req || req.status !== "PENDING") return;
+            req.status = "REJECTED";
+            saveState();
+            alert("डिपॉजिट रिक्वेस्ट रिजेक्ट कर दी गई!");
             navigate('adminLogin');
         }
 
@@ -1410,6 +2139,7 @@
                     state.depositQR = canvas.toDataURL('image/jpeg', 0.75);
                     let prev = document.getElementById('adminQrPreview');
                     if (prev) prev.src = state.depositQR;
+                    saveState();
                 };
                 img.src = e.target.result;
             };
@@ -1423,6 +2153,44 @@
             if (upi) state.depositUPI = upi;
             saveState();
             alert("डिपॉजिट QR और UPI डिटेल्स अपडेट हो गई!");
+        }
+
+        function adminCheckBidLoad() {
+            let mEl = document.getElementById('admLoadMarket');
+            let dEl = document.getElementById('admLoadDate');
+            let box = document.getElementById('admLoadResultBox');
+            if (!mEl || !dEl || !box) return;
+
+            let mId = parseInt(mEl.value, 10);
+            let date = dEl.value || getLocalDateString();
+            let filtered = state.bids.filter(b => b.marketId === mId && b.date === date && b.status !== "REFUNDED");
+
+            if (filtered.length === 0) {
+                box.innerHTML = `<p style="color:#aaa;">इस मार्केट और तारीख पर कोई बिड नहीं लगी है।</p>`;
+                return;
+            }
+
+            let totalAmt = 0;
+            let groups = {};
+            filtered.forEach(b => {
+                totalAmt += b.amount;
+                let key = `${b.gameType} (${b.session}) - Digit: ${b.digit}`;
+                if (!groups[key]) groups[key] = { count: 0, amount: 0 };
+                groups[key].count += 1;
+                groups[key].amount += b.amount;
+            });
+
+            let rows = Object.entries(groups)
+                .sort((a, b) => b[1].amount - a[1].amount)
+                .map(([k, v]) => `<div style="background:#111; padding:6px; margin-bottom:4px; border-radius:4px; display:flex; justify-content:space-between;"><span>${escapeHTML(k)} (${v.count})</span><b style="color:var(--primary)">₹${v.amount}</b></div>`)
+                .join('');
+
+            box.innerHTML = `
+                <div style="background:#111; padding:8px; border-radius:6px; margin-bottom:8px; border:1px solid var(--primary);">
+                    Total Bids: <b>${filtered.length}</b> | Total Load: <b style="color:var(--green)">₹${totalAmt}</b>
+                </div>
+                ${rows}
+            `;
         }
 
         function adminSearchGameHistory() {
@@ -1443,8 +2211,8 @@
             }
 
             let html = '';
-            filtered.forEach(b => {
-                let color = b.status === "WON" ? "var(--green)" : (b.status === "LOST" ? "var(--red)" : "var(--primary)");
+            filtered.slice().reverse().forEach(b => {
+                let color = b.status === "WON" ? "var(--green)" : (b.status === "LOST" ? "var(--red)" : (b.status === "REFUNDED" ? "var(--blue)" : "var(--primary)"));
                 html += `
                     <div style="background:#111; padding:8px; margin-bottom:5px; border-radius:4px; border-left:3px solid ${color};">
                         <b>${escapeHTML(b.marketName)}</b> (${escapeHTML(b.session)})<br>
@@ -1471,6 +2239,7 @@
                 return;
             }
 
+            let referredCount = Object.values(state.users).filter(u => !u.isSystem && u.referredBy === phone).length;
             let userTxns = state.transactions.filter(t => t.phone === phone);
             let txnHtml = userTxns.length === 0 ? `<small style="color:#aaa">कोई ट्रांजैक्शन नहीं है।</small>` : '';
             userTxns.slice().reverse().forEach(t => {
@@ -1482,6 +2251,8 @@
                     <b>Name:</b> ${escapeHTML(user.name)}<br>
                     <b>Phone:</b> ${escapeHTML(user.phone)}<br>
                     <b>Current Balance:</b> <b style="color:var(--green)">₹${user.balance}</b><br>
+                    <b>Referred By:</b> ${escapeHTML(user.referredBy || 'None')}<br>
+                    <b>Total Referred:</b> ${referredCount} | <b>Ref Box:</b> ₹${Number(user.referralBalance || 0)} (Total Earned: ₹${Number(user.referralTotalEarned || 0)})<br>
                     <b>Bank Details:</b> ${escapeHTML(user.bankDetails || 'Not Provided')}<br>
                     <b>UPI Details:</b> ${escapeHTML(user.upiDetails || 'Not Provided')}<br>
                     <hr style="border-color:#333; margin:6px 0;">
@@ -1489,6 +2260,21 @@
                     ${txnHtml}
                 </div>
             `;
+        }
+
+        function adminShowAllUsers() {
+            let box = document.getElementById('admProfResultBox');
+            if (!box) return;
+            let players = Object.values(state.users).filter(u => !u.isSystem);
+            if (players.length === 0) {
+                box.innerHTML = `<p style="color:#aaa;">कोई प्लेयर रजिस्टर नहीं है।</p>`;
+                return;
+            }
+            let html = `<div style="margin-bottom:6px; color:var(--primary);"><b>Total Players: ${players.length}</b></div>`;
+            players.forEach(u => {
+                html += `<div style="background:#111; padding:6px 8px; margin-bottom:4px; border-radius:4px; display:flex; justify-content:space-between;"><span><b>${escapeHTML(u.name)}</b> (${escapeHTML(u.phone)})</span><b style="color:var(--green)">₹${u.balance}</b></div>`;
+            });
+            box.innerHTML = html;
         }
 
         function approveWithdraw(id) {
@@ -1506,7 +2292,7 @@
             if (req && req.status === "PENDING") {
                 req.status = "REJECTED";
                 if (state.users[req.phone]) {
-                    state.users[req.phone].balance += req.amount;
+                    state.users[req.phone].balance = Math.round((state.users[req.phone].balance + req.amount) * 100) / 100;
                     state.transactions.push({
                         phone: req.phone,
                         type: "Withdrawal Rejected (Refund)",
@@ -1524,30 +2310,36 @@
             let pElem = document.getElementById('admPhone');
             let actElem = document.getElementById('admAction');
             let amtElem = document.getElementById('admAmount');
+            let depChk = document.getElementById('admCountAsDeposit');
             if (!pElem || !actElem || !amtElem) return;
 
             let phone = pElem.value.replace(/\D/g, '');
             let action = actElem.value;
-            let amt = parseInt(amtElem.value, 10);
-            if (phone.length !== 10 || isNaN(amt) || amt <= 0) {
-                alert("❌ कृपया सही 10 अंकों का मोबाइल नंबर और 0 से अधिक राशि दर्ज करें!");
+            let rawAmt = amtElem.value.trim();
+            if (phone.length !== 10 || !isStrictPositiveInt(rawAmt)) {
+                alert("❌ कृपया सही 10 अंकों का मोबाइल नंबर और 0 से अधिक पूरी राशि दर्ज करें!");
                 return;
             }
+            let amt = parseInt(rawAmt, 10);
             if (!state.users[phone]) {
-                state.users[phone] = { name: "Player " + phone.slice(-4), balance: 0, phone, password: "", avatar: "", bankDetails: "", upiDetails: "" };
+                state.users[phone] = { name: "Player " + phone.slice(-4), balance: 0, phone, password: "", avatar: "", bankDetails: "", upiDetails: "", referredBy: null, referralBalance: 0, referralTotalEarned: 0, referralHistory: [], referralFirstBonusPaid: false, referralTotalDeposited: 0, joinedAt: new Date().toLocaleDateString() };
             }
 
             if (action === 'add') {
-                state.users[phone].balance += amt;
+                state.users[phone].balance = Math.round((state.users[phone].balance + amt) * 100) / 100;
                 state.transactions.push({ phone, type: "Admin Added", amount: amt, time: new Date().toLocaleString() });
+                if (depChk && depChk.checked) {
+                    processReferralDeposit(phone, amt);
+                }
             } else {
                 if (state.users[phone].balance < amt) {
                     alert(`❌ यूज़र का बैलेंस (₹${state.users[phone].balance}) कटौती राशि से कम है!`);
                     return;
                 }
-                state.users[phone].balance -= amt;
+                state.users[phone].balance = Math.round((state.users[phone].balance - amt) * 100) / 100;
                 state.transactions.push({ phone, type: "Admin Deducted", amount: -amt, time: new Date().toLocaleString() });
             }
+            amtElem.value = '';
             saveState();
             alert("बैलेंस अपडेट हो गया!");
         }
@@ -1581,13 +2373,86 @@
             navigate('adminLogin');
         }
 
+        function loadMarketForEdit() {
+            let sel = document.getElementById('admDelMarketId');
+            if (!sel) return;
+            let mId = parseInt(sel.value, 10);
+            let m = state.markets.find(x => x.id === mId);
+            if (!m) return;
+            let mName = document.getElementById('admMarketName');
+            let oTime = document.getElementById('admOpenTime');
+            let oAmPm = document.getElementById('admOpenAmPm');
+            let cTime = document.getElementById('admCloseTime');
+            let cAmPm = document.getElementById('admCloseAmPm');
+            if (mName) mName.value = m.name;
+            if (oTime) oTime.value = m.openTime;
+            if (oAmPm) oAmPm.value = m.openAmPm;
+            if (cTime) cTime.value = m.closeTime;
+            if (cAmPm) cAmPm.value = m.closeAmPm;
+        }
+
+        function adminEditMarket() {
+            let sel = document.getElementById('admDelMarketId');
+            let mName = document.getElementById('admMarketName');
+            let oTime = document.getElementById('admOpenTime');
+            let oAmPm = document.getElementById('admOpenAmPm');
+            let cTime = document.getElementById('admCloseTime');
+            let cAmPm = document.getElementById('admCloseAmPm');
+            if (!sel || !mName || !oTime || !oAmPm || !cTime || !cAmPm) return;
+
+            let mId = parseInt(sel.value, 10);
+            let market = state.markets.find(m => m.id === mId);
+            if (!market) return;
+
+            let name = mName.value.trim().toUpperCase();
+            let openTime = oTime.value.trim();
+            let closeTime = cTime.value.trim();
+
+            if (!name || !isValidTimeFormat(openTime) || !isValidTimeFormat(closeTime)) {
+                alert("❌ कृपया मार्केट को सेलेक्ट करके ऊपर के बॉक्स में सही नाम और समय (जैसे 04:15) भरें!");
+                return;
+            }
+
+            market.name = name;
+            market.openTime = openTime;
+            market.openAmPm = oAmPm.value;
+            market.closeTime = closeTime;
+            market.closeAmPm = cAmPm.value;
+
+            saveState();
+            alert("मार्केट अपडेट हो गई!");
+            navigate('adminLogin');
+        }
+
         function adminDelMarket() {
             let delElem = document.getElementById('admDelMarketId');
             if (!delElem) return;
             let mId = parseInt(delElem.value, 10);
+            let market = state.markets.find(m => m.id === mId);
+            if (!market) return;
+
+            if (!confirm(`क्या आप वाकई "${market.name}" मार्केट डिलीट करना चाहते हैं? इसकी सभी PENDING बिड्स का पैसा यूज़र्स को वापस कर दिया जाएगा।`)) return;
+
+            let refundedCount = 0;
+            state.bids.forEach(b => {
+                if (b.marketId === mId && b.status === "PENDING") {
+                    b.status = "REFUNDED";
+                    if (state.users[b.phone]) {
+                        state.users[b.phone].balance = Math.round((state.users[b.phone].balance + b.amount) * 100) / 100;
+                        state.transactions.push({
+                            phone: b.phone,
+                            type: `Market Deleted Refund (${b.marketName})`,
+                            amount: b.amount,
+                            time: new Date().toLocaleString()
+                        });
+                    }
+                    refundedCount++;
+                }
+            });
+
             state.markets = state.markets.filter(m => m.id !== mId);
             saveState();
-            alert("डिलीट हो गई!");
+            alert(`मार्केट डिलीट हो गई! (${refundedCount} पेंडिंग बिड्स रिफंड की गईं)`);
             navigate('adminLogin');
         }
 
@@ -1598,11 +2463,18 @@
             let r4 = document.getElementById('rateDP');
             if (!r1 || !r2 || !r3 || !r4) return;
 
+            const ratePattern = /^\d+(?:\.\d+)?\s*ka\s*\d+(?:\.\d+)?$/i;
+            let vals = [r1.value.trim(), r2.value.trim(), r3.value.trim(), r4.value.trim()];
+            if (vals.some(v => !ratePattern.test(v))) {
+                alert("❌ कृपया सभी रेट्स '10 ka 95' के फॉर्मेट में लिखें!");
+                return;
+            }
+
             state.gameRates = [
-                { name: "Single Digit", rate: r1.value.trim() },
-                { name: "Jodi Digit", rate: r2.value.trim() },
-                { name: "Single Panna", rate: r3.value.trim() },
-                { name: "Double Panna", rate: r4.value.trim() }
+                { name: "Single Digit", rate: vals[0] },
+                { name: "Jodi Digit", rate: vals[1] },
+                { name: "Single Panna", rate: vals[2] },
+                { name: "Double Panna", rate: vals[3] }
             ];
             saveState();
             alert("गेम रेट्स सफलतापूर्वक अपडेट हो गए!");
@@ -1625,12 +2497,18 @@
             return 0;
         }
 
+        function pannaSumDigit(pannaStr) {
+            return String((parseInt(pannaStr[0], 10) + parseInt(pannaStr[1], 10) + parseInt(pannaStr[2], 10)) % 10);
+        }
+
         function adminDeclare() {
             let mElem = document.getElementById('admResMarket');
+            let dElem = document.getElementById('admResDate');
             let rElem = document.getElementById('admResStr');
-            if (!mElem || !rElem) return;
+            if (!mElem || !dElem || !rElem) return;
 
             let mId = parseInt(mElem.value, 10);
+            let targetDate = dElem.value || getLocalDateString();
             let resStr = rElem.value.trim();
             let market = state.markets.find(m => m.id === mId);
             if (!market) return;
@@ -1654,16 +2532,32 @@
                 return;
             }
 
+            if (hasOpen && pannaSumDigit(openPanna) !== jodi[0]) {
+                alert(`❌ Open Panna (${openPanna}) का जोड़ ${pannaSumDigit(openPanna)} होता है, इसलिए Jodi का पहला अंक ${pannaSumDigit(openPanna)} होना चाहिए!`);
+                return;
+            }
+
+            if (hasClose && pannaSumDigit(closePanna) !== jodi[1]) {
+                alert(`❌ Close Panna (${closePanna}) का जोड़ ${pannaSumDigit(closePanna)} होता है, इसलिए Jodi का दूसरा अंक ${pannaSumDigit(closePanna)} होना चाहिए!`);
+                return;
+            }
+
             market.result = resStr;
             if (hasFullJodi) {
-                market.chart.push(resStr);
+                if (!(market.lastChartDate === targetDate && market.chart[market.chart.length - 1] === resStr)) {
+                    market.chart.push(resStr);
+                    market.lastChartDate = targetDate;
+                }
             }
 
             let openDigit = jodi[0];
             let closeDigit = jodi[1];
+            let settledCount = 0;
+            let wonCount = 0;
+            let totalPayout = 0;
 
             state.bids.forEach(b => {
-                if (b.marketId !== mId || b.status !== "PENDING") return;
+                if (b.marketId !== mId || b.status !== "PENDING" || b.date !== targetDate) return;
 
                 let canSettle = false;
                 let win = false;
@@ -1692,12 +2586,15 @@
                 }
 
                 if (canSettle) {
+                    settledCount++;
                     if (win) {
+                        wonCount++;
                         let mult = getRateMultiplier(b.gameType);
                         b.status = "WON";
                         b.winAmount = Math.round(b.amount * mult);
+                        totalPayout += b.winAmount;
                         if (state.users[b.phone]) {
-                            state.users[b.phone].balance += b.winAmount;
+                            state.users[b.phone].balance = Math.round((state.users[b.phone].balance + b.winAmount) * 100) / 100;
                             state.transactions.push({
                                 phone: b.phone,
                                 type: `Won (${b.marketName} - ${b.gameType})`,
@@ -1711,8 +2608,10 @@
                 }
             });
 
+            rElem.value = '';
             saveState();
-            alert("रिजल्ट सफलतापूर्वक घोषित और सेटल हो गया!");
+            alert(`रिजल्ट घोषित और सेटल हो गया!\nतारीख: ${targetDate}\nकुल बिड्स सेटल: ${settledCount}\nजीत: ${wonCount} (कुल भुगतान: ₹${totalPayout})`);
+            navigate('adminLogin');
         }
 
         function adminChangeCreds() {
@@ -1721,10 +2620,11 @@
             if (!pElem || !pwElem) return;
             let p = pElem.value.trim();
             let pw = pwElem.value.trim();
-            if (!p || pw.length < 4) { alert("❌ कम से कम 4 अक्षर का पासवर्ड डालें!"); return; }
-            state.adminCreds = { phone: p, pass: pw };
+            if (!p || pw.length < 4) { alert("❌ कम से कम 4 अक्षर का नया पासवर्ड डालें!"); return; }
+            state.adminCreds = { phone: p, pass: hashPassword(pw) };
+            pwElem.value = '';
             saveState();
-            alert("पासवर्ड बदल गया!");
+            alert("एडमिन पासवर्ड सफलतापूर्वक बदल गया!");
         }
 
         function adminSaveSettings() {
