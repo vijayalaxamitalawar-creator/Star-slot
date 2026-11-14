@@ -37,3 +37,1478 @@ function fallbackCopy(text) {
         showToast("⚠️ Box se Select All karke Copy karein!");
     }
 }
+<body>
+
+<div class="app-container">
+
+    <!-- OFFLINE SCREEN -->
+    <div id="offlineScreen">
+        <div class="offline-card">
+            <h2 style="color: #ff4757; margin-top: 0; font-size: 18px;">⚠️ NO INTERNET CONNECTION</h2>
+            <p style="font-size: 11px; color: #ccc; margin-bottom: 12px;">Internet connection nahi hai ya slow hai.</p>
+            <button class="admin-btn" style="background:#00c6ff; color:#000; width:100%; padding:8px; font-size:12px; margin-bottom:6px;" onclick="checkInternetAndReload()">🔄 Retry Connection</button>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; padding:8px; font-size:12px;" onclick="playOfflineModeDirect()">🎮 Continue in Offline Fun Mode</button>
+        </div>
+    </div>
+
+    <!-- DEMO OTP BANNER -->
+    <div id="incomingSmsBanner" style="display:none; position:fixed; top:12px; left:50%; transform:translateX(-50%); width:92%; max-width:350px; background:rgba(15, 23, 42, 0.98); border:2px solid #00c6ff; border-radius:14px; box-shadow:0 12px 35px rgba(0,0,0,0.85); z-index:9999; padding:12px 14px; box-sizing:border-box;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+            <span style="font-size:11px; font-weight:bold; color:#00ffcc;">💬 DEMO OTP NOTIFICATION</span>
+            <span style="font-size:12px; color:#aaa; cursor:pointer;" onclick="closeSmsBanner()">✕</span>
+        </div>
+        <div style="font-size:12px; color:#fff; margin-bottom:10px;">
+            LuckySpin Social Demo Code: <b id="bannerOtpDisplay" style="color:#2ed573; font-size:15px; letter-spacing:2px;">------</b>
+        </div>
+        <button style="background:linear-gradient(90deg, #2ed573, #10ac84); color:#fff; border:none; padding:8px 12px; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer; width:100%;" onclick="autoFillOtpDirect()">⚡ Auto-Fill & Enter</button>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle, #10214a 0%, #060b19 100%); z-index:900; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+        <div style="width:100%; max-width:340px; border:2px solid #00c6ff; background:rgba(12, 23, 54, 0.96); border-radius:16px; padding:22px 18px; box-shadow:0 0 30px rgba(0, 198, 255, 0.35); text-align:center;">
+            <div style="font-size:32px; margin-bottom:4px;">🎰</div>
+            <h2 style="color: #00c6ff; margin:0 0 4px 0; font-size: 20px; font-weight:800;">LUCKYSPIN SOCIAL</h2>
+            <p style="font-size: 11px; color: #a4b3d6; margin: 0 0 14px 0;">Free-to-Play Virtual Coins Entertainment App</p>
+
+            <div id="mobileStepDiv">
+                <label style="display:block; text-align:left; font-size:10px; color:#00ffcc; margin-bottom:5px; font-weight:bold;">MOBILE NUMBER (DEMO LOGIN)</label>
+                <div style="display:flex; align-items:center; background:#0c1a3b; border:1.5px solid #00c6ff; border-radius:8px; margin-bottom:12px; overflow:hidden;">
+                    <div style="padding:10px 12px; background:rgba(0,198,255,0.15); border-right:1px solid #00c6ff; color:#fff; font-size:13px; font-weight:bold;">📱 +91</div>
+                    <input type="tel" id="loginMobileInput" inputmode="numeric" placeholder="9876543210" maxlength="10" style="flex:1; background:transparent; border:none; outline:none; color:#fff; font-size:15px; font-weight:bold; padding:10px; letter-spacing:1.5px;" onkeypress="if(event.key==='Enter') sendLoginOtp()">
+                </div>
+                <button id="sendOtpBtn" class="admin-btn" style="background:linear-gradient(90deg, #2ed573, #10ac84); color:#fff; width:100%; padding:11px; font-size:13px; border-radius:8px; margin-bottom:8px;" onclick="sendLoginOtp()">📩 Login with Demo OTP</button>
+                <button class="admin-btn" style="background:rgba(0,198,255,0.18); border:1px solid #00c6ff; color:#00ffcc; width:100%; padding:10px; font-size:12px; border-radius:8px; margin-bottom:10px;" onclick="playAsGuest()">🎮 Play Directly as Guest</button>
+                <div style="font-size:9px; color:#8899b7;">Virtual Coins Only • Entertainment Purpose • No Real Money</div>
+            </div>
+
+            <div id="otpStepDiv" style="display:none;">
+                <div style="background:rgba(0, 255, 204, 0.08); border:1px solid rgba(0, 255, 204, 0.25); border-radius:8px; padding:10px; margin-bottom:12px; text-align:left;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:11px; color:#fff;">Code sent to:</span>
+                        <span id="maskedMobileDisplay" style="color:#00ffcc; font-weight:bold; font-size:12px;">+91 98****3210</span>
+                    </div>
+                </div>
+                <input type="text" id="loginOtpInput" inputmode="numeric" placeholder="• • • • • •" maxlength="6" style="width:100%; background:#0c1a3b; border:1.5px solid #00c6ff; border-radius:8px; color:#00ffcc; font-size:22px; font-weight:bold; text-align:center; padding:10px; letter-spacing:8px; box-sizing:border-box; margin-bottom:8px; outline:none;" onkeypress="if(event.key==='Enter') verifyLoginOtp()">
+                <button type="button" class="admin-btn" style="background:rgba(0, 255, 204, 0.12); border:1px dashed #00ffcc; color:#00ffcc; padding:7px; font-size:11px; width:100%; border-radius:6px; margin-bottom:10px;" onclick="autoFillOtpDirect()">⚡ Auto-Fill Demo OTP</button>
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; margin-bottom:12px;">
+                    <span id="otpTimerDisplay" style="color:#ffb142; font-weight:bold;">⏳ Resend in 60s</span>
+                    <button id="resendOtpBtn" style="background:none; border:none; color:#00c6ff; text-decoration:underline; font-size:11px; cursor:pointer; display:none; padding:0;" onclick="resendLoginOtp()">Resend OTP</button>
+                </div>
+                <button class="admin-btn" style="background:linear-gradient(90deg, #00c6ff, #0072ff); color:#000; width:100%; padding:11px; font-size:13px; border-radius:8px; margin-bottom:10px;" onclick="verifyLoginOtp()">✅ Verify & Enter Game</button>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <button style="background:none; border:none; color:#8899b7; font-size:10px; cursor:pointer; text-decoration:underline; padding:0;" onclick="changeMobileNumberStep()">← Change Number</button>
+                    <span id="otpAttemptsCountDisplay" style="font-size:10px; color:#ff6b6b;">Attempts left: 3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOBBY SCREEN -->
+    <div id="lobbyScreen" style="display:flex; flex-direction:column; position:absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; z-index:10;">
+        <div class="header">
+            <div>
+                <div class="welcome-banner">VIRTUAL FUN COINS ONLY</div>
+                <h1 class="casino-title">LUCKYSPIN SOCIAL (150)</h1>
+            </div>
+            <div style="display:flex; align-items:center; gap:5px;">
+                <span style="background:rgba(0,0,0,0.45); border:1px solid #ffd700; padding:3px 7px; border-radius:12px; font-size:10px; color:#ffd700; font-weight:bold;">🪙 <span id="lobbyWalletDisplay">2670</span></span>
+                <button class="admin-gear-btn" onclick="openExportModal()" title="Export/Copy">💾</button>
+                <button class="admin-gear-btn" onclick="openAdminPanel()" title="Admin">⚙️</button>
+            </div>
+        </div>
+
+        <div class="top-banners">
+            <div class="slots-main-banner" onclick="openGame(1)">
+                <h2>🎰 6x6 SLOTS</h2>
+                <p>150 Virtual Games (A-O)</p>
+            </div>
+            <div class="jackpot-banner">
+                <div class="jackpot-title">🔥 FUN JACKPOT</div>
+                <div class="jackpot-amount">🪙 1,98,750</div>
+            </div>
+        </div>
+
+        <div class="quick-menu">
+            <div class="q-item" onclick="openDailyScratch()"><div class="q-icon">🎁</div>Daily Bonus</div>
+            <div class="q-item" onclick="openLuckyWheel()"><div class="q-icon">🎡</div>Spin & Win</div>
+            <div class="q-item" onclick="openVirtualStoreModal()"><div class="q-icon">🪙</div>Free Coins</div>
+            <div class="q-item" onclick="openMissionsModal()"><div class="q-icon">📋</div>Missions</div>
+            <div class="q-item" onclick="openLeaderboardModal()"><div class="q-icon">🏆</div>Leaders</div>
+        </div>
+
+        <div class="group-nav-bar" id="groupNavBar"></div>
+
+        <div class="section-title">
+            <span id="groupSectionTitle">⭐ GROUP A GAMES (10 Games)</span>
+            <span style="font-size: 9px; color: #aaa;">6x6 Grid • Fun Play</span>
+        </div>
+
+        <div class="games-grid-container">
+            <div class="games-grid" id="gamesGrid"></div>
+        </div>
+    </div>
+
+    <!-- GAMEPLAY SCREEN -->
+    <div id="gameScreen">
+        <div id="freeGameWinBox" style="display:none; background:rgba(10,20,40,0.95); border:2px solid #ffb800; border-radius:8px; padding:4px 10px; text-align:center; margin:4px auto; flex-shrink:0; width:90%; z-index:20;">
+            <div style="font-size:8px; color:#ffb800; font-weight:bold;">⭐ FREE GAMES TOTAL VIRTUAL WIN ⭐</div>
+            <div id="freeGameAccumulatedDisplay" style="font-size:15px; font-weight:900; color:#00ffcc;">0.00 COINS</div>
+        </div>
+
+        <!-- GROUP A -->
+        <div id="groupATopControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
+            <div class="group-a-top-bar">
+                <button class="group-a-menu-btn" onclick="backToLobby()">☰</button>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <div id="freeGameIndicatorA" class="stylish-free-banner">✨ FREE: <span id="freeGameCountA">0</span></div>
+                    <div style="background: rgba(0,0,0,0.6); border: 1px solid #ffd700; padding: 3px 8px; border-radius: 4px; font-size: 10px; color: #ffd700; font-weight: bold;">🪙 <span id="walletDisplayTopA">2670</span></div>
+                    <div style="background: linear-gradient(135deg, #4a0e4e, #240526); border: 2px solid #ffd700; color: #ffd700; padding: 2px 8px; border-radius: 6px; font-weight: 900; font-size: 8px; text-align:center;">WILD<br><span style="color:#fff; font-size:10px;">BOOST</span></div>
+                </div>
+            </div>
+            <div class="machine-main-layout">
+                <div class="slot-grid-container">
+                    <div class="slot-frame-box" id="slotFrameBoxA"><div class="slot-reels-inner" id="slotGridGroupA"></div></div>
+                </div>
+            </div>
+            <div class="group-a-control-panel">
+                <div class="group-a-ribbon" id="groupARibbonTitle">Virtual Fun Spins</div>
+                <div class="group-a-subtext">Winning WILD increases spin multiplier</div>
+                <div class="group-a-stats-row">
+                    <div class="g-stat-box"><span class="g-stat-label">COINS</span><span class="g-stat-val" id="walletDisplayA">2670</span></div>
+                    <div class="g-stat-box"><span class="g-stat-label">PLAY</span><span class="g-stat-val" id="betDisplayA">1.00</span></div>
+                    <div class="g-stat-box"><span class="g-stat-label">WIN</span><span class="g-stat-val" id="spinWinDisplayA">0.00</span></div>
+                </div>
+                <div class="group-a-buttons-row">
+                    <button class="g-action-btn" id="turboBtnA" onclick="toggleTurboMode()">⚡</button>
+                    <button class="g-action-btn minus-btn" onclick="changeBet(-1)">➖</button>
+                    <button class="g-spin-main-btn" id="spinBtnA" onclick="handleSpin()">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.27 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                    </button>
+                    <button class="g-action-btn" onclick="changeBet(1)">➕</button>
+                    <button class="g-action-btn" id="autoBtnA" onclick="toggleAutoSpin()">▶️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GROUP B -->
+        <div id="groupBTopControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
+            <div class="group-b-top-header">
+                <button class="group-b-menu-btn" onclick="backToLobby()">☰</button>
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <div id="freeGameIndicatorB" class="stylish-free-banner">✨ FREE: <span id="freeGameCountB">0</span></div>
+                    <div style="font-size:10px; font-weight:bold; color:#ffd700;" id="gameTitleB">WESTERN FUN</div>
+                </div>
+            </div>
+            <div class="group-b-wanted-banner">
+                <h2 class="group-b-wanted-text">!WANTED!</h2>
+                <div class="group-b-wanted-sub">VIRTUAL COINS ADVENTURE</div>
+                <button class="group-b-bonus-buy-btn" onclick="buyVirtualFreeSpins()">FREE SPINS BOOST (50 🪙)</button>
+            </div>
+            <div class="machine-main-layout">
+                <div class="slot-grid-container">
+                    <div class="slot-frame-box" id="slotFrameBoxB"><div class="slot-reels-inner" id="slotGridGroupB"></div></div>
+                </div>
+            </div>
+            <div class="group-b-control-panel">
+                <div class="group-b-stats-bar">
+                    <div class="group-b-stat-box"><span>COINS</span><span class="group-b-stat-val" id="walletDisplayB">2670</span></div>
+                    <div class="group-b-stat-box"><span>PLAY</span><span class="group-b-stat-val" id="betDisplayB">1</span></div>
+                    <div class="group-b-stat-box"><span>WIN</span><span class="group-b-stat-val" id="spinWinDisplayB">0</span></div>
+                </div>
+                <div class="group-b-buttons-row">
+                    <button class="group-b-action-btn" id="turboBtnB" onclick="toggleTurboMode()">⚡</button>
+                    <button class="group-b-action-btn" onclick="changeBet(-1)">-</button>
+                    <button class="group-b-spin-main-btn" id="spinBtnB" onclick="handleSpin()">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="#3d1a00"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.27 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                    </button>
+                    <button class="group-b-action-btn" onclick="changeBet(1)">+</button>
+                    <button class="group-b-action-btn" id="autoBtnB" onclick="toggleAutoSpin()">▶️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GROUP C TO O -->
+        <div id="defaultGameControlsContainer" style="display:none; flex-direction:column; justify-content:space-between; height:100%; width:100%; box-sizing:border-box;">
+            <div class="superace-top-bar">
+                <button class="superace-menu-btn" onclick="backToLobby()">☰</button>
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <div id="freeGameIndicatorDefault" class="stylish-free-banner">✨ FREE: <span id="freeGameCountDefault">0</span></div>
+                    <div style="background: rgba(0,0,0,0.5); border: 1px solid #7ea6db; border-radius: 6px; padding: 3px 10px; display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: bold; color: #ffd700;">
+                        <span>🪙</span> <span id="walletDisplay">2670</span>
+                    </div>
+                </div>
+            </div>
+            <div class="superace-multiplier-banner" id="defaultMultiplierBanner">
+                <div class="superace-mult-item active-mult" data-mult="1">x1</div>
+                <div class="superace-mult-item" data-mult="2">x2</div>
+                <div class="superace-mult-item" data-mult="3">x3</div>
+                <div class="superace-mult-item" data-mult="5">x5</div>
+            </div>
+            <div class="group-c-jackpot-container" id="groupCJackpotBanner" style="display:none;">
+                <div class="group-c-jackpot-box j20000"><div class="c-j-title">FUN JACKPOT</div><div class="c-j-val">20000</div></div>
+                <div class="group-c-jackpot-box j5000"><div class="c-j-title">FUN JACKPOT</div><div class="c-j-val">5000</div></div>
+                <div class="group-c-jackpot-box j2000"><div class="c-j-title">FUN JACKPOT</div><div class="c-j-val">2000</div></div>
+            </div>
+            <div class="machine-main-layout">
+                <div class="slot-grid-container">
+                    <div class="slot-frame-box" id="slotFrameBoxDefault"><div class="slot-reels-inner" id="slotGridDefault"></div></div>
+                </div>
+            </div>
+            <div class="superace-control-bar">
+                <button class="superace-auto-btn" id="autoBtnDef" onclick="toggleAutoSpin()">AUTO</button>
+                <div class="superace-middle-panel">
+                    <div style="font-size: 8px; color: #a6c4f5; font-weight: bold;">VIRTUAL WIN</div>
+                    <div style="font-size: 12px; font-weight: 900; color: #00ffcc;" id="spinWinDisplay">0.00</div>
+                    <div class="superace-bet-row">
+                        <button onclick="changeBet(-1)" style="width:18px;height:18px;background:#ff4757;color:#fff;border:none;border-radius:3px;font-weight:bold;cursor:pointer;">-</button>
+                        <span style="font-size: 10px; font-weight:bold; color:#fff;"><span id="betDisplay">1</span></span>
+                        <button onclick="changeBet(1)" style="width:18px;height:18px;background:#2ed573;color:#fff;border:none;border-radius:3px;font-weight:bold;cursor:pointer;">+</button>
+                        <button id="turboBtnDef" onclick="toggleTurboMode()" style="background:#e84118;color:#fff;border:none;border-radius:3px;width:22px;height:18px;font-size:10px;font-weight:bold;cursor:pointer;">⚡</button>
+                    </div>
+                </div>
+                <button class="superace-spin-btn" id="spinBtnDefault" onclick="handleSpin()">SPIN</button>
+            </div>
+        </div>
+
+        <div id="winPopupOverlay">
+            <div id="winPopupTitle">MEGA WIN!</div>
+            <div id="winPopupAmount">+150 COINS</div>
+        </div>
+    </div>
+
+    <!-- DAILY BONUS MODAL -->
+    <div id="scratchModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#00c6ff; margin-top:0;">🎁 Daily Bonus Scratch Cards</h3>
+            <p style="font-size:10px; color:#ccc; margin-bottom:10px;">Choose any 1 card to scratch (Win 5 to 30 virtual coins).</p>
+            <div id="scratchCardsGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px;"></div>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeScratchModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- LUCKY WHEEL MODAL -->
+    <div id="wheelModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#00c6ff; margin-top:0;">🎡 Lucky Wheel Spin</h3>
+            <p id="wheelStatusText" style="font-size:10px; color:#00ffcc; margin-bottom:8px;">Win 5 to 50 free virtual coins!</p>
+            <div style="font-size:45px; margin:10px 0;" id="wheelDisplayBox">🎡</div>
+            <div id="wheelResultDisplay" style="font-size:15px; font-weight:bold; color:#00c6ff; margin-bottom:10px;"></div>
+            <button id="spinWheelBtn" class="admin-btn" style="background:#2ed573; color:#fff; width:100%; padding:8px; font-size:12px; display:none;" onclick="executeLuckyWheelSpin()">Spin Now!</button>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%; margin-top:6px;" onclick="closeWheelModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- MISSIONS MODAL -->
+    <div id="missionsModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#00c6ff; margin-top:0;">📋 Daily Fun Missions</h3>
+            <div id="missionsListContainer" style="text-align:left; font-size:11px; margin-bottom:10px;"></div>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeMissionsModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- VIRTUAL STORE MODAL -->
+    <div id="virtualStoreModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#00c6ff; margin-top:0;">🪙 Free Virtual Coin Refill</h3>
+            <p style="font-size:10px; color:#ccc; line-height:1.4; margin-bottom:10px;">Yeh 100% Free-to-Play app hai. Virtual coins ki koi real-money value nahi hai.</p>
+            <div style="background:rgba(0,198,255,0.1); border:1px solid #00c6ff; border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10px; color:#aaa;">Current Virtual Balance</div>
+                <div style="font-size:20px; font-weight:900; color:#ffd700;">🪙 <span id="storeWalletDisplay">2670</span></div>
+            </div>
+            <button class="admin-btn" style="background:linear-gradient(90deg, #2ed573, #10ac84); color:#fff; width:100%; padding:10px; font-size:12px; margin-bottom:8px;" onclick="claimFreeVirtualRefill()">🎁 Claim +500 Free Virtual Coins</button>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeVirtualStoreModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD MODAL -->
+    <div id="leaderboardModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#ffd700; margin-top:0;">🏆 Top Fun Players</h3>
+            <div id="leaderboardListContainer" style="text-align:left; font-size:11px; margin-bottom:10px;"></div>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeLeaderboardModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- PROFILE SCREEN -->
+    <div id="profileScreen" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; z-index:200; padding-bottom:65px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <button onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back</button>
+            <div style="font-size: 12px; font-weight: bold; color: #00c6ff;">👤 Player Profile</div>
+        </div>
+        <div class="profile-header-card">
+            <div class="profile-avatar-container" onclick="document.getElementById('profilePicInput').click()">
+                <span id="profileAvatarDisplay">👤</span>
+                <img id="profileAvatarImg" src="" style="display:none;" />
+            </div>
+            <input type="file" id="profilePicInput" accept="image/*" style="display:none;" onchange="updateProfilePicture(event)">
+            <h3 id="profilePlayerName" style="margin: 4px 0 2px 0; font-size: 13px; color: #00c6ff;">LuckyPlayer_777</h3>
+            <p id="profileUniqueIdDisplay" style="font-size: 9px; color: #00ffcc; margin: 0 0 6px 0; font-weight: bold;">ID: #LS-892341</p>
+            <div class="profile-top-row">
+                <div class="profile-balance-box"><span>Fun Coins: 🪙 <span id="profileWalletDisplay">2670</span></span></div>
+                <button class="profile-refill-btn" onclick="openVirtualStoreModal()">🪙 Free Refill</button>
+            </div>
+        </div>
+        <div class="profile-section-card">
+            <h4>📋 Player Notes / Nickname Bio</h4>
+            <div class="notebook-lines-box">
+                <textarea id="playerDetailsTextarea" class="notebook-textarea" style="height: 96px;" placeholder="Nickname, favorite game, notes..."></textarea>
+            </div>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="savePlayerPersonalDetails()">💾 Save Notes</button>
+        </div>
+        <div class="profile-section-card">
+            <h4>👥 Invite Friends (Virtual Coins Bonus)</h4>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="text" id="referralLinkInput" class="admin-input" readonly value="" style="margin-bottom:0;">
+                <button class="admin-btn" onclick="copyReferralLink()">📋 Copy</button>
+            </div>
+            <div style="display:flex; gap:6px; margin-bottom:6px;">
+                <input type="text" id="redeemRefCodeInput" class="admin-input" placeholder="Friend code (e.g. LS-123456)" style="margin-bottom:0;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff;" onclick="redeemReferralCode()">🎁 Claim +100</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 6px;">
+                <span style="font-size: 10px; color: #00c6ff;">Invited: <strong id="referralCount">0</strong></span>
+                <span style="font-size: 10px; color: #2ed573;">Earned: 🪙 <strong id="referralEarnings">0</strong></span>
+            </div>
+        </div>
+        <div class="profile-section-card">
+            <h4>📝 Player Feedback</h4>
+            <div class="notebook-lines-box"><textarea id="feedbackTextarea" class="notebook-textarea" style="height: 72px;" placeholder="Write feedback here..."></textarea></div>
+            <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">
+                <input type="file" id="feedbackImageInput" class="admin-input" accept="image/*" style="margin-bottom:0; font-size:9px;" onchange="previewFeedbackImage(event)">
+                <span id="feedbackImgStatus" style="font-size: 9px; color: #00ffcc;">No screenshot</span>
+            </div>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="submitPlayerFeedback()">📤 Send Feedback</button>
+        </div>
+        <div class="profile-section-card" style="border-color:rgba(255, 71, 87, 0.4);">
+            <button class="admin-btn" style="background:linear-gradient(90deg, #ff4757, #c0392b); color:#fff; width:100%; padding:10px; font-size:12px;" onclick="logoutPlayerAccount()">🚪 Logout Account</button>
+        </div>
+    </div>
+
+    <!-- EXPORT CODE MODAL (WITH MANUAL COPY FALLBACK) -->
+    <div id="exportModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#00c6ff; margin-top:0; font-size:16px;">💾 Export / Copy Code</h3>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; padding:10px; font-size:12px;" onclick="downloadSingleFileCode()">📥 Download .html File</button>
+                <button class="admin-btn" style="background:#00c6ff; color:#000; padding:10px; font-size:12px;" onclick="copySingleFileCode()">📋 Copy Full Code</button>
+            </div>
+            <textarea id="manualCopyBox" readonly style="display:none; width:100%; height:90px; background:#091229; color:#00ffcc; border:1px solid #00c6ff; border-radius:6px; font-size:10px; padding:6px; box-sizing:border-box; margin-bottom:8px;"></textarea>
+            <button class="admin-btn" style="background:#718093; color:#fff; width:100%;" onclick="closeExportModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="custom-modal-overlay">
+        <div class="modal-card">
+            <h3 style="color:#00c6ff; margin-top:0; font-size:15px;">🔐 Admin Login</h3>
+            <input type="tel" id="adminLoginMobileInput" class="admin-input" placeholder="Admin ID (Default: 9876543210)" maxlength="10" style="text-align:center;">
+            <input type="password" id="adminLoginPasswordInput" class="admin-input" placeholder="Password (Default: admin123)" style="text-align:center;">
+            <div style="display:flex; gap:6px; margin-top:10px;">
+                <button class="admin-btn" style="background:#718093; color:#fff; flex:1;" onclick="closeAdminLoginModal()">Cancel</button>
+                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1;" onclick="verifyAdminLogin()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL SCREEN -->
+    <div id="adminScreen" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; z-index:200; padding-bottom:65px;">
+        <button onclick="backToLobby()" style="background:#333; color:#00c6ff; border:1px solid #00c6ff; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer;">⬅ Back to Lobby</button>
+        <div style="height: 8px;"></div>
+        <h2 style="color: #00c6ff; margin-top: 0; font-size: 15px;">⚙️ App Control Panel (Virtual Coins Mode)</h2>
+
+        <div class="admin-card" style="border: 2px solid #00ffcc;">
+            <h3 style="color: #00ffcc;">📦 EXPORT SINGLE FILE</h3>
+            <div style="display: flex; gap: 6px;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1; padding:8px;" onclick="downloadSingleFileCode()">📥 Download .html</button>
+                <button class="admin-btn" style="background:#00c6ff; color:#000; flex:1; padding:8px;" onclick="copySingleFileCode()">📋 Copy Code</button>
+            </div>
+        </div>
+
+        <div class="admin-card" style="border: 2px solid #ffcc00;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h3 style="color: #ffcc00; margin: 0; border: none;">📊 VIRTUAL COIN STATS</h3>
+                <button class="admin-btn" style="background:#ff4757; color:#fff; font-size:9px; padding:2px 6px;" onclick="resetCasinoDailyStats()">🔄 Reset</button>
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:6px;">
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px;"><div style="font-size:9px; color:#aaa;">Total Coins Spun:</div><div style="font-size:13px; font-weight:bold; color:#00c6ff;">🪙 <span id="statTotalBetsDisplay">0.00</span></div></div>
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px;"><div style="font-size:9px; color:#aaa;">Total Coins Won:</div><div style="font-size:13px; font-weight:bold; color:#2ed573;">🪙 <span id="statTotalWinsDisplay">0.00</span></div></div>
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px;"><div style="font-size:9px; color:#aaa;">Total Spins:</div><div style="font-size:13px; font-weight:bold; color:#fff;" id="statSpinsCountDisplay">0</div></div>
+                <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px;"><div style="font-size:9px; color:#aaa;">Return %:</div><div style="font-size:13px; font-weight:bold; color:#ffcc00;"><span id="statRtpDisplay">0.0</span>%</div></div>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3>💾 BACKUP & RESTORE</h3>
+            <div style="display: flex; gap: 6px;">
+                <button class="admin-btn" style="background:#a55eea; color:#fff; flex:1; padding:7px;" onclick="exportCasinoBackupJson()">📥 Export JSON</button>
+                <label class="admin-btn" style="background:#4b6584; color:#fff; flex:1; padding:7px; text-align:center; cursor:pointer;">📤 Restore JSON<input type="file" accept=".json" style="display:none;" onchange="restoreCasinoBackupJson(event)"></label>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3>🔐 Change Admin Credentials</h3>
+            <label class="admin-label">Admin ID / Mobile:</label><input type="tel" id="changeAdminMobileInput" class="admin-input">
+            <label class="admin-label">New Password:</label><input type="password" id="changeAdminPasswordInput" class="admin-input">
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="saveNewAdminCredentials()">💾 Update Credentials</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>📝 Player Feedbacks</h3>
+            <div id="adminFeedbackListContainer" style="max-height: 140px; overflow-y: auto; font-size: 10px; color: #ccc;"><p style="color:#aaa;">No feedbacks yet.</p></div>
+        </div>
+
+        <div class="admin-card">
+            <h3>🎯 GROUP C JACKPOT TRIGGER</h3>
+            <input type="text" id="adminGroupCPlayerId" class="admin-input" value="ALL">
+            <select id="adminGroupCJackpotSelect" class="admin-select"><option value="none">None</option><option value="20000">20000</option><option value="5000">5000</option><option value="2000">2000</option></select>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="saveGroupCJackpotTarget()">💾 Save Target</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>🖼️ LOBBY GAME LOGO MANAGER (1-150)</h3>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;"><input type="number" id="adminLobbyGameSearchInput" class="admin-input" min="1" max="150" value="1" style="margin-bottom:0;"><button class="admin-btn" onclick="searchAdminLobbyGame()">🔍 Search</button></div>
+            <div id="adminLobbyPreviewContainer" style="display:none;">
+                <p style="font-size: 11px; color: #00c6ff; font-weight: bold;">Selected: <span id="adminLobbyGameTitleDisplay"></span></p>
+                <div style="display: flex; gap: 6px; margin-bottom: 6px;"><input type="file" class="admin-input" accept="image/*" onchange="previewCustomLobbyLogoFile(event)" style="margin-bottom:0;"><button class="admin-btn" style="background:#ff4757; color:#fff;" onclick="removeCustomLobbyLogo()">🗑️</button></div>
+                <label class="admin-label">Zoom: <span id="lobbyLogoSizeValLabel">100</span>%</label>
+                <input type="range" id="lobbyLogoSizeRange" min="20" max="200" value="100" class="admin-input" oninput="updateLobbyLogoScaleLive(this.value)">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="saveLobbyLogoConfig()">💾 Save Lobby Logo</button>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3>🎵 CUSTOM AUDIO & BGM</h3>
+            <label class="admin-label">BGM:</label><input type="file" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'bgm')"><div id="bgmStatus" style="font-size:9px; color:#00ffcc; margin-bottom:4px;">Default</div>
+            <label class="admin-label">Spin Sound:</label><input type="file" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'spin')"><div id="spinAudioStatus" style="font-size:9px; color:#00ffcc; margin-bottom:4px;">Default Synth</div>
+            <label class="admin-label">Win Sound:</label><input type="file" class="admin-input" accept="audio/*" onchange="previewCustomAudio(event, 'win')"><div id="winAudioStatus" style="font-size:9px; color:#00ffcc; margin-bottom:4px;">Default Synth</div>
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="saveAudioSettings()">💾 Save Audio</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>🖼️ FRAME & REEL CUSTOMIZATION</h3>
+            <select id="adminFrameTargetSelect" class="admin-select" onchange="loadFrameSettingsForTarget(this.value)"><option value="groupA">Group A</option><option value="groupB">Group B</option><option value="default">Groups C-O</option></select>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;"><input type="file" class="admin-input" accept="image/*" onchange="previewCustomFrameImageFile(event)" style="margin-bottom:0;"><button class="admin-btn" style="background:#ff4757; color:#fff;" onclick="removeCustomFrameImage()">🗑️</button></div>
+            <label class="admin-label">Frame Scale: <span id="frameScaleVal">1.0</span>x</label><input type="range" id="frameScaleRange" min="0.5" max="1.5" step="0.05" value="1.0" class="admin-input" oninput="previewReelLiveConfigs()">
+            <label class="admin-label">Reel Zoom: <span id="reelScaleVal">1.0</span>x</label><input type="range" id="reelScaleRange" min="0.5" max="1.5" step="0.05" value="1.0" class="admin-input" oninput="previewReelLiveConfigs()">
+            <label class="admin-label">Width: <span id="reelWidthVal">100</span>%</label><input type="range" id="reelWidthRange" min="50" max="150" value="100" class="admin-input" oninput="previewReelLiveConfigs()">
+            <label class="admin-label">Height: <span id="reelHeightVal">100</span>%</label><input type="range" id="reelHeightRange" min="50" max="150" value="100" class="admin-input" oninput="previewReelLiveConfigs()">
+            <label class="admin-label">Offset X: <span id="reelOffsetXVal">0</span>px</label><input type="range" id="reelOffsetXRange" min="-100" max="100" value="0" class="admin-input" oninput="previewReelLiveConfigs()">
+            <label class="admin-label">Offset Y: <span id="reelOffsetYVal">0</span>px</label><input type="range" id="reelOffsetYRange" min="-100" max="100" value="0" class="admin-input" oninput="previewReelLiveConfigs()">
+            <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="saveGameFrameConfig()">💾 Save Frame & Reel</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>⚙️ SYMBOL FITTER</h3>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;"><input type="number" id="adminGameSearchInput" class="admin-input" min="1" max="150" value="1" style="margin-bottom:0;"><button class="admin-btn" onclick="searchAdminGame()">🔍 Search</button></div>
+            <div id="adminGamePreviewContainer" style="display:none;">
+                <p style="font-size: 11px; color: #00c6ff; font-weight: bold;">Game: <span id="adminGameTitleDisplay"></span></p>
+                <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%; margin-bottom:6px;" onclick="openSearchedGameDirectly()">🎮 Open Game</button>
+                <div id="adminMasterSymbolsPalette" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; background: #000; padding: 6px; border: 2px solid #00c6ff; border-radius: 6px; margin-bottom: 6px;"></div>
+                <div id="selectedSymbolInfo" style="font-size: 10px; color: #00ffcc; margin-bottom: 6px;">Selected Symbol: 0</div>
+                <div style="display: flex; gap: 6px; margin-bottom: 6px;"><input type="file" class="admin-input" accept="image/*" onchange="previewCustomSymbolFile(event)" style="margin-bottom:0;"><button class="admin-btn" style="background:#ff4757; color:#fff;" onclick="removeCustomSymbol()">🗑️</button></div>
+                <label class="admin-label">Size: <span id="sizeValLabel">100</span>%</label><input type="range" id="symbolSizeRange" min="20" max="200" value="100" class="admin-input" oninput="updateSymbolScaleLive(this.value)">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; width:100%;" onclick="saveSymbolFitterConfig()">💾 Save Symbol</button>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3>🎮 GAME DIFFICULTY MODE</h3>
+            <select id="adminDifficultySelect" class="admin-select" onchange="updateDifficultySetting(this.value)"><option value="normal">Normal Mode</option><option value="medium">Medium Mode</option><option value="hard">Hard Mode</option></select>
+        </div>
+
+        <div class="admin-card">
+            <h3>🎯 DEMO FORCE OUTCOME</h3>
+            <input type="text" id="forcePlayerIdInput" class="admin-input" value="ALL">
+            <select id="forceModeSelect" class="admin-select"><option value="none">Normal</option><option value="win">Force Win 🟢</option><option value="loss">Force Loss 🔴</option></select>
+            <button class="admin-btn" onclick="saveForceRule()">💾 Save Rule</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>🪙 VIRTUAL COIN MANAGER</h3>
+            <input type="number" id="coinAmountChangeInput" class="admin-input" placeholder="Enter virtual coins">
+            <div style="display:flex; gap:6px;">
+                <button class="admin-btn" style="background:#2ed573; color:#fff; flex:1;" onclick="applyCoinChange('add')">➕ Add Coins</button>
+                <button class="admin-btn" style="background:#ff4757; color:#fff; flex:1;" onclick="applyCoinChange('deduct')">➖ Deduct</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchNav(this, 'Home')"><div class="nav-icon">🏠</div>Home</div>
+        <div class="nav-item" onclick="switchNav(this, 'Missions')"><div class="nav-icon">🎯</div>Missions</div>
+        <div class="nav-item" onclick="switchNav(this, 'Store')"><div class="nav-icon">🪙</div>Free Coins</div>
+        <div class="nav-item" onclick="switchNav(this, 'Leaderboard')"><div class="nav-icon">🏆</div>Leaders</div>
+        <div class="nav-item" onclick="switchNav(this, 'Profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+</div><script>
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function sha256Sync(ascii) {
+        function rightRotate(v, a) { return (v >>> a) | (v << (32 - a)); }
+        var i, j, result = '', words = [], asciiBitLength = ascii.length * 8;
+        var hash = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+        var k = [
+            0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+            0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+            0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+            0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+            0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+            0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+            0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+            0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
+        ];
+        words[asciiBitLength >> 5] |= 0x80 << (24 - (asciiBitLength % 32));
+        words[(((asciiBitLength + 64) >> 9) << 4) + 15] = asciiBitLength;
+        for (i = 0; i < ascii.length; i++) words[i >> 2] |= ascii.charCodeAt(i) << ((3 - (i % 4)) * 8);
+        for (i = 0; i < words.length; i += 16) {
+            var w = words.slice(i, i + 16), oldHash = hash.slice(0);
+            for (j = 0; j < 64; j++) {
+                var w15 = w[j - 15], w2 = w[j - 2];
+                var s0 = rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3);
+                var s1 = rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10);
+                w[j] = j < 16 ? w[j] : (w[j - 16] + s0 + w[j - 7] + s1) | 0;
+                var ch = (hash[4] & hash[5]) ^ (~hash[4] & hash[6]);
+                var maj = (hash[0] & hash[1]) ^ (hash[0] & hash[2]) ^ (hash[1] & hash[2]);
+                var t1 = (hash[7] + (rightRotate(hash[4], 6) ^ rightRotate(hash[4], 11) ^ rightRotate(hash[4], 25)) + ch + k[j] + w[j]) | 0;
+                var t2 = ((rightRotate(hash[0], 2) ^ rightRotate(hash[0], 13) ^ rightRotate(hash[0], 22)) + maj) | 0;
+                hash = [(t1 + t2) | 0, hash[0], hash[1], hash[2], (hash[3] + t1) | 0, hash[4], hash[5], hash[6]];
+            }
+            for (j = 0; j < 8; j++) hash[j] = (hash[j] + oldHash[j]) | 0;
+        }
+        for (i = 0; i < 8; i++) for (j = 3; j >= 0; j--) {
+            var b = (hash[i] >> (8 * j)) & 255;
+            result += (b < 16 ? '0' : '') + b.toString(16);
+        }
+        return result;
+    }
+
+    const DB_NAME = 'LuckySpinSocialDB';
+    function openIDB() {
+        return new Promise((resolve, reject) => {
+            const req = indexedDB.open(DB_NAME, 1);
+            req.onupgradeneeded = () => req.result.createObjectStore('store');
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+    async function idbSave(key, val) {
+        try { const db = await openIDB(); db.transaction('store', 'readwrite').objectStore('store').put(val, key); } catch(e) {}
+    }
+    async function idbFetch(key, defVal) {
+        try {
+            const db = await openIDB();
+            return new Promise(resolve => {
+                const req = db.transaction('store', 'readonly').objectStore('store').get(key);
+                req.onsuccess = () => resolve(req.result !== undefined ? req.result : defVal);
+                req.onerror = () => resolve(defVal);
+            });
+        } catch(e) { return defVal; }
+    }
+    function safeSaveLocalStorage(key, dataString) {
+        idbSave(key, dataString);
+        try { localStorage.setItem(key, dataString); } catch (e) {}
+        return true;
+    }
+
+    const SecureVault = (function() {
+        const PEPPER = "LS_SOCIAL_VIRTUAL_777";
+        let inMemoryBalance = null, inMemorySeq = 0;
+        function getDeviceKey() {
+            let k = localStorage.getItem('_ls_dk');
+            if (!k) { k = sha256Sync((Date.now() + Math.random()).toString()); localStorage.setItem('_ls_dk', k); }
+            return k;
+        }
+        function calcSig(bal, seq) { return sha256Sync(`${bal.toFixed(2)}:${seq}:${getDeviceKey()}:${PEPPER}`); }
+        return {
+            getBalance: function() {
+                if (inMemoryBalance !== null) return inMemoryBalance;
+                let rawVal = localStorage.getItem('casino_wallet'), sig = localStorage.getItem('_ls_ws'), seq = parseInt(localStorage.getItem('_ls_wq') || '0', 10);
+                if (rawVal === null || sig === null) return this.setBalance(2670.00);
+                let parsed = parseFloat(rawVal);
+                if (isNaN(parsed) || parsed < 0 || sig !== calcSig(parsed, seq)) return this.setBalance(2670.00);
+                inMemoryBalance = parsed; inMemorySeq = seq; return parsed;
+            },
+            setBalance: function(val) {
+                let clean = parseFloat(Math.max(0, val).toFixed(2));
+                inMemorySeq++;
+                let sig = calcSig(clean, inMemorySeq);
+                inMemoryBalance = clean;
+                safeSaveLocalStorage('casino_wallet', clean.toFixed(2));
+                safeSaveLocalStorage('_ls_ws', sig);
+                safeSaveLocalStorage('_ls_wq', inMemorySeq.toString());
+                return clean;
+            },
+            verifyAdmin: function(mob, pass) {
+                let savedMob = localStorage.getItem('casino_admin_mobile') || "9876543210";
+                if (mob !== savedMob) return false;
+                let savedHash = localStorage.getItem('_ls_ah') || sha256Sync("admin123" + PEPPER);
+                return sha256Sync(pass + PEPPER) === savedHash;
+            },
+            updateAdmin: function(newMob, newPass) {
+                safeSaveLocalStorage('casino_admin_mobile', newMob);
+                safeSaveLocalStorage('_ls_ah', sha256Sync(newPass + PEPPER));
+            }
+        };
+    })();
+
+    function compressImageFile(file, maxW, maxH, quality, cb) {
+        let reader = new FileReader();
+        reader.onload = e => {
+            let img = new Image();
+            img.onload = () => {
+                let canvas = document.createElement('canvas'), w = img.width, h = img.height;
+                if (w > h && w > maxW) { h *= maxW / w; w = maxW; }
+                else if (h > maxH) { w *= maxH / h; h = maxH; }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                cb(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    const groups = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O'];
+    const iconsPool = ["🚗","🐶","😼","🙈","🥳","👑","🍉","💎","🐉","🎰","🌟","🪙","🔥","🧞","🏴‍☠️","🐃","🍬","⚡","🗿","👸","🦁","🐚","🃏","🐼","🍇","🔱","🏦","🌶️","📖","✨","🎡","⭐","🍒","🔔"];
+    let gameList = [], counter = 1;
+    groups.forEach(g => { for (let i = 1; i <= 10; i++) { gameList.push({ id: counter, name: `Slot Fun ${counter}`, icon: iconsPool[(counter - 1) % iconsPool.length], group: g }); counter++; } });
+
+    let currentActiveGroup = 'A', activeGameId = 1, currentBet = 1, isSpinning = false, isTurboMode = false, isAutoSpin = false, autoSpinTimer = null, winStreak = 0;
+    let freeGamesRemaining = 0, isFreeGameActive = false, freeGameAccumulatedWin = 0;
+
+    let gameAudioConfigs = JSON.parse(localStorage.getItem('slot_game_audio_configs') || '{"bgm":null,"spin":null,"win":null}');
+    let lobbyLogoConfigs = JSON.parse(localStorage.getItem('slot_lobby_logo_configs') || '{}');
+    let gameFrameConfigs = JSON.parse(localStorage.getItem('slot_game_frame_configs') || '{}');
+    let gameSymbolConfigs = JSON.parse(localStorage.getItem('slot_game_symbol_configs') || '{}');
+    let globalDifficulty = localStorage.getItem('slot_difficulty_mode') || "normal";
+    let forceRule = JSON.parse(localStorage.getItem('slot_force_rule') || '{"mode":"none","playerId":"ALL"}');
+    let groupCJackpotRule = JSON.parse(localStorage.getItem('slot_groupc_jackpot_rule') || '{"playerId":"ALL","type":"none"}');
+
+    async function restoreHeavyConfigsFromIDB() {
+        try {
+            const keys = [
+                ['slot_game_audio_configs', v => gameAudioConfigs = JSON.parse(v)],
+                ['slot_lobby_logo_configs', v => lobbyLogoConfigs = JSON.parse(v)],
+                ['slot_game_frame_configs', v => gameFrameConfigs = JSON.parse(v)],
+                ['slot_game_symbol_configs', v => gameSymbolConfigs = JSON.parse(v)]
+            ];
+            for (let [k, setter] of keys) {
+                if (!localStorage.getItem(k)) { let val = await idbFetch(k, null); if (val) setter(val); }
+            }
+            renderLobbyGridForGroup(currentActiveGroup);
+        } catch(e) {}
+    }
+
+    let bgmAudioElement = new Audio(); bgmAudioElement.loop = true;
+    function startContinuousBgm() { if (bgmAudioElement.paused && gameAudioConfigs.bgm) { bgmAudioElement.src = gameAudioConfigs.bgm; bgmAudioElement.play().catch(()=>{}); } }
+
+    let masterAudioCtx = null;
+    function getMasterAudioContext() {
+        try {
+            if (!masterAudioCtx || masterAudioCtx.state === 'closed') masterAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (masterAudioCtx.state === 'suspended') masterAudioCtx.resume().catch(()=>{});
+            return masterAudioCtx;
+        } catch(e) { return null; }
+    }
+    ['touchstart','click','keydown'].forEach(evt => document.addEventListener(evt, () => getMasterAudioContext(), { passive: true }));
+
+    function playNotificationChime() {
+        try {
+            let ctx = getMasterAudioContext(); if (!ctx) return;
+            let osc = ctx.createOscillator(), gain = ctx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(587.33, ctx.currentTime); osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.12, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+            osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.35);
+        } catch(e) {}
+    }
+    function playSpinSound() {
+        if (gameAudioConfigs.spin) { new Audio(gameAudioConfigs.spin).play().catch(()=>{}); return; }
+        try {
+            let ctx = getMasterAudioContext(); if (!ctx) return;
+            let osc = ctx.createOscillator(), gain = ctx.createGain();
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(220, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.12);
+            gain.gain.setValueAtTime(0.08, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+            osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.12);
+        } catch(e) {}
+    }
+    function playWinSound() {
+        if (gameAudioConfigs.win) { new Audio(gameAudioConfigs.win).play().catch(()=>{}); return; }
+        try {
+            let ctx = getMasterAudioContext(); if (!ctx) return;
+            [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                setTimeout(() => {
+                    try {
+                        let osc = ctx.createOscillator(), gain = ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                        gain.gain.setValueAtTime(0.12, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+                        osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.2);
+                    } catch(e) {}
+                }, idx * 70);
+            });
+        } catch(e) {}
+    }
+    function playCoinCountingSound(callback) {
+        let called = false;
+        const done = () => { if (!called) { called = true; if (callback) callback(); } };
+        try {
+            let ctx = getMasterAudioContext();
+            if (!ctx) { setTimeout(done, 250); return; }
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    try {
+                        let osc = ctx.createOscillator(), gain = ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(900 + i * 120, ctx.currentTime);
+                        gain.gain.setValueAtTime(0.12, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+                        osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.08);
+                    } catch(e) {}
+                    if (i === 5) done();
+                }, i * 80);
+            }
+            setTimeout(done, 700);
+        } catch(e) { done(); }
+    }
+
+    const VirtualAnalytics = (function() {
+        const KEY = 'slot_virtual_analytics';
+        function getStats() {
+            try { return Object.assign({ totalBets: 0, totalWins: 0, spinsCount: 0 }, JSON.parse(localStorage.getItem(KEY) || '{}')); }
+            catch(e) { return { totalBets: 0, totalWins: 0, spinsCount: 0 }; }
+        }
+        return {
+            recordSpin: bet => { let s = getStats(); s.totalBets = parseFloat((s.totalBets + bet).toFixed(2)); s.spinsCount++; safeSaveLocalStorage(KEY, JSON.stringify(s)); renderAnalyticsUI(); },
+            recordWin: win => { let s = getStats(); s.totalWins = parseFloat((s.totalWins + win).toFixed(2)); safeSaveLocalStorage(KEY, JSON.stringify(s)); renderAnalyticsUI(); },
+            getStats,
+            reset: () => { safeSaveLocalStorage(KEY, JSON.stringify({ totalBets: 0, totalWins: 0, spinsCount: 0 })); renderAnalyticsUI(); }
+        };
+    })();
+    function renderAnalyticsUI() {
+        let s = VirtualAnalytics.getStats();
+        let b = document.getElementById('statTotalBetsDisplay'), w = document.getElementById('statTotalWinsDisplay'), c = document.getElementById('statSpinsCountDisplay'), r = document.getElementById('statRtpDisplay');
+        if (b) b.innerText = s.totalBets.toFixed(2);
+        if (w) w.innerText = s.totalWins.toFixed(2);
+        if (c) c.innerText = s.spinsCount;
+        if (r) r.innerText = s.totalBets > 0 ? ((s.totalWins / s.totalBets) * 100).toFixed(1) : '0.0';
+    }
+    function resetCasinoDailyStats() { if (confirm("Reset stats?")) VirtualAnalytics.reset(); }
+
+    let activeOtpSession = { mobile: '', otpCode: '', expiresAt: 0, attemptsLeft: 3, timerInterval: null }, smsBannerTimeout = null;
+    function playAsGuest() {
+        localStorage.setItem('casino_logged_in', 'true');
+        if (!localStorage.getItem('casino_player_mobile')) localStorage.setItem('casino_player_mobile', 'Guest');
+        getPlayerUniqueId();
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('lobbyScreen').style.display = 'flex';
+        startContinuousBgm(); updateUIStats(); showToast("🎮 Welcome! Enjoy Virtual Fun Coins.");
+    }
+    function sendLoginOtp() {
+        let mobile = document.getElementById('loginMobileInput').value.trim();
+        if (!/^[6-9]\d{9}$/.test(mobile)) { showToast("⚠️ Valid 10-digit number enter karein!"); return; }
+        let otp = Math.floor(100000 + Math.random() * 900000).toString();
+        activeOtpSession = { mobile, otpCode: otp, expiresAt: Date.now() + 300000, attemptsLeft: 3, timerInterval: activeOtpSession.timerInterval };
+        document.getElementById('mobileStepDiv').style.display = 'none';
+        document.getElementById('otpStepDiv').style.display = 'block';
+        document.getElementById('maskedMobileDisplay').innerText = `+91 ${mobile.slice(0,2)}****${mobile.slice(-2)}`;
+        document.getElementById('otpAttemptsCountDisplay').innerText = "Attempts left: 3";
+        document.getElementById('loginOtpInput').value = "";
+        startOtpCooldownTimer(60); showIncomingSmsBanner(otp);
+    }
+    function startOtpCooldownTimer(sec) {
+        if (activeOtpSession.timerInterval) clearInterval(activeOtpSession.timerInterval);
+        let rem = sec, tEl = document.getElementById('otpTimerDisplay'), rBtn = document.getElementById('resendOtpBtn');
+        rBtn.style.display = 'none'; tEl.style.display = 'inline';
+        activeOtpSession.timerInterval = setInterval(() => {
+            rem--; tEl.innerText = `⏳ Resend in ${rem}s`;
+            if (rem <= 0) { clearInterval(activeOtpSession.timerInterval); tEl.style.display = 'none'; rBtn.style.display = 'inline'; }
+        }, 1000);
+    }
+    function resendLoginOtp() {
+        let otp = Math.floor(100000 + Math.random() * 900000).toString();
+        activeOtpSession.otpCode = otp; activeOtpSession.expiresAt = Date.now() + 300000; activeOtpSession.attemptsLeft = 3;
+        document.getElementById('otpAttemptsCountDisplay').innerText = "Attempts left: 3";
+        startOtpCooldownTimer(60); showIncomingSmsBanner(otp);
+    }
+    function showIncomingSmsBanner(code) {
+        document.getElementById('bannerOtpDisplay').innerText = code;
+        document.getElementById('incomingSmsBanner').style.display = 'block';
+        playNotificationChime(); clearTimeout(smsBannerTimeout);
+        smsBannerTimeout = setTimeout(closeSmsBanner, 15000);
+    }
+    function closeSmsBanner() { document.getElementById('incomingSmsBanner').style.display = 'none'; }
+    function autoFillOtpDirect() {
+        if (!activeOtpSession.otpCode) return;
+        document.getElementById('loginOtpInput').value = activeOtpSession.otpCode;
+        closeSmsBanner(); verifyLoginOtp();
+    }
+    function changeMobileNumberStep() {
+        clearInterval(activeOtpSession.timerInterval); closeSmsBanner();
+        document.getElementById('otpStepDiv').style.display = 'none';
+        document.getElementById('mobileStepDiv').style.display = 'block';
+    }
+    function verifyLoginOtp() {
+        let entered = document.getElementById('loginOtpInput').value.trim();
+        if (entered.length !== 6) { showToast("⚠️ 6-digit OTP enter karein!"); return; }
+        if (Date.now() > activeOtpSession.expiresAt) { showToast("⚠️ OTP expire ho gaya!"); return; }
+        if (activeOtpSession.attemptsLeft <= 0) { showToast("⚠️ Attempts khatam!"); return; }
+        if (entered !== activeOtpSession.otpCode) {
+            activeOtpSession.attemptsLeft--;
+            document.getElementById('otpAttemptsCountDisplay').innerText = `Attempts left: ${activeOtpSession.attemptsLeft}`;
+            showToast("⚠️ Galat OTP!"); return;
+        }
+        clearInterval(activeOtpSession.timerInterval); closeSmsBanner();
+        localStorage.setItem('casino_logged_in', 'true');
+        localStorage.setItem('casino_player_mobile', activeOtpSession.mobile);
+        getPlayerUniqueId();
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('lobbyScreen').style.display = 'flex';
+        startContinuousBgm(); updateUIStats(); showToast("🎰 Welcome to LuckySpin Social!");
+    }
+    function logoutPlayerAccount() {
+        if (confirm("Logout karna chahte hain?")) {
+            localStorage.removeItem('casino_logged_in'); hideAllScreens();
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mobileStepDiv').style.display = 'block';
+            document.getElementById('otpStepDiv').style.display = 'none';
+        }
+    }
+
+    function getWallet() { return SecureVault.getBalance(); }
+    function setWallet(val) { let v = SecureVault.setBalance(val); updateUIStats(); return v; }
+    function getPlayerUniqueId() {
+        let uid = localStorage.getItem('casino_player_uid');
+        if (!uid) { uid = '#LS-' + Math.floor(100000 + Math.random() * 900000); localStorage.setItem('casino_player_uid', uid); }
+        return uid;
+    }
+    function updateUIStats() {
+        let bal = getWallet().toFixed(2);
+        ['walletDisplay','walletDisplayA','walletDisplayTopA','walletDisplayB','lobbyWalletDisplay','profileWalletDisplay','storeWalletDisplay'].forEach(id => {
+            let el = document.getElementById(id); if (el) el.innerText = bal;
+        });
+        ['betDisplay','betDisplayA','betDisplayB'].forEach(id => {
+            let el = document.getElementById(id); if (el) el.innerText = currentBet.toFixed(2);
+        });
+    }
+
+    function openVirtualStoreModal() { updateUIStats(); document.getElementById('virtualStoreModal').style.display = 'flex'; }
+    function closeVirtualStoreModal() { document.getElementById('virtualStoreModal').style.display = 'none'; }
+    function claimFreeVirtualRefill() {
+        let last = parseInt(localStorage.getItem('ls_last_refill') || '0', 10), now = Date.now();
+        if (now - last < 60000) { showToast(`⏳ Agla free refill ${Math.ceil((60000 - (now - last)) / 1000)}s baad milega!`); return; }
+        localStorage.setItem('ls_last_refill', now.toString());
+        setWallet(getWallet() + 500);
+        showToast("🪙 +500 Free Virtual Coins added!");
+    }
+
+    function getMissionProgress() {
+        let today = new Date().toDateString(), d = JSON.parse(localStorage.getItem('ls_missions') || '{}');
+        if (d.date !== today) d = { date: today, spins: 0, claimed5: false, claimed15: false };
+        return d;
+    }
+    function saveMissionProgress(d) { safeSaveLocalStorage('ls_missions', JSON.stringify(d)); }
+    function incrementMissionSpin() { let d = getMissionProgress(); d.spins++; saveMissionProgress(d); }
+    function openMissionsModal() {
+        let d = getMissionProgress();
+        document.getElementById('missionsListContainer').innerHTML = `
+            <div style="background:rgba(0,0,0,0.4); border:1px solid #00c6ff; padding:8px; border-radius:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                <div><b>Spin 5 Times Today</b><br><span style="color:#aaa; font-size:9px;">Progress: ${Math.min(d.spins,5)}/5 • +100 🪙</span></div>
+                ${d.claimed5 ? '<span style="color:#2ed573;">✔ Claimed</span>' : `<button class="admin-btn" ${d.spins>=5?'':'disabled style="opacity:0.4;"'} onclick="claimMission(5,100)">Claim</button>`}
+            </div>
+            <div style="background:rgba(0,0,0,0.4); border:1px solid #00c6ff; padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                <div><b>Spin 15 Times Today</b><br><span style="color:#aaa; font-size:9px;">Progress: ${Math.min(d.spins,15)}/15 • +300 🪙</span></div>
+                ${d.claimed15 ? '<span style="color:#2ed573;">✔ Claimed</span>' : `<button class="admin-btn" ${d.spins>=15?'':'disabled style="opacity:0.4;"'} onclick="claimMission(15,300)">Claim</button>`}
+            </div>`;
+        document.getElementById('missionsModal').style.display = 'flex';
+    }
+    function claimMission(target, reward) {
+        let d = getMissionProgress();
+        if (target === 5 && d.spins >= 5 && !d.claimed5) { d.claimed5 = true; setWallet(getWallet() + reward); showToast(`🎉 +${reward} Virtual Coins!`); }
+        if (target === 15 && d.spins >= 15 && !d.claimed15) { d.claimed15 = true; setWallet(getWallet() + reward); showToast(`🎉 +${reward} Virtual Coins!`); }
+        saveMissionProgress(d); openMissionsModal();
+    }
+    function closeMissionsModal() { document.getElementById('missionsModal').style.display = 'none'; }
+
+    function openLeaderboardModal() {
+        let list = [
+            { name: "Aarav_Pro", coins: 45200 },
+            { name: "Neha_Spin", coins: 31800 },
+            { name: "Rohan_777", coins: 19450 },
+            { name: `You (${getPlayerUniqueId()})`, coins: Math.floor(getWallet()), isMe: true }
+        ].sort((a, b) => b.coins - a.coins);
+        document.getElementById('leaderboardListContainer').innerHTML = list.map((p, i) => `
+            <div style="display:flex; justify-content:space-between; padding:6px 8px; margin-bottom:4px; border-radius:6px; background:${p.isMe?'rgba(0,198,255,0.2)':'rgba(0,0,0,0.4)'}; border:1px solid ${p.isMe?'#00ffcc':'#223'};">
+                <span>#${i+1} <b>${escapeHtml(p.name)}</b></span><span style="color:#ffd700; font-weight:bold;">🪙 ${p.coins}</span>
+            </div>`).join('');
+        document.getElementById('leaderboardModal').style.display = 'flex';
+    }
+    function closeLeaderboardModal() { document.getElementById('leaderboardModal').style.display = 'none'; }
+
+    function openDailyScratch() {
+        if (localStorage.getItem('casino_last_scratch_date') === new Date().toDateString()) { showToast("⚠️ Aaj ka Scratch Card use ho chuka hai!"); return; }
+        let html = '';
+        for (let i = 1; i <= 8; i++) html += `<div id="scard-${i}" onclick="revealScratchCard(${i})" style="background:#112244; border:2px solid #00c6ff; border-radius:8px; height:60px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:10px; font-weight:bold; cursor:pointer; color:#00c6ff;"><span>🎁</span>Card ${i}</div>`;
+        document.getElementById('scratchCardsGrid').innerHTML = html;
+        document.getElementById('scratchModal').style.display = 'flex';
+    }
+    function revealScratchCard(num) {
+        safeSaveLocalStorage('casino_last_scratch_date', new Date().toDateString());
+        let reward = Math.floor(Math.random() * 26) + 5, el = document.getElementById(`scard-${num}`);
+        el.style.background = '#2ed573'; el.style.color = '#000'; el.innerHTML = `🪙<br>+${reward}`;
+        for (let i = 1; i <= 8; i++) { let c = document.getElementById(`scard-${i}`); if (c) c.onclick = null; }
+        setWallet(getWallet() + reward);
+        setTimeout(() => { closeScratchModal(); showToast(`🎉 Won +${reward} Virtual Coins!`); }, 700);
+    }
+    function closeScratchModal() { document.getElementById('scratchModal').style.display = 'none'; }
+
+    function openLuckyWheel() {
+        let claimed = localStorage.getItem(`casino_wheel_${new Date().toDateString()}`) === 'true';
+        document.getElementById('wheelDisplayBox').innerText = '🎡';
+        document.getElementById('wheelResultDisplay').innerText = '';
+        document.getElementById('wheelStatusText').innerText = claimed ? "⚠️ Aaj ka Lucky Wheel use ho chuka hai!" : "🟢 Daily Free Spin Ready!";
+        document.getElementById('spinWheelBtn').style.display = claimed ? 'none' : 'block';
+        document.getElementById('wheelModal').style.display = 'flex';
+    }
+    function executeLuckyWheelSpin() {
+        safeSaveLocalStorage(`casino_wheel_${new Date().toDateString()}`, 'true');
+        document.getElementById('spinWheelBtn').style.display = 'none';
+        let box = document.getElementById('wheelDisplayBox'), res = document.getElementById('wheelResultDisplay'), count = 0;
+        let iv = setInterval(() => {
+            box.innerText = ['🎡','🎰','🪙','✨'][count % 4];
+            if (++count > 12) {
+                clearInterval(iv);
+                let coin = Math.floor(Math.random() * 46) + 5;
+                box.innerText = '🪙'; res.innerText = `🎉 Won +${coin} Virtual Coins!`;
+                setWallet(getWallet() + coin);
+            }
+        }, 80);
+    }
+    function closeWheelModal() { document.getElementById('wheelModal').style.display = 'none'; }
+
+    function renderGroupTabs() {
+        document.getElementById('groupNavBar').innerHTML = groups.map(g => `<button class="group-tab ${g===currentActiveGroup?'active':''}" onclick="switchGroup('${g}')">Group ${g}</button>`).join('');
+    }
+    function switchGroup(g) { currentActiveGroup = g; renderGroupTabs(); renderLobbyGridForGroup(g); }
+    function renderLobbyGridForGroup(groupName) {
+        let filtered = gameList.filter(g => g.group === groupName);
+        document.getElementById('groupSectionTitle').innerText = `⭐ GROUP ${groupName} GAMES (10 Games)`;
+        document.getElementById('gamesGrid').innerHTML = filtered.map(game => {
+            let cfg = lobbyLogoConfigs[game.id] || { url: null, scale: 100 }, scale = (cfg.scale || 100) / 100;
+            let iconHtml = cfg.url ? `<img src="${cfg.url}" style="transform:scale(${scale}); width:100%; height:100%; object-fit:cover;" />` : `<span style="font-size:${Math.floor(26*scale)}px;">${game.icon}</span>`;
+            let extra = groupName === 'B' ? 'border-radius: 50%; border: 2px solid #ffd700;' : '';
+            return `<div class="game-card" style="${extra}" onclick="openGame(${game.id})"><span class="game-num">${game.id}</span><div class="game-img">${iconHtml}</div><div class="game-name">${escapeHtml(game.name)}</div></div>`;
+        }).join('');
+    }
+
+    const symbols = [
+        {icon:'🚗',mult:50},{icon:'🐶',mult:30},{icon:'😼',mult:20},{icon:'🙈',mult:10},{icon:'🥳',mult:5},
+        {icon:'👑',mult:15},{icon:'🍉',mult:8},{icon:'💎',mult:25},{icon:'🐉',mult:40},{icon:'🎰',mult:35},
+        {icon:'🌟',mult:12},{icon:'🪙',mult:10},{icon:'🔥',mult:45},{icon:'🧞',mult:20},{icon:'🏴‍☠️',mult:30},
+        {icon:'🐃',mult:15},{icon:'⭐',isWild:true,mult:60},{icon:'🎟️',isScatter:true,mult:0}
+    ];
+    let gridData = [[0,1,2,3,4,15],[6,3,15,2,1,5],[7,15,9,10,5,1],[11,0,12,8,15,7],[13,14,5,1,11,0],[10,2,5,1,11,12]];
+
+    function openGame(gameId) {
+        let game = gameList.find(g => g.id === gameId); if (!game) return;
+        activeGameId = game.id; winStreak = 0; updateStreakBannerUI(); hideAllScreens();
+        let gs = document.getElementById('gameScreen'); gs.style.display = 'flex';
+        gs.classList.remove('group-a-mode','group-b-mode','group-c-to-o-mode');
+        document.getElementById('groupATopControlsContainer').style.display = 'none';
+        document.getElementById('groupBTopControlsContainer').style.display = 'none';
+        document.getElementById('defaultGameControlsContainer').style.display = 'none';
+
+        if (game.group === 'A') {
+            gs.classList.add('group-a-mode');
+            document.getElementById('groupATopControlsContainer').style.display = 'flex';
+            document.getElementById('groupARibbonTitle').innerText = game.name;
+        } else if (game.group === 'B') {
+            gs.classList.add('group-b-mode');
+            document.getElementById('groupBTopControlsContainer').style.display = 'flex';
+            document.getElementById('gameTitleB').innerText = game.name.toUpperCase();
+        } else {
+            gs.classList.add('group-c-to-o-mode');
+            document.getElementById('defaultGameControlsContainer').style.display = 'flex';
+            document.getElementById('defaultMultiplierBanner').style.display = game.group === 'C' ? 'none' : 'flex';
+            document.getElementById('groupCJackpotBanner').style.display = game.group === 'C' ? 'flex' : 'none';
+        }
+        startContinuousBgm(); renderSlotGrid(); applyCustomFrameToActiveGame(game.group); updateUIStats(); updateFreeGameUIIndicators(); syncTurboAutoButtonsUI();
+    }
+
+    function hideAllScreens() {
+        ['loginScreen','lobbyScreen','gameScreen','adminScreen','profileScreen','winPopupOverlay','adminLoginModal','scratchModal','wheelModal','missionsModal','virtualStoreModal','leaderboardModal','exportModal'].forEach(id => {
+            let el = document.getElementById(id); if (el) el.style.display = 'none';
+        });
+    }
+    function backToLobby() {
+        isAutoSpin = false; clearTimeout(autoSpinTimer); syncTurboAutoButtonsUI(); hideAllScreens();
+        document.getElementById('lobbyScreen').style.display = 'flex';
+        renderLobbyGridForGroup(currentActiveGroup); updateUIStats();
+    }
+    function toggleTurboMode() { isTurboMode = !isTurboMode; syncTurboAutoButtonsUI(); showToast(isTurboMode ? "⚡ Turbo Spin ON" : "⚡ Turbo Spin OFF"); }
+    function toggleAutoSpin() { isAutoSpin = !isAutoSpin; syncTurboAutoButtonsUI(); showToast(isAutoSpin ? "▶️ Auto Spin ON" : "⏹️ Auto Spin OFF"); if (isAutoSpin && !isSpinning) handleSpin(); }
+    function syncTurboAutoButtonsUI() {
+        ['turboBtnA','turboBtnB','turboBtnDef'].forEach(id => { let el = document.getElementById(id); if (el) el.classList.toggle('mode-active-glow', isTurboMode); });
+        ['autoBtnA','autoBtnB','autoBtnDef'].forEach(id => { let el = document.getElementById(id); if (el) el.classList.toggle('mode-active-glow', isAutoSpin); });
+    }
+    function buyVirtualFreeSpins() {
+        if (isSpinning || isFreeGameActive) return;
+        if (getWallet() < 50) { showToast("⚠️ Kam se kam 50 Virtual Coins chahiye!"); return; }
+        setWallet(getWallet() - 50); freeGamesRemaining += 5; isFreeGameActive = true; freeGameAccumulatedWin = 0;
+        updateFreeGameUIIndicators(); showToast("🌟 +5 Free Fun Spins Unlocked!"); handleSpin();
+    }
+    function changeBet(amt) {
+        if (freeGamesRemaining > 0 || isFreeGameActive) { showToast("⚠️ Free Games ke dauran play amount change nahi hota!"); return; }
+        if (currentBet + amt >= 1 && currentBet + amt <= 100) { currentBet += amt; updateUIStats(); }
+    }
+    function updateFreeGameUIIndicators() {
+        let show = freeGamesRemaining > 0;
+        ['A','B','Default'].forEach(p => {
+            let ind = document.getElementById(`freeGameIndicator${p}`), cnt = document.getElementById(`freeGameCount${p}`);
+            if (ind && cnt) { ind.style.display = show ? 'inline-block' : 'none'; cnt.innerText = freeGamesRemaining; }
+        });
+        let fgBox = document.getElementById('freeGameWinBox'); if (fgBox) fgBox.style.display = (show || isFreeGameActive) ? 'block' : 'none';
+    }
+    function getStreakMultiplier() { return winStreak >= 3 ? 5 : (winStreak === 2 ? 3 : (winStreak === 1 ? 2 : 1)); }
+    function updateStreakBannerUI() {
+        let m = getStreakMultiplier();
+        document.querySelectorAll('#defaultMultiplierBanner .superace-mult-item').forEach(el => el.classList.toggle('active-mult', parseInt(el.dataset.mult, 10) === m));
+    }
+    function calculateDifficultyAdjustedWin(rawWin, bet) {
+        let curMob = localStorage.getItem('casino_player_mobile') || '', curUid = getPlayerUniqueId();
+        if (forceRule && forceRule.mode !== 'none' && (forceRule.playerId === 'ALL' || forceRule.playerId === curMob || forceRule.playerId === curUid)) {
+            if (forceRule.mode === 'loss') return 0;
+            if (forceRule.mode === 'win') return bet * 25;
+        }
+        if (rawWin <= 0) return 0;
+        let mult = globalDifficulty === 'hard' ? 0.4 : (globalDifficulty === 'medium' ? 0.7 : 1.0);
+        return parseFloat((rawWin * mult).toFixed(2));
+    }
+
+    let lastSpinTimestamp = 0;
+    function handleSpin() {
+        let gs = document.getElementById('gameScreen');
+        if (!gs || gs.style.display === 'none') return;
+        let now = Date.now(); if (now - lastSpinTimestamp < 300 || isSpinning) return;
+        lastSpinTimestamp = now; isSpinning = true;
+        let winOverlay = document.getElementById('winPopupOverlay'); if (winOverlay) winOverlay.style.display = 'none';
+        playSpinSound();
+
+        let currentBal = getWallet();
+        if (freeGamesRemaining > 0) { freeGamesRemaining--; isFreeGameActive = true; updateFreeGameUIIndicators(); }
+        else {
+            if (currentBal < currentBet) { isSpinning = false; isAutoSpin = false; syncTurboAutoButtonsUI(); showToast("⚠️ Coins kam hain! 'Free Coins' tab se refill lein."); return; }
+            setWallet(currentBal - currentBet); VirtualAnalytics.recordSpin(currentBet); incrementMissionSpin();
+        }
+
+        let spinningCols = [true,true,true,true,true,true];
+        renderSlotGrid(spinningCols);
+
+        let activeGame = gameList.find(g => g.id === activeGameId), curMob = localStorage.getItem('casino_player_mobile') || '', curUid = getPlayerUniqueId();
+        let jackpotMatch = groupCJackpotRule.playerId === 'ALL' || groupCJackpotRule.playerId === curMob || groupCJackpotRule.playerId === curUid;
+        let triggerJackpot = (activeGame && activeGame.group === 'C' && jackpotMatch && groupCJackpotRule.type !== 'none') ? groupCJackpotRule.type : 'none';
+
+        let targetGrid = [];
+        if (triggerJackpot !== 'none') {
+            let symIdx = Math.floor(Math.random() * (symbols.length - 2));
+            for (let r = 0; r < 6; r++) targetGrid[r] = Array(6).fill(symIdx);
+        } else {
+            let scatterPlaced = 0;
+            for (let r = 0; r < 6; r++) {
+                targetGrid[r] = [];
+                for (let c = 0; c < 6; c++) {
+                    let s = Math.floor(Math.random() * symbols.length);
+                    if (symbols[s].isScatter) { if (scatterPlaced < 4) scatterPlaced++; else s = Math.floor(Math.random() * (symbols.length - 1)); }
+                    targetGrid[r][c] = s;
+                }
+            }
+        }
+
+        const stopDelays = isTurboMode ? [140,210,280,350,420,490] : [450,750,1050,1350,1650,1950];
+        for (let c = 0; c < 6; c++) {
+            setTimeout(() => {
+                spinningCols[c] = false;
+                for (let r = 0; r < 6; r++) gridData[r][c] = targetGrid[r][c];
+                updateSingleColumn(c, gridData);
+                if (c === 5) finishSpinEvaluation(activeGame, triggerJackpot, winOverlay);
+            }, stopDelays[c]);
+        }
+    }
+
+    function finishSpinEvaluation(activeGame, triggerJackpot, winOverlay) {
+        let totalScatters = 0;
+        for (let r = 0; r < 6; r++) for (let c = 0; c < 6; c++) if (symbols[gridData[r][c]].isScatter) totalScatters++;
+        if (totalScatters >= 3) {
+            let awarded = totalScatters === 3 ? 10 : (totalScatters === 4 ? 15 : 20);
+            freeGamesRemaining += awarded; if (!isFreeGameActive) freeGameAccumulatedWin = 0;
+            updateFreeGameUIIndicators();
+            document.getElementById('winPopupTitle').innerText = `✨ ${awarded} FREE SPINS! ✨`;
+            document.getElementById('winPopupAmount').innerText = `+${awarded} FREE SPINS`;
+            winOverlay.style.display = 'block';
+        }
+
+        let totalWin = 0, winningCells = [];
+        if (triggerJackpot !== 'none') {
+            totalWin = parseFloat(triggerJackpot);
+            for (let r = 0; r < 6; r++) for (let c = 0; c < 6; c++) winningCells.push([r, c]);
+            groupCJackpotRule.type = 'none'; safeSaveLocalStorage('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule));
+            document.getElementById('adminGroupCJackpotSelect').value = 'none';
+            document.getElementById('winPopupTitle').innerText = `🎉 FUN JACKPOT ${totalWin}!`;
+            document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
+            winOverlay.style.display = 'block';
+        } else {
+            let evalRes = evaluateStrictPaylinesWithHighlight(gridData, activeGame ? activeGame.group : 'A');
+            totalWin = calculateDifficultyAdjustedWin(evalRes.rawWin, currentBet);
+            if (activeGame && activeGame.group !== 'A' && activeGame.group !== 'B' && activeGame.group !== 'C') {
+                if (totalWin > 0) { totalWin = parseFloat((totalWin * getStreakMultiplier()).toFixed(2)); winStreak = Math.min(winStreak + 1, 3); }
+                else winStreak = 0;
+                updateStreakBannerUI();
+            }
+            winningCells = totalWin > 0 ? evalRes.winningCells : [];
+        }
+
+        if (winningCells.length > 0 && totalWin > 0) highlightWinningCellsDOM(winningCells);
+        totalWin = parseFloat(totalWin.toFixed(2));
+        if (isFreeGameActive) { freeGameAccumulatedWin += totalWin; document.getElementById('freeGameAccumulatedDisplay').innerText = `${freeGameAccumulatedWin.toFixed(2)} COINS`; }
+        else if (totalWin > 0) setWallet(getWallet() + totalWin);
+        if (totalWin > 0) VirtualAnalytics.recordWin(totalWin);
+
+        updateUIStats();
+        ['spinWinDisplay','spinWinDisplayA','spinWinDisplayB'].forEach(id => { let el = document.getElementById(id); if (el) el.innerText = totalWin.toFixed(2); });
+
+        if (totalWin > 0 && triggerJackpot === 'none' && totalScatters < 3 && !isFreeGameActive) {
+            playWinSound();
+            document.getElementById('winPopupTitle').innerText = totalWin >= currentBet * 10 ? "🔥 MEGA FUN WIN!" : "NICE WIN!";
+            document.getElementById('winPopupAmount').innerText = `+${totalWin.toFixed(2)} COINS`;
+            winOverlay.style.display = 'block';
+        }
+
+        isSpinning = false;
+        if (isFreeGameActive && freeGamesRemaining === 0) {
+            playCoinCountingSound(() => {
+                let finalWin = parseFloat(freeGameAccumulatedWin.toFixed(2));
+                setWallet(getWallet() + finalWin); isFreeGameActive = false; freeGameAccumulatedWin = 0;
+                updateFreeGameUIIndicators();
+                document.getElementById('winPopupTitle').innerText = "🏆 FREE SPINS DONE!";
+                document.getElementById('winPopupAmount').innerText = `+${finalWin.toFixed(2)} COINS`;
+                winOverlay.style.display = 'block';
+                if (isAutoSpin) autoSpinTimer = setTimeout(handleSpin, 1100);
+            });
+        } else if (isFreeGameActive && freeGamesRemaining > 0) autoSpinTimer = setTimeout(handleSpin, isTurboMode ? 450 : 1000);
+        else if (isAutoSpin) autoSpinTimer = setTimeout(handleSpin, isTurboMode ? 450 : 950);
+    }
+
+    function evaluateStrictPaylinesWithHighlight(grid, groupName) {
+        let totalWin = 0, winningCells = [];
+        for (let r = 0; r < 6; r++) {
+            let matchSymbol = null, consecutive = 0, wildBonus = 1, pathCells = [];
+            for (let c = 0; c < 6; c++) {
+                let sIdx = grid[r][c], sym = symbols[sIdx];
+                if (!sym || sym.isScatter) break;
+                if (c === 0) { if (!sym.isWild) matchSymbol = sIdx; else if (groupName === 'A') wildBonus += 0.5; consecutive = 1; pathCells.push([r,c]); }
+                else if (sym.isWild || sIdx === matchSymbol || matchSymbol === null) {
+                    if (matchSymbol === null && !sym.isWild) matchSymbol = sIdx;
+                    if (sym.isWild && groupName === 'A') wildBonus += 0.5;
+                    consecutive++; pathCells.push([r,c]);
+                } else break;
+            }
+            if (consecutive >= 3) {
+                let symObj = symbols[matchSymbol !== null ? matchSymbol : 0] || { mult: 10 };
+                totalWin += currentBet * (consecutive * 0.5) * (symObj.mult * 0.2) * 2.0 * wildBonus;
+                pathCells.forEach(cell => { if (!winningCells.some(w => w[0]===cell[0] && w[1]===cell[1])) winningCells.push(cell); });
+            }
+        }
+        return { rawWin: parseFloat(totalWin.toFixed(2)), winningCells };
+    }
+
+    function getActivePrefix() { let g = gameList.find(x => x.id === activeGameId); return g ? (g.group === 'A' ? 'A' : (g.group === 'B' ? 'B' : 'Def')) : 'Def'; }
+    function highlightWinningCellsDOM(cells) {
+        let prefix = getActivePrefix();
+        cells.forEach(([r, c]) => { let col = document.getElementById(`col-${prefix}-${c}`); if (col && col.children[r]) col.children[r].classList.add('winning-highlight'); });
+    }
+    function buildCellHTML(sIdx, extra) {
+        let sym = symbols[sIdx], cfg = getSymbolConfig(activeGameId, sIdx), scale = (cfg.scale || 100) / 100;
+        let content = cfg.url ? `<img src="${cfg.url}" style="transform:scale(${scale});" />` : `<span style="font-size:22px;">${sym.icon}</span>`;
+        let badge = sym.isWild ? `<span class="badge-wild">WILD</span>` : (sym.isScatter ? `<span class="badge-scatter">SCATTER</span>` : '');
+        return `<div class="slot-cell" style="${extra}">${content}${badge}</div>`;
+    }
+    function renderSlotGrid(spinningCols = [false,false,false,false,false,false]) {
+        let g = gameList.find(x => x.id === activeGameId), prefix = getActivePrefix(), extra = g && g.group === 'B' ? 'border-radius: 50%;' : '', html = '';
+        for (let c = 0; c < 6; c++) {
+            let isSpin = spinningCols[c];
+            html += `<div class="slot-reel-window"><div class="slot-column ${isSpin?'spinning':''}" id="col-${prefix}-${c}">`;
+            let count = isSpin ? 14 : 6;
+            for (let r = 0; r < count; r++) html += buildCellHTML(isSpin ? Math.floor(Math.random() * symbols.length) : gridData[r % 6][c], extra);
+            html += `</div></div>`;
+        }
+        let el = document.getElementById(g && g.group === 'A' ? 'slotGridGroupA' : (g && g.group === 'B' ? 'slotGridGroupB' : 'slotGridDefault'));
+        if (el) el.innerHTML = html;
+    }
+    function updateSingleColumn(colIndex, grid) {
+        let g = gameList.find(x => x.id === activeGameId), prefix = getActivePrefix(), extra = g && g.group === 'B' ? 'border-radius: 50%;' : '';
+        let colEl = document.getElementById(`col-${prefix}-${colIndex}`); if (!colEl) return;
+        colEl.classList.remove('spinning'); colEl.style.transition = 'transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)'; colEl.style.transform = 'translate3d(0,0,0)';
+        let html = ''; for (let r = 0; r < 6; r++) html += buildCellHTML(grid[r][colIndex], extra);
+        colEl.innerHTML = html;
+    }
+    function getSymbolConfig(gameId, sIdx) {
+        let conf = gameSymbolConfigs[gameId] || gameSymbolConfigs[String(gameId)];
+        return (conf && (conf[sIdx] || conf[String(sIdx)])) || { url: null, scale: 100 };
+    }
+
+    function openAdminPanel() { document.getElementById('adminLoginMobileInput').value = ""; document.getElementById('adminLoginPasswordInput').value = ""; document.getElementById('adminLoginModal').style.display = 'flex'; }
+    function closeAdminLoginModal() { document.getElementById('adminLoginModal').style.display = 'none'; }
+    function verifyAdminLogin() {
+        let mob = document.getElementById('adminLoginMobileInput').value.trim(), pass = document.getElementById('adminLoginPasswordInput').value.trim();
+        if (SecureVault.verifyAdmin(mob, pass)) {
+            closeAdminLoginModal(); hideAllScreens(); document.getElementById('adminScreen').style.display = 'block';
+            renderAnalyticsUI(); renderAdminFeedbacks();
+            document.getElementById('changeAdminMobileInput').value = mob; document.getElementById('changeAdminPasswordInput').value = "";
+            document.getElementById('adminDifficultySelect').value = globalDifficulty;
+            document.getElementById('forcePlayerIdInput').value = forceRule.playerId || 'ALL';
+            document.getElementById('forceModeSelect').value = forceRule.mode || 'none';
+            document.getElementById('adminGroupCPlayerId').value = groupCJackpotRule.playerId || 'ALL';
+            document.getElementById('adminGroupCJackpotSelect').value = groupCJackpotRule.type || 'none';
+        } else showToast("⚠️ Invalid Admin ID or Password!");
+    }
+    function saveNewAdminCredentials() {
+        let m = document.getElementById('changeAdminMobileInput').value.trim(), p = document.getElementById('changeAdminPasswordInput').value.trim();
+        if (m.length < 4 || !p) { showToast("⚠️ Valid ID aur Password enter karein!"); return; }
+        SecureVault.updateAdmin(m, p); showToast("✅ Admin credentials updated!");
+    }
+    function applyCoinChange(action) {
+        let amt = parseFloat(document.getElementById('coinAmountChangeInput').value);
+        if (isNaN(amt) || amt <= 0) { showToast("⚠️ Valid virtual coins enter karein!"); return; }
+        setWallet(action === 'add' ? getWallet() + amt : Math.max(0, getWallet() - amt));
+        document.getElementById('coinAmountChangeInput').value = '';
+        showToast(`✅ Virtual Coins ${action === 'add' ? 'added' : 'deducted'}!`);
+    }
+    function updateDifficultySetting(mode) { globalDifficulty = mode; safeSaveLocalStorage('slot_difficulty_mode', mode); showToast("✅ Difficulty: " + mode); }
+    function saveForceRule() { forceRule = { mode: document.getElementById('forceModeSelect').value, playerId: document.getElementById('forcePlayerIdInput').value.trim() || 'ALL' }; safeSaveLocalStorage('slot_force_rule', JSON.stringify(forceRule)); showToast("✅ Demo Force Rule Saved!"); }
+    function saveGroupCJackpotTarget() { groupCJackpotRule = { playerId: document.getElementById('adminGroupCPlayerId').value.trim() || 'ALL', type: document.getElementById('adminGroupCJackpotSelect').value }; safeSaveLocalStorage('slot_groupc_jackpot_rule', JSON.stringify(groupCJackpotRule)); showToast("✅ Group C Target Saved!"); }
+
+    let tempFrameImageBase64 = null, frameImageRemoved = false;
+    function previewCustomFrameImageFile(e) { let f = e.target.files[0]; if (f) compressImageFile(f, 300, 300, 0.7, url => { tempFrameImageBase64 = url; frameImageRemoved = false; showToast("✅ Frame image loaded!"); }); }
+    function removeCustomFrameImage() { tempFrameImageBase64 = null; frameImageRemoved = true; showToast("🗑️ Frame image cleared (Click Save)."); }
+    function loadFrameSettingsForTarget(key) {
+        let cfg = Object.assign({ scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0, frameImageUrl: null }, gameFrameConfigs[key] || {});
+        document.getElementById('frameScaleRange').value = cfg.scale; document.getElementById('frameScaleVal').innerText = cfg.scale;
+        document.getElementById('reelScaleRange').value = cfg.reelScale; document.getElementById('reelScaleVal').innerText = cfg.reelScale;
+        document.getElementById('reelWidthRange').value = cfg.width; document.getElementById('reelWidthVal').innerText = cfg.width;
+        document.getElementById('reelHeightRange').value = cfg.height; document.getElementById('reelHeightVal').innerText = cfg.height;
+        document.getElementById('reelOffsetXRange').value = cfg.offsetX; document.getElementById('reelOffsetXVal').innerText = cfg.offsetX;
+        document.getElementById('reelOffsetYRange').value = cfg.offsetY; document.getElementById('reelOffsetYVal').innerText = cfg.offsetY;
+        tempFrameImageBase64 = cfg.frameImageUrl; frameImageRemoved = false;
+    }
+    function previewReelLiveConfigs() {
+        document.getElementById('frameScaleVal').innerText = document.getElementById('frameScaleRange').value;
+        document.getElementById('reelScaleVal').innerText = document.getElementById('reelScaleRange').value;
+        document.getElementById('reelWidthVal').innerText = document.getElementById('reelWidthRange').value;
+        document.getElementById('reelHeightVal').innerText = document.getElementById('reelHeightRange').value;
+        document.getElementById('reelOffsetXVal').innerText = document.getElementById('reelOffsetXRange').value;
+        document.getElementById('reelOffsetYVal').innerText = document.getElementById('reelOffsetYRange').value;
+    }
+    function saveGameFrameConfig() {
+        let key = document.getElementById('adminFrameTargetSelect').value, existing = gameFrameConfigs[key] || {};
+        gameFrameConfigs[key] = {
+            scale: parseFloat(document.getElementById('frameScaleRange').value), reelScale: parseFloat(document.getElementById('reelScaleRange').value),
+            width: parseInt(document.getElementById('reelWidthRange').value, 10), height: parseInt(document.getElementById('reelHeightRange').value, 10),
+            offsetX: parseInt(document.getElementById('reelOffsetXRange').value, 10), offsetY: parseInt(document.getElementById('reelOffsetYRange').value, 10),
+            frameImageUrl: frameImageRemoved ? null : (tempFrameImageBase64 || existing.frameImageUrl || null)
+        };
+        safeSaveLocalStorage('slot_game_frame_configs', JSON.stringify(gameFrameConfigs)); showToast("✅ Frame & Reel saved!");
+    }
+    function applyCustomFrameToActiveGame(groupName) {
+        let key = groupName === 'A' ? 'groupA' : (groupName === 'B' ? 'groupB' : 'default');
+        let cfg = Object.assign({ scale: 1.0, reelScale: 1.0, width: 100, height: 100, offsetX: 0, offsetY: 0, frameImageUrl: null }, gameFrameConfigs[key] || {});
+        let frameEl = document.getElementById(groupName === 'A' ? 'slotFrameBoxA' : (groupName === 'B' ? 'slotFrameBoxB' : 'slotFrameBoxDefault'));
+        let reelsEl = document.getElementById(groupName === 'A' ? 'slotGridGroupA' : (groupName === 'B' ? 'slotGridGroupB' : 'slotGridDefault'));
+        if (frameEl) {
+            frameEl.style.transform = `scale(${cfg.scale}) translate(${cfg.offsetX}px, ${cfg.offsetY}px)`;
+            frameEl.style.width = `${cfg.width}%`; frameEl.style.height = `${cfg.height}%`;
+            if (cfg.frameImageUrl) { frameEl.style.borderImage = `url(${cfg.frameImageUrl}) 30 round`; frameEl.style.borderWidth = '16px'; frameEl.style.backgroundImage = `url(${cfg.frameImageUrl})`; frameEl.style.backgroundSize = 'cover'; }
+            else { frameEl.style.borderImage = 'none'; frameEl.style.borderWidth = '12px'; frameEl.style.backgroundImage = 'none'; }
+        }
+        if (reelsEl) reelsEl.style.transform = `scale(${cfg.reelScale})`;
+    }
+
+    let selectedTargetSymbolIdx = 0;
+    function searchAdminGame() {
+        let g = gameList.find(x => x.id === parseInt(document.getElementById('adminGameSearchInput').value, 10));
+        if (!g) { showToast("⚠️ Invalid Game Number!"); return; }
+        activeGameId = g.id; document.getElementById('adminGamePreviewContainer').style.display = 'block';
+        document.getElementById('adminGameTitleDisplay').innerText = `#${g.id} ${g.name} (Group ${g.group})`;
+        renderAdminMasterPalette();
+    }
+    function openSearchedGameDirectly() { openGame(activeGameId); }
+    function renderAdminMasterPalette() {
+        document.getElementById('adminMasterSymbolsPalette').innerHTML = symbols.map((sym, idx) => {
+            let cfg = getSymbolConfig(activeGameId, idx);
+            let content = cfg.url ? `<img src="${cfg.url}" style="width:100%; height:100%; object-fit:contain; transform:scale(${(cfg.scale||100)/100});" />` : `<span style="font-size:18px;">${sym.icon}</span>`;
+            return `<div onclick="selectAdminSymbol(${idx})" style="height:40px; display:flex; align-items:center; justify-content:center; border:${idx===selectedTargetSymbolIdx?'2px solid #00ffcc':'1px solid #ffd700'}; border-radius:4px; cursor:pointer; overflow:hidden;">${content}</div>`;
+        }).join('');
+        document.getElementById('selectedSymbolInfo').innerText = `Selected Symbol: ${selectedTargetSymbolIdx}`;
+    }
+    function selectAdminSymbol(idx) {
+        selectedTargetSymbolIdx = idx; let cfg = getSymbolConfig(activeGameId, idx);
+        document.getElementById('symbolSizeRange').value = cfg.scale || 100; document.getElementById('sizeValLabel').innerText = cfg.scale || 100;
+        renderAdminMasterPalette();
+    }
+    function updateSymbolScaleLive(val) {
+        document.getElementById('sizeValLabel').innerText = val;
+        if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
+        if (!gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx]) gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = { url: null, scale: 100 };
+        gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx].scale = parseInt(val, 10); renderAdminMasterPalette();
+    }
+    function previewCustomSymbolFile(e) {
+        let f = e.target.files[0];
+        if (f) compressImageFile(f, 400, 400, 0.9, url => {
+            if (!gameSymbolConfigs[activeGameId]) gameSymbolConfigs[activeGameId] = {};
+            gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx] = { url, scale: parseInt(document.getElementById('symbolSizeRange').value, 10) };
+            renderAdminMasterPalette(); showToast("✅ Symbol loaded!");
+        });
+    }
+    function saveSymbolFitterConfig() { safeSaveLocalStorage('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs)); showToast("✅ Symbols saved!"); }
+    function removeCustomSymbol() {
+        if (gameSymbolConfigs[activeGameId]) delete gameSymbolConfigs[activeGameId][selectedTargetSymbolIdx];
+        safeSaveLocalStorage('slot_game_symbol_configs', JSON.stringify(gameSymbolConfigs)); renderAdminMasterPalette(); showToast("🗑️ Symbol deleted!");
+    }
+
+    let selectedLobbyGameId = 1, tempLobbyLogoDataUrl = null, lobbyLogoRemoved = false;
+    function searchAdminLobbyGame() {
+        let g = gameList.find(x => x.id === parseInt(document.getElementById('adminLobbyGameSearchInput').value, 10));
+        if (!g) { showToast("⚠️ Invalid Game Number!"); return; }
+        selectedLobbyGameId = g.id; document.getElementById('adminLobbyPreviewContainer').style.display = 'block';
+        document.getElementById('adminLobbyGameTitleDisplay').innerText = `#${g.id} ${g.name}`;
+        let cfg = lobbyLogoConfigs[g.id] || { url: null, scale: 100 };
+        document.getElementById('lobbyLogoSizeRange').value = cfg.scale || 100; document.getElementById('lobbyLogoSizeValLabel').innerText = cfg.scale || 100;
+        tempLobbyLogoDataUrl = cfg.url; lobbyLogoRemoved = false;
+    }
+    function previewCustomLobbyLogoFile(e) { let f = e.target.files[0]; if (f) compressImageFile(f, 400, 400, 0.9, url => { tempLobbyLogoDataUrl = url; lobbyLogoRemoved = false; showToast("✅ Logo loaded!"); }); }
+    function removeCustomLobbyLogo() { tempLobbyLogoDataUrl = null; lobbyLogoRemoved = true; showToast("🗑️ Logo marked for deletion."); }
+    function updateLobbyLogoScaleLive(v) { document.getElementById('lobbyLogoSizeValLabel').innerText = v; }
+    function saveLobbyLogoConfig() {
+        if (lobbyLogoRemoved) delete lobbyLogoConfigs[selectedLobbyGameId];
+        else lobbyLogoConfigs[selectedLobbyGameId] = { url: tempLobbyLogoDataUrl, scale: parseInt(document.getElementById('lobbyLogoSizeRange').value, 10) };
+        safeSaveLocalStorage('slot_lobby_logo_configs', JSON.stringify(lobbyLogoConfigs)); renderLobbyGridForGroup(currentActiveGroup); showToast("✅ Lobby logo saved!");
+    }
+
+    function previewCustomAudio(e, type) {
+        let f = e.target.files[0]; if (!f) return;
+        let r = new FileReader();
+        r.onload = ev => {
+            gameAudioConfigs[type] = ev.target.result;
+            if (type === 'bgm') { document.getElementById('bgmStatus').innerText = "✅ Ready"; bgmAudioElement.src = ev.target.result; bgmAudioElement.play().catch(()=>{}); }
+            if (type === 'spin') document.getElementById('spinAudioStatus').innerText = "✅ Ready";
+            if (type === 'win') document.getElementById('winAudioStatus').innerText = "✅ Ready";
+        };
+        r.readAsDataURL(f);
+    }
+    function saveAudioSettings() { safeSaveLocalStorage('slot_game_audio_configs', JSON.stringify(gameAudioConfigs)); showToast("✅ Audio saved!"); }
+
+    function updateProfilePicture(e) { let f = e.target.files[0]; if (f) compressImageFile(f, 120, 120, 0.6, url => { safeSaveLocalStorage('casino_profile_pic', url); renderProfileScreenData(); showToast("✅ Avatar updated!"); }); }
+    function savePlayerPersonalDetails() { safeSaveLocalStorage('casino_player_saved_details', document.getElementById('playerDetailsTextarea').value); showToast("✅ Notes saved!"); }
+    function copyReferralLink() {
+        let val = document.getElementById('referralLinkInput').value;
+        navigator.clipboard ? navigator.clipboard.writeText(val).then(()=>showToast("📋 Link copied!")).catch(()=>showToast(val)) : showToast(val);
+    }
+    function redeemReferralCode() {
+        let code = document.getElementById('redeemRefCodeInput').value.trim();
+        if (!code) { showToast("⚠️ Invite code enter karein!"); return; }
+        if (localStorage.getItem('ls_ref_claimed') === 'true') { showToast("⚠️ Bonus pehle hi claim ho chuka hai!"); return; }
+        localStorage.setItem('ls_ref_claimed', 'true'); setWallet(getWallet() + 100);
+        localStorage.setItem('ls_ref_count', parseInt(localStorage.getItem('ls_ref_count') || '0', 10) + 1);
+        renderProfileScreenData(); showToast("🎁 +100 Virtual Coins added!");
+    }
+
+    let tempFeedbackImg = null;
+    function previewFeedbackImage(e) { let f = e.target.files[0]; if (f) compressImageFile(f, 200, 200, 0.5, url => { tempFeedbackImg = url; document.getElementById('feedbackImgStatus').innerText = "✅ Attached"; }); }
+    function submitPlayerFeedback() {
+        let txt = document.getElementById('feedbackTextarea').value.trim();
+        if (!txt && !tempFeedbackImg) { showToast("⚠️ Feedback likhein!"); return; }
+        let list = JSON.parse(localStorage.getItem('casino_player_feedbacks') || '[]');
+        list.unshift({ uid: getPlayerUniqueId(), text: txt, image: tempFeedbackImg, time: new Date().toLocaleString() });
+        safeSaveLocalStorage('casino_player_feedbacks', JSON.stringify(list));
+        document.getElementById('feedbackTextarea').value = ""; tempFeedbackImg = null; document.getElementById('feedbackImgStatus').innerText = "No screenshot";
+        showToast("✅ Feedback sent!");
+    }
+    function renderAdminFeedbacks() {
+        let list = JSON.parse(localStorage.getItem('casino_player_feedbacks') || '[]');
+        document.getElementById('adminFeedbackListContainer').innerHTML = list.length === 0 ? '<p style="color:#aaa;">No feedbacks yet.</p>' : list.map(f => `<div style="background:rgba(0,0,0,0.4); border:1px solid #2ed573; padding:5px; border-radius:4px; margin-bottom:4px;"><div><b>${escapeHtml(f.uid)}:</b> ${escapeHtml(f.text)}</div>${f.image?`<img src="${f.image}" style="max-width:50px; border-radius:4px;" />`:''}<div style="font-size:8px; color:#aaa;">${escapeHtml(f.time)}</div></div>`).join('');
+    }
+    function renderProfileScreenData() {
+        let uid = getPlayerUniqueId();
+        document.getElementById('profileUniqueIdDisplay').innerText = `ID: ${uid}`;
+        document.getElementById('referralLinkInput').value = `${location.origin}${location.pathname}?ref=${uid.replace('#','')}`;
+        document.getElementById('playerDetailsTextarea').value = localStorage.getItem('casino_player_saved_details') || "";
+        document.getElementById('referralCount').innerText = localStorage.getItem('ls_ref_count') || '0';
+        document.getElementById('referralEarnings').innerText = (parseInt(localStorage.getItem('ls_ref_count') || '0', 10) * 100);
+        let pic = localStorage.getItem('casino_profile_pic');
+        document.getElementById('profileAvatarDisplay').style.display = pic ? 'none' : 'block';
+        document.getElementById('profileAvatarImg').style.display = pic ? 'block' : 'none';
+        if (pic) document.getElementById('profileAvatarImg').src = pic;
+        updateUIStats();
+    }
+
+    function switchNav(el, tab) {
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active');
+        if (tab === 'Profile') { hideAllScreens(); document.getElementById('profileScreen').style.display = 'block'; renderProfileScreenData(); }
+        else if (tab === 'Missions') openMissionsModal();
+        else if (tab === 'Store') openVirtualStoreModal();
+        else if (tab === 'Leaderboard') openLeaderboardModal();
+        else backToLobby();
+    }
+
+    function exportCasinoBackupJson() {
+        let data = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            let k = localStorage.key(i);
+            if (k && (k.startsWith('slot_') || k.startsWith('casino_') || k.startsWith('_ls_') || k.startsWith('ls_'))) data[k] = localStorage.getItem(k);
+        }
+        let blob = new Blob([JSON.stringify({ timestamp: new Date().toISOString(), data }, null, 2)], { type: 'application/json' });
+        let url = URL.createObjectURL(blob), a = document.createElement('a');
+        a.href = url; a.download = `luckyspin_social_backup.json`; a.click(); URL.revokeObjectURL(url); showToast("✅ Backup downloaded!");
+    }
+    function restoreCasinoBackupJson(e) {
+        let f = e.target.files[0]; if (!f) return;
+        let r = new FileReader();
+        r.onload = ev => {
+            try { let p = JSON.parse(ev.target.result); if (!p.data) throw new Error(); Object.keys(p.data).forEach(k => localStorage.setItem(k, p.data[k])); location.reload(); }
+            catch(err) { showToast("⚠️ Invalid backup file!"); }
+        };
+        r.readAsText(f);
+    }
+
+    function checkInternetAndReload() { if (navigator.onLine) { document.getElementById('offlineScreen').style.display = 'none'; initAppFlow(); } else showToast("⚠️ No internet!"); }
+    function playOfflineModeDirect() { document.getElementById('offlineScreen').style.display = 'none'; initAppFlow(); }
+    window.addEventListener('offline', () => document.getElementById('offlineScreen').style.display = 'flex');
+    window.addEventListener('online', () => { document.getElementById('offlineScreen').style.display = 'none'; initAppFlow(); });
+
+    function showToast(msg) {
+        let toast = document.getElementById('customToast');
+        if (!toast) { toast = document.createElement('div'); toast.id = 'customToast'; document.body.appendChild(toast); }
+        toast.innerText = msg; toast.style.display = 'block';
+        clearTimeout(window.__toastTimeout);
+        window.__toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function openExportModal() { document.getElementById('exportModal').style.display = 'flex'; }
+    function closeExportModal() {
+        document.getElementById('exportModal').style.display = 'none';
+        let box = document.getElementById('manualCopyBox'); if (box) { box.style.display = 'none'; box.value = ''; }
+    }
+    function downloadSingleFileCode() {
+        const code = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        const blob = new Blob([code], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob), a = document.createElement('a');
+        a.href = url; a.download = 'LuckySpin_Virtual_Social.html'; a.click(); URL.revokeObjectURL(url); showToast("✅ File Downloaded!");
+    }
+    function copySingleFileCode() {
+        const code = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(code).then(() => showToast("✅ Code Copied!")).catch(() => fallbackCopy(code));
+        } else fallbackCopy(code);
+    }
+    function fallbackCopy(text) {
+        const ta = document.createEle
