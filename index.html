@@ -1,401 +1,1753 @@
-import 'package:flutter/material.dart';
-import 'data/games_catalog.dart';
-import 'screens/slot_machine_screen.dart';
-import 'widgets/casino_art.dart';
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.KING - Matka App</title>
+    <style>
+        :root {
+            --primary: #f39c12;
+            --primary-dark: #d35400;
+            --bg: #0b0c10;
+            --card: #1f2833;
+            --text: #ffffff;
+            --green: #2ecc71;
+            --red: #e74c3c;
+            --blue: #3498db;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 75px; }
 
-void main() {
-  runApp(const RoyalSlotsApp());
-}
+        header { background: #14181f; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 100; }
+        header h1 { color: var(--primary); font-size: 22px; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+        .wallet-badge { background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; }
 
-class RoyalSlotsApp extends StatelessWidget {
-  const RoyalSlotsApp({super.key});
+        .notice-board { background: #1f2229; border-left: 4px solid var(--primary); padding: 10px 15px; margin: 10px; border-radius: 6px; font-size: 13px; color: #f1c40f; line-height: 1.5; }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Royal Virtual 100 Slots',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF080B16),
-      ),
-      home: const CasinoLobbyScreen(),
-    );
-  }
-}
+        .container { padding: 12px; max-width: 600px; margin: auto; }
+        .quick-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
+        .q-btn { background: var(--card); border: 1px solid #333; color: #fff; padding: 10px 5px; border-radius: 8px; font-size: 12px; font-weight: bold; text-align: center; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; }
 
-class CasinoLobbyScreen extends StatefulWidget {
-  const CasinoLobbyScreen({super.key});
+        .market-card { background: var(--card); border: 1px solid #2c3e50; border-radius: 12px; padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        .m-top { display: flex; justify-content: space-between; align-items: center; }
+        .m-title { font-size: 17px; font-weight: 700; color: #fff; }
+        .m-status { font-size: 10px; padding: 3px 8px; border-radius: 12px; font-weight: bold; }
+        .status-open { background: rgba(46, 204, 113, 0.2); color: var(--green); border: 1px solid var(--green); }
+        .status-closed { background: rgba(231, 76, 60, 0.2); color: var(--red); border: 1px solid var(--red); }
 
-  @override
-  State<CasinoLobbyScreen> createState() => _CasinoLobbyScreenState();
-}
+        .m-times { display: flex; justify-content: space-between; font-size: 11px; color: #aaa; margin: 6px 0; }
+        .m-timers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+        .m-timer-box { font-size: 11px; color: var(--primary); font-weight: bold; background: #14181f; padding: 5px 6px; border-radius: 6px; text-align: center; border: 1px solid #2c3e50; }
+        .m-result-box { background: #11161d; border: 1px dashed #444; padding: 8px; border-radius: 8px; text-align: center; margin: 8px 0; }
+        .m-result-text { font-size: 19px; font-weight: 800; color: var(--primary); letter-spacing: 3px; }
 
-class _CasinoLobbyScreenState extends State<CasinoLobbyScreen> {
-  late final List<SlotGameConfig> _allGames;
-  int _balance = 10000;
-  int _xp = 35;
-  int _vipLevel = 1;
-  String _selectedCat = 'All';
-  String _search = '';
+        .m-btns { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-top: 8px; }
+        .btn { padding: 10px; border: none; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; text-align: center; }
+        .btn-chart { background: #2c3e50; color: #fff; }
+        .btn-play { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; font-size: 14px; }
 
-  @override
-  void initState() {
-    super.initState();
-    _allGames = build100SlotGames();
-  }
+        .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 10px; }
+        .game-box { background: var(--card); border: 1px solid #3a4b5c; padding: 18px 10px; border-radius: 12px; text-align: center; cursor: pointer; }
+        .game-label { font-size: 14px; font-weight: bold; color: #fff; }
+        .game-rate { font-size: 11px; color: var(--green); margin-top: 3px; }
 
-  void _addXp() {
-    setState(() {
-      _xp += 15;
-      if (_xp >= 100) {
-        _xp -= 100;
-        _vipLevel++;
-        _balance += 1000;
-      }
-    });
-  }
+        .form-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #333; margin-bottom: 15px; }
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 12px; color: #bbb; margin-bottom: 5px; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 11px; background: #111; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 14px; }
+        .bid-cart-item { background: #14181f; padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--primary); font-size: 13px; }
+        .del-btn { background: var(--red); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
 
-  void _openBonusWheel() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => BonusWheelDialog(
-        onWinCoins: (amount) {
-          setState(() => _balance += amount);
-        },
-      ),
-    );
-  }
+        .list-card { background: var(--card); padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid var(--primary); font-size: 13px; }
+        .win-badge { background: var(--green); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .loss-badge { background: var(--red); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .pend-badge { background: #f39c12; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
 
-  @override
-  Widget build(BuildContext context) {
-    final categories = ['All', '3x3 Classic', ..._allGames.map((e) => e.category).toSet()];
-    final filtered = _allGames.where((g) {
-      final matchesSearch = _search.isEmpty ||
-          g.title.toLowerCase().contains(_search.toLowerCase()) ||
-          g.category.toLowerCase().contains(_search.toLowerCase());
-      if (!matchesSearch) return false;
-      if (_selectedCat == 'All') return true;
-      if (_selectedCat == '3x3 Classic') return g.cols == 3;
-      return g.category == _selectedCat;
-    }).toList();
+        .admin-section { background: #14181f; border: 1px dashed var(--primary); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .admin-section h4 { color: var(--primary); margin-bottom: 10px; font-size: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Pro App Top Header (VIP + Coins + Wheel)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              decoration: const BoxDecoration(
-                color: Color(0xFF10152B),
-                border: Border(bottom: BorderSide(color: Color(0x44FFD700))),
-              ),
-              child: Row(
-                children: [
-                  // VIP Level Pill
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      gradient: const LinearGradient(colors: [Color(0xFF7209B7), Color(0xFF3A0CA3)]),
-                      border: Border.all(color: const Color(0xFFFFD700)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'VIP LVL $_vipLevel',
-                          style: const TextStyle(
-                            color: Color(0xFFFFD700),
-                            fontSize: 11,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        SizedBox(
-                          width: 56,
-                          height: 4,
-                          child: LinearProgressIndicator(
-                            value: _xp / 100,
-                            backgroundColor: Colors.white24,
-                            color: const Color(0xFF00F5D4),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
+        .profile-top { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center; }
+        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; background: #333; display: inline-block; }
 
-                  // Virtual Coins Pill
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF192140),
-                        borderRadius: BorderRadius.circular(999),
-                        border: Border.all(color: const Color(0xFFFFD700)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '🪙 $_balance',
-                            style: const TextStyle(
-                              color: Color(0xFFFFD700),
-                              fontWeight: FontWeight.w900,
-                              fontSize: 15,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () => setState(() => _balance += 5000),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFD700),
-                                borderRadius: BorderRadius.circular(999),
-                              ),
-                              child: const Text(
-                                '+5K',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
+        nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #14181f; justify-content: space-around; padding: 8px 0; border-top: 1px solid #2c3e50; z-index: 200; display: none; }
+        .nav-item { color: #888; text-align: center; font-size: 10px; cursor: pointer; flex: 1; }
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+        .nav-icon { font-size: 18px; margin-bottom: 2px; }
 
-                  // Daily Bonus Wheel Button
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF2E63),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    onPressed: _openBonusWheel,
-                    icon: const Icon(Icons.attractions, size: 18),
-                    label: const Text('WHEEL', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11)),
-                  ),
-                ],
-              ),
-            ),
+        .sub-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; background: #1a202c; padding: 10px; border-radius: 8px; }
+        .back-btn { background: #333; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
 
-            // Featured Jackpot Banner
-            Container(
-              margin: const EdgeInsets.fromLTRB(14, 12, 14, 8),
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF3A0CA3), Color(0xFF7209B7), Color(0xFFF72585)],
-                ),
-                border: Border.all(color: const Color(0xFFFFD700), width: 1.5),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'ROYAL VIRTUAL 100 CLUB',
-                          style: TextStyle(
-                            color: Color(0xFFFFD700),
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          '100 Slots • Virtual Coins Only • Free Wheel & VIP Level Up',
-                          style: TextStyle(color: Colors.white70, fontSize: 11),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Icon(Icons.workspace_premium, color: Color(0xFFFFD700), size: 38),
-                ],
-              ),
-            ),
+    <header id="mainHeader" style="display:none;">
+        <h1 onclick="navigate('home')">M.KING 👑</h1>
+        <div class="wallet-badge" onclick="navigate('profile')">₹ <span id="headerBalance">0</span></div>
+    </header>
 
-            // Search Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-              child: TextField(
-                onChanged: (v) => setState(() => _search = v),
-                style: const TextStyle(color: Colors.white, fontSize: 14),
-                decoration: InputDecoration(
-                  hintText: 'Search 100 slot games...',
-                  hintStyle: const TextStyle(color: Colors.white38),
-                  prefixIcon: const Icon(Icons.search, color: Color(0xFFFFD700)),
-                  filled: true,
-                  fillColor: const Color(0xFF12182D),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white12),
-                  ),
-                ),
-              ),
-            ),
+    <div class="notice-board" id="noticeBoardDisplay" style="display:none;"></div>
 
-            // Category Filter Chips
-            SizedBox(
-              height: 44,
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 8),
-                itemBuilder: (_, i) {
-                  final cat = categories[i];
-                  final active = cat == _selectedCat;
-                  return ChoiceChip(
-                    label: Text(cat == 'All' ? 'All (100)' : cat),
-                    selected: active,
-                    selectedColor: const Color(0xFFFFD700),
-                    backgroundColor: const Color(0xFF151C34),
-                    labelStyle: TextStyle(
-                      color: active ? Colors.black : Colors.white70,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 12,
-                    ),
-                    onSelected: (_) => setState(() => _selectedCat = cat),
-                  );
-                },
-              ),
-            ),
+    <div class="container" id="appRoot"></div>
 
-            // 100 Games Grid
-            Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.all(14),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.88,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-                itemCount: filtered.length,
-                itemBuilder: (_, i) {
-                  final g = filtered[i];
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => SlotMachineScreen(
-                            game: g,
-                            balance: _balance,
-                            onBalanceChanged: (newBal) => setState(() => _balance = newBal),
-                            onSpinXp: _addXp,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [g.bgTop, const Color(0xFF11162B)],
-                        ),
-                        border: Border.all(color: g.accentColor.withAlpha(130)),
-                      ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black54,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    g.badge,
-                                    style: const TextStyle(
-                                      color: Color(0xFFFFD700),
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  '${g.cols}x3',
-                                  style: const TextStyle(color: Colors.white60, fontSize: 10),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: SizedBox(
-                                width: 82,
-                                height: 82,
-                                child: CasinoSymbolWidget(symbol: g.symbols[3], size: 78),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(9),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF0E1324),
-                              borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '#${g.id} ${g.title}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      g.category,
-                                      style: const TextStyle(color: Colors.white54, fontSize: 10),
-                                    ),
-                                    Text(
-                                      'RTP ${g.rtp.toStringAsFixed(1)}%',
-                                      style: TextStyle(color: g.accentColor, fontSize: 10, fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+    <nav id="bottomNav">
+        <div class="nav-item active" id="nav-home" onclick="navigate('home')">
+            <div class="nav-icon">🏠</div>Home
+        </div>
+        <div class="nav-item" id="nav-bids" onclick="navigate('bids')">
+            <div class="nav-icon">📜</div>My Bids
+        </div>
+        <div class="nav-item" id="nav-profile" onclick="navigate('profile')">
+            <div class="nav-icon">👤</div>Profile
+        </div>
+        <div class="nav-item" id="nav-guessing" onclick="navigate('guessing')">
+            <div class="nav-icon">🔮</div>Guessing
+        </div>
+        <div class="nav-item" id="nav-rates" onclick="navigate('rates')">
+            <div class="nav-icon">📊</div>Rates
+        </div>
+        <div class="nav-item" id="nav-adminLogin" onclick="navigate('adminLogin')">
+            <div class="nav-icon">⚙️</div>Admin
+        </div>
+    </nav>
+
+    <script>
+        const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="#2c3e50"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="26" font-weight="bold">U</text></svg>');
+        const DEFAULT_QR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect width="180" height="180" fill="#ffffff"/><rect x="16" y="16" width="148" height="148" fill="none" stroke="#111" stroke-width="4" stroke-dasharray="8 6"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#111" font-family="sans-serif" font-size="14" font-weight="bold">Upload QR</text><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#555" font-family="sans-serif" font-size="11">from Admin Panel</text></svg>');
+
+        function escapeHTML(str) {
+            if (str === null || str === undefined) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function safeImageURL(url, fallback) {
+            if (!url || typeof url !== "string") return fallback;
+            const trimmed = url.trim();
+            if (/^(https?:\/\/|data:image\/(png|jpe?g|gif|webp|svg\+xml);)/i.test(trimmed)) {
+                return trimmed;
+            }
+            return fallback;
+        }
+
+        function getLocalDateString(d = new Date()) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, "0");
+            const day = String(d.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        }
+
+        const defaultMarkets = [
+            { id: 1, name: "MILAN MORNING", openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM", result: "145-06-268", chart: ["123-65-456"] },
+            { id: 2, name: "KALYAN MORNING", openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM", result: "369-81-579", chart: ["127-05-230"] },
+            { id: 3, name: "MAIN BAZAR", openTime: "09:35", openAmPm: "PM", closeTime: "11:59", closeAmPm: "PM", result: "***-**-***", chart: ["468-89-270"] }
+        ];
+
+        const defaultRates = [
+            { name: "Single Digit", rate: "10 ka 95" },
+            { name: "Jodi Digit", rate: "10 ka 950" },
+            { name: "Single Panna", rate: "10 ka 1400" },
+            { name: "Double Panna", rate: "10 ka 2800" }
+        ];
+
+        function safeJSONParse(key, fallback) {
+            try {
+                let item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        let state = {
+            currentUserPhone: localStorage.getItem('mk_logged_in_phone') || null,
+            isAdminLoggedIn: false,
+            adminCreds: safeJSONParse('mk_admin_creds', { phone: "9999999999", pass: "admin123" }),
+            users: safeJSONParse('mk_users', {}),
+            adminWhatsApp: localStorage.getItem('mk_whatsapp') || "919876543210",
+            noticeText: localStorage.getItem('mk_notice') || "M.KING Me Sabhi Player Ka Swagat Hai",
+            depositQR: localStorage.getItem('mk_deposit_qr') || DEFAULT_QR_SVG,
+            depositUPI: localStorage.getItem('mk_deposit_upi') || "9876543210@paytm",
+            markets: safeJSONParse('mk_markets', defaultMarkets),
+            gameRates: safeJSONParse('mk_gamerates', defaultRates),
+            bids: safeJSONParse('mk_bids', []),
+            withdrawRequests: safeJSONParse('mk_withdraws', []),
+            forgotRequests: safeJSONParse('mk_forgot', []),
+            transactions: safeJSONParse('mk_txns', []),
+            guessingPosts: safeJSONParse('mk_guessing', [
+                { id: 1, phone: "9990009990", name: "M.KING VIP", avatar: "", market: "KALYAN MORNING", text: "Open: 3 - 8 | Jodi: 38, 83 | Panna: 148, 260", time: "Today", likes: 5, likedBy: [], comments: [], wishes: [], chatMessages: [] }
+            ]),
+            selectedMarket: null,
+            selectedGameType: null,
+            activeChatPostId: null,
+            bidCart: []
+        };
+
+        let homeTimerInterval = null;
+
+        if (!state.markets || state.markets.length === 0) state.markets = defaultMarkets;
+        if (!state.gameRates || state.gameRates.length === 0) state.gameRates = defaultRates;
+
+        // पुराने localStorage मार्केट्स में खाली या अधूरे openTime/closeTime को डिफ़ॉल्ट टाइमिंग से ठीक करना
+        state.markets = state.markets.map((m, idx) => {
+            const def = defaultMarkets[idx] || { openTime: "10:00", openAmPm: "AM", closeTime: "12:00", closeAmPm: "PM" };
+            return {
+                ...m,
+                openTime: (m.openTime && /^\d{1,2}:\d{2}$/.test(String(m.openTime).trim())) ? String(m.openTime).trim() : def.openTime,
+                openAmPm: m.openAmPm || def.openAmPm,
+                closeTime: (m.closeTime && /^\d{1,2}:\d{2}$/.test(String(m.closeTime).trim())) ? String(m.closeTime).trim() : def.closeTime,
+                closeAmPm: m.closeAmPm || def.closeAmPm,
+                chart: Array.isArray(m.chart) ? m.chart : []
+            };
+        });
+
+        function saveState() {
+            try {
+                localStorage.setItem('mk_users', JSON.stringify(state.users));
+                localStorage.setItem('mk_markets', JSON.stringify(state.markets));
+                localStorage.setItem('mk_gamerates', JSON.stringify(state.gameRates));
+                localStorage.setItem('mk_bids', JSON.stringify(state.bids));
+                localStorage.setItem('mk_withdraws', JSON.stringify(state.withdrawRequests));
+                localStorage.setItem('mk_forgot', JSON.stringify(state.forgotRequests));
+                localStorage.setItem('mk_txns', JSON.stringify(state.transactions));
+                localStorage.setItem('mk_guessing', JSON.stringify(state.guessingPosts));
+                localStorage.setItem('mk_admin_creds', JSON.stringify(state.adminCreds));
+                localStorage.setItem('mk_whatsapp', state.adminWhatsApp);
+                localStorage.setItem('mk_notice', state.noticeText);
+                localStorage.setItem('mk_deposit_qr', state.depositQR);
+                localStorage.setItem('mk_deposit_upi', state.depositUPI);
+
+                if (state.currentUserPhone && state.users[state.currentUserPhone]) {
+                    let user = state.users[state.currentUserPhone];
+                    let hb = document.getElementById('headerBalance');
+                    if (hb) hb.innerText = user.balance;
+                }
+                let nb = document.getElementById('noticeBoardDisplay');
+                if (nb) nb.innerHTML = `📌 <b>Notice:</b> ${escapeHTML(state.noticeText)}`;
+            } catch (err) {
+                console.error("Storage save failed:", err);
+                alert("डेटा सेव करने में समस्या आई (Storage Limit)। कृपया बड़ी इमेज न डालें।");
+            }
+        }
+
+        function renderLoginScreen() {
+            if (homeTimerInterval) clearInterval(homeTimerInterval);
+            let mh = document.getElementById('mainHeader');
+            let nb = document.getElementById('noticeBoardDisplay');
+            let bn = document.getElementById('bottomNav');
+            if (mh) mh.style.display = 'none';
+            if (nb) nb.style.display = 'none';
+            if (bn) bn.style.display = 'none';
+
+            let root = document.getElementById('appRoot');
+            if (!root) return;
+            root.innerHTML = `
+                <div class="form-card" style="max-width:350px; margin:40px auto; text-align:center; border: 2px solid var(--primary);">
+                    <h2 style="color:var(--primary); margin-bottom:5px;">M.KING 👑</h2>
+                    <p style="color:#aaa; font-size:12px; margin-bottom:20px;">मोबाइल नंबर और पासवर्ड दर्ज करें</p>
+                    <div class="input-group">
+                        <input type="tel" id="playerPhone" maxlength="10" placeholder="Mobile Number (10 Digits)">
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="playerPass" placeholder="Password">
+                    </div>
+                    <button class="btn" style="background:var(--green); color:#000; width:100%; font-size:15px; padding:12px; margin-bottom:10px;" onclick="handlePlayerLogin()">Login / Register</button>
+                    <button class="btn" style="background:transparent; color:var(--primary); border:none; font-size:12px; cursor:pointer;" onclick="renderForgotScreen()">❓ Forgot Password?</button>
+                </div>
+            `;
+        }
+
+        function renderForgotScreen() {
+            if (homeTimerInterval) clearInterval(homeTimerInterval);
+            let root = document.getElementById('appRoot');
+            if (!root) return;
+            root.innerHTML = `
+                <div class="form-card" style="max-width:350px; margin:40px auto; text-align:center; border: 2px solid var(--red);">
+                    <h3 style="color:var(--red); margin-bottom:10px;">🔒 Forgot Password</h3>
+                    <p style="color:#aaa; font-size:12px; margin-bottom:15px;">अपना रजिस्टर्ड मोबाइल नंबर दर्ज करें। रिकवरी रिक्वेस्ट एडमिन के पास भेज दी जाएगी।</p>
+                    <div class="input-group">
+                        <input type="tel" id="forgotPhone" maxlength="10" placeholder="Mobile Number">
+                    </div>
+                    <button class="btn" style="background:var(--primary); color:#000; width:100%; margin-bottom:10px;" onclick="submitForgotPassword()">Send Request to Admin</button>
+                    <button class="btn" style="background:#333; color:#fff; width:100%;" onclick="renderLoginScreen()">← Back to Login</button>
+                </div>
+            `;
+        }
+
+        function submitForgotPassword() {
+            let phoneElem = document.getElementById('forgotPhone');
+            if (!phoneElem) return;
+            let phone = phoneElem.value.replace(/\D/g, '');
+            if (phone.length !== 10) { alert("कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!"); return; }
+            if (!state.users[phone]) { alert("यह मोबाइल नंबर रजिस्टर नहीं है!"); return; }
+
+            let user = state.users[phone];
+            state.forgotRequests.push({
+                id: Date.now(),
+                phone: phone,
+                name: user.name,
+                time: new Date().toLocaleString()
+            });
+            saveState();
+            alert("पासवर्ड रीसेट रिक्वेस्ट एडमिन के पास भेज दी गई है! एडमिन से WhatsApp पर संपर्क करें।");
+            renderLoginScreen();
+        }
+
+        function handlePlayerLogin() {
+            let phoneElem = document.getElementById('playerPhone');
+            let passElem = document.getElementById('playerPass');
+            if (!phoneElem || !passElem) return;
+
+            let phone = phoneElem.value.replace(/\D/g, '');
+            let pass = passElem.value.trim();
+
+            if (phone.length !== 10 || pass.length < 4) {
+                alert("कृपया 10 अंकों का सही मोबाइल नंबर और कम से कम 4 अक्षर का पासवर्ड दर्ज करें!");
+                return;
+            }
+
+            if (!state.users[phone]) {
+                state.users[phone] = {
+                    name: "Player " + phone.slice(-4),
+                    balance: 0,
+                    phone: phone,
+                    password: pass,
+                    avatar: "",
+                    bankDetails: "",
+                    upiDetails: ""
+                };
+                alert("नया खाता सफलतापूर्वक बन गया है!");
+            } else {
+                if (state.users[phone].password && state.users[phone].password !== pass) {
+                    alert("गलत पासवर्ड! कृपया सही पासवर्ड दर्ज करें।");
+                    return;
+                } else if (!state.users[phone].password) {
+                    state.users[phone].password = pass;
+                }
+            }
+
+            state.currentUserPhone = phone;
+            localStorage.setItem('mk_logged_in_phone', phone);
+            saveState();
+
+            let mh = document.getElementById('mainHeader');
+            let nb = document.getElementById('noticeBoardDisplay');
+            let bn = document.getElementById('bottomNav');
+            if (mh) mh.style.display = 'flex';
+            if (nb) nb.style.display = 'block';
+            if (bn) bn.style.display = 'flex';
+
+            navigate('home');
+        }
+
+        function logoutPlayer() {
+            if (homeTimerInterval) clearInterval(homeTimerInterval);
+            localStorage.removeItem('mk_logged_in_phone');
+            state.currentUserPhone = null;
+            renderLoginScreen();
+        }
+
+        function navigate(screen, param1 = null) {
+            if (!state.currentUserPhone || !state.users[state.currentUserPhone]) {
+                renderLoginScreen();
+                return;
+            }
+
+            if (screen !== 'home' && homeTimerInterval) {
+                clearInterval(homeTimerInterval);
+                homeTimerInterval = null;
+            }
+
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            let navEl = document.getElementById(`nav-${screen}`);
+            if (navEl) navEl.classList.add('active');
+
+            const root = document.getElementById('appRoot');
+            if (!root) return;
+            saveState();
+
+            if (screen === 'home') renderHome(root);
+            else if (screen === 'gameSelect') renderGameSelect(root, param1);
+            else if (screen === 'playGame') renderPlayGame(root, param1.mId, param1.gType);
+            else if (screen === 'chart') renderChart(root, param1);
+            else if (screen === 'bids') renderBids(root);
+            else if (screen === 'profile') renderProfile(root);
+            else if (screen === 'guessing') renderGuessingForum(root);
+            else if (screen === 'chatBox') renderChatBox(root, param1);
+            else if (screen === 'deposit') renderDeposit(root);
+            else if (screen === 'rates') renderRates(root);
+            else if (screen === 'adminLogin') {
+                if (state.isAdminLoggedIn) renderAdmin(root);
+                else renderAdminLogin(root);
+            }
+        }
+
+        function parseMarketDate(timeStr, ampm, referenceNow) {
+            let parts = (timeStr || "10:00").split(':');
+            let hours = parseInt(parts[0], 10);
+            let mins = parseInt(parts[1], 10);
+            if (isNaN(hours)) hours = 10;
+            if (isNaN(mins)) mins = 0;
+
+            let upperAmPm = (ampm || "").toUpperCase();
+            if (upperAmPm === "PM" && hours < 12) hours += 12;
+            if (upperAmPm === "AM" && hours === 12) hours = 0;
+
+            return new Date(referenceNow.getFullYear(), referenceNow.getMonth(), referenceNow.getDate(), hours, mins, 0, 0);
+        }
+
+        function getMarketSessionStatus(market, referenceNow) {
+            let now = referenceNow || new Date();
+            let openTarget = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", now);
+            let closeTarget = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", now);
+
+            // रात 12 बजे के पार चलने वाले मार्केट (जैसे 10:00 PM से 02:00 AM) की सही गणना
+            if (closeTarget.getTime() <= openTarget.getTime()) {
+                let yesterdayOpen = new Date(openTarget.getTime());
+                yesterdayOpen.setDate(yesterdayOpen.getDate() - 1);
+                if (now.getTime() < closeTarget.getTime()) {
+                    openTarget = yesterdayOpen;
+                } else {
+                    closeTarget.setDate(closeTarget.getDate() + 1);
+                }
+            }
+
+            let isMarketActive = now.getTime() < closeTarget.getTime();
+            let isOpenSessionActive = now.getTime() < openTarget.getTime();
+            let isCloseSessionActive = isMarketActive;
+
+            return {
+                openTarget,
+                closeTarget,
+                isOpenSessionActive,
+                isCloseSessionActive,
+                isMarketActive
+            };
+        }
+
+        function checkMarketTiming(market) {
+            return getMarketSessionStatus(market, new Date()).isMarketActive;
+        }
+
+        function renderHome(root) {
+            if (homeTimerInterval) clearInterval(homeTimerInterval);
+
+            let waNum = encodeURIComponent((state.adminWhatsApp || "").replace(/\D/g, ""));
+            let waLink = `https://wa.me/${waNum}?text=Hello%20Admin,%20I%20need%20help`;
+            let html = `
+                <div class="quick-actions">
+                    <div class="q-btn" onclick="navigate('deposit')">➕ Deposit</div>
+                    <div class="q-btn" onclick="navigate('profile')">🏦 Withdraw</div>
+                    <a class="q-btn" href="${waLink}" target="_blank" rel="noopener noreferrer" style="color:#fff; background:#27ae60;">💬 WhatsApp</a>
+                </div>
+            `;
+
+            if (!state.markets || state.markets.length === 0) {
+                html += `<p style="text-align:center; color:#777; margin-top:20px;">कोई मार्केट उपलब्ध नहीं है।</p>`;
+            } else {
+                let now = new Date();
+                state.markets.forEach(m => {
+                    let status = getMarketSessionStatus(m, now);
+                    let statusBadge = status.isMarketActive
+                        ? `<span class="m-status status-open" id="badgeText_${m.id}">RUNNING</span>`
+                        : `<span class="m-status status-closed" id="badgeText_${m.id}">CLOSED</span>`;
+
+                    html += `
+                        <div class="market-card" id="marketCard_${m.id}">
+                            <div class="m-top"><span class="m-title">${escapeHTML(m.name)}</span><span id="badgeContainer_${m.id}">${statusBadge}</span></div>
+                            <div class="m-times"><span>Open: ${escapeHTML(m.openTime || '10:00')} ${escapeHTML(m.openAmPm || 'AM')} | Close: ${escapeHTML(m.closeTime || '12:00')} ${escapeHTML(m.closeAmPm || 'PM')}</span></div>
+                            <div class="m-timers-grid">
+                                <div class="m-timer-box" id="openTimer_${m.id}">⏳ Open: ...</div>
+                                <div class="m-timer-box" id="closeTimer_${m.id}">⏳ Close: ...</div>
+                            </div>
+                            <div class="m-result-box"><div class="m-result-text">${escapeHTML(m.result || '***-**-***')}</div></div>
+                            <div class="m-btns">
+                                <button class="btn btn-chart" onclick="navigate('chart', ${m.id})">📅 CHART</button>
+                                <button class="btn btn-play" id="playBtn_${m.id}" onclick="handlePlayClick(${m.id})">▶ PLAY</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            root.innerHTML = html;
+
+            updateMarketTimers();
+            homeTimerInterval = setInterval(updateMarketTimers, 1000);
+        }
+
+        function formatCountdown(diff) {
+            if (diff <= 0) return "00:00:00";
+            let totalSecs = Math.floor(diff / 1000);
+            let hrs = Math.floor(totalSecs / 3600);
+            let mins = Math.floor((totalSecs % 3600) / 60);
+            let secs = totalSecs % 60;
+            return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function updateMarketTimers() {
+            if (!state.markets) return;
+            let now = new Date();
+            state.markets.forEach(m => {
+                let openTimerEl = document.getElementById(`openTimer_${m.id}`);
+                let closeTimerEl = document.getElementById(`closeTimer_${m.id}`);
+                let badgeContainer = document.getElementById(`badgeContainer_${m.id}`);
+                let playBtn = document.getElementById(`playBtn_${m.id}`);
+                if (!openTimerEl || !closeTimerEl) return;
+
+                let status = getMarketSessionStatus(m, now);
+                let openDiff = status.openTarget.getTime() - now.getTime();
+                let closeDiff = status.closeTarget.getTime() - now.getTime();
+
+                if (openDiff <= 0) {
+                    openTimerEl.innerHTML = "🔴 Open Closed";
+                    openTimerEl.style.color = "var(--red)";
+                } else {
+                    openTimerEl.innerHTML = `⏳ Open: ${formatCountdown(openDiff)}`;
+                    openTimerEl.style.color = "var(--green)";
+                }
+
+                if (closeDiff <= 0) {
+                    closeTimerEl.innerHTML = "🔴 Close Closed";
+                    closeTimerEl.style.color = "var(--red)";
+                    if (badgeContainer && !badgeContainer.innerHTML.includes('CLOSED')) {
+                        badgeContainer.innerHTML = `<span class="m-status status-closed">CLOSED</span>`;
+                    }
+                    if (playBtn) playBtn.style.opacity = "0.6";
+                } else {
+                    closeTimerEl.innerHTML = `⏳ Close: ${formatCountdown(closeDiff)}`;
+                    closeTimerEl.style.color = "var(--primary)";
+                    if (badgeContainer && !badgeContainer.innerHTML.includes('RUNNING')) {
+                        badgeContainer.innerHTML = `<span class="m-status status-open">RUNNING</span>`;
+                    }
+                    if (playBtn) playBtn.style.opacity = "1";
+                }
+            });
+        }
+
+        function handlePlayClick(marketId) {
+            let market = state.markets.find(m => m.id === marketId);
+            if (!market || !checkMarketTiming(market)) { alert("❌ इस मार्केट का समय समाप्त हो चुका है!"); return; }
+            navigate('gameSelect', marketId);
+        }
+
+        function renderGameSelect(root, marketId) {
+            let market = state.markets.find(m => m.id === marketId);
+            if (!market) { navigate('home'); return; }
+            state.selectedMarket = market;
+            let status = getMarketSessionStatus(market, new Date());
+
+            let html = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(market.name)}</h3></div><div class="game-grid">`;
+            state.gameRates.forEach((g, idx) => {
+                let isJodiLocked = (g.name === "Jodi Digit" && !status.isOpenSessionActive);
+                let lockBadge = isJodiLocked ? `<div style="font-size:10px; color:var(--red); margin-top:4px;">🔒 Open Closed</div>` : '';
+                let clickAction = isJodiLocked
+                    ? `alert('❌ ओपन का समय समाप्त हो चुका है! अब सिर्फ क्लोज सेशन के गेम ही खेल सकते हैं।')`
+                    : `openGameByIndex(${market.id}, ${idx})`;
+
+                html += `<div class="game-box" style="opacity:${isJodiLocked ? '0.5' : '1'}" onclick="${clickAction}"><div class="game-label">${escapeHTML(g.name)}</div><div class="game-rate">${escapeHTML(g.rate)}</div>${lockBadge}</div>`;
+            });
+            html += `</div>`;
+            root.innerHTML = html;
+        }
+
+        function openGameByIndex(marketId, rateIdx) {
+            let rateObj = state.gameRates[rateIdx];
+            if (!rateObj) return;
+            navigate('playGame', { mId: marketId, gType: rateObj.name });
+        }
+
+        function getRequiredDigitLength(gameType) {
+            if (gameType === "Single Digit") return 1;
+            if (gameType === "Jodi Digit") return 2;
+            if (gameType.includes("Panna")) return 3;
+            return 3;
+        }
+
+        function isValidPannaDigit(digit, gameType) {
+            if (digit.length !== 3) return false;
+            const [a, b, c] = digit.split('');
+            if (gameType === "Single Panna") {
+                return a !== b && b !== c && a !== c;
+            }
+            if (gameType === "Double Panna") {
+                return (a === b && b !== c) || (a === c && a !== b) || (b === c && a !== b);
+            }
+            return true;
+        }
+
+        function enforceDigitLimit(inputEl) {
+            let maxLen = getRequiredDigitLength(state.selectedGameType || "");
+            let cleaned = inputEl.value.replace(/\D/g, '');
+            if (cleaned.length > maxLen) {
+                cleaned = cleaned.slice(0, maxLen);
+            }
+            inputEl.value = cleaned;
+        }
+
+        function renderPlayGame(root, marketId, gameType) {
+            let market = state.markets.find(m => m.id === marketId);
+            if (!market) { navigate('home'); return; }
+            state.selectedMarket = market;
+            state.selectedGameType = gameType;
+            state.bidCart = [];
+            let status = getMarketSessionStatus(market, new Date());
+
+            if (!status.isCloseSessionActive) {
+                alert("❌ इस मार्केट का समय समाप्त हो चुका है!");
+                navigate('home');
+                return;
+            }
+
+            if (gameType === "Jodi Digit" && !status.isOpenSessionActive) {
+                alert("❌ ओपन का समय समाप्त होने के बाद जोड़ी नहीं खेल सकते!");
+                navigate('gameSelect', marketId);
+                return;
+            }
+
+            let sessionOptions = '';
+            if (status.isOpenSessionActive) {
+                sessionOptions += `<option value="OPEN">OPEN</option>`;
+            }
+            if (gameType !== "Jodi Digit" && status.isCloseSessionActive) {
+                sessionOptions += `<option value="CLOSE">CLOSE</option>`;
+            }
+
+            let reqLen = getRequiredDigitLength(gameType);
+            let placeholderText = reqLen === 1
+                ? "0 से 9 तक एक अंक लिखें"
+                : (reqLen === 2 ? "00 से 99 तक दो अंक लिखें" : "000 से 999 तक तीन अंकों का पाना लिखें");
+
+            root.innerHTML = `
+                <div class="sub-header"><button class="back-btn" onclick="navigate('gameSelect', ${market.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(market.name)}</h4><small>${escapeHTML(gameType)}</small></div></div>
+                <div class="form-card">
+                    <div class="input-group">
+                        <label>Session</label>
+                        <select id="bidSession" onchange="handleSessionChange()">
+                            ${sessionOptions}
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>${escapeHTML(gameType)} (${reqLen} Digit Only)</label>
+                        <input type="tel" id="bidDigitInput" maxlength="${reqLen}" oninput="enforceDigitLimit(this)" placeholder="${placeholderText}">
+                    </div>
+                    <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" min="10" placeholder="राशि"></div>
+                    <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button>
+                </div>
+                <div id="cartContainer"></div>
+            `;
+        }
+
+        function handleSessionChange() {
+            let sesInput = document.getElementById('bidSession');
+            if (!sesInput) return;
+            if (state.selectedGameType === "Jodi Digit" && sesInput.value === "CLOSE") {
+                alert("❌ नियम के अनुसार क्लोज सेशन में जोड़ी नहीं खेली जा सकती!");
+                sesInput.value = "OPEN";
+            }
+        }
+
+        function addToCart() {
+            let digInput = document.getElementById('bidDigitInput');
+            let amtInput = document.getElementById('bidAmountInput');
+            let sesInput = document.getElementById('bidSession');
+            if (!digInput || !amtInput || !sesInput) return;
+
+            let digit = digInput.value.trim();
+            let amount = parseInt(amtInput.value, 10);
+            let session = sesInput.value;
+            let reqLen = getRequiredDigitLength(state.selectedGameType);
+
+            let status = getMarketSessionStatus(state.selectedMarket, new Date());
+
+            if (session === "OPEN" && !status.isOpenSessionActive) {
+                alert("❌ इस मार्केट का OPEN सेशन समय समाप्त हो चुका है!");
+                return;
+            }
+            if (session === "CLOSE" && !status.isCloseSessionActive) {
+                alert("❌ इस मार्केट का CLOSE सेशन समय समाप्त हो चुका है!");
+                return;
+            }
+            if (state.selectedGameType === "Jodi Digit" && session === "CLOSE") {
+                alert("❌ क्लोज सेशन में जोड़ी नहीं खेल सकते!");
+                return;
+            }
+            if (!/^\d+$/.test(digit) || digit.length !== reqLen) {
+                alert(`❌ ${state.selectedGameType} के लिए ठीक ${reqLen} अंक ही दर्ज करें!`);
+                return;
+            }
+            if (state.selectedGameType.includes("Panna") && !isValidPannaDigit(digit, state.selectedGameType)) {
+                alert(`❌ कृपया ${state.selectedGameType} के सही नियम के अनुसार 3 अंक डालें!`);
+                return;
+            }
+            if (!amount || amount < 10) {
+                alert("कृपया कम से कम ₹10 राशि दर्ज करें!");
+                return;
+            }
+
+            state.bidCart.push({
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                marketId: state.selectedMarket.id,
+                marketName: state.selectedMarket.name,
+                gameType: state.selectedGameType,
+                session: session,
+                digit,
+                amount,
+                phone: state.currentUserPhone
+            });
+            digInput.value = '';
+            amtInput.value = '';
+            renderCartList();
+        }
+
+        function renderCartList() {
+            let container = document.getElementById('cartContainer');
+            if (!container) return;
+            if (state.bidCart.length === 0) { container.innerHTML = ''; return; }
+            let total = state.bidCart.reduce((s, i) => s + i.amount, 0);
+            let html = `<h4 style="margin-bottom:8px; color:#ccc;">Bids Added (${state.bidCart.length})</h4>`;
+            state.bidCart.forEach(item => {
+                html += `<div class="bid-cart-item"><div><b>${escapeHTML(item.digit)}</b> (${escapeHTML(item.session)}) - <b>₹${item.amount}</b></div><button class="del-btn" onclick="removeFromCart(${item.id})">X</button></div>`;
+            });
+            html += `<button class="btn" style="background:var(--green); color:#000; width:100%; margin-top:8px;" onclick="submitBids()">✅ SUBMIT ALL (₹${total})</button>`;
+            container.innerHTML = html;
+        }
+
+        function removeFromCart(id) {
+            state.bidCart = state.bidCart.filter(x => x.id !== id);
+            renderCartList();
+        }
+
+        function submitBids() {
+            if (!state.bidCart || state.bidCart.length === 0) return;
+
+            let total = state.bidCart.reduce((s, i) => s + i.amount, 0);
+            if (total <= 0) return;
+
+            let now = new Date();
+            for (const b of state.bidCart) {
+                const m = state.markets.find(mk => mk.id === b.marketId);
+                if (!m) { alert("❌ मार्केट उपलब्ध नहीं है!"); return; }
+                const st = getMarketSessionStatus(m, now);
+                if ((b.session === "OPEN" && !st.isOpenSessionActive) || (b.session === "CLOSE" && !st.isCloseSessionActive)) {
+                    alert(`❌ ${m.name} (${b.session}) का समय समाप्त हो चुका है! कृपया इसे कार्ट से हटाएं।`);
+                    return;
+                }
+            }
+
+            let user = state.users[state.currentUserPhone];
+            if (!user || user.balance < total) { alert("पर्याप्त बैलेंस नहीं है!"); return; }
+
+            user.balance -= total;
+            let today = getLocalDateString(now);
+            let nowTime = now.toLocaleTimeString();
+
+            state.bidCart.forEach(b => {
+                state.bids.push({ ...b, date: today, status: "PENDING", winAmount: 0, time: nowTime });
+            });
+            state.transactions.push({
+                phone: state.currentUserPhone,
+                type: `Bids Placed (${state.bidCart.length})`,
+                amount: -total,
+                time: now.toLocaleString()
+            });
+
+            state.bidCart = [];
+            saveState();
+            alert("बिड सफलतापूर्वक लग गई!");
+            navigate('bids');
+        }
+
+        function renderChart(root, marketId) {
+            let market = state.markets.find(m => m.id === marketId);
+            if (!market) { navigate('home'); return; }
+            let html = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(market.name)} Chart</h3></div><div class="form-card" style="text-align:center;">`;
+            if (market.chart && market.chart.length > 0) {
+                market.chart.forEach(c => html += `<div style="padding:10px; border-bottom:1px solid #333; color:var(--primary); font-weight:bold;">${escapeHTML(c)}</div>`);
+            } else {
+                html += `<p style="color:#777;">कोई पुराना चार्ट नहीं है।</p>`;
+            }
+            html += `</div>`;
+            root.innerHTML = html;
+        }
+
+        function renderBids(root) {
+            let html = `<h3 style="margin-bottom:12px; color:var(--primary);">📜 My Bids History</h3>`;
+            let myBids = state.bids.filter(b => b.phone === state.currentUserPhone);
+            if (myBids.length === 0) {
+                html += `<p style="text-align:center; color:#777; margin-top:40px;">कोई बिड नहीं है।</p>`;
+            } else {
+                myBids.slice().reverse().forEach(b => {
+                    let badge = b.status === "WON"
+                        ? `<span class="win-badge">WON ₹${b.winAmount}</span>`
+                        : (b.status === "LOST" ? `<span class="loss-badge">LOST</span>` : `<span class="pend-badge">PENDING</span>`);
+                    html += `<div class="list-card"><div style="display:flex; justify-content:space-between;"><b>${escapeHTML(b.marketName)} (${escapeHTML(b.session)})</b> ${badge}</div><div>${escapeHTML(b.gameType)} | Digit: <b>${escapeHTML(b.digit)}</b></div><div style="color:#aaa; font-size:11px;">₹${b.amount} • ${escapeHTML(b.date)}</div></div>`;
+                });
+            }
+            root.innerHTML = html;
+        }
+
+        function renderGuessingForum(root) {
+            let marketOptions = state.markets.map(m => `<option value="${escapeHTML(m.name)}">${escapeHTML(m.name)}</option>`).join('');
+            let html = `
+                <h3 style="margin-bottom:12px; color:var(--primary);">🔮 Guessing Forum</h3>
+                <div class="form-card">
+                    <h4 style="margin-bottom:8px; color:#ccc; font-size:13px;">अपनी गेसिंग (लकी नंबर) पोस्ट करें:</h4>
+                    <div class="input-group">
+                        <select id="guessMarket">${marketOptions}</select>
+                    </div>
+                    <div class="input-group">
+                        <textarea id="guessText" rows="2" placeholder="उदाहरण: Open 4 - 9 | Jodi 49, 94 | Panna 149"></textarea>
+                    </div>
+                    <button class="btn btn-play" style="width:100%;" onclick="postGuessing()">📤 Post Guessing</button>
+                </div>
+                <h4 style="margin-bottom:10px; color:#aaa; font-size:13px;">Live Guessing Posts:</h4>
+            `;
+
+            if (state.guessingPosts.length === 0) {
+                html += `<p style="text-align:center; color:#777;">कोई पोस्ट नहीं है।</p>`;
+            } else {
+                state.guessingPosts.slice().reverse().forEach(p => {
+                    let userObj = state.users[p.phone] || { avatar: "" };
+                    let avatarImg = safeImageURL(userObj.avatar, DEFAULT_AVATAR_SVG);
+                    let isLiked = p.likedBy && p.likedBy.includes(state.currentUserPhone);
+                    let likesCount = p.likes || 0;
+
+                    let commentsHtml = '';
+                    if (p.comments && p.comments.length > 0) {
+                        p.comments.forEach(c => {
+                            commentsHtml += `<div style="background:#111; padding:6px; margin-top:4px; border-radius:4px; font-size:11px; color:#ddd;"><b>${escapeHTML(c.name)}:</b> ${escapeHTML(c.text)}</div>`;
+                        });
+                    }
+
+                    let wishesHtml = '';
+                    if (p.wishes && p.wishes.length > 0) {
+                        wishesHtml += `<div style="margin-top:6px; font-size:11px; color:var(--green);">🎉 Wishes: ${p.wishes.map(escapeHTML).join(', ')}</div>`;
+                    }
+
+                    html += `
+                        <div class="list-card" style="border-left-color:var(--primary);">
+                            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <img src="${avatarImg}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid var(--primary);">
+                                    <div>
+                                        <b style="color:#fff; font-size:13px;">${escapeHTML(p.name)}</b><br>
+                                        <span style="font-size:10px; color:var(--green);">${escapeHTML(p.market)} • ${escapeHTML(p.time)}</span>
+                                    </div>
+                                </div>
+                                <button class="btn" style="background:var(--blue); color:#fff; padding:5px 10px; font-size:11px;" onclick="openChatWithGuesser(${p.id})">💬 Chat / Gift</button>
+                            </div>
+                            
+                            <div style="font-size:14px; color:#fff; margin:8px 0; background:#111; padding:10px; border-radius:6px; border:1px dashed #444;">${escapeHTML(p.text)}</div>
+                            
+                            ${wishesHtml}
+
+                            <div style="display:flex; gap:10px; margin-top:10px; font-size:12px; border-top:1px solid #333; padding-top:8px;">
+                                <button class="btn" style="background:${isLiked ? 'var(--red)' : '#333'}; color:#fff; padding:4px 10px; font-size:11px;" onclick="toggleLike(${p.id})">❤️ Like (${likesCount})</button>
+                                <button class="btn" style="background:#27ae60; color:#000; padding:4px 10px; font-size:11px;" onclick="sendWish(${p.id})">🎉 Wish Pass</button>
+                            </div>
+
+                            <div style="margin-top:8px;">
+                                <div id="commentsContainer_${p.id}">${commentsHtml}</div>
+                                <div style="display:flex; gap:5px; margin-top:6px;">
+                                    <input type="text" id="commentInput_${p.id}" placeholder="कमेंट लिखें..." style="background:#111; border:1px solid #444; color:#fff; padding:6px; border-radius:4px; font-size:12px; flex:1;">
+                                    <button class="btn" style="background:var(--primary); color:#000; padding:6px 10px; font-size:11px;" onclick="addComment(${p.id})">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            root.innerHTML = html;
+        }
+
+        function postGuessing() {
+            let mElem = document.getElementById('guessMarket');
+            let tElem = document.getElementById('guessText');
+            if (!mElem || !tElem) return;
+
+            let market = mElem.value;
+            let text = tElem.value.trim();
+            if (!text) { alert("कृपया अपना गेसिंग नंबर लिखें!"); return; }
+
+            let user = state.users[state.currentUserPhone];
+            state.guessingPosts.push({
+                id: Date.now(),
+                phone: state.currentUserPhone,
+                name: user.name,
+                market: market,
+                text: text,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                likes: 0,
+                likedBy: [],
+                comments: [],
+                wishes: [],
+                chatMessages: []
+            });
+            saveState();
+            renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function toggleLike(postId) {
+            let post = state.guessingPosts.find(p => p.id === postId);
+            if (!post) return;
+            if (!post.likedBy) post.likedBy = [];
+            let index = post.likedBy.indexOf(state.currentUserPhone);
+            if (index > -1) {
+                post.likedBy.splice(index, 1);
+                post.likes = Math.max(0, (post.likes || 1) - 1);
+            } else {
+                post.likedBy.push(state.currentUserPhone);
+                post.likes = (post.likes || 0) + 1;
+            }
+            saveState();
+            renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function addComment(postId) {
+            let input = document.getElementById(`commentInput_${postId}`);
+            if (!input) return;
+            let text = input.value.trim();
+            if (!text) return;
+            let user = state.users[state.currentUserPhone];
+            let post = state.guessingPosts.find(p => p.id === postId);
+            if (!post) return;
+            if (!post.comments) post.comments = [];
+            post.comments.push({ name: user.name, text: text });
+            saveState();
+            renderGuessingForum(document.getElementById('appRoot'));
+        }
+
+        function sendWish(postId) {
+            let post = state.guessingPosts.find(p => p.id === postId);
+            if (!post) return;
+            let user = state.users[state.currentUserPhone];
+            if (!post.wishes) post.wishes = [];
+            if (!post.wishes.includes(user.name)) {
+                post.wishes.push(user.name);
+                saveState();
+                alert("आपने बधाई भेज दी है!");
+                renderGuessingForum(document.getElementById('appRoot'));
+            } else {
+                alert("आप पहले ही बधाई दे चुके हैं!");
+            }
+        }
+
+        function openChatWithGuesser(postId) {
+            state.activeChatPostId = postId;
+            navigate('chatBox', postId);
+        }
+
+        function renderChatBox(root, postId) {
+            let post = state.guessingPosts.find(p => p.id === postId);
+            if (!post) { navigate('guessing'); return; }
+            let isPostAuthor = post.phone === state.currentUserPhone;
+            let hasGifted = post.chatMessages && post.chatMessages.some(m => m.sender === state.currentUserPhone && m.isGift);
+            let canChat = isPostAuthor || hasGifted;
+
+            let messagesHtml = '';
+            if (post.chatMessages && post.chatMessages.length > 0) {
+                post.chatMessages.forEach(msg => {
+                    let isMe = msg.sender === state.currentUserPhone;
+                    messagesHtml += `
+                        <div style="margin-bottom:8px; text-align:${isMe ? 'right' : 'left'};">
+                            <div style="display:inline-block; background:${msg.isGift ? '#d35400' : (isMe ? '#27ae60' : '#333')}; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; max-width:80%;">
+                                <b>${escapeHTML(msg.senderName)}:</b> ${escapeHTML(msg.text)}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                messagesHtml = `<p style="text-align:center; color:#777; font-size:12px; margin-top:20px;">चैट शुरू करने के लिए नीचे से कोई गिफ्ट भेजें!</p>`;
+            }
+
+            root.innerHTML = `
+                <div class="sub-header"><button class="back-btn" onclick="navigate('guessing')">← Back</button><h3>💬 Chat with ${escapeHTML(post.name)}</h3></div>
+                
+                ${!isPostAuthor ? `
+                <div class="form-card" style="background:#111; border:1px solid #444;">
+                    <div style="font-size:12px; color:var(--primary); margin-bottom:8px; text-align:center;">🎁 गिफ्ट भेजकर चैट अनलॉक करें (पैसे आपके वॉलेट से कटेंगे):</div>
+                    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; margin-bottom:10px;">
+                        <button class="btn" style="background:#e74c3c; color:#fff; font-size:11px;" onclick="sendGift(${postId}, '🌸 Flower (₹50)', 50)">🌸 ₹50<br>Flower</button>
+                        <button class="btn" style="background:#f39c12; color:#000; font-size:11px;" onclick="sendGift(${postId}, '⭐ Star (₹100)', 100)">⭐ ₹100<br>Star</button>
+                        <button class="btn" style="background:#8e44ad; color:#fff; font-size:11px;" onclick="sendGift(${postId}, '💣 Bomb (₹150)', 150)">💣 ₹150<br>Bomb</button>
+                    </div>
+                </div>` : ''}
+
+                <div class="form-card" style="height:250px; overflow-y:auto; background:#14181f; margin-bottom:10px;" id="chatMsgArea">
+                    ${messagesHtml}
+                </div>
+
+                ${canChat ? `
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="chatInputText" placeholder="संदेश लिखें..." style="background:#111; border:1px solid #444; color:#fff; padding:10px; border-radius:8px; font-size:13px; flex:1;">
+                        <button class="btn btn-play" onclick="sendChatMessage(${postId})">Send</button>
+                    </div>
+                ` : `
+                    <div style="text-align:center; background:#1f2833; padding:10px; border-radius:8px; color:#f1c40f; font-size:12px;">
+                        🔒 चैट करने के लिए ऊपर से कोई भी गिफ्ट भेजना अनिवार्य है।
+                    </div>
+                `}
+            `;
+        }
+
+        function sendGift(postId, giftName, amount) {
+            let currentUser = state.users[state.currentUserPhone];
+            let post = state.guessingPosts.find(p => p.id === postId);
+            if (!post || post.phone === state.currentUserPhone) return;
+
+            if (currentUser.balance < amount) {
+                alert("आपके वॉलेट में पर्याप्त बैलेंस नहीं है! कृपया पहले डिपॉजिट करें।");
+                return;
+            }
+
+            currentUser.balance -= amount;
+            let guesserUser = state.users[post.phone];
+            if (guesserUser) {
+                guesserUser.balance += amount;
+            }
+
+            if (!post.chatMessages) post.chatMessages = [];
+            post.chatMessages.push({
+                sender: state.currentUserPhone,
+                senderName: currentUser.name,
+                text: `🎁 Sent a gift: ${giftName}`,
+                isGift: true,
+                time: new Date().toLocaleTimeString()
+            });
+
+            state.transactions.push({ phone: state.currentUserPhone, type: "Gift Sent to " + post.name, amount: -amount, time: new Date().toLocaleString() });
+            if (guesserUser) {
+                state.transactions.push({ phone: post.phone, type: "Gift Received from " + currentUser.name, amount: amount, time: new Date().toLocaleString() });
+            }
+
+            saveState();
+            alert(`सफलतापूर्वक ${giftName} भेज दिया गया! चैट अब खुल गई है।`);
+            renderChatBox(document.getElementById('appRoot'), postId);
+        }
+
+        function sendChatMessage(postId) {
+            let input = document.getElementById('chatInputText');
+            if (!input) return;
+            let text = input.value.trim();
+            if (!text) return;
+
+            let post = state.guessingPosts.find(p => p.id === postId);
+            if (!post) return;
+            let currentUser = state.users[state.currentUserPhone];
+            if (!post.chatMessages) post.chatMessages = [];
+
+            post.chatMessages.push({
+                sender: state.currentUserPhone,
+                senderName: currentUser.name,
+                text: text,
+                isGift: false,
+                time: new Date().toLocaleTimeString()
+            });
+
+            saveState();
+            renderChatBox(document.getElementById('appRoot'), postId);
+        }
+
+        function renderDeposit(root) {
+            let waNum = encodeURIComponent((state.adminWhatsApp || "").replace(/\D/g, ""));
+            let waLink = `https://wa.me/${waNum}?text=Hello%20Admin,%20I%20have%20made%20payment,%20please%20add%20balance`;
+            let qrSrc = safeImageURL(state.depositQR, DEFAULT_QR_SVG);
+
+            root.innerHTML = `
+                <div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>➕ Add Points / Deposit</h3></div>
+                <div class="form-card" style="text-align:center;">
+                    <p style="color:#aaa; font-size:12px; margin-bottom:15px;">नीचे दिए गए QR कोड को स्कैन करें या PhonePe/GPay नंबर पर पेमेंट करें। पेमेंट के बाद स्क्रीनशॉट WhatsApp पर भेजें।</p>
+                    
+                    <div style="background:#fff; padding:10px; display:inline-block; border-radius:8px; margin-bottom:15px;">
+                        <img src="${qrSrc}" alt="Deposit QR Code" style="width:180px; height:180px; object-fit:contain; display:block;">
+                    </div>
+                    <div style="margin-bottom:10px;"><a href="${qrSrc}" download="Deposit_QR.png" class="btn" style="background:#333; color:#fff; padding:6px 12px; font-size:11px; text-decoration:none; display:inline-block;">📥 Download QR Code</a></div>
+
+                    <div style="background:#111; padding:12px; border-radius:8px; margin-bottom:15px; border:1px dashed var(--primary);">
+                        <div style="font-size:12px; color:#aaa;">PhonePe / Google Pay / Paytm Number:</div>
+                        <div style="font-size:18px; font-weight:bold; color:var(--primary); margin-top:4px;">${escapeHTML(state.depositUPI)}</div>
+                    </div>
+
+                    <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn" style="background:#27ae60; color:#fff; display:block; text-decoration:none; padding:12px;">💬 Send Payment Screenshot on WhatsApp</a>
+                </div>
+            `;
+        }
+
+        function renderProfile(root) {
+            let user = state.users[state.currentUserPhone];
+            let waNum = encodeURIComponent((state.adminWhatsApp || "").replace(/\D/g, ""));
+            let waLink = `https://wa.me/${waNum}?text=Hello%20Admin`;
+            let avatarSrc = safeImageURL(user.avatar, DEFAULT_AVATAR_SVG);
+
+            root.innerHTML = `
+                <div class="profile-top">
+                    <div class="profile-pic-box">
+                        <img class="profile-img" src="${avatarSrc}" alt="Profile">
+                        <div style="margin-top:5px;"><button class="btn" style="padding:4px 8px; font-size:10px; background:#333; color:#fff;" onclick="changeAvatar()">Change Photo</button></div>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <input type="text" id="profileNameInput" value="${escapeHTML(user.name)}" style="background:#111; border:1px solid #444; color:#fff; padding:6px; border-radius:6px; text-align:center; font-weight:bold; font-size:15px; width:80%; margin-bottom:5px;" placeholder="अपना नाम लिखें">
+                        <button class="btn" style="background:var(--primary); color:#000; padding:4px 10px; font-size:11px;" onclick="saveProfileName()">Save Name</button>
+                        <div style="font-size:12px; color:#aaa; margin-top:5px;">📱 ${escapeHTML(user.phone)} | Balance: <b style="color:var(--green)">₹${user.balance}</b></div>
+                    </div>
+                </div>
+
+                <div class="form-card" style="text-align:center;">
+                    <button class="btn" style="background:var(--green); color:#000; width:100%; padding:12px; font-size:15px; font-weight:bold; margin-bottom:10px;" onclick="navigate('deposit')">➕ Deposit Points (QR & UPI)</button>
+                </div>
+
+                <div class="form-card">
+                    <h4 style="margin-bottom:8px; color:var(--primary);">🏦 Payment Details (विड्रॉल के लिए)</h4>
+                    <div class="input-group">
+                        <label>Bank Account Details (A/C No, IFSC, Name)</label>
+                        <textarea id="userBankInput" rows="2" placeholder="Account No, IFSC Code, Bank Name">${escapeHTML(user.bankDetails || '')}</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>PhonePe / Google Pay / Paytm Number</label>
+                        <input type="text" id="userUpiInput" value="${escapeHTML(user.upiDetails || '')}" placeholder="UPI Number / ID">
+                    </div>
+                    <button class="btn" style="background:var(--blue); color:#fff; width:100%;" onclick="savePaymentDetails()">Save Payment Details</button>
+                </div>
+
+                <div class="form-card">
+                    <h4 style="margin-bottom:8px; color:var(--primary);">🏦 Send Withdrawal Request</h4>
+                    <div class="input-group"><input type="number" id="withdrawAmt" min="500" placeholder="Enter Amount (Min ₹500)"></div>
+                    <button class="btn" style="background:var(--red); color:#fff; width:100%;" onclick="sendWithdrawalRequest()">Send Withdrawal Request</button>
+                </div>
+
+                <div class="form-card">
+                    <h4 style="margin-bottom:8px; color:var(--primary);">📅 Filter Game History by Date</h4>
+                    <div class="input-group"><input type="date" id="filterDate" onchange="filterHistory()"></div>
+                    <div id="historyFilteredBox" style="max-height:200px; overflow-y:auto;">
+                        <p style="color:#777; font-size:12px;">तारीख चुनें...</p>
+                    </div>
+                </div>
+
+                <div style="text-align:center; margin-top:15px;">
+                    <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn" style="background:#27ae60; color:#fff; display:block; text-decoration:none; padding:12px; margin-bottom:8px;">💬 WhatsApp Support Team</a>
+                    <button class="btn" style="background:#c0392b; color:#fff; width:100%; padding:10px;" onclick="logoutPlayer()">🔒 Logout</button>
+                </div>
+            `;
+        }
+
+        function changeAvatar() {
+            let url = prompt("अपनी प्रोफाइल फोटो का HTTPS Image URL डालें:", "");
+            if (url === null) return;
+            let cleaned = url.trim();
+            if (!/^https?:\/\//i.test(cleaned)) {
+                alert("❌ कृपया केवल सही http:// या https:// इमेज URL डालें!");
+                return;
+            }
+            state.users[state.currentUserPhone].avatar = cleaned;
+            saveState();
+            navigate('profile');
+        }
+
+        function saveProfileName() {
+            let nameInput = document.getElementById('profileNameInput');
+            if (!nameInput) return;
+            let name = nameInput.value.trim();
+            if (name) {
+                state.users[state.currentUserPhone].name = name;
+                saveState();
+                alert("नाम सेव हो गया!");
+                navigate('profile');
+            }
+        }
+
+        function savePaymentDetails() {
+            let bankElem = document.getElementById('userBankInput');
+            let upiElem = document.getElementById('userUpiInput');
+            if (!bankElem || !upiElem) return;
+            state.users[state.currentUserPhone].bankDetails = bankElem.value.trim();
+            state.users[state.currentUserPhone].upiDetails = upiElem.value.trim();
+            saveState();
+            alert("बैंक और UPI डिटेल्स सेव हो गई!");
+        }
+
+        function sendWithdrawalRequest() {
+            let amtElem = document.getElementById('withdrawAmt');
+            if (!amtElem) return;
+            let amt = parseInt(amtElem.value, 10);
+            let user = state.users[state.currentUserPhone];
+
+            if (!user.bankDetails && !user.upiDetails) {
+                alert("❌ कृपया पहले अपनी Bank या UPI डिटेल्स सेव करें!");
+                return;
+            }
+            if (isNaN(amt) || amt < 500) { alert("कम से कम ₹500 दर्ज करें!"); return; }
+            if (user.balance < amt) { alert("पर्याप्त बैलेंस नहीं है!"); return; }
+
+            user.balance -= amt;
+            state.withdrawRequests.push({
+                id: Date.now(),
+                phone: user.phone,
+                name: user.name,
+                amount: amt,
+                status: "PENDING",
+                time: new Date().toLocaleString()
+            });
+            state.transactions.push({
+                phone: user.phone,
+                type: "Withdrawal Requested",
+                amount: -amt,
+                time: new Date().toLocaleString()
+            });
+            saveState();
+            alert("विड्रॉल रिक्वेस्ट एडमिन के पास भेज दी गई है!");
+            navigate('profile');
+        }
+
+        function filterHistory() {
+            let dateElem = document.getElementById('filterDate');
+            let box = document.getElementById('historyFilteredBox');
+            if (!dateElem || !box) return;
+            let date = dateElem.value;
+            let filtered = state.bids.filter(b => b.phone === state.currentUserPhone && b.date === date);
+            if (filtered.length === 0) {
+                box.innerHTML = `<p style="color:#777; font-size:12px; margin-top:5px;">इस तारीख पर कोई गेम नहीं है।</p>`;
+                return;
+            }
+            let html = '';
+            filtered.forEach(b => {
+                html += `<div style="background:#111; padding:8px; margin-bottom:5px; border-radius:4px; font-size:12px;"><b>${escapeHTML(b.marketName)}</b> | ${escapeHTML(b.gameType)} (${escapeHTML(b.session)}) - ₹${b.amount} [<b>${escapeHTML(b.status)}</b>]</div>`;
+            });
+            box.innerHTML = html;
+        }
+
+        function renderRates(root) {
+            let html = `<h3 style="margin-bottom:12px; color:var(--primary);">📊 Official Game Rates</h3>`;
+            state.gameRates.forEach(r => {
+                html += `<div class="list-card">${escapeHTML(r.name)}: <b style="color:var(--green)">${escapeHTML(r.rate)}</b></div>`;
+            });
+            root.innerHTML = html;
+        }
+
+        function renderAdminLogin(root) {
+            root.innerHTML = `
+                <div class="form-card" style="max-width:350px; margin:40px auto; text-align:center;">
+                    <h3 style="color:var(--primary); margin-bottom:15px;">🔐 Admin Login</h3>
+                    <div class="input-group"><input type="text" id="admLoginPhone" placeholder="Admin Mobile Number"></div>
+                    <div class="input-group"><input type="password" id="admLoginPass" placeholder="Password"></div>
+                    <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="verifyAdminLogin()">Login to Admin</button>
+                </div>
+            `;
+        }
+
+        function verifyAdminLogin() {
+            let pElem = document.getElementById('admLoginPhone');
+            let pwElem = document.getElementById('admLoginPass');
+            if (!pElem || !pwElem) return;
+            let phone = pElem.value.trim();
+            let pass = pwElem.value.trim();
+            if (phone === state.adminCreds.phone && pass === state.adminCreds.pass) {
+                state.isAdminLoggedIn = true;
+                navigate('adminLogin');
+            } else {
+                alert("गलत मोबाइल नंबर या पासवर्ड!");
+            }
+        }
+
+        function renderAdmin(root) {
+            let marketOptions = state.markets.map(m => `<option value="${m.id}">${escapeHTML(m.name)} (${escapeHTML(m.openTime || '')} ${escapeHTML(m.openAmPm || '')})</option>`).join('');
+            let withdrawList = state.withdrawRequests.filter(w => w.status === "PENDING");
+            let wHtml = withdrawList.length === 0 ? `<p style="color:#777; font-size:12px;">कोई नई विड्रॉल रिक्वेस्ट नहीं है।</p>` : '';
+            withdrawList.forEach(w => {
+                wHtml += `
+                    <div style="background:#111; padding:8px; margin-bottom:6px; border-radius:6px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                        <div><b>${escapeHTML(w.name)}</b> (${escapeHTML(w.phone)})<br>Amount: <b style="color:var(--green)">₹${w.amount}</b></div>
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn" style="background:var(--green); color:#000; padding:4px 8px; font-size:11px;" onclick="approveWithdraw(${w.id})">Approve</button>
+                            <button class="btn" style="background:var(--red); color:#fff; padding:4px 8px; font-size:11px;" onclick="rejectWithdraw(${w.id})">Reject</button>
+                        </div>
+                    </div>`;
+            });
+
+            let forgotListHtml = state.forgotRequests.length === 0 ? `<p style="color:#777; font-size:12px;">कोई पासवर्ड रिकवरी रिक्वेस्ट नहीं है।</p>` : '';
+            state.forgotRequests.slice().reverse().forEach(f => {
+                forgotListHtml += `
+                    <div style="background:#111; padding:8px; margin-bottom:6px; border-radius:6px; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                        <div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#aaa">${escapeHTML(f.time)}</small></div>
+                        <button class="btn" style="background:var(--primary); color:#000; padding:6px 10px; font-size:11px;" onclick="adminResetUserPassword('${escapeHTML(f.phone)}', ${f.id})">🔑 Reset Pass</button>
+                    </div>
+                `;
+            });
+
+            root.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h3 style="color:var(--primary);">⚙️ Admin Dashboard</h3>
+                    <button class="btn" style="background:var(--red); color:#fff; padding:6px 10px; font-size:11px;" onclick="state.isAdminLoggedIn=false; navigate('adminLogin');">Logout</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4>🔑 Forgot Password Requests (${state.forgotRequests.length})</h4>
+                    ${forgotListHtml}
+                </div>
+
+                <div class="admin-section">
+                    <h4>💳 Deposit QR & UPI Settings</h4>
+                    <div class="input-group">
+                        <label>Upload QR Code from Gallery</label>
+                        <input type="file" id="admQrFile" accept="image/*" onchange="handleQrUpload(event)" style="background:#111; color:#fff; padding:8px; border:1px solid #444; border-radius:8px; width:100%;">
+                    </div>
+                    <div style="text-align:center; margin:10px 0;">
+                        <img id="adminQrPreview" src="${safeImageURL(state.depositQR, DEFAULT_QR_SVG)}" alt="QR Preview" style="width:100px; height:100px; object-fit:contain; border:1px solid #444; background:#fff; border-radius:6px;">
+                    </div>
+                    <div class="input-group">
+                        <label>PhonePe / GPay Number / UPI ID</label>
+                        <input type="text" id="admUpiInput" value="${escapeHTML(state.depositUPI)}" placeholder="9876543210@paytm">
+                    </div>
+                    <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="adminSaveDepositSettings()">💾 Save Deposit Info</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4>🔍 Player Game History Check</h4>
+                    <div class="input-group"><input type="text" id="admGameSearchPhone" placeholder="Player Mobile Number"></div>
+                    <div class="input-group"><input type="date" id="admGameSearchDate"></div>
+                    <button class="btn" style="background:var(--blue); color:#fff; width:100%;" onclick="adminSearchGameHistory()">Search Game History</button>
+                    <div id="admGameResultBox" style="margin-top:10px; font-size:12px; max-height:220px; overflow-y:auto;"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h4>👤 Player Profile & Wallet Check</h4>
+                    <div class="input-group"><input type="text" id="admProfSearchPhone" placeholder="Player Mobile Number"></div>
+                    <button class="btn" style="background:var(--blue); color:#fff; width:100%;" onclick="adminSearchPlayerProfile()">Search Player Profile</button>
+                    <div id="admProfResultBox" style="margin-top:10px; font-size:12px;"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h4>5️⃣ Player Withdrawal Requests (${withdrawList.length})</h4>
+                    ${wHtml}
+                </div>
+
+                <div class="admin-section">
+                    <h4>1️⃣ Balance Add / Deduct</h4>
+                    <div class="input-group"><input type="text" id="admPhone" placeholder="Player Mobile Number"></div>
+                    <div class="input-group"><select id="admAction"><option value="add">Add</option><option value="deduct">Deduct</option></select></div>
+                    <div class="input-group"><input type="number" id="admAmount" min="1" placeholder="Amount"></div>
+                    <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="adminModBal()">Update Balance</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4>2️⃣ Market & AM/PM Timing Management</h4>
+                    <div class="input-group"><input type="text" id="admMarketName" placeholder="Market Name (e.g. KALYAN)"></div>
+                    <div style="display:grid; grid-template-columns:2fr 1fr; gap:5px;">
+                        <div class="input-group"><input type="text" id="admOpenTime" placeholder="Open Time (04:15)"></div>
+                        <div class="input-group"><select id="admOpenAmPm"><option value="AM">AM</option><option value="PM" selected>PM</option></select></div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:2fr 1fr; gap:5px;">
+                        <div class="input-group"><input type="text" id="admCloseTime" placeholder="Close Time (06:15)"></div>
+                        <div class="input-group"><select id="admCloseAmPm"><option value="AM">AM</option><option value="PM" selected>PM</option></select></div>
+                    </div>
+                    <button class="btn" style="background:var(--blue); color:#fff; width:100%; margin-bottom:8px;" onclick="adminAddMarket()">➕ Add Market</button>
+                    <div class="input-group"><select id="admDelMarketId">${marketOptions}</select></div>
+                    <button class="btn" style="background:var(--red); color:#fff; width:100%;" onclick="adminDelMarket()">❌ Delete Market</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4>📊 Manage Game Rates</h4>
+                    <div class="input-group"><label>Single Digit Rate</label><input type="text" id="rateSingle" value="${escapeHTML(state.gameRates[0]?.rate || '10 ka 95')}"></div>
+                    <div class="input-group"><label>Jodi Digit Rate</label><input type="text" id="rateJodi" value="${escapeHTML(state.gameRates[1]?.rate || '10 ka 950')}"></div>
+                    <div class="input-group"><label>Single Panna Rate</label><input type="text" id="rateSP" value="${escapeHTML(state.gameRates[2]?.rate || '10 ka 1400')}"></div>
+                    <div class="input-group"><label>Double Panna Rate</label><input type="text" id="rateDP" value="${escapeHTML(state.gameRates[3]?.rate || '10 ka 2800')}"></div>
+                    <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="adminSaveRates()">💾 Save Rates</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4>📢 Declare Result</h4>
+                    <div class="input-group"><select id="admResMarket">${marketOptions}</select></div>
+                    <div class="input-group"><input type="text" id="admResStr" placeholder="जैसे: 123-6*-*** (सिर्फ Open) या 123-68-459 (Full)"></div>
+                    <button class="btn" style="background:var(--primary); color:#000; width:100%;" onclick="adminDeclare()">Publish Result</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4>4️⃣ Change Admin Password</h4>
+                    <div class="input-group"><input type="text" id="newAdminPhone" value="${escapeHTML(state.adminCreds.phone)}"></div>
+                    <div class="input-group"><input type="password" id="newAdminPass" value="${escapeHTML(state.adminCreds.pass)}"></div>
+                    <button class="btn" style="background:var(--blue); color:#fff; width:100%;" onclick="adminChangeCreds()">Save New Password</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4>Settings (WhatsApp & Notice)</h4>
+                    <div class="input-group"><input type="text" id="admWa" value="${escapeHTML(state.adminWhatsApp)}"></div>
+                    <div class="input-group"><textarea id="admNotice" rows="2">${escapeHTML(state.noticeText)}</textarea></div>
+                    <button class="btn" style="background:var(--green); color:#000; width:100%;" onclick="adminSaveSettings()">Save Settings</button>
+                </div>
+            `;
+        }
+
+        function adminResetUserPassword(phone, reqId) {
+            let user = state.users[phone];
+            if (!user) return;
+            let newPass = prompt(`${phone} के लिए नया अस्थायी पासवर्ड लिखें (कम से कम 4 अक्षर):`);
+            if (!newPass || newPass.trim().length < 4) return;
+            user.password = newPass.trim();
+            state.forgotRequests = state.forgotRequests.filter(r => r.id !== reqId);
+            saveState();
+            alert(`नया पासवर्ड सेट हो गया! कृपया यूज़र को सूचित करें।`);
+            navigate('adminLogin');
+        }
+
+        function handleQrUpload(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                let img = new Image();
+                img.onload = function () {
+                    const maxDim = 360;
+                    let w = img.width, h = img.height;
+                    if (w > h && w > maxDim) { h = Math.round((h * maxDim) / w); w = maxDim; }
+                    else if (h > maxDim) { w = Math.round((w * maxDim) / h); h = maxDim; }
+
+                    let canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    state.depositQR = canvas.toDataURL('image/jpeg', 0.75);
+                    let prev = document.getElementById('adminQrPreview');
+                    if (prev) prev.src = state.depositQR;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function adminSaveDepositSettings() {
+            let upiElem = document.getElementById('admUpiInput');
+            if (!upiElem) return;
+            let upi = upiElem.value.trim();
+            if (upi) state.depositUPI = upi;
+            saveState();
+            alert("डिपॉजिट QR और UPI डिटेल्स अपडेट हो गई!");
+        }
+
+        function adminSearchGameHistory() {
+            let phoneElem = document.getElementById('admGameSearchPhone');
+            let dateElem = document.getElementById('admGameSearchDate');
+            let box = document.getElementById('admGameResultBox');
+            if (!phoneElem || !dateElem || !box) return;
+
+            let phone = phoneElem.value.trim();
+            let date = dateElem.value;
+
+            if (!phone) { alert("कृपया मोबाइल नंबर दर्ज करें!"); return; }
+            let filtered = state.bids.filter(b => b.phone === phone && (!date || b.date === date));
+
+            if (filtered.length === 0) {
+                box.innerHTML = `<p style="color:var(--red);">इस नंबर या तारीख पर कोई गेम रिकॉर्ड नहीं मिला।</p>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(b => {
+                let color = b.status === "WON" ? "var(--green)" : (b.status === "LOST" ? "var(--red)" : "var(--primary)");
+                html += `
+                    <div style="background:#111; padding:8px; margin-bottom:5px; border-radius:4px; border-left:3px solid ${color};">
+                        <b>${escapeHTML(b.marketName)}</b> (${escapeHTML(b.session)})<br>
+                        Game: ${escapeHTML(b.gameType)} | Digit: <b>${escapeHTML(b.digit)}</b> | Amt: <b>₹${b.amount}</b><br>
+                        Status: <b style="color:${color}">${escapeHTML(b.status)} ${b.status === 'WON' ? '(Win: ₹' + b.winAmount + ')' : ''}</b><br>
+                        <small style="color:#aaa">${escapeHTML(b.date)} ${escapeHTML(b.time)}</small>
+                    </div>
+                `;
+            });
+            box.innerHTML = html;
+        }
+
+        function adminSearchPlayerProfile() {
+            let phoneElem = document.getElementById('admProfSearchPhone');
+            let box = document.getElementById('admProfResultBox');
+            if (!phoneElem || !box) return;
+
+            let phone = phoneElem.value.trim();
+            if (!phone) { alert("कृपया मोबाइल नंबर दर्ज करें!"); return; }
+            let user = state.users[phone];
+
+            if (!user) {
+                box.innerHTML = `<span style="color:var(--red);">यह यूजर रजिस्टर नहीं है!</span>`;
+                return;
+            }
+
+            let userTxns = state.transactions.filter(t => t.phone === phone);
+            let txnHtml = userTxns.length === 0 ? `<small style="color:#aaa">कोई ट्रांजैक्शन नहीं है।</small>` : '';
+            userTxns.slice().reverse().forEach(t => {
+                txnHtml += `<div style="font-size:11px; color:#ccc; border-bottom:1px solid #333; padding:2px 0;">${escapeHTML(t.type)}: <b>₹${t.amount}</b> (${escapeHTML(t.time)})</div>`;
+            });
+
+            box.innerHTML = `
+                <div style="background:#111; padding:10px; border-radius:6px; margin-top:5px;">
+                    <b>Name:</b> ${escapeHTML(user.name)}<br>
+                    <b>Phone:</b> ${escapeHTML(user.phone)}<br>
+                    <b>Current Balance:</b> <b style="color:var(--green)">₹${user.balance}</b><br>
+                    <b>Bank Details:</b> ${escapeHTML(user.bankDetails || 'Not Provided')}<br>
+                    <b>UPI Details:</b> ${escapeHTML(user.upiDetails || 'Not Provided')}<br>
+                    <hr style="border-color:#333; margin:6px 0;">
+                    <b>Wallet Transactions:</b><br>
+                    ${txnHtml}
+                </div>
+            `;
+        }
+
+        function approveWithdraw(id) {
+            let req = state.withdrawRequests.find(w => w.id === id);
+            if (req && req.status === "PENDING") {
+                req.status = "APPROVED";
+                saveState();
+                alert("विड्रॉल अप्रूव हो गया!");
+                navigate('adminLogin');
+            }
+        }
+
+        function rejectWithdraw(id) {
+            let req = state.withdrawRequests.find(w => w.id === id);
+            if (req && req.status === "PENDING") {
+                req.status = "REJECTED";
+                if (state.users[req.phone]) {
+                    state.users[req.phone].balance += req.amount;
+                    state.transactions.push({
+                        phone: req.phone,
+                        type: "Withdrawal Rejected (Refund)",
+                        amount: req.amount,
+                        time: new Date().toLocaleString()
+                    });
+                }
+                saveState();
+                alert("विड्रॉल रिजेक्ट किया गया और राशि यूज़र के वॉलेट में वापस जोड़ दी गई!");
+                navigate('adminLogin');
+            }
+        }
+
+        function adminModBal() {
+            let pElem = document.getElementById('admPhone');
+            let actElem = document.getElementById('admAction');
+            let amtElem = document.getElementById('admAmount');
+            if (!pElem || !actElem || !amtElem) return;
+
+            let phone = pElem.value.replace(/\D/g, '');
+            let action = actElem.value;
+            let amt = parseInt(amtElem.value, 10);
+            if (phone.length !== 10 || isNaN(amt) || amt <= 0) {
+                alert("❌ कृपया सही 10 अंकों का मोबाइल नंबर और 0 से अधिक राशि दर्ज करें!");
+                return;
+            }
+            if (!state.users[phone]) {
+                state.users[phone] = { name: "Player " + phone.slice(-4), balance: 0, phone, password: "", avatar: "", bankDetails: "", upiDetails: "" };
+            }
+
+            if (action === 'add') {
+                state.users[phone].balance += amt;
+                state.transactions.push({ phone, type: "Admin Added", amount: amt, time: new Date().toLocaleString() });
+            } else {
+                if (state.users[phone].balance < amt) {
+                    alert(`❌ यूज़र का बैलेंस (₹${state.users[phone].balance}) कटौती राशि से कम है!`);
+                    return;
+                }
+                state.users[phone].balance -= amt;
+                state.transactions.push({ phone, type: "Admin Deducted", amount: -amt, time: new Date().toLocaleString() });
+            }
+            saveState();
+            alert("बैलेंस अपडेट हो गया!");
+        }
+
+        function isValidTimeFormat(str) {
+            return /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(str);
+        }
+
+        function adminAddMarket() {
+            let mName = document.getElementById('admMarketName');
+            let oTime = document.getElementById('admOpenTime');
+            let oAmPm = document.getElementById('admOpenAmPm');
+            let cTime = document.getElementById('admCloseTime');
+            let cAmPm = document.getElementById('admCloseAmPm');
+            if (!mName || !oTime || !oAmPm || !cTime || !cAmPm) return;
+
+            let name = mName.value.trim().toUpperCase();
+            let openTime = oTime.value.trim();
+            let openAmPm = oAmPm.value;
+            let closeTime = cTime.value.trim();
+            let closeAmPm = cAmPm.value;
+
+            if (!name || !isValidTimeFormat(openTime) || !isValidTimeFormat(closeTime)) {
+                alert("❌ कृपया मार्केट का नाम और सही समय (जैसे 04:15) दर्ज करें!");
+                return;
+            }
+            let newId = state.markets.length > 0 ? Math.max(...state.markets.map(m => m.id)) + 1 : 1;
+            state.markets.push({ id: newId, name, openTime, openAmPm, closeTime, closeAmPm, result: "***-**-***", chart: [] });
+            saveState();
+            alert("मार्केट जुड़ गई!");
+            navigate('adminLogin');
+        }
+
+        function adminDelMarket() {
+            let delElem = document.getElementById('admDelMarketId');
+            if (!delElem) return;
+            let mId = parseInt(delElem.value, 10);
+            state.markets = state.markets.filter(m => m.id !== mId);
+            saveState();
+            alert("डिलीट हो गई!");
+            navigate('adminLogin');
+        }
+
+        function adminSaveRates() {
+            let r1 = document.getElementById('rateSingle');
+            let r2 = document.getElementById('rateJodi');
+            let r3 = document.getElementById('rateSP');
+            let r4 = document.getElementById('rateDP');
+            if (!r1 || !r2 || !r3 || !r4) return;
+
+            state.gameRates = [
+                { name: "Single Digit", rate: r1.value.trim() },
+                { name: "Jodi Digit", rate: r2.value.trim() },
+                { name: "Single Panna", rate: r3.value.trim() },
+                { name: "Double Panna", rate: r4.value.trim() }
+            ];
+            saveState();
+            alert("गेम रेट्स सफलतापूर्वक अपडेट हो गए!");
+        }
+
+        function getRateMultiplier(gameType) {
+            const rateObj = state.gameRates.find(r => r.name === gameType);
+            if (rateObj && rateObj.rate) {
+                const match = rateObj.rate.match(/(\d+(?:\.\d+)?)\s*ka\s*(\d+(?:\.\d+)?)/i);
+                if (match) {
+                    const base = parseFloat(match[1]);
+                    const payout = parseFloat(match[2]);
+                    if (base > 0) return payout / base;
+                }
+            }
+            if (gameType === "Single Digit") return 9.5;
+            if (gameType === "Jodi Digit") return 95;
+            if (gameType === "Single Panna") return 140;
+            if (gameType === "Double Panna") return 280;
+            return 0;
+        }
+
+        function adminDeclare() {
+            let mElem = document.getElementById('admResMarket');
+            let rElem = document.getElementById('admResStr');
+            if (!mElem || !rElem) return;
+
+            let mId = parseInt(mElem.value, 10);
+            let resStr = rElem.value.trim();
+            let market = state.markets.find(m => m.id === mId);
+            if (!market) return;
+
+            let parts = resStr.split('-');
+            if (parts.length !== 3 || parts[0].length !== 3 || parts[1].length !== 2 || parts[2].length !== 3) {
+                alert("❌ रिज़ल्ट का सही फॉर्मेट डालें! जैसे: 123-6*-*** या 123-68-459");
+                return;
+            }
+
+            let openPanna = parts[0];
+            let jodi = parts[1];
+            let closePanna = parts[2];
+
+            let hasOpen = /^\d{3}$/.test(openPanna) && /^\d$/.test(jodi[0]);
+            let hasClose = /^\d{3}$/.test(closePanna) && /^\d$/.test(jodi[1]);
+            let hasFullJodi = /^\d{2}$/.test(jodi);
+
+            if (!hasOpen && !hasClose) {
+                alert("❌ कम से कम OPEN या CLOSE के सही अंक दर्ज करें!");
+                return;
+            }
+
+            market.result = resStr;
+            if (hasFullJodi) {
+                market.chart.push(resStr);
+            }
+
+            let openDigit = jodi[0];
+            let closeDigit = jodi[1];
+
+            state.bids.forEach(b => {
+                if (b.marketId !== mId || b.status !== "PENDING") return;
+
+                let canSettle = false;
+                let win = false;
+
+                if (b.gameType === "Single Digit") {
+                    if (b.session === "OPEN" && hasOpen) {
+                        canSettle = true;
+                        win = (b.digit === openDigit);
+                    } else if (b.session === "CLOSE" && hasClose) {
+                        canSettle = true;
+                        win = (b.digit === closeDigit);
+                    }
+                } else if (b.gameType === "Jodi Digit") {
+                    if (hasFullJodi) {
+                        canSettle = true;
+                        win = (b.digit === jodi);
+                    }
+                } else if (b.gameType === "Single Panna" || b.gameType === "Double Panna") {
+                    if (b.session === "OPEN" && hasOpen) {
+                        canSettle = true;
+                        win = (b.digit === openPanna);
+                    } else if (b.session === "CLOSE" && hasClose) {
+                        canSettle = true;
+                        win = (b.digit === closePanna);
+                    }
+                }
+
+                if (canSettle) {
+                    if (win) {
+                        let mult = getRateMultiplier(b.gameType);
+                        b.status = "WON";
+                        b.winAmount = Math.round(b.amount * mult);
+                        if (state.users[b.phone]) {
+                            state.users[b.phone].balance += b.winAmount;
+                            state.transactions.push({
+                                phone: b.phone,
+                                type: `Won (${b.marketName} - ${b.gameType})`,
+                                amount: b.winAmount,
+                                time: new Date().toLocaleString()
+                            });
+                        }
+                    } else {
+                        b.status = "LOST";
+                    }
+                }
+            });
+
+            saveState();
+            alert("रिजल्ट सफलतापूर्वक घोषित और सेटल हो गया!");
+        }
+
+        function adminChangeCreds() {
+            let pElem = document.getElementById('newAdminPhone');
+            let pwElem = document.getElementById('newAdminPass');
+            if (!pElem || !pwElem) return;
+            let p = pElem.value.trim();
+            let pw = pwElem.value.trim();
+            if (!p || pw.length < 4) { alert("❌ कम से कम 4 अक्षर का पासवर्ड डालें!"); return; }
+            state.adminCreds = { phone: p, pass: pw };
+            saveState();
+            alert("पासवर्ड बदल गया!");
+        }
+
+        function adminSaveSettings() {
+            let waElem = document.getElementById('admWa');
+            let notElem = document.getElementById('admNotice');
+            if (!waElem || !notElem) return;
+            state.adminWhatsApp = waElem.value.trim();
+            state.noticeText = notElem.value.trim();
+            saveState();
+            alert("सेटिंग्स सेव हो गई!");
+        }
+
+        if (!state.currentUserPhone || !state.users[state.currentUserPhone]) {
+            renderLoginScreen();
+        } else {
+            let mh = document.getElementById('mainHeader');
+            let nb = document.getElementById('noticeBoardDisplay');
+            let bn = document.getElementById('bottomNav');
+            if (mh) mh.style.display = 'flex';
+            if (nb) nb.style.display = 'block';
+            if (bn) bn.style.display = 'flex';
+            navigate('home');
+        }
+    </script>
+</body>
+</html>
