@@ -6,114 +6,249 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M.KING - Matka App</title>
     <style>
-        :root { --primary:#f39c12; --primary-dark:#d35400; --bg:#090d16; --card:rgba(24,34,54,0.92); --text:#fff; --green:#2ecc71; --red:#e74c3c; --blue:#3498db; }
+        :root {
+            --primary:#fbbf24;
+            --primary-dark:#ea580c;
+            --bg-deep:#13183b;
+            --card-top:rgba(43, 53, 108, 0.90);
+            --card-bot:rgba(26, 33, 74, 0.94);
+            --surface:rgba(20, 27, 65, 0.88);
+            --border-soft:rgba(129, 140, 248, 0.35);
+            --text:#f8fafc;
+            --muted:#cbd5e1;
+            --green:#22c55e;
+            --red:#f43f5e;
+            --blue:#38bdf8;
+        }
         * { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI',Roboto,sans-serif; }
         body {
-            background: radial-gradient(circle at 12% 8%, rgba(243,156,18,0.16), transparent 38%), radial-gradient(circle at 88% 22%, rgba(142,68,173,0.18), transparent 42%), radial-gradient(circle at 50% 85%, rgba(52,152,219,0.14), transparent 46%), linear-gradient(160deg,#070b14 0%,#0f172a 52%,#090e1a 100%);
-            background-attachment:fixed; color:var(--text); padding-bottom:78px; min-height:100vh;
+            background:
+                radial-gradient(circle at 10% 8%, rgba(251,191,36,0.24), transparent 36%),
+                radial-gradient(circle at 90% 16%, rgba(236,72,153,0.26), transparent 40%),
+                radial-gradient(circle at 15% 78%, rgba(56,189,248,0.22), transparent 42%),
+                radial-gradient(circle at 85% 88%, rgba(34,197,94,0.20), transparent 44%),
+                linear-gradient(155deg, #1b1f4b 0%, #24215a 38%, #183059 72%, #15224a 100%);
+            background-attachment:fixed;
+            color:var(--text);
+            padding-bottom:78px;
+            min-height:100vh;
         }
-        header { background:rgba(13,19,33,0.92); backdrop-filter:blur(12px); padding:14px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--primary); box-shadow:0 4px 20px rgba(243,156,18,0.15); position:sticky; top:0; z-index:100; }
-        header h1 { color:var(--primary); font-size:22px; font-weight:800; letter-spacing:1px; cursor:pointer; }
-        .wallet-badge { background:linear-gradient(135deg,#16a34a,#2ecc71); color:#fff; padding:6px 14px; border-radius:20px; font-weight:bold; font-size:14px; cursor:pointer; }
-        .notice-board { background:linear-gradient(90deg,rgba(30,41,59,0.95),rgba(20,27,45,0.95)); border:1px solid rgba(243,156,18,0.2); border-left:4px solid var(--primary); padding:10px 15px; margin:10px; border-radius:8px; font-size:13px; color:#fde047; line-height:1.5; }
+        header {
+            background:linear-gradient(135deg, rgba(49,46,129,0.94), rgba(30,58,138,0.94), rgba(88,28,135,0.92));
+            backdrop-filter:blur(14px);
+            padding:13px 18px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-bottom:2px solid var(--primary);
+            box-shadow:0 6px 24px rgba(15,23,42,0.35);
+            position:sticky;
+            top:0;
+            z-index:100;
+        }
+        header h1 {
+            background:linear-gradient(90deg, #fde047, #fbbf24, #fb923c);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            font-size:22px;
+            font-weight:900;
+            letter-spacing:1.2px;
+            cursor:pointer;
+            user-select:none;
+        }
+        .wallet-badge {
+            background:linear-gradient(135deg,#10b981,#22c55e);
+            color:#042f2e;
+            padding:7px 14px;
+            border-radius:20px;
+            font-weight:800;
+            font-size:14px;
+            cursor:pointer;
+            box-shadow:0 4px 12px rgba(34,197,94,0.35);
+        }
+        .notice-board {
+            background:linear-gradient(90deg, rgba(76,29,149,0.85), rgba(30,64,175,0.85));
+            border:1px solid rgba(251,191,36,0.35);
+            border-left:4px solid var(--primary);
+            padding:10px 15px;
+            margin:10px auto;
+            max-width:580px;
+            border-radius:10px;
+            font-size:13px;
+            color:#fef08a;
+            line-height:1.5;
+            box-shadow:0 4px 14px rgba(0,0,0,0.22);
+        }
         .container { padding:12px; max-width:600px; margin:auto; }
         .quick-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:15px; }
-        .q-btn { background:linear-gradient(145deg,rgba(30,41,59,0.95),rgba(17,24,39,0.95)); border:1px solid rgba(243,156,18,0.25); color:#fff; padding:11px 5px; border-radius:10px; font-size:12px; font-weight:bold; text-align:center; cursor:pointer; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:4px; }
-        .market-card,.form-card,.profile-top { background:linear-gradient(145deg,rgba(26,36,56,0.94),rgba(15,22,36,0.96)); border:1px solid rgba(243,156,18,0.22); border-radius:14px; padding:14px; margin-bottom:13px; box-shadow:0 6px 18px rgba(0,0,0,0.42); }
+        .q-btn {
+            background:linear-gradient(135deg, rgba(67,56,202,0.88), rgba(37,99,235,0.86));
+            border:1px solid rgba(165,180,252,0.4);
+            color:#fff;
+            padding:11px 5px;
+            border-radius:12px;
+            font-size:12px;
+            font-weight:bold;
+            text-align:center;
+            cursor:pointer;
+            text-decoration:none;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:4px;
+            box-shadow:0 4px 14px rgba(30,41,59,0.28);
+        }
+        .market-card,.form-card,.profile-top {
+            background:linear-gradient(145deg, var(--card-top), var(--card-bot));
+            backdrop-filter:blur(10px);
+            border:1px solid rgba(251,191,36,0.32);
+            border-radius:16px;
+            padding:14px;
+            margin-bottom:13px;
+            box-shadow:0 10px 26px rgba(10,14,40,0.38);
+        }
         .m-top,.flex-between { display:flex; justify-content:space-between; align-items:center; gap:6px; }
-        .m-title { font-size:17px; font-weight:700; color:#fff; }
-        .m-status { font-size:10px; padding:3px 8px; border-radius:12px; font-weight:bold; }
-        .status-open { background:rgba(46,204,113,0.2); color:var(--green); border:1px solid var(--green); }
-        .status-closed { background:rgba(231,76,60,0.2); color:var(--red); border:1px solid var(--red); }
-        .status-holiday { background:rgba(243,156,18,0.2); color:var(--primary); border:1px solid var(--primary); }
-        .m-times { font-size:11px; color:#94a3b8; margin:6px 0; }
+        .m-title { font-size:17px; font-weight:800; color:#fef9c3; }
+        .m-status { font-size:10px; padding:3px 9px; border-radius:12px; font-weight:bold; }
+        .status-open { background:rgba(34,197,94,0.22); color:#86efac; border:1px solid #4ade80; }
+        .status-closed { background:rgba(244,63,94,0.22); color:#fda4af; border:1px solid #fb7185; }
+        .status-holiday { background:rgba(251,191,36,0.22); color:#fde047; border:1px solid #fbbf24; }
+        .m-times { font-size:11px; color:#cbd5e1; margin:6px 0; }
         .m-timers-grid,.game-grid,.pnl-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; }
-        .m-timer-box,.pnl-card { font-size:11px; color:var(--primary); font-weight:bold; background:rgba(9,13,22,0.86); padding:6px; border-radius:8px; text-align:center; border:1px solid #334155; }
+        .m-timer-box,.pnl-card {
+            font-size:11px;
+            color:var(--primary);
+            font-weight:bold;
+            background:linear-gradient(145deg, rgba(24,33,77,0.9), rgba(34,26,77,0.9));
+            padding:7px;
+            border-radius:10px;
+            text-align:center;
+            border:1px solid var(--border-soft);
+        }
         .pnl-val { font-size:15px; font-weight:800; color:#fff; }
-        .pnl-lbl { font-size:10px; color:#94a3b8; margin-top:3px; font-weight:normal; }
-        .m-result-box { background:rgba(9,13,22,0.85); border:1px dashed rgba(243,156,18,0.35); padding:8px; border-radius:10px; text-align:center; margin:8px 0; }
-        .m-result-text { font-size:19px; font-weight:800; color:var(--primary); letter-spacing:3px; }
+        .pnl-lbl { font-size:10px; color:#cbd5e1; margin-top:3px; font-weight:normal; }
+        .m-result-box {
+            background:linear-gradient(135deg, rgba(49,46,129,0.75), rgba(88,28,135,0.68));
+            border:1px dashed rgba(251,191,36,0.55);
+            padding:9px;
+            border-radius:12px;
+            text-align:center;
+            margin:8px 0;
+        }
+        .m-result-text { font-size:20px; font-weight:900; color:#fde047; letter-spacing:3px; text-shadow:0 2px 10px rgba(251,191,36,0.3); }
         .m-btns { display:grid; grid-template-columns:1fr 2fr; gap:8px; margin-top:8px; }
-        .btn { padding:10px; border:none; border-radius:8px; font-weight:bold; font-size:13px; cursor:pointer; text-align:center; }
+        .btn { padding:10px; border:none; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; text-align:center; transition:transform 0.1s ease; }
+        .btn:active { transform:scale(0.98); }
         .btn-sm { padding:5px 9px; font-size:11px; }
-        .btn-chart { background:linear-gradient(135deg,#1e293b,#334155); color:#fff; border:1px solid #475569; }
-        .btn-play { background:linear-gradient(135deg,#f59e0b,#d97706); color:#000; font-size:14px; }
-        .game-box { background:linear-gradient(145deg,rgba(30,41,59,0.94),rgba(17,24,39,0.96)); border:1px solid rgba(243,156,18,0.25); padding:18px 10px; border-radius:12px; text-align:center; cursor:pointer; }
+        .btn-chart { background:linear-gradient(135deg,#334155,#475569); color:#fff; border:1px solid rgba(148,163,184,0.45); }
+        .btn-play { background:linear-gradient(135deg,#fde047,#f59e0b,#ea580c); color:#1e1b4b; font-size:14px; font-weight:800; box-shadow:0 4px 12px rgba(245,158,11,0.35); }
+        .game-box {
+            background:linear-gradient(145deg, rgba(55,48,163,0.72), rgba(30,58,138,0.82));
+            border:1px solid rgba(251,191,36,0.35);
+            padding:18px 10px;
+            border-radius:14px;
+            text-align:center;
+            cursor:pointer;
+            box-shadow:0 6px 16px rgba(15,23,42,0.3);
+        }
         .game-label { font-size:14px; font-weight:bold; color:#fff; }
-        .game-rate { font-size:11px; color:var(--green); margin-top:3px; }
+        .game-rate { font-size:11px; color:#86efac; margin-top:3px; font-weight:600; }
         .input-group { margin-bottom:12px; text-align:left; }
-        .input-group label { display:block; font-size:12px; color:#cbd5e1; margin-bottom:5px; }
-        .input-group input,.input-group select,.input-group textarea { width:100%; padding:11px; background:rgba(9,13,22,0.9); border:1px solid #334155; color:#fff; border-radius:8px; font-size:14px; }
+        .input-group label { display:block; font-size:12px; color:#e2e8f0; margin-bottom:5px; font-weight:600; }
+        .input-group input,.input-group select,.input-group textarea {
+            width:100%;
+            padding:11px;
+            background:var(--surface);
+            border:1px solid rgba(129,140,248,0.45);
+            color:#fff;
+            border-radius:10px;
+            font-size:14px;
+            outline:none;
+        }
+        .input-group input:focus,.input-group select:focus,.input-group textarea:focus { border-color:var(--primary); }
+        .input-group input::placeholder,.input-group textarea::placeholder { color:#94a3b8; }
         .pass-wrap { position:relative; display:flex; align-items:center; }
         .pass-wrap input { padding-right:42px !important; }
-        .pass-eye { position:absolute; right:10px; background:transparent; border:none; color:#aaa; font-size:16px; cursor:pointer; padding:4px; }
-        .bid-cart-item { background:rgba(15,22,36,0.9); padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; border-left:3px solid var(--primary); font-size:13px; }
-        .del-btn { background:var(--red); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; }
-        .list-card { background:linear-gradient(145deg,rgba(26,36,56,0.94),rgba(15,22,36,0.96)); padding:12px; border-radius:10px; margin-bottom:10px; border-left:4px solid var(--primary); font-size:13px; }
-        .dark-row { background:rgba(9,13,22,0.86); padding:8px; margin-bottom:6px; border-radius:6px; font-size:12px; }
-        .win-badge { background:var(--green); color:#000; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:11px; }
+        .pass-eye { position:absolute; right:10px; background:transparent; border:none; color:#cbd5e1; font-size:16px; cursor:pointer; padding:4px; }
+        .bid-cart-item { background:rgba(30,41,92,0.88); padding:10px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; border-left:3px solid var(--primary); font-size:13px; }
+        .del-btn { background:var(--red); color:#fff; border:none; padding:4px 8px; border-radius:6px; font-size:11px; cursor:pointer; }
+        .list-card { background:linear-gradient(145deg, var(--card-top), var(--card-bot)); padding:12px; border-radius:12px; margin-bottom:10px; border-left:4px solid var(--primary); border-top:1px solid rgba(165,180,252,0.22); font-size:13px; }
+        .dark-row { background:linear-gradient(135deg, rgba(24,33,77,0.88), rgba(34,27,77,0.88)); padding:9px; margin-bottom:6px; border-radius:8px; font-size:12px; border:1px solid rgba(129,140,248,0.22); }
+        .win-badge { background:var(--green); color:#052e16; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:11px; }
         .loss-badge { background:var(--red); color:#fff; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:11px; }
-        .pend-badge { background:#f39c12; color:#000; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:11px; }
-        .ref-badge { background:var(--blue); color:#fff; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:11px; }
-        .admin-section { background:rgba(15,22,36,0.92); border:1px dashed rgba(243,156,18,0.6); padding:14px; border-radius:12px; margin-bottom:14px; }
-        .admin-section h4 { color:var(--primary); margin-bottom:10px; font-size:15px; border-bottom:1px solid #334155; padding-bottom:5px; }
+        .pend-badge { background:var(--primary); color:#1e1b4b; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:11px; }
+        .ref-badge { background:var(--blue); color:#082f49; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:11px; }
+        .admin-section { background:linear-gradient(145deg, rgba(35,44,94,0.90), rgba(26,28,70,0.94)); border:1px dashed rgba(251,191,36,0.65); padding:14px; border-radius:14px; margin-bottom:14px; }
+        .admin-section h4 { color:var(--primary); margin-bottom:10px; font-size:15px; border-bottom:1px solid rgba(129,140,248,0.3); padding-bottom:5px; }
         .profile-top { text-align:center; }
-        .profile-img { width:80px; height:80px; border-radius:50%; border:2px solid var(--primary); object-fit:cover; background:#333; display:inline-block; }
-        .ref-box { background:linear-gradient(145deg,rgba(30,41,59,0.95),rgba(17,24,39,0.96)); border:1px solid var(--primary); border-radius:14px; padding:15px; margin-bottom:15px; }
+        .profile-img { width:80px; height:80px; border-radius:50%; border:3px solid var(--primary); object-fit:cover; background:#312e81; display:inline-block; }
+        .ref-box { background:linear-gradient(145deg, rgba(55,48,163,0.75), rgba(30,58,138,0.85)); border:1px solid var(--primary); border-radius:14px; padding:15px; margin-bottom:15px; }
         .ref-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:10px 0; }
-        .ref-stat-item { background:rgba(9,13,22,0.85); border:1px solid #334155; border-radius:8px; padding:8px 4px; text-align:center; }
-        .ref-stat-val { font-size:16px; font-weight:800; color:var(--green); }
-        .ref-stat-lbl { font-size:10px; color:#94a3b8; margin-top:2px; }
-        .ref-link-box { background:rgba(9,13,22,0.9); border:1px dashed var(--primary); padding:8px; border-radius:8px; font-size:11px; color:#fde047; word-break:break-all; margin-bottom:8px; text-align:center; }
+        .ref-stat-item { background:rgba(20,27,65,0.85); border:1px solid var(--border-soft); border-radius:10px; padding:8px 4px; text-align:center; }
+        .ref-stat-val { font-size:16px; font-weight:800; color:#4ade80; }
+        .ref-stat-lbl { font-size:10px; color:#cbd5e1; margin-top:2px; }
+        .ref-link-box { background:rgba(20,27,65,0.88); border:1px dashed var(--primary); padding:8px; border-radius:8px; font-size:11px; color:#fef08a; word-break:break-all; margin-bottom:8px; text-align:center; }
 
         .gf-toolbar { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:10px; }
         .gf-icon-group { display:flex; align-items:center; gap:5px; }
-        .gf-icon-btn { width:35px; height:35px; border-radius:50%; border:1px solid #334155; background:rgba(20,29,46,0.92); color:#fff; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative; }
-        .gf-icon-btn.active { border-color:var(--primary); color:var(--primary); background:rgba(243,156,18,0.14); }
-        .gf-post-cta { background:linear-gradient(135deg,#d81b60,#1e3a8a); color:#fff; border:none; padding:9px 13px; border-radius:22px; font-weight:700; font-size:12px; cursor:pointer; white-space:nowrap; }
-        .gf-toggle-bar { background:rgba(20,28,44,0.92); border:1px solid #334155; border-radius:12px; padding:9px 12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:13px; }
-        .gf-switch-pill { padding:4px 12px; border-radius:14px; font-size:11px; font-weight:800; border:1px solid #475569; cursor:pointer; background:#1e293b; color:#94a3b8; }
-        .gf-switch-pill.on { background:var(--green); color:#000; border-color:var(--green); }
-        .gf-card { background:linear-gradient(145deg,rgba(24,34,52,0.96),rgba(15,22,35,0.98)); border:1px solid #334155; border-radius:14px; padding:12px 0 10px 0; margin-bottom:14px; box-shadow:0 6px 18px rgba(0,0,0,0.45); overflow:hidden; }
+        .gf-icon-btn { width:35px; height:35px; border-radius:50%; border:1px solid var(--border-soft); background:rgba(38,48,96,0.92); color:#fff; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative; }
+        .gf-icon-btn.active { border-color:var(--primary); color:var(--primary); background:rgba(251,191,36,0.18); }
+        .gf-post-cta { background:linear-gradient(135deg,#ec4899,#6366f1); color:#fff; border:none; padding:9px 13px; border-radius:22px; font-weight:700; font-size:12px; cursor:pointer; white-space:nowrap; box-shadow:0 4px 12px rgba(236,72,153,0.35); }
+        .gf-toggle-bar { background:rgba(36,46,94,0.88); border:1px solid var(--border-soft); border-radius:12px; padding:9px 12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:13px; }
+        .gf-switch-pill { padding:4px 12px; border-radius:14px; font-size:11px; font-weight:800; border:1px solid #6366f1; cursor:pointer; background:#1e1b4b; color:#cbd5e1; }
+        .gf-switch-pill.on { background:var(--green); color:#052e16; border-color:var(--green); }
+        .gf-card { background:linear-gradient(145deg, var(--card-top), var(--card-bot)); border:1px solid var(--border-soft); border-radius:16px; padding:12px 0 10px 0; margin-bottom:14px; box-shadow:0 8px 22px rgba(10,14,40,0.38); overflow:hidden; }
         .gf-card-head { display:flex; justify-content:space-between; align-items:flex-start; padding:0 0 10px 12px; gap:6px; }
         .gf-author-wrap { display:flex; align-items:center; gap:10px; }
         .gf-avatar-wrap { position:relative; width:42px; height:42px; flex-shrink:0; }
         .gf-avatar { width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--primary); }
-        .gf-online-dot { position:absolute; bottom:1px; right:1px; width:10px; height:10px; background:#2ecc71; border:2px solid #18202a; border-radius:50%; }
+        .gf-online-dot { position:absolute; bottom:1px; right:1px; width:10px; height:10px; background:#22c55e; border:2px solid #1e1b4b; border-radius:50%; }
         .gf-author-name { font-size:14px; font-weight:700; color:#fff; display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
-        .gf-role-badge { font-size:10px; padding:2px 8px; border-radius:12px; border:1px solid #e91e63; color:#ff6b9d; background:rgba(233,30,99,0.12); font-weight:700; }
-        .gf-role-badge.vip { border-color:var(--primary); color:var(--primary); background:rgba(243,156,18,0.15); }
-        .gf-time { font-size:11px; color:#94a3b8; margin-top:2px; }
-        .gf-ribbon { background:linear-gradient(135deg,#1e3a8a,#6d28d9); color:#fff; font-size:11px; font-weight:800; padding:6px 10px 6px 18px; clip-path:polygon(14px 0,100% 0,100% 100%,14px 100%,0 50%); white-space:nowrap; max-width:145px; overflow:hidden; text-overflow:ellipsis; }
-        .gf-guess-body { margin:0 10px 10px 10px; background:linear-gradient(180deg,rgba(48,36,20,0.95),rgba(31,24,15,0.98)); border:1px solid rgba(243,156,18,0.45); border-radius:10px; padding:14px 10px; text-align:center; color:#ffe7b8; font-size:14px; font-weight:700; line-height:1.65; white-space:pre-wrap; word-break:break-word; }
-        .gf-quote-box { margin:0 10px 8px 10px; background:rgba(11,16,26,0.9); border:1px solid #2c3e50; border-left:3px solid #a855f7; border-radius:8px; padding:9px 10px; }
-        .gf-quote-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; font-size:11px; color:#94a3b8; }
-        .gf-quote-text { font-size:12px; color:#ffd89b; white-space:pre-wrap; line-height:1.45; text-align:center; font-weight:600; }
+        .gf-role-badge { font-size:10px; padding:2px 8px; border-radius:12px; border:1px solid #f472b6; color:#fbcfe8; background:rgba(236,72,153,0.2); font-weight:700; }
+        .gf-role-badge.vip { border-color:var(--primary); color:#fde047; background:rgba(251,191,36,0.2); }
+        .gf-time { font-size:11px; color:#cbd5e1; margin-top:2px; }
+        .gf-ribbon { background:linear-gradient(135deg,#2563eb,#7c3aed); color:#fff; font-size:11px; font-weight:800; padding:6px 10px 6px 18px; clip-path:polygon(14px 0,100% 0,100% 100%,14px 100%,0 50%); white-space:nowrap; max-width:145px; overflow:hidden; text-overflow:ellipsis; }
+        .gf-guess-body { margin:0 10px 10px 10px; background:linear-gradient(160deg, rgba(91,33,182,0.55), rgba(30,58,138,0.65)); border:1px solid rgba(251,191,36,0.55); border-radius:12px; padding:14px 10px; text-align:center; color:#fef08a; font-size:14px; font-weight:700; line-height:1.65; white-space:pre-wrap; word-break:break-word; }
+        .gf-quote-box { margin:0 10px 8px 10px; background:rgba(23,31,74,0.88); border:1px solid rgba(129,140,248,0.35); border-left:3px solid #c084fc; border-radius:10px; padding:9px 10px; }
+        .gf-quote-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; font-size:11px; color:#cbd5e1; }
+        .gf-quote-text { font-size:12px; color:#fde68a; white-space:pre-wrap; line-height:1.45; text-align:center; font-weight:600; }
         .gf-meta-actions { display:flex; flex-wrap:wrap; gap:6px; padding:0 12px 8px 12px; }
-        .gf-chip-btn { background:rgba(12,18,30,0.9); border:1px solid #334155; color:#e2e8f0; padding:5px 10px; border-radius:16px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px; }
-        .gf-chip-btn.liked { background:rgba(231,76,60,0.2); border-color:var(--red); color:#ff7675; }
-        .gf-footer-bar { display:flex; align-items:center; gap:6px; padding:8px 10px 0 10px; border-top:1px solid #293548; }
-        .gf-stat-mini { font-size:12px; color:#cbd5e1; display:inline-flex; align-items:center; gap:3px; cursor:pointer; background:transparent; border:none; padding:4px; }
-        .gf-comment-pill { flex:1; display:flex; align-items:center; background:rgba(9,13,22,0.9); border:1px solid #334155; border-radius:20px; padding:3px 6px 3px 12px; }
+        .gf-chip-btn { background:rgba(26,35,82,0.9); border:1px solid var(--border-soft); color:#e2e8f0; padding:5px 10px; border-radius:16px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px; }
+        .gf-chip-btn.liked { background:rgba(244,63,94,0.24); border-color:#fb7185; color:#fecdd3; }
+        .gf-footer-bar { display:flex; align-items:center; gap:6px; padding:8px 10px 0 10px; border-top:1px solid rgba(129,140,248,0.25); }
+        .gf-stat-mini { font-size:12px; color:#e2e8f0; display:inline-flex; align-items:center; gap:3px; cursor:pointer; background:transparent; border:none; padding:4px; }
+        .gf-comment-pill { flex:1; display:flex; align-items:center; background:var(--surface); border:1px solid var(--border-soft); border-radius:20px; padding:3px 6px 3px 12px; }
         .gf-comment-pill input { flex:1; background:transparent; border:none; color:#fff; font-size:12px; outline:none; min-width:60px; }
-        .gf-send-icon { background:transparent; border:none; color:#e91e63; font-size:16px; cursor:pointer; padding:2px 5px; }
-        .gf-quote-btn { background:#1e293b; border:1px solid #38bdf8; color:#e2e8f0; border-radius:8px; padding:6px 9px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap; }
+        .gf-send-icon { background:transparent; border:none; color:#f472b6; font-size:16px; cursor:pointer; padding:2px 5px; }
+        .gf-quote-btn { background:rgba(30,58,138,0.85); border:1px solid #38bdf8; color:#e0f2fe; border-radius:8px; padding:6px 9px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap; }
         .gf-comments-list { padding:6px 12px 2px 12px; }
 
         .tab-row { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:15px; }
-        .tab-btn { padding:9px; border-radius:8px; border:1px solid #475569; background:rgba(9,13,22,0.9); color:#cbd5e1; font-weight:bold; font-size:13px; cursor:pointer; }
-        .tab-btn.active { background:var(--primary); color:#000; border-color:var(--primary); }
-        nav { position:fixed; bottom:0; left:0; width:100%; background:rgba(13,19,33,0.95); backdrop-filter:blur(12px); justify-content:space-around; padding:8px 0; border-top:1px solid rgba(243,156,18,0.28); z-index:200; display:none; }
-        .nav-item { color:#94a3b8; text-align:center; font-size:10px; cursor:pointer; flex:1; }
+        .tab-btn { padding:9px; border-radius:8px; border:1px solid rgba(129,140,248,0.45); background:var(--surface); color:#cbd5e1; font-weight:bold; font-size:13px; cursor:pointer; }
+        .tab-btn.active { background:linear-gradient(135deg,#fde047,#f59e0b); color:#1e1b4b; border-color:var(--primary); }
+        nav {
+            position:fixed;
+            bottom:0;
+            left:0;
+            width:100%;
+            background:linear-gradient(135deg, rgba(30,27,75,0.95), rgba(30,58,138,0.95));
+            backdrop-filter:blur(12px);
+            justify-content:space-around;
+            padding:8px 0;
+            border-top:1px solid rgba(251,191,36,0.4);
+            z-index:200;
+            display:none;
+        }
+        .nav-item { color:#cbd5e1; text-align:center; font-size:10px; cursor:pointer; flex:1; }
         .nav-item.active { color:var(--primary); font-weight:bold; }
         .nav-icon { font-size:18px; margin-bottom:2px; }
-        .sub-header { display:flex; align-items:center; gap:10px; margin-bottom:15px; background:rgba(24,34,54,0.92); border:1px solid #334155; padding:10px; border-radius:10px; }
-        .back-btn { background:#334155; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; }
+        .sub-header { display:flex; align-items:center; gap:10px; margin-bottom:15px; background:linear-gradient(135deg, rgba(49,46,129,0.88), rgba(30,58,138,0.88)); border:1px solid var(--border-soft); padding:10px; border-radius:12px; }
+        .back-btn { background:rgba(51,65,85,0.9); color:#fff; border:1px solid rgba(148,163,184,0.4); padding:6px 12px; border-radius:8px; font-weight:bold; cursor:pointer; }
     </style>
 </head>
 <body>
     <header id="mainHeader" style="display:none;">
-        <h1 onclick="navigate('home')">M.KING 👑</h1>
+        <h1 onclick="handleLogoTap(false)">M.KING 👑</h1>
         <div class="wallet-badge" onclick="navigate('profile')">₹ <span id="headerBalance">0</span></div>
     </header>
     <div class="notice-board" id="noticeBoardDisplay" style="display:none;"></div>
@@ -124,14 +259,25 @@
         <div class="nav-item" id="nav-profile" onclick="navigate('profile')"><div class="nav-icon">👤</div>Profile</div>
         <div class="nav-item" id="nav-guessing" onclick="navigate('guessing')"><div class="nav-icon">🔮</div>Guessing</div>
         <div class="nav-item" id="nav-rates" onclick="navigate('rates')"><div class="nav-icon">📊</div>Rates</div>
-        <div class="nav-item" id="nav-adminLogin" onclick="navigate('adminLogin')"><div class="nav-icon">⚙️</div>Admin</div>
     </nav>
 
     <script>
-        const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="#2c3e50"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="26" font-weight="bold">U</text></svg>');
-        const DEFAULT_QR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect width="180" height="180" fill="#fff"/><rect x="16" y="16" width="148" height="148" fill="none" stroke="#111" stroke-width="4" stroke-dasharray="8 6"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#111" font-family="sans-serif" font-size="14" font-weight="bold">Upload QR</text><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#555" font-family="sans-serif" font-size="11">from Admin Panel</text></svg>');
+        const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="#312e81"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fde047" font-family="sans-serif" font-size="26" font-weight="bold">U</text></svg>');
+        const DEFAULT_QR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect width="180" height="180" fill="#fff"/><rect x="16" y="16" width="148" height="148" fill="none" stroke="#312e81" stroke-width="4" stroke-dasharray="8 6"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#1e1b4b" font-family="sans-serif" font-size="14" font-weight="bold">Upload QR</text><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#4f46e5" font-family="sans-serif" font-size="11">from Admin Panel</text></svg>');
         const DEFAULT_VIP_PHONE = "9990009990";
-        const REFERRAL_BASE_URL = "https://star-slot.vercel.app";
+        const REFERRAL_BASE_URL = (window.location.origin && window.location.origin !== "null" && /^https?:/i.test(window.location.origin))
+            ? (window.location.origin + window.location.pathname.replace(/\/index\.html$/i, '').replace(/\/$/, ''))
+            : "https://star-slot.vercel.app";
+
+        function utf8ToBinaryString(str) {
+            if (typeof TextEncoder !== "undefined") {
+                const bytes = new TextEncoder().encode(str);
+                let bin = "";
+                for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+                return bin;
+            }
+            return str;
+        }
 
         function sha256(ascii) {
             const rr = (v, a) => (v >>> a) | (v << (32 - a));
@@ -170,7 +316,7 @@
             }
             return res;
         }
-        const hashPassword = pw => "sha256:" + sha256(unescape(encodeURIComponent("mking_salt_v1:" + String(pw))));
+        const hashPassword = pw => "sha256:" + sha256(utf8ToBinaryString("mking_salt_v1:" + String(pw)));
         const isHashedPassword = s => typeof s === "string" && s.startsWith("sha256:");
         const verifyPassword = (inp, st) => !st ? false : (isHashedPassword(st) ? hashPassword(inp) === st : inp === st);
         function togglePassVisibility(id, btn) {
@@ -182,6 +328,15 @@
         const escapeHTML = s => (s === null || s === undefined) ? "" : String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
         const safeImageURL = (u, fb) => (!u || typeof u !== "string") ? fb : (/^(https?:\/\/|data:image\/(png|jpe?g|gif|webp|svg\+xml);)/i.test(u.trim()) ? u.trim() : fb);
         const getLocalDateString = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+        function normalizePhone(val) {
+            let d = String(val || "").replace(/^MK/i, '').replace(/\D/g, '');
+            if (d.length > 10) {
+                if (d.startsWith('0091') && d.length === 14) d = d.slice(4);
+                else if (d.startsWith('91') && d.length === 12) d = d.slice(2);
+                else if (d.startsWith('0') && d.length === 11) d = d.slice(1);
+            }
+            return d;
+        }
         function formatForumDateTime(d = new Date()) {
             const m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
             let h = d.getHours(), ap = h >= 12 ? "PM" : "AM";
@@ -192,17 +347,37 @@
         const isStrictPositiveInt = s => /^\d+$/.test(String(s || "").trim()) && parseInt(s, 10) > 0;
         function getUrlRefCode() {
             try {
-                let r = (new URLSearchParams(window.location.search).get('ref') || "").replace(/^MK/i,'').replace(/\D/g,'');
+                let r = normalizePhone(new URLSearchParams(window.location.search).get('ref') || "");
                 return r.length === 10 ? r : "";
             } catch (e) { return ""; }
         }
+        function isSecretAdminRequested() {
+            try {
+                const sp = new URLSearchParams(window.location.search);
+                return sp.get('admin') === '1' || window.location.hash.toLowerCase() === '#admin';
+            } catch (e) { return false; }
+        }
         function safeJSONParse(k, fb) { try { let x = localStorage.getItem(k); return x ? JSON.parse(x) : fb; } catch (e) { return fb; } }
+
+        let logoTapCount = 0, logoTapTimer = null;
+        function handleLogoTap(isLoginScreen = false) {
+            logoTapCount++;
+            clearTimeout(logoTapTimer);
+            logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1800);
+            if (logoTapCount >= 5) {
+                logoTapCount = 0;
+                clearTimeout(logoTapTimer);
+                navigate('adminLogin');
+                return;
+            }
+            if (!isLoginScreen && state.currentScreen !== 'home') navigate('home');
+        }
 
         const todayInitial = getLocalDateString();
         const defaultMarkets = [
-            { id:1, name:"MILAN MORNING", openTime:"10:00", openAmPm:"AM", closeTime:"12:00", closeAmPm:"PM", result:"145-06-268", resultDate:todayInitial, isHoliday:false, chart:["123-65-456"] },
-            { id:2, name:"KALYAN MORNING", openTime:"10:00", openAmPm:"AM", closeTime:"12:00", closeAmPm:"PM", result:"369-81-579", resultDate:todayInitial, isHoliday:false, chart:["127-05-230"] },
-            { id:3, name:"MAIN BAZAR", openTime:"09:35", openAmPm:"PM", closeTime:"11:59", closeAmPm:"PM", result:"***-**-***", resultDate:todayInitial, isHoliday:false, chart:["468-89-270"] }
+            { id:1, name:"MILAN MORNING", openTime:"10:00", openAmPm:"AM", closeTime:"12:00", closeAmPm:"PM", result:"145-06-268", resultDate:todayInitial, isHoliday:false, chart:[{ date:todayInitial, result:"123-65-456" }] },
+            { id:2, name:"KALYAN MORNING", openTime:"10:00", openAmPm:"AM", closeTime:"12:00", closeAmPm:"PM", result:"369-81-579", resultDate:todayInitial, isHoliday:false, chart:[{ date:todayInitial, result:"127-05-230" }] },
+            { id:3, name:"MAIN BAZAR", openTime:"09:35", openAmPm:"PM", closeTime:"11:59", closeAmPm:"PM", result:"***-**-***", resultDate:todayInitial, isHoliday:false, chart:[{ date:todayInitial, result:"468-89-270" }] }
         ];
         const defaultRates = [
             { name:"Single Digit", rate:"10 ka 95" }, { name:"Jodi Digit", rate:"10 ka 950" },
@@ -211,6 +386,7 @@
             { name:"Full Sangam", rate:"10 ka 100000" }
         ];
         const initialUrlRef = getUrlRefCode();
+        const initialSecretAdmin = isSecretAdminRequested();
         let state = {
             currentUserPhone: localStorage.getItem('mk_logged_in_phone') || null,
             isAdminLoggedIn: sessionStorage.getItem('mk_admin_logged_in') === '1',
@@ -227,12 +403,14 @@
             withdrawRequests: safeJSONParse('mk_withdraws', []),
             forgotRequests: safeJSONParse('mk_forgot', []),
             transactions: safeJSONParse('mk_txns', []),
+            giftCommissions: safeJSONParse('mk_gift_comms', []),
             guesserChats: safeJSONParse('mk_guesser_chats', {}),
             guessingPosts: safeJSONParse('mk_guessing', [
                 { id:1, phone:DEFAULT_VIP_PHONE, name:"M.KING VIP", avatar:"", market:"KALYAN MORNING", text:"KALYAN MORNING OPEN\n\n3\n8\n\n38___83___33___88\n\n148___260___139___468\n\nBest of luck 🤞👍", time:formatForumDateTime(), likes:5, likedBy:[], comments:[], wishes:[] }
             ]),
             selectedMarket:null, selectedGameType:null, activeChatGuesserPhone:null, activeChatBuyerPhone:null,
             authTab: initialUrlRef ? 'register' : 'login', pendingRefCode: initialUrlRef,
+            currentScreen: 'home',
             bidCart:[], guessShowComposer:false, guessShowSearchBar:false, guessFilterOriginalOnly:false,
             guessFilterMarket:"ALL", guessSearchQuery:"", guessQuoteTargetId:null, lastGuessPostTs:0
         };
@@ -243,16 +421,18 @@
         defaultRates.forEach(dr => { if (!state.gameRates.some(r => r.name === dr.name)) state.gameRates.push({ ...dr }); });
         if (!state.users[DEFAULT_VIP_PHONE]) state.users[DEFAULT_VIP_PHONE] = { name:"M.KING VIP", balance:0, phone:DEFAULT_VIP_PHONE, password:hashPassword("vip_sys_" + Date.now()), avatar:"", bankDetails:"", upiDetails:"", isSystem:true };
         if (state.adminCreds && state.adminCreds.pass && !isHashedPassword(state.adminCreds.pass)) state.adminCreds.pass = hashPassword(state.adminCreds.pass);
+        if (!Array.isArray(state.giftCommissions)) state.giftCommissions = [];
 
         state.markets = state.markets.map((m, i) => {
             const d = defaultMarkets[i] || { openTime:"10:00", openAmPm:"AM", closeTime:"12:00", closeAmPm:"PM" };
+            const normChart = Array.isArray(m.chart) ? m.chart.map(c => (typeof c === "string" ? { date:"", result:c } : c)) : [];
             return {
                 ...m,
                 openTime: (m.openTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.openTime).trim())) ? String(m.openTime).trim() : d.openTime,
                 openAmPm: m.openAmPm || d.openAmPm,
                 closeTime: (m.closeTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.closeTime).trim())) ? String(m.closeTime).trim() : d.closeTime,
                 closeAmPm: m.closeAmPm || d.closeAmPm,
-                isHoliday: Boolean(m.isHoliday), resultDate: m.resultDate || null, chart: Array.isArray(m.chart) ? m.chart : []
+                isHoliday: Boolean(m.isHoliday), resultDate: m.resultDate || null, chart: normChart
             };
         });
         if (!state.guesserChats || typeof state.guesserChats !== "object") state.guesserChats = {};
@@ -275,6 +455,7 @@
                 localStorage.setItem('mk_withdraws', JSON.stringify(state.withdrawRequests));
                 localStorage.setItem('mk_forgot', JSON.stringify(state.forgotRequests));
                 localStorage.setItem('mk_txns', JSON.stringify(state.transactions));
+                localStorage.setItem('mk_gift_comms', JSON.stringify(state.giftCommissions));
                 localStorage.setItem('mk_guesser_chats', JSON.stringify(state.guesserChats));
                 localStorage.setItem('mk_guessing', JSON.stringify(state.guessingPosts));
                 localStorage.setItem('mk_admin_creds', JSON.stringify(state.adminCreds));
@@ -357,21 +538,38 @@
             if (!dep || !dep.referredBy) return;
             let ref = state.users[dep.referredBy];
             if (!ref || ref.phone === depositorPhone || ref.isSystem) return;
-            dep.referralTotalDeposited = (dep.referralTotalDeposited || 0) + depositAmount;
+
+            let prevTotal = dep.referralTotalDeposited || 0;
+            let newTotal = prevTotal + depositAmount;
+            dep.referralTotalDeposited = newTotal;
             if (!Array.isArray(ref.referralHistory)) ref.referralHistory = [];
             if (typeof ref.referralBalance !== "number") ref.referralBalance = 0;
             if (typeof ref.referralTotalEarned !== "number") ref.referralTotalEarned = 0;
 
-            let credit = 0, label = "";
-            if (!dep.referralFirstBonusPaid && dep.referralTotalDeposited >= 200) {
-                dep.referralFirstBonusPaid = true; credit = 100; label = "Starting Bonus (₹200+ Deposit)";
+            let nowStr = new Date().toLocaleString();
+            if (!dep.referralFirstBonusPaid && newTotal >= 200) {
+                dep.referralFirstBonusPaid = true;
+                let bonus = 100;
+                ref.referralBalance = Math.round((ref.referralBalance + bonus) * 100) / 100;
+                ref.referralTotalEarned = Math.round((ref.referralTotalEarned + bonus) * 100) / 100;
+                ref.referralHistory.push({ id:Date.now() + Math.floor(Math.random()*1000), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:bonus, type:"Starting Bonus (₹200+ Deposit)", time:nowStr });
+
+                let extraAmt = Math.min(depositAmount, newTotal - 200);
+                if (extraAmt > 0) {
+                    let extraComm = Math.round((extraAmt * 0.03) * 100) / 100;
+                    if (extraComm > 0) {
+                        ref.referralBalance = Math.round((ref.referralBalance + extraComm) * 100) / 100;
+                        ref.referralTotalEarned = Math.round((ref.referralTotalEarned + extraComm) * 100) / 100;
+                        ref.referralHistory.push({ id:Date.now() + Math.floor(Math.random()*1000) + 1, friendPhone:dep.phone, friendName:dep.name, depositAmount:extraAmt, commission:extraComm, type:"3% Commission (Extra Deposit)", time:nowStr });
+                    }
+                }
             } else {
-                credit = Math.round((depositAmount * 0.03) * 100) / 100; label = "3% Commission";
-            }
-            if (credit > 0) {
-                ref.referralBalance = Math.round((ref.referralBalance + credit) * 100) / 100;
-                ref.referralTotalEarned = Math.round((ref.referralTotalEarned + credit) * 100) / 100;
-                ref.referralHistory.push({ id:Date.now() + Math.floor(Math.random()*1000), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:credit, type:label, time:new Date().toLocaleString() });
+                let comm = Math.round((depositAmount * 0.03) * 100) / 100;
+                if (comm > 0) {
+                    ref.referralBalance = Math.round((ref.referralBalance + comm) * 100) / 100;
+                    ref.referralTotalEarned = Math.round((ref.referralTotalEarned + comm) * 100) / 100;
+                    ref.referralHistory.push({ id:Date.now() + Math.floor(Math.random()*1000), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:comm, type:"3% Commission", time:nowStr });
+                }
             }
         }
 
@@ -379,28 +577,29 @@
 
         function renderLoginScreen() {
             if (homeTimerInterval) clearInterval(homeTimerInterval);
+            state.currentScreen = 'login';
             ['mainHeader','noticeBoardDisplay','bottomNav'].forEach(id => { let e = document.getElementById(id); if (e) e.style.display = 'none'; });
             let root = document.getElementById('appRoot'); if (!root) return;
             let isReg = state.authTab === 'register';
             root.innerHTML = `
                 <div class="form-card" style="max-width:350px; margin:30px auto; text-align:center; border:2px solid var(--primary);">
-                    <h2 style="color:var(--primary); margin-bottom:5px;">M.KING 👑</h2>
-                    <p style="color:#94a3b8; font-size:12px; margin-bottom:15px;">${isReg ? 'नया खाता बनाएं' : 'अपने खाते में लॉगिन करें'}</p>
+                    <h2 onclick="handleLogoTap(true)" style="color:var(--primary); margin-bottom:5px; cursor:pointer; user-select:none;">M.KING 👑</h2>
+                    <p style="color:#cbd5e1; font-size:12px; margin-bottom:15px;">${isReg ? 'नया खाता बनाएं' : 'अपने खाते में लॉगिन करें'}</p>
                     <div class="tab-row">
                         <button class="tab-btn ${!isReg ? 'active' : ''}" onclick="switchAuthTab('login')">Login</button>
                         <button class="tab-btn ${isReg ? 'active' : ''}" onclick="switchAuthTab('register')">New Register</button>
                     </div>
                     ${isReg ? `
                         <div class="input-group"><input type="text" id="regName" placeholder="आपका नाम (Optional)"></div>
-                        <div class="input-group"><input type="tel" id="regPhone" maxlength="10" placeholder="Mobile Number (10 Digits)"></div>
+                        <div class="input-group"><input type="tel" id="regPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number (10 Digits)"></div>
                         <div class="input-group"><div class="pass-wrap"><input type="password" id="regPass" placeholder="Password (कम से कम 4 अक्षर)"><button type="button" class="pass-eye" onclick="togglePassVisibility('regPass',this)">👁️</button></div></div>
                         <div class="input-group"><div class="pass-wrap"><input type="password" id="regPassConfirm" placeholder="Confirm Password"><button type="button" class="pass-eye" onclick="togglePassVisibility('regPassConfirm',this)">👁️</button></div></div>
                         <div class="input-group"><label>Referral Code / Friend Mobile (Optional)</label><input type="text" id="regRefCode" value="${escapeHTML(state.pendingRefCode || '')}" placeholder="दोस्त का मोबाइल नंबर" onkeydown="if(event.key==='Enter') handlePlayerRegister()"></div>
-                        <button class="btn" style="background:var(--green); color:#000; width:100%; font-size:15px; padding:12px;" onclick="handlePlayerRegister()">Create Account</button>
+                        <button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e); color:#042f2e; width:100%; font-size:15px; padding:12px;" onclick="handlePlayerRegister()">Create Account</button>
                     ` : `
-                        <div class="input-group"><input type="tel" id="playerPhone" maxlength="10" placeholder="Mobile Number (10 Digits)"></div>
+                        <div class="input-group"><input type="tel" id="playerPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number (10 Digits)"></div>
                         <div class="input-group"><div class="pass-wrap"><input type="password" id="playerPass" placeholder="Password" onkeydown="if(event.key==='Enter') handlePlayerLogin()"><button type="button" class="pass-eye" onclick="togglePassVisibility('playerPass',this)">👁️</button></div></div>
-                        <button class="btn" style="background:var(--green); color:#000; width:100%; font-size:15px; padding:12px; margin-bottom:10px;" onclick="handlePlayerLogin()">Login</button>
+                        <button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e); color:#042f2e; width:100%; font-size:15px; padding:12px; margin-bottom:10px;" onclick="handlePlayerLogin()">Login</button>
                         <button class="btn" style="background:transparent; color:var(--primary); font-size:12px;" onclick="renderForgotScreen()">❓ Forgot Password?</button>
                     `}
                 </div>`;
@@ -411,17 +610,17 @@
             let root = document.getElementById('appRoot'); if (!root) return;
             root.innerHTML = `
                 <div class="form-card" style="max-width:350px; margin:40px auto; text-align:center; border:2px solid var(--red);">
-                    <h3 style="color:var(--red); margin-bottom:10px;">🔒 Forgot Password</h3>
-                    <p style="color:#94a3b8; font-size:12px; margin-bottom:15px;">रजिस्टर्ड मोबाइल नंबर दर्ज करें। रिक्वेस्ट एडमिन को भेज दी जाएगी।</p>
-                    <div class="input-group"><input type="tel" id="forgotPhone" maxlength="10" placeholder="Mobile Number" onkeydown="if(event.key==='Enter') submitForgotPassword()"></div>
-                    <button class="btn" style="background:var(--primary); color:#000; width:100%; margin-bottom:10px;" onclick="submitForgotPassword()">Send Request to Admin</button>
-                    <button class="btn" style="background:#334155; color:#fff; width:100%;" onclick="renderLoginScreen()">← Back to Login</button>
+                    <h3 style="color:#fda4af; margin-bottom:10px;">🔒 Forgot Password</h3>
+                    <p style="color:#cbd5e1; font-size:12px; margin-bottom:15px;">रजिस्टर्ड मोबाइल नंबर दर्ज करें। रिक्वेस्ट एडमिन को भेज दी जाएगी।</p>
+                    <div class="input-group"><input type="tel" id="forgotPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number" onkeydown="if(event.key==='Enter') submitForgotPassword()"></div>
+                    <button class="btn btn-play" style="width:100%; margin-bottom:10px;" onclick="submitForgotPassword()">Send Request to Admin</button>
+                    <button class="btn btn-chart" style="width:100%;" onclick="renderLoginScreen()">← Back to Login</button>
                 </div>`;
         }
 
         function submitForgotPassword() {
             let pEl = document.getElementById('forgotPhone'); if (!pEl) return;
-            let phone = pEl.value.replace(/\D/g, '');
+            let phone = normalizePhone(pEl.value);
             if (phone.length !== 10) return alert("कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!");
             if (!state.users[phone] || state.users[phone].isSystem) return alert("यह मोबाइल नंबर रजिस्टर नहीं है!");
             if (state.forgotRequests.some(r => r.phone === phone)) { alert("रिक्वेस्ट पहले से पेंडिंग है!"); return renderLoginScreen(); }
@@ -440,8 +639,8 @@
         function handlePlayerRegister() {
             let nEl = document.getElementById('regName'), pEl = document.getElementById('regPhone'), pwEl = document.getElementById('regPass'), pcEl = document.getElementById('regPassConfirm'), rEl = document.getElementById('regRefCode');
             if (!pEl || !pwEl || !pcEl) return;
-            let name = nEl ? nEl.value.trim() : "", phone = pEl.value.replace(/\D/g,''), pass = pwEl.value.trim(), passConf = pcEl.value.trim();
-            let refCode = rEl ? rEl.value.trim().replace(/^MK/i,'').replace(/\D/g,'') : '';
+            let name = nEl ? nEl.value.trim() : "", phone = normalizePhone(pEl.value), pass = pwEl.value.trim(), passConf = pcEl.value.trim();
+            let refCode = rEl ? normalizePhone(rEl.value) : '';
             if (phone.length !== 10 || pass.length < 4) return alert("कृपया 10 अंकों का मोबाइल नंबर और कम से कम 4 अक्षर का पासवर्ड दर्ज करें!");
             if (pass !== passConf) return alert("दोनों पासवर्ड एक जैसे होने चाहिए!");
             if (refCode && (refCode === phone || refCode.length !== 10 || !state.users[refCode] || state.users[refCode].isSystem)) {
@@ -465,7 +664,7 @@
         function handlePlayerLogin() {
             let pEl = document.getElementById('playerPhone'), pwEl = document.getElementById('playerPass');
             if (!pEl || !pwEl) return;
-            let phone = pEl.value.replace(/\D/g,''), pass = pwEl.value.trim();
+            let phone = normalizePhone(pEl.value), pass = pwEl.value.trim();
             if (phone.length !== 10 || pass.length < 4) return alert("कृपया 10 अंकों का मोबाइल नंबर और कम से कम 4 अक्षर का पासवर्ड दर्ज करें!");
             let user = state.users[phone];
             if (!user || user.isSystem) return alert("यह मोबाइल नंबर रजिस्टर नहीं है! कृपया 'New Register' से खाता बनाएं।");
@@ -479,16 +678,35 @@
         function logoutPlayer() {
             if (homeTimerInterval) clearInterval(homeTimerInterval);
             localStorage.removeItem('mk_logged_in_phone');
-            state.currentUserPhone = null; state.authTab = 'login'; renderLoginScreen();
+            state.currentUserPhone = null; state.bidCart = []; state.authTab = 'login'; renderLoginScreen();
         }
 
         function navigate(screen, param1 = null) {
-            if (!state.currentUserPhone || !state.users[state.currentUserPhone]) return renderLoginScreen();
-            if (screen !== 'adminLogin' && enforceNotBlocked()) return;
+            if (state.currentScreen === 'playGame' && screen !== 'playGame' && state.bidCart.length > 0) {
+                if (!confirm("आपके कार्ट में बिड्स बाकी हैं! बिना सबमिट किए बाहर जाने पर ये हट जाएंगी। क्या आप बाहर जाना चाहते हैं?")) return;
+                state.bidCart = [];
+            }
+
+            if (screen !== 'adminLogin' && !(screen === 'chatBox' && state.isAdminLoggedIn && param1 === DEFAULT_VIP_PHONE) && (!state.currentUserPhone || !state.users[state.currentUserPhone])) {
+                return renderLoginScreen();
+            }
+            if (screen !== 'adminLogin' && !(screen === 'chatBox' && state.isAdminLoggedIn && param1 === DEFAULT_VIP_PHONE) && enforceNotBlocked()) return;
             if (screen !== 'home' && homeTimerInterval) { clearInterval(homeTimerInterval); homeTimerInterval = null; }
+
+            const root = document.getElementById('appRoot'); if (!root) return;
+            state.currentScreen = screen;
+
+            if ((screen === 'adminLogin' || screen === 'chatBox') && !state.currentUserPhone) {
+                ['mainHeader','noticeBoardDisplay','bottomNav'].forEach(id => { let e = document.getElementById(id); if (e) e.style.display = 'none'; });
+            } else {
+                document.getElementById('mainHeader').style.display = 'flex';
+                document.getElementById('noticeBoardDisplay').style.display = 'block';
+                document.getElementById('bottomNav').style.display = 'flex';
+            }
+
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             let navEl = document.getElementById(`nav-${screen}`); if (navEl) navEl.classList.add('active');
-            const root = document.getElementById('appRoot'); if (!root) return;
+
             syncDailyMarketResults(); saveState();
             if (screen === 'home') renderHome(root);
             else if (screen === 'gameSelect') renderGameSelect(root, param1);
@@ -508,8 +726,8 @@
             if (homeTimerInterval) clearInterval(homeTimerInterval);
             syncDailyMarketResults();
             let waNum = encodeURIComponent((state.adminWhatsApp || "").replace(/\D/g, ""));
-            let html = `<div class="quick-actions"><div class="q-btn" onclick="navigate('deposit')">➕ Deposit</div><div class="q-btn" onclick="navigate('profile')">🏦 Withdraw</div><a class="q-btn" href="https://wa.me/${waNum}?text=Hello%20Admin,%20I%20need%20help" target="_blank" rel="noopener noreferrer" style="background:linear-gradient(135deg,#16a34a,#27ae60);border-color:#2ecc71;">💬 WhatsApp</a></div>`;
-            if (!state.markets.length) html += `<p style="text-align:center;color:#94a3b8;margin-top:20px;">कोई मार्केट उपलब्ध नहीं है।</p>`;
+            let html = `<div class="quick-actions"><div class="q-btn" onclick="navigate('deposit')">➕ Deposit</div><div class="q-btn" onclick="navigate('profile')">🏦 Withdraw</div><a class="q-btn" href="https://wa.me/${waNum}?text=Hello%20Admin,%20I%20need%20help" target="_blank" rel="noopener noreferrer" style="background:linear-gradient(135deg,#059669,#22c55e);border-color:#4ade80;color:#052e16;">💬 WhatsApp</a></div>`;
+            if (!state.markets.length) html += `<p style="text-align:center;color:#cbd5e1;margin-top:20px;">कोई मार्केट उपलब्ध नहीं है।</p>`;
             else {
                 let now = new Date();
                 state.markets.forEach(m => {
@@ -544,15 +762,15 @@
                 let st = getMarketSessionStatus(m, now);
                 if (st.isHoliday) {
                     ot.innerHTML = "🏖️ Market Holiday"; ot.style.color = "var(--primary)";
-                    ct.innerHTML = "🔴 Closed Today"; ct.style.color = "var(--red)";
+                    ct.innerHTML = "🔴 Closed Today"; ct.style.color = "#fda4af";
                     if (bc && !bc.innerHTML.includes('HOLIDAY')) bc.innerHTML = `<span class="m-status status-holiday">HOLIDAY</span>`;
                     if (pb) pb.style.opacity = "0.5"; return;
                 }
                 let od = st.openTarget.getTime() - now.getTime(), cd = st.closeTarget.getTime() - now.getTime();
                 ot.innerHTML = od <= 0 ? "🔴 Open Closed" : `⏳ Open: ${formatCountdown(od)}`;
-                ot.style.color = od <= 0 ? "var(--red)" : "var(--green)";
+                ot.style.color = od <= 0 ? "#fda4af" : "#86efac";
                 ct.innerHTML = cd <= 0 ? "🔴 Close Closed" : `⏳ Close: ${formatCountdown(cd)}`;
-                ct.style.color = cd <= 0 ? "var(--red)" : "var(--primary)";
+                ct.style.color = cd <= 0 ? "#fda4af" : "var(--primary)";
                 if (bc) bc.innerHTML = cd <= 0 ? `<span class="m-status status-closed">CLOSED</span>` : `<span class="m-status status-open">RUNNING</span>`;
                 if (pb) pb.style.opacity = cd <= 0 ? "0.6" : "1";
             });
@@ -576,7 +794,7 @@
             let html = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(m.name)}</h3></div><div class="game-grid">`;
             state.gameRates.forEach((g, idx) => {
                 let locked = isOpenRequiredGame(g.name) && !st.isOpenSessionActive;
-                html += `<div class="game-box" style="opacity:${locked?'0.5':'1'}" onclick="${locked ? "alert('❌ ओपन का समय समाप्त हो चुका है!')" : `openGameByIndex(${m.id},${idx})`}"><div class="game-label">${escapeHTML(g.name)}</div><div class="game-rate">${escapeHTML(g.rate)}</div>${locked ? '<div style="font-size:10px;color:var(--red);margin-top:4px;">🔒 Open Closed</div>' : ''}</div>`;
+                html += `<div class="game-box" style="opacity:${locked?'0.5':'1'}" onclick="${locked ? "alert('❌ ओपन का समय समाप्त हो चुका है!')" : `openGameByIndex(${m.id},${idx})`}"><div class="game-label">${escapeHTML(g.name)}</div><div class="game-rate">${escapeHTML(g.rate)}</div>${locked ? '<div style="font-size:10px;color:#fda4af;margin-top:4px;">🔒 Open Closed</div>' : ''}</div>`;
             });
             root.innerHTML = html + `</div>`;
         }
@@ -618,15 +836,16 @@
             let st = getMarketSessionStatus(m, new Date());
             if (st.isHoliday || !st.isCloseSessionActive) { alert(st.isHoliday ? "🏖️ आज छुट्टी है!" : "❌ समय समाप्त हो चुका है!"); return navigate('home'); }
             if (isOpenRequiredGame(gameType) && !st.isOpenSessionActive) { alert(`❌ ओपन बंद होने के बाद ${gameType} नहीं खेल सकते!`); return navigate('gameSelect', marketId); }
+            let curBal = (state.users[state.currentUserPhone] || {}).balance || 0;
 
             if (gameType === "Half Sangam" || gameType === "Full Sangam") {
                 let isH = gameType === "Half Sangam";
-                root.innerHTML = `<div class="sub-header"><button class="back-btn" onclick="navigate('gameSelect',${m.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(m.name)}</h4><small>${gameType}</small></div></div>
+                root.innerHTML = `<div class="sub-header flex-between"><div style="display:flex;align-items:center;gap:10px;"><button class="back-btn" onclick="navigate('gameSelect',${m.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(m.name)}</h4><small>${gameType}</small></div></div><span class="win-badge">₹${curBal}</span></div>
                     <div class="form-card">
                         ${isH ? `<div class="input-group"><label>Sangam Type</label><select id="halfSangamMode" onchange="updateHalfSangamLabels()"><option value="OPEN_ANK_CLOSE_PANNA">Open Ank (1) + Close Panna (3)</option><option value="OPEN_PANNA_CLOSE_ANK">Open Panna (3) + Close Ank (1)</option></select></div>` : ''}
-                        <div class="input-group"><label id="sangamLbl1">${isH ? 'Open Ank (1 Digit)' : 'Open Panna (3 Digits)'}</label><input type="tel" id="sangamPart1" maxlength="${isH?1:3}" oninput="enforceDigitLimit(this,${isH?1:3})" placeholder="${isH?'0-9 एक अंक':'128, 112, 000'}"></div>
-                        <div class="input-group"><label id="sangamLbl2">${isH ? 'Close Panna (3 Digits)' : 'Close Panna (3 Digits)'}</label><input type="tel" id="sangamPart2" maxlength="3" oninput="enforceDigitLimit(this,3)" placeholder="128, 112, 000"></div>
-                        <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" min="10" placeholder="राशि"></div>
+                        <div class="input-group"><label id="sangamLbl1">${isH ? 'Open Ank (1 Digit)' : 'Open Panna (3 Digits)'}</label><input type="tel" id="sangamPart1" inputmode="numeric" maxlength="${isH?1:3}" oninput="enforceDigitLimit(this,${isH?1:3})" placeholder="${isH?'0-9 एक अंक':'128, 112, 000'}"></div>
+                        <div class="input-group"><label id="sangamLbl2">${isH ? 'Close Panna (3 Digits)' : 'Close Panna (3 Digits)'}</label><input type="tel" id="sangamPart2" inputmode="numeric" maxlength="3" oninput="enforceDigitLimit(this,3)" placeholder="128, 112, 000"></div>
+                        <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" inputmode="numeric" min="10" placeholder="राशि"></div>
                         <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button>
                     </div><div id="cartContainer"></div>`;
                 return;
@@ -634,11 +853,11 @@
             let opts = (st.isOpenSessionActive ? `<option value="OPEN">OPEN</option>` : '') + (gameType !== "Jodi Digit" && st.isCloseSessionActive ? `<option value="CLOSE">CLOSE</option>` : '');
             let reqLen = getRequiredDigitLength(gameType);
             let ph = reqLen === 1 ? "0 से 9 तक एक अंक" : (reqLen === 2 ? "00 से 99 तक दो अंक" : (gameType === "Single Panna" ? "128, 120 (बढ़ते क्रम में)" : (gameType === "Double Panna" ? "112, 100 (बढ़ते क्रम में)" : "000, 111 ... 999")));
-            root.innerHTML = `<div class="sub-header"><button class="back-btn" onclick="navigate('gameSelect',${m.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(m.name)}</h4><small>${escapeHTML(gameType)}</small></div></div>
+            root.innerHTML = `<div class="sub-header flex-between"><div style="display:flex;align-items:center;gap:10px;"><button class="back-btn" onclick="navigate('gameSelect',${m.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(m.name)}</h4><small>${escapeHTML(gameType)}</small></div></div><span class="win-badge">₹${curBal}</span></div>
                 <div class="form-card">
                     <div class="input-group"><label>Session</label><select id="bidSession" onchange="if(state.selectedGameType==='Jodi Digit'&&this.value==='CLOSE'){alert('❌ क्लोज में जोड़ी नहीं खेल सकते!');this.value='OPEN';}">${opts}</select></div>
-                    <div class="input-group"><label>${escapeHTML(gameType)} (${reqLen} Digit)</label><input type="tel" id="bidDigitInput" maxlength="${reqLen}" oninput="enforceDigitLimit(this)" placeholder="${ph}"></div>
-                    <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" min="10" placeholder="राशि"></div>
+                    <div class="input-group"><label>${escapeHTML(gameType)} (${reqLen} Digit)</label><input type="tel" id="bidDigitInput" inputmode="numeric" maxlength="${reqLen}" oninput="enforceDigitLimit(this)" placeholder="${ph}"></div>
+                    <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" inputmode="numeric" min="10" placeholder="राशि"></div>
                     <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button>
                 </div><div id="cartContainer"></div>`;
         }
@@ -678,9 +897,9 @@
             let box = document.getElementById('cartContainer'); if (!box) return;
             if (!state.bidCart.length) { box.innerHTML = ''; return; }
             let total = state.bidCart.reduce((s, i) => s + i.amount, 0);
-            box.innerHTML = `<h4 style="margin-bottom:8px;color:#ccc;">Bids Added (${state.bidCart.length})</h4>` +
+            box.innerHTML = `<h4 style="margin-bottom:8px;color:#e2e8f0;">Bids Added (${state.bidCart.length})</h4>` +
                 state.bidCart.map(i => `<div class="bid-cart-item"><div><b>${escapeHTML(i.digit)}</b> (${escapeHTML(i.session)}) - <b>₹${i.amount}</b></div><button class="del-btn" onclick="removeFromCart(${i.id})">X</button></div>`).join('') +
-                `<button class="btn" style="background:var(--green);color:#000;width:100%;margin-top:8px;" onclick="submitBids()">✅ SUBMIT ALL (₹${total})</button>`;
+                `<button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;margin-top:8px;" onclick="submitBids()">✅ SUBMIT ALL (₹${total})</button>`;
         }
         function removeFromCart(id) { state.bidCart = state.bidCart.filter(x => x.id !== id); renderCartList(); }
 
@@ -712,17 +931,29 @@
 
         function renderChart(root, mId) {
             let m = state.markets.find(x => x.id === mId); if (!m) return navigate('home');
-            root.innerHTML = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(m.name)} Chart</h3></div><div class="form-card" style="text-align:center;">` +
-                (m.chart && m.chart.length ? m.chart.slice().reverse().map(c => `<div style="padding:10px;border-bottom:1px solid #334155;color:var(--primary);font-weight:bold;">${escapeHTML(c)}</div>`).join('') : `<p style="color:#94a3b8;">कोई पुराना चार्ट नहीं है।</p>`) + `</div>`;
+            let chartRows = (m.chart && m.chart.length) ? m.chart.slice().reverse().map(c => {
+                let dt = (typeof c === "object" && c.date) ? c.date : "";
+                let res = (typeof c === "object") ? c.result : c;
+                let dayLabel = "";
+                if (dt) {
+                    let dObj = new Date(dt + "T00:00:00");
+                    if (!isNaN(dObj.getTime())) dayLabel = dObj.toLocaleDateString('en-IN', { weekday:'short' });
+                }
+                return `<div class="flex-between" style="padding:10px;border-bottom:1px solid rgba(129,140,248,0.28);">
+                    <span style="color:#cbd5e1;font-size:12px;">${dt ? `📅 ${escapeHTML(dt)} (${escapeHTML(dayLabel)})` : '📅 Purana Record'}</span>
+                    <span style="color:var(--primary);font-weight:bold;letter-spacing:1px;">${escapeHTML(res)}</span>
+                </div>`;
+            }).join('') : `<p style="color:#cbd5e1;padding:15px;">कोई पुराना चार्ट नहीं है।</p>`;
+            root.innerHTML = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(m.name)} Chart</h3></div><div class="form-card">${chartRows}</div>`;
         }
 
         function renderBids(root) {
             let my = state.bids.filter(b => b.phone === state.currentUserPhone).slice().reverse();
             root.innerHTML = `<h3 style="margin-bottom:12px;color:var(--primary);">📜 My Bids History</h3>` +
-                (!my.length ? `<p style="text-align:center;color:#94a3b8;margin-top:40px;">कोई बिड नहीं है।</p>` :
+                (!my.length ? `<p style="text-align:center;color:#cbd5e1;margin-top:40px;">कोई बिड नहीं है।</p>` :
                 my.map(b => {
                     let badge = b.status === "WON" ? `<span class="win-badge">WON ₹${b.winAmount}</span>` : (b.status === "LOST" ? `<span class="loss-badge">LOST</span>` : (b.status === "REFUNDED" ? `<span class="ref-badge">REFUNDED</span>` : `<span class="pend-badge">PENDING</span>`));
-                    return `<div class="list-card"><div class="flex-between"><b>${escapeHTML(b.marketName)} (${escapeHTML(b.session)})</b>${badge}</div><div>${escapeHTML(b.gameType)} | Digit: <b>${escapeHTML(b.digit)}</b></div><div style="color:#94a3b8;font-size:11px;">₹${b.amount} • ${escapeHTML(b.date)}</div></div>`;
+                    return `<div class="list-card"><div class="flex-between"><b>${escapeHTML(b.marketName)} (${escapeHTML(b.session)})</b>${badge}</div><div>${escapeHTML(b.gameType)} | Digit: <b>${escapeHTML(b.digit)}</b></div><div style="color:#cbd5e1;font-size:11px;">₹${b.amount} • ${escapeHTML(b.date)}</div></div>`;
                 }).join(''));
         }
 
@@ -752,14 +983,16 @@
         function setQuickQuoteText(id, txt) { let q = document.getElementById(`quoteText_${id}`); if (q) q.value = txt; }
         function submitQuotePost(targetId) {
             if (enforceNotBlocked()) return;
+            let nowMs = Date.now();
+            if (!state.isAdminLoggedIn && state.lastGuessPostTs && (nowMs - state.lastGuessPostTs) < 15000) return alert(`⏳ कृपया ${Math.ceil((15000-(nowMs-state.lastGuessPostTs))/1000)} सेकंड प्रतीक्षा करें!`);
             let target = state.guessingPosts.find(p => p.id === targetId), qIn = document.getElementById(`quoteText_${targetId}`);
             if (!target || !qIn) return;
             let text = qIn.value.trim(); if (!text) return alert("कृपया अपना Quote या बधाई संदेश लिखें!");
             let user = state.users[state.currentUserPhone];
             let prev = Array.isArray(target.quoteChain) ? target.quoteChain.slice(-3) : (target.quoteOf ? [target.quoteOf] : []);
             let chain = [...prev, { id:target.id, name:target.name, phone:target.phone, time:target.time, text:target.text }];
-            state.guessingPosts.push({ id:Date.now(), phone:state.currentUserPhone, name:user.name, market:target.market, text, time:formatForumDateTime(), likes:0, likedBy:[], comments:[], wishes:[], quoteOf:chain[chain.length-1], quoteChain:chain });
-            state.guessQuoteTargetId = null; saveState(); renderGuessingForum(document.getElementById('appRoot'));
+            state.guessingPosts.push({ id:nowMs, phone:state.currentUserPhone, name:user.name, market:target.market, text, time:formatForumDateTime(), likes:0, likedBy:[], comments:[], wishes:[], quoteOf:chain[chain.length-1], quoteChain:chain });
+            state.lastGuessPostTs = nowMs; state.guessQuoteTargetId = null; saveState(); renderGuessingForum(document.getElementById('appRoot'));
         }
         function shareGuessPost(id) {
             let p = state.guessingPosts.find(x => x.id === id); if (!p) return;
@@ -770,16 +1003,26 @@
         function getGuesserRoleBadge(p) {
             if (p.phone === DEFAULT_VIP_PHONE) return `<span class="gf-role-badge vip">VIP</span>`;
             if ((p.likes || 0) >= 3) return `<span class="gf-role-badge">Expert</span>`;
-            return `<span class="gf-role-badge" style="border-color:#38bdf8;color:#38bdf8;background:rgba(56,189,248,0.1);">Guesser</span>`;
+            return `<span class="gf-role-badge" style="border-color:#38bdf8;color:#bae6fd;background:rgba(56,189,248,0.16);">Guesser</span>`;
         }
-        function getMyChatsCount() {
-            let me = state.currentUserPhone, c = state.guesserChats[me] ? Object.keys(state.guesserChats[me]).length : 0;
-            Object.keys(state.guesserChats).forEach(g => { if (g !== me && state.guesserChats[g] && state.guesserChats[g][me]) c++; });
-            return c;
+        function getUnreadChatsCount() {
+            let me = state.currentUserPhone, unread = 0;
+            let inc = state.guesserChats[me] || {};
+            Object.keys(inc).forEach(bp => {
+                (inc[bp] || []).forEach(m => { if (m.sender !== me && m.read === false) unread++; });
+            });
+            Object.keys(state.guesserChats).forEach(gp => {
+                if (gp !== me && state.guesserChats[gp] && state.guesserChats[gp][me]) {
+                    (state.guesserChats[gp][me] || []).forEach(m => { if (m.sender !== me && m.read === false) unread++; });
+                }
+            });
+            return unread;
         }
 
         function buildGuessPostsHTML() {
             let list = state.guessingPosts.slice().reverse().filter(p => {
+                let author = state.users[p.phone];
+                if (author && author.isBlocked && !state.isAdminLoggedIn) return false;
                 let hasQ = Boolean(p.quoteOf || (Array.isArray(p.quoteChain) && p.quoteChain.length));
                 if (state.guessFilterOriginalOnly && hasQ) return false;
                 if (state.guessFilterMarket !== "ALL" && p.market !== state.guessFilterMarket) return false;
@@ -789,30 +1032,31 @@
                 }
                 return true;
             });
-            if (!list.length) return `<p style="text-align:center;color:#94a3b8;margin-top:25px;">कोई गेसिंग पोस्ट नहीं मिली।</p>`;
+            if (!list.length) return `<p style="text-align:center;color:#cbd5e1;margin-top:25px;">कोई गेसिंग पोस्ट नहीं मिली।</p>`;
             return list.map(p => {
                 let u = state.users[p.phone] || { avatar:"" }, av = safeImageURL(u.avatar, DEFAULT_AVATAR_SVG);
                 let liked = p.likedBy && p.likedBy.includes(state.currentUserPhone), cArr = Array.isArray(p.comments) ? p.comments : [];
+                let visibleComments = cArr.filter(c => state.isAdminLoggedIn || !(c.phone && state.users[c.phone]?.isBlocked));
                 let canDel = p.phone === state.currentUserPhone || state.isAdminLoggedIn, canBlk = state.isAdminLoggedIn && p.phone !== DEFAULT_VIP_PHONE;
-                let cHtml = cArr.map(c => `<div style="background:#11161d;padding:6px 9px;margin-top:4px;border-radius:6px;font-size:11px;color:#e2e8f0;border-left:2px solid var(--primary);"><b>${escapeHTML(c.name)}:</b> ${escapeHTML(c.text)}</div>`).join('');
+                let cHtml = visibleComments.map(c => `<div style="background:rgba(24,33,77,0.88);padding:6px 9px;margin-top:4px;border-radius:8px;font-size:11px;color:#e2e8f0;border-left:2px solid var(--primary);"><b>${escapeHTML(c.name)}:</b> ${escapeHTML(c.text)}</div>`).join('');
                 let wHtml = (p.wishes && p.wishes.length) ? `🎉 Wishes: ${p.wishes.map(escapeHTML).join(', ')}` : '';
                 let chain = (Array.isArray(p.quoteChain) && p.quoteChain.length) ? p.quoteChain : (p.quoteOf ? [p.quoteOf] : []);
                 let body = chain.length ? chain.map(q => `<div class="gf-quote-box"><div class="gf-quote-head"><span style="display:flex;align-items:center;gap:6px;"><img src="${safeImageURL((state.users[q.phone]||{}).avatar,DEFAULT_AVATAR_SVG)}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;"><b style="color:#fff;">${escapeHTML(q.name)}</b> • ${escapeHTML(q.time||'')}</span><span style="font-size:15px;">❞</span></div><div class="gf-quote-text">${escapeHTML(q.text)}</div></div>`).join('') + `<div class="gf-guess-body" style="padding:10px;font-size:13px;">${escapeHTML(p.text)}</div>` : `<div class="gf-guess-body">${escapeHTML(p.text)}</div>`;
-                let qBox = state.guessQuoteTargetId === p.id ? `<div style="margin:8px 10px;background:#11161d;border:1px solid #38bdf8;border-radius:10px;padding:10px;"><div style="font-size:11px;color:#38bdf8;margin-bottom:6px;font-weight:bold;">🔁 Quoting ${escapeHTML(p.name)}:</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;"><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'BIG CONGRATULATIONS 🎉🎉')">🎉 Congrats</button><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'PASS 🎯🔥')">🎯 Pass</button><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'Dil se badhai Boss! 👏')">👏 Badhai</button></div><textarea id="quoteText_${p.id}" rows="2" placeholder="अपना जवाब लिखें..." style="width:100%;background:#0b0c10;border:1px solid #444;color:#fff;padding:8px;border-radius:8px;font-size:12px;margin-bottom:6px;"></textarea><div style="display:flex;gap:6px;"><button class="btn" style="background:#334155;color:#fff;padding:6px;font-size:11px;flex:1;" onclick="openQuoteBox(${p.id})">Cancel</button><button class="btn btn-play" style="padding:6px;font-size:11px;flex:2;" onclick="submitQuotePost(${p.id})">Post Quote</button></div></div>` : '';
+                let qBox = state.guessQuoteTargetId === p.id ? `<div style="margin:8px 10px;background:rgba(24,33,77,0.92);border:1px solid #38bdf8;border-radius:10px;padding:10px;"><div style="font-size:11px;color:#7dd3fc;margin-bottom:6px;font-weight:bold;">🔁 Quoting ${escapeHTML(p.name)}:</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;"><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'BIG CONGRATULATIONS 🎉🎉')">🎉 Congrats</button><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'PASS 🎯🔥')">🎯 Pass</button><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'Dil se badhai Boss! 👏')">👏 Badhai</button></div><textarea id="quoteText_${p.id}" rows="2" maxlength="500" placeholder="अपना जवाब लिखें..." style="width:100%;background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:8px;border-radius:8px;font-size:12px;margin-bottom:6px;"></textarea><div style="display:flex;gap:6px;"><button class="btn btn-chart" style="padding:6px;font-size:11px;flex:1;" onclick="openQuoteBox(${p.id})">Cancel</button><button class="btn btn-play" style="padding:6px;font-size:11px;flex:2;" onclick="submitQuotePost(${p.id})">Post Quote</button></div></div>` : '';
                 return `<div class="gf-card" id="guessPostCard_${p.id}">
                     <div class="gf-card-head"><div class="gf-author-wrap"><div class="gf-avatar-wrap"><img src="${av}" class="gf-avatar"><span class="gf-online-dot"></span></div><div><div class="gf-author-name">${escapeHTML(p.name)} ${getGuesserRoleBadge(p)}</div><div class="gf-time">${escapeHTML(p.time)}</div></div></div><div class="gf-ribbon">${escapeHTML(p.market)}</div></div>
                     ${body}
-                    <div id="wishesContainer_${p.id}" style="margin:0 12px 8px 12px;font-size:11px;color:var(--green);${wHtml?'':'display:none;'}">${wHtml}</div>
+                    <div id="wishesContainer_${p.id}" style="margin:0 12px 8px 12px;font-size:11px;color:#86efac;${wHtml?'':'display:none;'}">${wHtml}</div>
                     <div class="gf-meta-actions">
                         <button class="gf-chip-btn ${liked?'liked':''}" id="likeBtn_${p.id}" onclick="toggleLike(${p.id})">❤️ Like (${p.likes||0})</button>
-                        <button class="gf-chip-btn" style="border-color:#27ae60;color:#2ecc71;" onclick="sendWish(${p.id})">🎉 Wish Pass</button>
-                        <button class="gf-chip-btn" style="border-color:#3498db;color:#63b3ed;" data-phone="${escapeHTML(p.phone)}" onclick="openChatWithGuesserPhone(this.dataset.phone)">💬 Chat / Gift</button>
-                        ${canDel ? `<button class="gf-chip-btn" style="border-color:var(--red);color:#ff7675;" onclick="deleteGuessingPost(${p.id})">🗑️</button>` : ''}
-                        ${canBlk ? `<button class="gf-chip-btn" style="border-color:#a855f7;color:#d8b4fe;" data-phone="${escapeHTML(p.phone)}" data-postid="${p.id}" onclick="adminToggleBlockUser(this.dataset.phone,Number(this.dataset.postid))">🚫 Block</button>` : ''}
+                        <button class="gf-chip-btn" style="border-color:#4ade80;color:#86efac;" onclick="sendWish(${p.id})">🎉 Wish Pass</button>
+                        <button class="gf-chip-btn" style="border-color:#38bdf8;color:#bae6fd;" data-phone="${escapeHTML(p.phone)}" onclick="openChatWithGuesserPhone(this.dataset.phone)">💬 Chat / Gift</button>
+                        ${canDel ? `<button class="gf-chip-btn" style="border-color:#fb7185;color:#fecdd3;" onclick="deleteGuessingPost(${p.id})">🗑️</button>` : ''}
+                        ${canBlk ? `<button class="gf-chip-btn" style="border-color:#c084fc;color:#e9d5ff;" data-phone="${escapeHTML(p.phone)}" data-postid="${p.id}" onclick="adminToggleBlockUser(this.dataset.phone,Number(this.dataset.postid))">${u.isBlocked ? '✅ Unblock' : '🚫 Block'}</button>` : ''}
                     </div>
                     ${qBox}
                     <div class="gf-footer-bar">
-                        <span class="gf-stat-mini">💬 <span id="commentCount_${p.id}">${cArr.length}</span></span>
+                        <span class="gf-stat-mini">💬 <span id="commentCount_${p.id}">${visibleComments.length}</span></span>
                         <button class="gf-stat-mini" onclick="shareGuessPost(${p.id})">🔗</button>
                         <div class="gf-comment-pill"><input type="text" id="commentInput_${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') addComment(${p.id})"><button class="gf-send-icon" onclick="addComment(${p.id})">➤</button></div>
                         <button class="gf-quote-btn" onclick="openQuoteBox(${p.id})">🔁 Quote</button>
@@ -825,21 +1069,21 @@
         function renderGuessingForum(root) {
             let mOpts = state.markets.map(m => `<option value="${escapeHTML(m.name)}">${escapeHTML(m.name)}</option>`).join('');
             let fOpts = `<option value="ALL" ${state.guessFilterMarket==='ALL'?'selected':''}>All Markets</option>` + state.markets.map(m => `<option value="${escapeHTML(m.name)}" ${state.guessFilterMarket===m.name?'selected':''}>${escapeHTML(m.name)}</option>`).join('');
-            let cc = getMyChatsCount();
+            let uc = getUnreadChatsCount();
             root.innerHTML = `
                 <div class="gf-toolbar">
                     <div class="gf-icon-group">
                         <button class="gf-icon-btn" onclick="renderGuessingForum(document.getElementById('appRoot'))" title="Refresh">🔄</button>
                         <button class="gf-icon-btn ${state.guessShowSearchBar?'active':''}" onclick="toggleGuessSearchBar()" title="Search">🔍</button>
                         <button class="gf-icon-btn ${state.guessFilterMarket!=='ALL'?'active':''}" onclick="toggleGuessSearchBar()" title="Filter">🎛️</button>
-                        <button class="gf-icon-btn" onclick="navigate('myChats')" title="My Chats">💬${cc>0?`<span style="position:absolute;top:-4px;right:-4px;background:var(--green);color:#000;border-radius:50%;font-size:9px;padding:1px 4px;font-weight:bold;">${cc}</span>`:''}</button>
+                        <button class="gf-icon-btn" onclick="navigate('myChats')" title="My Chats">💬${uc>0?`<span style="position:absolute;top:-4px;right:-4px;background:var(--green);color:#052e16;border-radius:50%;font-size:9px;padding:1px 4px;font-weight:bold;">${uc}</span>`:''}</button>
                         <button class="gf-icon-btn" onclick="alert('📌 Guessing Forum Rules:\\n1. यहाँ केवल लकी नंबर व बधाई पोस्ट करें।\\n2. किसी गेसर को गिफ्ट भेजने के बाद आप उनके साथ सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात कर सकते हैं।\\n3. गाली-गलौज करने पर ID ब्लॉक कर दी जाएगी।')" title="Info">ℹ️</button>
                     </div>
                     <button class="gf-post-cta" onclick="toggleGuessComposer()">Post Your Guess 💡</button>
                 </div>
-                <div class="gf-toggle-bar"><span style="color:#e2e8f0;font-weight:600;">💠 Original Post</span><button id="gfOrigPill" class="gf-switch-pill ${state.guessFilterOriginalOnly?'on':''}" onclick="toggleOriginalPostFilter()">${state.guessFilterOriginalOnly?'ON':'OFF'}</button></div>
-                ${state.guessShowSearchBar ? `<div class="form-card" style="padding:10px;margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><input type="text" id="gfSearchInput" value="${escapeHTML(state.guessSearchQuery)}" placeholder="नाम या अंक खोजें..." style="background:rgba(9,13,22,0.9);border:1px solid #334155;color:#fff;padding:8px;border-radius:8px;font-size:12px;" oninput="applyGuessFilters()"><select id="gfMarketFilter" style="background:rgba(9,13,22,0.9);border:1px solid #334155;color:#fff;padding:8px;border-radius:8px;font-size:12px;" onchange="applyGuessFilters()">${fOpts}</select></div></div>` : ''}
-                ${state.guessShowComposer ? `<div class="form-card" style="border:1px solid var(--primary);"><div class="flex-between" style="margin-bottom:10px;"><h4 style="color:var(--primary);font-size:14px;">💡 Post Your Guess</h4><button class="btn btn-sm" style="background:#2c3e50;color:#fff;" onclick="insertGuessTemplate()">📋 Format</button></div><div class="input-group"><label>Market चुनें</label><select id="guessMarket">${mOpts}</select></div><div class="input-group"><label>आपकी गेसिंग</label><textarea id="guessText" rows="5" maxlength="500" placeholder="OPEN / JODI / PANNA लिखें..."></textarea></div><div style="display:grid;grid-template-columns:1fr 2fr;gap:6px;"><button class="btn" style="background:#334155;color:#fff;" onclick="toggleGuessComposer()">Cancel</button><button class="btn btn-play" onclick="postGuessing()">📤 Publish Guess</button></div></div>` : ''}
+                <div class="gf-toggle-bar"><span style="color:#f1f5f9;font-weight:600;">💠 Original Post</span><button id="gfOrigPill" class="gf-switch-pill ${state.guessFilterOriginalOnly?'on':''}" onclick="toggleOriginalPostFilter()">${state.guessFilterOriginalOnly?'ON':'OFF'}</button></div>
+                ${state.guessShowSearchBar ? `<div class="form-card" style="padding:10px;margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><input type="text" id="gfSearchInput" value="${escapeHTML(state.guessSearchQuery)}" placeholder="नाम या अंक खोजें..." style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:8px;border-radius:8px;font-size:12px;" oninput="applyGuessFilters()"><select id="gfMarketFilter" style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:8px;border-radius:8px;font-size:12px;" onchange="applyGuessFilters()">${fOpts}</select></div></div>` : ''}
+                ${state.guessShowComposer ? `<div class="form-card" style="border:1px solid var(--primary);"><div class="flex-between" style="margin-bottom:10px;"><h4 style="color:var(--primary);font-size:14px;">💡 Post Your Guess</h4><button class="btn btn-sm btn-chart" onclick="insertGuessTemplate()">📋 Format</button></div><div class="input-group"><label>Market चुनें</label><select id="guessMarket">${mOpts}</select></div><div class="input-group"><label>आपकी गेसिंग</label><textarea id="guessText" rows="5" maxlength="500" placeholder="OPEN / JODI / PANNA लिखें..."></textarea></div><div style="display:grid;grid-template-columns:1fr 2fr;gap:6px;"><button class="btn btn-chart" onclick="toggleGuessComposer()">Cancel</button><button class="btn btn-play" onclick="postGuessing()">📤 Publish Guess</button></div></div>` : ''}
                 <div id="gfPostsFeed">${buildGuessPostsHTML()}</div>`;
         }
 
@@ -875,15 +1119,16 @@
             let text = inp.value.trim(); if (!text) return;
             let p = state.guessingPosts.find(x => x.id === id), u = state.users[state.currentUserPhone]; if (!p) return;
             if (!p.comments) p.comments = [];
-            p.comments.push({ name:u.name, text }); saveState();
+            p.comments.push({ phone:state.currentUserPhone, name:u.name, text }); saveState();
             let box = document.getElementById(`commentsContainer_${id}`);
             if (box) {
                 let d = document.createElement('div');
-                d.style.cssText = "background:#11161d;padding:6px 9px;margin-top:4px;border-radius:6px;font-size:11px;color:#e2e8f0;border-left:2px solid var(--primary);";
+                d.style.cssText = "background:rgba(24,33,77,0.88);padding:6px 9px;margin-top:4px;border-radius:8px;font-size:11px;color:#e2e8f0;border-left:2px solid var(--primary);";
                 d.innerHTML = `<b>${escapeHTML(u.name)}:</b> ${escapeHTML(text)}`;
                 box.appendChild(d); inp.value = '';
             }
-            let cEl = document.getElementById(`commentCount_${id}`); if (cEl) cEl.innerText = p.comments.length;
+            let visibleCount = p.comments.filter(c => state.isAdminLoggedIn || !(c.phone && state.users[c.phone]?.isBlocked)).length;
+            let cEl = document.getElementById(`commentCount_${id}`); if (cEl) cEl.innerText = visibleCount;
         }
         function sendWish(id) {
             if (enforceNotBlocked()) return;
@@ -902,16 +1147,18 @@
             let me = state.currentUserPhone, open = isChatTimeOpen(), inc = state.guesserChats[me] || {}, incBuyers = Object.keys(inc), outGuessers = [];
             Object.keys(state.guesserChats).forEach(g => { if (g !== me && state.guesserChats[g] && state.guesserChats[g][me]) outGuessers.push(g); });
             let html = `<div class="sub-header"><button class="back-btn" onclick="navigate('guessing')">← Back</button><h3>💬 My Private Chats</h3></div>
-                <div class="form-card" style="padding:10px;text-align:center;font-size:12px;color:${open?'var(--green)':'var(--red)'};">${open ? '🟢 Chat Open: सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात करें' : '🔴 Chat Closed: समय सुबह 7:00 AM से रात 12:00 AM है'}</div>
+                <div class="form-card" style="padding:10px;text-align:center;font-size:12px;color:${open?'#86efac':'#fda4af'};">${open ? '🟢 Chat Open: सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात करें' : '🔴 Chat Closed: समय सुबह 7:00 AM से रात 12:00 AM है'}</div>
                 <div class="form-card"><h4 style="color:var(--primary);margin-bottom:8px;font-size:14px;">🎁 आपको मिले गिफ्ट / चैट (${incBuyers.length})</h4>` +
-                (!incBuyers.length ? `<p style="color:#94a3b8;font-size:12px;">अभी कोई गिफ्ट नहीं मिला है।</p>` : incBuyers.map(bp => {
+                (!incBuyers.length ? `<p style="color:#cbd5e1;font-size:12px;">अभी कोई गिफ्ट नहीं मिला है।</p>` : incBuyers.map(bp => {
                     let bU = state.users[bp], msgs = inc[bp] || [], last = msgs[msgs.length-1];
-                    return `<div class="list-card" style="cursor:pointer;" data-g="${escapeHTML(me)}" data-b="${escapeHTML(bp)}" onclick="openChatWithGuesserPhone(this.dataset.g,this.dataset.b)"><div class="flex-between"><b>${escapeHTML(bU?bU.name:("Player "+bp.slice(-4)))} (${escapeHTML(bp)})</b><span class="win-badge">${msgs.length} msgs</span></div><div style="font-size:11px;color:#cbd5e1;margin-top:4px;">${last?escapeHTML(last.text):''}</div></div>`;
+                    let unread = msgs.filter(m => m.sender !== me && m.read === false).length;
+                    return `<div class="list-card" style="cursor:pointer;" data-g="${escapeHTML(me)}" data-b="${escapeHTML(bp)}" onclick="openChatWithGuesserPhone(this.dataset.g,this.dataset.b)"><div class="flex-between"><b>${escapeHTML(bU?bU.name:("Player "+bp.slice(-4)))} (${escapeHTML(bp)})${bU&&bU.isBlocked?' <span class="loss-badge">BLOCKED</span>':''}</b><span>${unread>0?`<span class="pend-badge">${unread} new</span> `:''}<span class="win-badge">${msgs.length} msgs</span></span></div><div style="font-size:11px;color:#e2e8f0;margin-top:4px;">${last?escapeHTML(last.text):''}</div></div>`;
                 }).join('')) + `</div>
                 <div class="form-card"><h4 style="color:var(--primary);margin-bottom:8px;font-size:14px;">🔮 जिन गेसर को आपने गिफ्ट भेजा (${outGuessers.length})</h4>` +
-                (!outGuessers.length ? `<p style="color:#94a3b8;font-size:12px;">आपने अभी किसी को गिफ्ट नहीं भेजा है।</p>` : outGuessers.map(gp => {
+                (!outGuessers.length ? `<p style="color:#cbd5e1;font-size:12px;">आपने अभी किसी को गिफ्ट नहीं भेजा है।</p>` : outGuessers.map(gp => {
                     let gU = state.users[gp], msgs = state.guesserChats[gp][me] || [], last = msgs[msgs.length-1];
-                    return `<div class="list-card" style="cursor:pointer;" data-g="${escapeHTML(gp)}" data-b="${escapeHTML(me)}" onclick="openChatWithGuesserPhone(this.dataset.g,this.dataset.b)"><div class="flex-between"><b>${escapeHTML(gU?gU.name:("Guesser "+gp.slice(-4)))}</b><span class="win-badge">Unlocked</span></div><div style="font-size:11px;color:#cbd5e1;margin-top:4px;">${last?escapeHTML(last.text):''}</div></div>`;
+                    let unread = msgs.filter(m => m.sender !== me && m.read === false).length;
+                    return `<div class="list-card" style="cursor:pointer;" data-g="${escapeHTML(gp)}" data-b="${escapeHTML(me)}" onclick="openChatWithGuesserPhone(this.dataset.g,this.dataset.b)"><div class="flex-between"><b>${escapeHTML(gU?gU.name:("Guesser "+gp.slice(-4)))}${gU&&gU.isBlocked?' <span class="loss-badge">BLOCKED</span>':''}</b><span>${unread>0?`<span class="pend-badge">${unread} new</span> `:''}<span class="win-badge">Unlocked</span></span></div><div style="font-size:11px;color:#e2e8f0;margin-top:4px;">${last?escapeHTML(last.text):''}</div></div>`;
                 }).join('')) + `</div>`;
             root.innerHTML = html;
         }
@@ -926,41 +1173,75 @@
             let gMap = state.guesserChats[guesserPhone], buyers = Object.keys(gMap);
             let targetBuyer = isAuthor ? (state.activeChatBuyerPhone && gMap[state.activeChatBuyerPhone] ? state.activeChatBuyerPhone : (buyers[0] || null)) : state.currentUserPhone;
             let thread = targetBuyer ? (gMap[targetBuyer] || []) : [];
+
+            let viewerId = isVipAdm ? DEFAULT_VIP_PHONE : state.currentUserPhone;
+            let markedRead = false;
+            thread.forEach(m => { if (m.sender !== viewerId && m.read === false) { m.read = true; markedRead = true; } });
+            if (markedRead) saveState();
+
             let hasGifted = !isAuthor && thread.some(m => m.sender === state.currentUserPhone && m.isGift);
             let canChat = isAuthor ? Boolean(targetBuyer) : hasGifted, open = isChatTimeOpen();
+            let backTarget = isVipAdm ? "adminLogin" : "guessing";
 
-            let buyerBar = isAuthor ? (!buyers.length ? `<div class="dark-row" style="text-align:center;color:#94a3b8;">अभी तक किसी यूज़र ने आपको गिफ्ट/चैट नहीं भेजा है।</div>` :
-                `<div class="form-card" style="padding:10px;margin-bottom:10px;"><div style="font-size:11px;color:#cbd5e1;margin-bottom:6px;">${isVipAdm?'👑 VIP Admin Mode — ':''}प्राइवेट चैट चुनें:</div><div style="display:flex;flex-wrap:wrap;gap:6px;">` +
-                buyers.map(bp => `<button class="btn btn-sm" style="background:${bp===targetBuyer?'var(--primary)':'#334155'};color:${bp===targetBuyer?'#000':'#fff'};" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(bp)}" onclick="selectChatBuyer(this.dataset.g,this.dataset.b)">${escapeHTML((state.users[bp]||{}).name || ("User "+bp.slice(-4)))} (${bp.slice(-4)})</button>`).join('') + `</div></div>`) : '';
+            let buyerBar = isAuthor ? (!buyers.length ? `<div class="dark-row" style="text-align:center;color:#cbd5e1;">अभी तक किसी यूज़र ने आपको गिफ्ट/चैट नहीं भेजा है।</div>` :
+                `<div class="form-card" style="padding:10px;margin-bottom:10px;"><div style="font-size:11px;color:#e2e8f0;margin-bottom:6px;">${isVipAdm?'👑 VIP Admin Mode — ':''}प्राइवेट चैट चुनें:</div><div style="display:flex;flex-wrap:wrap;gap:6px;">` +
+                buyers.map(bp => `<button class="btn btn-sm" style="background:${bp===targetBuyer?'var(--primary)':'rgba(51,65,85,0.9)'};color:${bp===targetBuyer?'#1e1b4b':'#fff'};" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(bp)}" onclick="selectChatBuyer(this.dataset.g,this.dataset.b)">${escapeHTML((state.users[bp]||{}).name || ("User "+bp.slice(-4)))} (${bp.slice(-4)})</button>`).join('') + `</div></div>`) : '';
 
             let msgsHtml = thread.length ? thread.map(m => {
                 let isMe = isVipAdm ? m.sender === DEFAULT_VIP_PHONE : m.sender === state.currentUserPhone;
-                return `<div style="margin-bottom:8px;text-align:${isMe?'right':'left'};"><div style="display:inline-block;background:${m.isGift?'linear-gradient(135deg,#d35400,#e67e22)':(isMe?'linear-gradient(135deg,#16a34a,#27ae60)':'#2c3e50')};color:#fff;padding:8px 12px;border-radius:10px;font-size:12px;max-width:82%;text-align:left;"><b>${escapeHTML(m.senderName)}:</b> ${escapeHTML(m.text)}<div style="font-size:9px;opacity:0.75;margin-top:2px;">${escapeHTML(m.time||'')}</div></div></div>`;
-            }).join('') : `<p style="text-align:center;color:#94a3b8;font-size:12px;margin-top:20px;">${isAuthor ? 'कोई संदेश नहीं है।' : 'प्राइवेट चैट शुरू करने के लिए नीचे से कोई गिफ्ट भेजें!'}</p>`;
+                return `<div style="margin-bottom:8px;text-align:${isMe?'right':'left'};"><div style="display:inline-block;background:${m.isGift?'linear-gradient(135deg,#ea580c,#f59e0b)':(isMe?'linear-gradient(135deg,#059669,#22c55e)':'linear-gradient(135deg,#3730a3,#4338ca)')};color:#fff;padding:8px 12px;border-radius:12px;font-size:12px;max-width:82%;text-align:left;box-shadow:0 3px 10px rgba(0,0,0,0.2);"><b>${escapeHTML(m.senderName)}:</b> ${escapeHTML(m.text)}<div style="font-size:9px;opacity:0.8;margin-top:2px;">${escapeHTML(m.time||'')}</div></div></div>`;
+            }).join('') : `<p style="text-align:center;color:#cbd5e1;font-size:12px;margin-top:20px;">${isAuthor ? 'कोई संदेश नहीं है।' : 'प्राइवेट चैट शुरू करने के लिए नीचे से कोई गिफ्ट भेजें!'}</p>`;
 
             root.innerHTML = `
-                <div class="sub-header flex-between"><div style="display:flex;align-items:center;gap:8px;"><button class="back-btn" onclick="navigate('guessing')">← Back</button><h3 style="font-size:15px;">💬 Chat - ${escapeHTML(gName)}</h3></div><button class="btn btn-sm" style="background:#334155;color:#fff;" data-g="${escapeHTML(guesserPhone)}" onclick="renderChatBox(document.getElementById('appRoot'),this.dataset.g)">🔄</button></div>
-                <div style="background:rgba(15,22,36,0.9);border:1px solid ${open?'var(--green)':'var(--red)'};padding:7px 10px;border-radius:8px;font-size:11px;text-align:center;margin-bottom:10px;color:${open?'var(--green)':'var(--red)'};">${open ? '🟢 चैट चालू है — सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात करें' : '🔴 चैट अभी बंद है (समय: सुबह 7:00 AM से रात 12:00 AM)'}</div>
-                ${!isAuthor ? `<div class="form-card" style="background:rgba(13,19,33,0.92);"><div style="font-size:12px;color:var(--primary);margin-bottom:8px;text-align:center;">${hasGifted?'✅ चैट अनलॉक है! सुबह 7 से रात 12 तक कभी भी बात करें:':'🎁 गिफ्ट भेजकर प्राइवेट चैट अनलॉक करें (सुबह 7 से रात 12 तक बात कर सकेंगे):'}</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"><button class="btn" style="background:#e74c3c;color:#fff;font-size:11px;" data-g="${escapeHTML(guesserPhone)}" onclick="sendGift(this.dataset.g,'🌸 Flower (₹50)',50)">🌸 ₹50<br>Flower</button><button class="btn" style="background:#f39c12;color:#000;font-size:11px;" data-g="${escapeHTML(guesserPhone)}" onclick="sendGift(this.dataset.g,'⭐ Star (₹100)',100)">⭐ ₹100<br>Star</button><button class="btn" style="background:#8e44ad;color:#fff;font-size:11px;" data-g="${escapeHTML(guesserPhone)}" onclick="sendGift(this.dataset.g,'💣 Bomb (₹150)',150)">💣 ₹150<br>Bomb</button></div></div>` : buyerBar}
-                <div class="form-card" style="height:245px;overflow-y:auto;background:rgba(9,13,22,0.88);margin-bottom:10px;" id="chatMsgArea">${msgsHtml}</div>
-                ${canChat ? (open ? `<div style="display:flex;gap:6px;"><input type="text" id="chatInputText" placeholder="संदेश लिखें..." style="background:rgba(9,13,22,0.92);border:1px solid #334155;color:#fff;padding:10px;border-radius:8px;font-size:13px;flex:1;" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(targetBuyer||'')}" onkeydown="if(event.key==='Enter') sendChatMessage(this.dataset.g,this.dataset.b)"><button class="btn btn-play" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(targetBuyer||'')}" onclick="sendChatMessage(this.dataset.g,this.dataset.b)">Send</button></div>` : `<div style="text-align:center;background:rgba(231,76,60,0.15);border:1px solid var(--red);padding:10px;border-radius:8px;color:#ff7675;font-size:12px;">🌙 चैट का समय सुबह 7:00 बजे से रात 12:00 बजे तक है।</div>`) : `<div style="text-align:center;background:rgba(24,34,54,0.92);padding:10px;border-radius:8px;color:#fde047;font-size:12px;border:1px solid rgba(243,156,18,0.3);">${isAuthor?'🔒 रिप्लाई करने के लिए पहले किसी यूज़र का गिफ्ट आना ज़रूरी है।':'🔒 चैट करने के लिए ऊपर से कोई भी गिफ्ट भेजना अनिवार्य है।'}</div>`}`;
+                <div class="sub-header flex-between"><div style="display:flex;align-items:center;gap:8px;"><button class="back-btn" onclick="navigate('${backTarget}')">← Back</button><h3 style="font-size:15px;">💬 Chat - ${escapeHTML(gName)}</h3></div><button class="btn btn-sm btn-chart" data-g="${escapeHTML(guesserPhone)}" onclick="renderChatBox(document.getElementById('appRoot'),this.dataset.g)">🔄</button></div>
+                <div style="background:var(--surface);border:1px solid ${open?'#4ade80':'#fb7185'};padding:7px 10px;border-radius:10px;font-size:11px;text-align:center;margin-bottom:10px;color:${open?'#86efac':'#fda4af'};">${open ? '🟢 चैट चालू है — सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात करें' : '🔴 चैट अभी बंद है (समय: सुबह 7:00 AM से रात 12:00 AM)'}</div>
+                ${!isAuthor ? `<div class="form-card"><div style="font-size:12px;color:var(--primary);margin-bottom:8px;text-align:center;">${hasGifted?'✅ चैट अनलॉक है! सुबह 7 से रात 12 तक कभी भी बात करें:':'🎁 गिफ्ट भेजकर प्राइवेट चैट अनलॉक करें (सुबह 7 से रात 12 तक बात कर सकेंगे):'}</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"><button class="btn" style="background:linear-gradient(135deg,#e11d48,#f43f5e);color:#fff;font-size:11px;" data-g="${escapeHTML(guesserPhone)}" onclick="sendGift(this.dataset.g,'🌸 Flower (₹50)',50)">🌸 ₹50<br>Flower</button><button class="btn" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#1e1b4b;font-size:11px;" data-g="${escapeHTML(guesserPhone)}" onclick="sendGift(this.dataset.g,'⭐ Star (₹100)',100)">⭐ ₹100<br>Star</button><button class="btn" style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:11px;" data-g="${escapeHTML(guesserPhone)}" onclick="sendGift(this.dataset.g,'💣 Bomb (₹150)',150)">💣 ₹150<br>Bomb</button></div></div>` : buyerBar}
+                <div class="form-card" style="height:245px;overflow-y:auto;background:var(--surface);margin-bottom:10px;" id="chatMsgArea">${msgsHtml}</div>
+                ${canChat ? (open ? `<div style="display:flex;gap:6px;"><input type="text" id="chatInputText" placeholder="संदेश लिखें..." style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:10px;border-radius:10px;font-size:13px;flex:1;" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(targetBuyer||'')}" onkeydown="if(event.key==='Enter') sendChatMessage(this.dataset.g,this.dataset.b)"><button class="btn btn-play" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(targetBuyer||'')}" onclick="sendChatMessage(this.dataset.g,this.dataset.b)">Send</button></div>` : `<div style="text-align:center;background:rgba(244,63,94,0.18);border:1px solid #fb7185;padding:10px;border-radius:10px;color:#fecdd3;font-size:12px;">🌙 चैट का समय सुबह 7:00 बजे से रात 12:00 बजे तक है।</div>`) : `<div style="text-align:center;background:var(--surface);padding:10px;border-radius:10px;color:#fef08a;font-size:12px;border:1px solid rgba(251,191,36,0.4);">${isAuthor?'🔒 रिप्लाई करने के लिए पहले किसी यूज़र का गिफ्ट आना ज़रूरी है।':'🔒 चैट करने के लिए ऊपर से कोई भी गिफ्ट भेजना अनिवार्य है।'}</div>`}`;
             let area = document.getElementById('chatMsgArea'); if (area) area.scrollTop = area.scrollHeight;
         }
 
         function sendGift(gp, giftName, amt) {
             if (enforceNotBlocked()) return;
             let me = state.users[state.currentUserPhone]; if (!gp || gp === state.currentUserPhone) return;
+            let gU = state.users[gp];
+            if (gU && gU.isBlocked) return alert("🚫 यह यूज़र ब्लॉक है, इन्हें गिफ्ट नहीं भेजा जा सकता!");
             if (me.balance < amt) return alert("आपके वॉलेट में पर्याप्त बैलेंस नहीं है! कृपया पहले डिपॉजिट करें।");
+
+            let isVipReceiver = gp === DEFAULT_VIP_PHONE;
+            let adminComm = isVipReceiver ? amt : Math.round((amt * 0.20) * 100) / 100;
+            let guesserGet = Math.round((amt - adminComm) * 100) / 100;
+
             me.balance = Math.round((me.balance - amt) * 100) / 100;
-            let gU = state.users[gp], gName = gU ? gU.name : ("User " + gp.slice(-4));
-            if (gU) gU.balance = Math.round((gU.balance + amt) * 100) / 100;
+            let gName = gU ? gU.name : ("User " + gp.slice(-4));
+            if (gU && guesserGet > 0) gU.balance = Math.round((gU.balance + guesserGet) * 100) / 100;
+
             if (!state.guesserChats[gp]) state.guesserChats[gp] = {};
             if (!state.guesserChats[gp][state.currentUserPhone]) state.guesserChats[gp][state.currentUserPhone] = [];
-            state.guesserChats[gp][state.currentUserPhone].push({ sender:state.currentUserPhone, senderName:me.name, text:`🎁 Sent a gift: ${giftName}`, isGift:true, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
-            let today = getLocalDateString();
-            state.transactions.push({ phone:state.currentUserPhone, type:"Gift Sent to "+gName, amount:-amt, date:today, time:new Date().toLocaleString() });
-            if (gU) state.transactions.push({ phone:gp, type:"Gift Received from "+me.name, amount:amt, date:today, time:new Date().toLocaleString() });
-            saveState(); alert(`✅ ${giftName} भेज दिया गया! अब आप ${gName} से सुबह 7:00 बजे से रात 12:00 बजे तक बात कर सकते हैं।`); renderChatBox(document.getElementById('appRoot'), gp);
+            state.guesserChats[gp][state.currentUserPhone].push({ sender:state.currentUserPhone, senderName:me.name, text:`🎁 Sent a gift: ${giftName}`, isGift:true, read:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
+
+            let today = getLocalDateString(), nowStr = new Date().toLocaleString();
+            state.transactions.push({ phone:state.currentUserPhone, type:`Gift Sent to ${gName} (${giftName})`, amount:-amt, date:today, time:nowStr });
+            if (gU && guesserGet > 0) {
+                state.transactions.push({ phone:gp, type:`Gift Received from ${me.name} (₹${amt} - ₹${adminComm} Admin Fee)`, amount:guesserGet, date:today, time:nowStr });
+            }
+            state.giftCommissions.push({
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                date: today,
+                time: nowStr,
+                senderPhone: state.currentUserPhone,
+                senderName: me.name,
+                receiverPhone: gp,
+                receiverName: gName,
+                giftName,
+                giftAmount: amt,
+                adminCommission: adminComm,
+                guesserReceived: guesserGet
+            });
+
+            saveState();
+            alert(`✅ ${giftName} भेज दिया गया!\nअब आप ${gName} से सुबह 7:00 बजे से रात 12:00 बजे तक बात कर सकते हैं।`);
+            renderChatBox(document.getElementById('appRoot'), gp);
         }
 
         function sendChatMessage(gp, bp) {
@@ -972,7 +1253,7 @@
             let isVipAdm = state.isAdminLoggedIn && gp === DEFAULT_VIP_PHONE, isAuth = gp === state.currentUserPhone || isVipAdm;
             let key = isAuth ? bp : state.currentUserPhone; if (!key) return;
             if (!state.guesserChats[gp][key]) state.guesserChats[gp][key] = [];
-            state.guesserChats[gp][key].push({ sender:isVipAdm?DEFAULT_VIP_PHONE:state.currentUserPhone, senderName:isVipAdm?"M.KING VIP (Admin)":state.users[state.currentUserPhone].name, text, isGift:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
+            state.guesserChats[gp][key].push({ sender:isVipAdm?DEFAULT_VIP_PHONE:state.currentUserPhone, senderName:isVipAdm?"M.KING VIP (Admin)":state.users[state.currentUserPhone].name, text, isGift:false, read:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
             saveState(); renderChatBox(document.getElementById('appRoot'), gp);
         }
 
@@ -981,16 +1262,16 @@
             let dl = qr.startsWith('data:image/jpeg') ? 'Deposit_QR.jpg' : (qr.startsWith('data:image/svg+xml') ? 'Deposit_QR.svg' : 'Deposit_QR.png');
             root.innerHTML = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>➕ Add Points / Deposit</h3></div>
                 <div class="form-card" style="text-align:center;">
-                    <p style="color:#cbd5e1;font-size:12px;margin-bottom:15px;">QR कोड स्कैन करें या UPI नंबर पर पेमेंट करके नीचे UTR सबमिट करें या WhatsApp पर स्क्रीनशॉट भेजें।</p>
-                    <div style="background:#fff;padding:10px;display:inline-block;border-radius:10px;margin-bottom:12px;"><img src="${qr}" style="width:180px;height:180px;object-fit:contain;display:block;"></div>
-                    <div style="margin-bottom:12px;"><a href="${qr}" download="${dl}" class="btn btn-sm" style="background:#334155;color:#fff;text-decoration:none;">📥 Download QR Code</a></div>
-                    <div style="background:rgba(9,13,22,0.9);padding:12px;border-radius:8px;margin-bottom:15px;border:1px dashed var(--primary);"><div style="font-size:12px;color:#94a3b8;">PhonePe / GPay / Paytm:</div><div style="font-size:18px;font-weight:bold;color:var(--primary);margin-top:4px;">${escapeHTML(state.depositUPI)}</div></div>
-                    <div class="form-card" style="background:rgba(13,19,33,0.92);margin-bottom:12px;"><h4 style="color:var(--primary);font-size:13px;margin-bottom:10px;">💳 Submit Deposit Request</h4>
-                        <div class="input-group"><label>Amount (Min ₹100)</label><input type="number" id="depAmtInput" min="100" placeholder="राशि (200, 500)"></div>
+                    <p style="color:#e2e8f0;font-size:12px;margin-bottom:15px;">QR कोड स्कैन करें या UPI नंबर पर पेमेंट करके नीचे UTR सबमिट करें या WhatsApp पर स्क्रीनशॉट भेजें।</p>
+                    <div style="background:#fff;padding:10px;display:inline-block;border-radius:12px;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,0.25);"><img src="${qr}" style="width:180px;height:180px;object-fit:contain;display:block;"></div>
+                    <div style="margin-bottom:12px;"><a href="${qr}" download="${dl}" class="btn btn-sm btn-chart" style="text-decoration:none;">📥 Download QR Code</a></div>
+                    <div style="background:var(--surface);padding:12px;border-radius:10px;margin-bottom:15px;border:1px dashed var(--primary);"><div style="font-size:12px;color:#cbd5e1;">PhonePe / GPay / Paytm:</div><div style="font-size:18px;font-weight:bold;color:var(--primary);margin-top:4px;">${escapeHTML(state.depositUPI)}</div></div>
+                    <div class="form-card" style="background:var(--surface);margin-bottom:12px;"><h4 style="color:var(--primary);font-size:13px;margin-bottom:10px;">💳 Submit Deposit Request</h4>
+                        <div class="input-group"><label>Amount (Min ₹100)</label><input type="number" id="depAmtInput" inputmode="numeric" min="100" placeholder="राशि (200, 500)"></div>
                         <div class="input-group"><label>UTR / Ref No.</label><input type="text" id="depUtrInput" placeholder="12 अंकों का UTR नंबर"></div>
-                        <button class="btn" style="background:var(--primary);color:#000;width:100%;" onclick="submitDepositRequest()">✅ Submit Deposit Request</button>
+                        <button class="btn btn-play" style="width:100%;" onclick="submitDepositRequest()">✅ Submit Deposit Request</button>
                     </div>
-                    <a href="https://wa.me/${waNum}?text=Hello%20Admin,%20I%20have%20made%20payment,%20please%20add%20balance" target="_blank" rel="noopener noreferrer" class="btn" style="background:linear-gradient(135deg,#16a34a,#27ae60);color:#fff;display:block;text-decoration:none;padding:12px;">💬 Send Payment Screenshot on WhatsApp</a>
+                    <a href="https://wa.me/${waNum}?text=Hello%20Admin,%20I%20have%20made%20payment,%20please%20add%20balance" target="_blank" rel="noopener noreferrer" class="btn" style="background:linear-gradient(135deg,#059669,#22c55e);color:#042f2e;display:block;text-decoration:none;padding:12px;">💬 Send Payment Screenshot on WhatsApp</a>
                 </div>`;
         }
 
@@ -1055,49 +1336,51 @@
             let refFriends = Object.values(state.users).filter(x => !x.isSystem && x.referredBy === u.phone);
             let refHist = Array.isArray(u.referralHistory) ? u.referralHistory.slice().reverse() : [];
 
-            let refFHtml = !refFriends.length ? `<p style="color:#94a3b8;font-size:11px;">अभी किसी को रेफर नहीं किया।</p>` : refFriends.map(f => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#94a3b8">Deposit: ₹${Number(f.referralTotalDeposited||0)} • ${escapeHTML(f.joinedAt||'Recent')}</small></div>${f.referralFirstBonusPaid?'<span class="win-badge">₹100 Bonus Unlocked</span>':`<span class="pend-badge">₹${Number(f.referralTotalDeposited||0)}/200</span>`}</div>`).join('');
-            let refHHtml = !refHist.length ? `<p style="color:#94a3b8;font-size:11px;">अभी कोई कमीशन हिस्ट्री नहीं है।</p>` : refHist.map(h => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(h.type)}</b><br><small style="color:#94a3b8">${escapeHTML(h.friendName)} (${escapeHTML(h.friendPhone)}) • ₹${h.depositAmount}<br>${escapeHTML(h.time)}</small></div><b style="color:var(--green)">+₹${h.commission}</b></div>`).join('');
+            let refFHtml = !refFriends.length ? `<p style="color:#cbd5e1;font-size:11px;">अभी किसी को रेफर नहीं किया।</p>` : refFriends.map(f => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#cbd5e1">Deposit: ₹${Number(f.referralTotalDeposited||0)} • ${escapeHTML(f.joinedAt||'Recent')}</small></div>${f.referralFirstBonusPaid?'<span class="win-badge">₹100 Bonus Unlocked</span>':`<span class="pend-badge">₹${Number(f.referralTotalDeposited||0)}/200</span>`}</div>`).join('');
+            let refHHtml = !refHist.length ? `<p style="color:#cbd5e1;font-size:11px;">अभी कोई कमीशन हिस्ट्री नहीं है।</p>` : refHist.map(h => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(h.type)}</b><br><small style="color:#cbd5e1">${escapeHTML(h.friendName)} (${escapeHTML(h.friendPhone)}) • ₹${h.depositAmount}<br>${escapeHTML(h.time)}</small></div><b style="color:#4ade80">+₹${h.commission}</b></div>`).join('');
             let wHtml = state.withdrawRequests.filter(w => w.phone === u.phone).slice().reverse().map(w => {
                 let b = w.status==="APPROVED"?`<span class="win-badge">APPROVED</span>`:(w.status==="REJECTED"?`<span class="loss-badge">REJECTED (Refunded)</span>`:(w.status==="CANCELLED"?`<span class="ref-badge">CANCELLED</span>`:`<span class="pend-badge">PENDING</span> <button class="del-btn" onclick="cancelPendingWithdrawal(${w.id})">Cancel</button>`));
-                return `<div class="dark-row flex-between"><div><b>₹${w.amount}</b><br><small style="color:#94a3b8">${escapeHTML(w.time)}</small></div><div>${b}</div></div>`;
-            }).join('') || `<p style="color:#94a3b8;font-size:12px;">कोई विड्रॉल रिक्वेस्ट नहीं है।</p>`;
-            let dHtml = state.depositRequests.filter(d => d.phone === u.phone).slice().reverse().map(d => `<div class="dark-row flex-between"><div><b>₹${d.amount}</b> (${escapeHTML(d.utr)})<br><small style="color:#94a3b8">${escapeHTML(d.time)}</small></div>${d.status==="APPROVED"?'<span class="win-badge">APPROVED</span>':(d.status==="REJECTED"?'<span class="loss-badge">REJECTED</span>':'<span class="pend-badge">PENDING</span>')}</div>`).join('') || `<p style="color:#94a3b8;font-size:12px;">कोई डिपॉजिट रिक्वेस्ट नहीं है।</p>`;
-            let tHtml = state.transactions.filter(t => t.phone === u.phone).slice().reverse().slice(0,30).map(t => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(t.type)}</b><br><small style="color:#64748b">${escapeHTML(t.time)}</small></div><b style="color:${t.amount>=0?'var(--green)':'var(--red)'}">${t.amount>=0?'+':''}₹${t.amount}</b></div>`).join('') || `<p style="color:#94a3b8;font-size:12px;">कोई ट्रांजैक्शन नहीं है।</p>`;
+                return `<div class="dark-row flex-between"><div><b>₹${w.amount}</b><br><small style="color:#cbd5e1">${escapeHTML(w.time)}</small></div><div>${b}</div></div>`;
+            }).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई विड्रॉल रिक्वेस्ट नहीं है।</p>`;
+            let dHtml = state.depositRequests.filter(d => d.phone === u.phone).slice().reverse().map(d => `<div class="dark-row flex-between"><div><b>₹${d.amount}</b> (${escapeHTML(d.utr)})<br><small style="color:#cbd5e1">${escapeHTML(d.time)}</small></div>${d.status==="APPROVED"?'<span class="win-badge">APPROVED</span>':(d.status==="REJECTED"?'<span class="loss-badge">REJECTED</span>':'<span class="pend-badge">PENDING</span>')}</div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई डिपॉजिट रिक्वेस्ट नहीं है।</p>`;
+            let tHtml = state.transactions.filter(t => t.phone === u.phone).slice().reverse().slice(0,30).map(t => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(t.type)}</b><br><small style="color:#94a3b8">${escapeHTML(t.time)}</small></div><b style="color:${t.amount>=0?'#4ade80':'#fda4af'}">${t.amount>=0?'+':''}₹${t.amount}</b></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई ट्रांजैक्शन नहीं है।</p>`;
 
             root.innerHTML = `
                 <div class="profile-top">
                     <img class="profile-img" src="${safeImageURL(u.avatar,DEFAULT_AVATAR_SVG)}">
-                    <div style="margin-top:6px;display:flex;justify-content:center;gap:6px;"><label class="btn btn-sm" style="background:#334155;color:#fff;cursor:pointer;">📷 Upload<input type="file" accept="image/*" style="display:none;" onchange="changeAvatarGallery(event)"></label><button class="btn btn-sm" style="background:#1e293b;color:#fff;border:1px solid #475569;" onclick="changeAvatarUrl()">🔗 URL</button></div>
-                    <div style="margin-top:10px;"><input type="text" id="profileNameInput" value="${escapeHTML(u.name)}" style="background:rgba(9,13,22,0.9);border:1px solid #334155;color:#fff;padding:6px;border-radius:6px;text-align:center;font-weight:bold;width:72%;"> <button class="btn btn-sm" style="background:var(--primary);color:#000;" onclick="saveProfileName()">Save</button><div style="font-size:12px;color:#cbd5e1;margin-top:5px;">📱 ${escapeHTML(u.phone)} | Balance: <b style="color:var(--green)">₹${u.balance}</b></div></div>
+                    <div style="margin-top:6px;display:flex;justify-content:center;gap:6px;"><label class="btn btn-sm btn-chart" style="cursor:pointer;">📷 Upload<input type="file" accept="image/*" style="display:none;" onchange="changeAvatarGallery(event)"></label><button class="btn btn-sm btn-chart" onclick="changeAvatarUrl()">🔗 URL</button></div>
+                    <div style="margin-top:10px;"><input type="text" id="profileNameInput" value="${escapeHTML(u.name)}" style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:6px;border-radius:8px;text-align:center;font-weight:bold;width:72%;"> <button class="btn btn-sm btn-play" onclick="saveProfileName()">Save</button><div style="font-size:12px;color:#e2e8f0;margin-top:5px;">📱 ${escapeHTML(u.phone)} | Balance: <b style="color:#4ade80">₹${u.balance}</b></div></div>
                 </div>
-                <div class="form-card"><button class="btn" style="background:linear-gradient(135deg,#16a34a,#2ecc71);color:#000;width:100%;padding:12px;font-size:15px;" onclick="navigate('deposit')">➕ Deposit Points (QR & UPI)</button></div>
+                <div class="form-card"><button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;padding:12px;font-size:15px;" onclick="navigate('deposit')">➕ Deposit Points (QR & UPI)</button></div>
                 <div class="ref-box">
                     <h4 style="color:var(--primary);margin-bottom:6px;font-size:15px;">🎁 Refer & Earn (Referral Commission Box)</h4>
-                    <p style="font-size:11px;color:#e2e8f0;line-height:1.4;margin-bottom:8px;">दोस्त <b>₹200</b> डिपॉजिट करेगा तो <b>₹100 Starting Bonus</b>, और उसके बाद हर डिपॉजिट पर <b>3% Commission</b> (जैसे ₹100 पर ₹3) इसी बॉक्स में जुड़ेगा!</p>
+                    <p style="font-size:11px;color:#f1f5f9;line-height:1.4;margin-bottom:8px;">दोस्त <b>₹200</b> डिपॉजिट करेगा तो <b>₹100 Starting Bonus</b>, और उसके बाद हर डिपॉजिट पर <b>3% Commission</b> (जैसे ₹100 पर ₹3) इसी बॉक्स में जुड़ेगा!</p>
                     <div class="ref-stats"><div class="ref-stat-item"><div class="ref-stat-val">₹${refBal}</div><div class="ref-stat-lbl">Commission Box</div></div><div class="ref-stat-item"><div class="ref-stat-val" style="color:var(--primary);">₹${refTot}</div><div class="ref-stat-lbl">Total Earning</div></div><div class="ref-stat-item"><div class="ref-stat-val" style="color:var(--blue);">${refFriends.length}</div><div class="ref-stat-lbl">Total Referred</div></div></div>
-                    <button class="btn" style="background:linear-gradient(135deg,#16a34a,#2ecc71);color:#000;width:100%;margin-bottom:10px;" onclick="claimReferralToWallet()">💸 Transfer ₹${refBal} to Main Wallet</button>
-                    <div style="font-size:11px;color:#cbd5e1;margin-bottom:4px;">Referral Code: <b style="color:#fff;">${escapeHTML(u.phone)}</b></div>
+                    <button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;margin-bottom:10px;" onclick="claimReferralToWallet()">💸 Transfer ₹${refBal} to Main Wallet</button>
+                    <div style="font-size:11px;color:#e2e8f0;margin-bottom:4px;">Referral Code: <b style="color:#fff;">${escapeHTML(u.phone)}</b></div>
                     <div class="ref-link-box">${escapeHTML(refLink)}</div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;"><button class="btn btn-sm" style="background:var(--primary);color:#000;" onclick="copyReferralLink()">📋 Copy Link</button><a href="https://wa.me/?text=${refShare}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:#27ae60;color:#fff;text-decoration:none;">💬 Share WhatsApp</a></div>
-                    <div style="border-top:1px solid #334155;padding-top:8px;"><div style="font-size:12px;font-weight:bold;color:var(--primary);margin-bottom:5px;">👥 Referred Friends (${refFriends.length})</div><div style="max-height:130px;overflow-y:auto;">${refFHtml}</div></div>
-                    <div style="border-top:1px solid #334155;padding-top:8px;margin-top:8px;"><div style="font-size:12px;font-weight:bold;color:var(--primary);margin-bottom:5px;">📜 Referral Commission History (${refHist.length})</div><div style="max-height:150px;overflow-y:auto;">${refHHtml}</div></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;"><button class="btn btn-sm btn-play" onclick="copyReferralLink()">📋 Copy Link</button><a href="https://wa.me/?text=${refShare}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:linear-gradient(135deg,#059669,#22c55e);color:#042f2e;text-decoration:none;">💬 Share WhatsApp</a></div>
+                    <div style="border-top:1px solid rgba(165,180,252,0.3);padding-top:8px;"><div style="font-size:12px;font-weight:bold;color:var(--primary);margin-bottom:5px;">👥 Referred Friends (${refFriends.length})</div><div style="max-height:130px;overflow-y:auto;">${refFHtml}</div></div>
+                    <div style="border-top:1px solid rgba(165,180,252,0.3);padding-top:8px;margin-top:8px;"><div style="font-size:12px;font-weight:bold;color:var(--primary);margin-bottom:5px;">📜 Referral Commission History (${refHist.length})</div><div style="max-height:150px;overflow-y:auto;">${refHHtml}</div></div>
                 </div>
-                <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">🏦 Payment Details</h4><div class="input-group"><label>Bank Details</label><textarea id="userBankInput" rows="2" placeholder="Account No, IFSC, Bank">${escapeHTML(u.bankDetails||'')}</textarea></div><div class="input-group"><label>PhonePe / GPay / UPI</label><input type="text" id="userUpiInput" value="${escapeHTML(u.upiDetails||'')}" placeholder="UPI ID / Number"></div><button class="btn" style="background:var(--blue);color:#fff;width:100%;" onclick="savePaymentDetails()">Save Payment Details</button></div>
-                <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">🏦 Send Withdrawal Request</h4><div class="input-group"><input type="number" id="withdrawAmt" min="500" placeholder="Enter Amount (Min ₹500)"></div><button class="btn" style="background:var(--red);color:#fff;width:100%;" onclick="sendWithdrawalRequest()">Send Withdrawal Request</button></div>
+                <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">🏦 Payment Details</h4><div class="input-group"><label>Bank Details</label><textarea id="userBankInput" rows="2" placeholder="Account No, IFSC, Bank">${escapeHTML(u.bankDetails||'')}</textarea></div><div class="input-group"><label>PhonePe / GPay / UPI</label><input type="text" id="userUpiInput" value="${escapeHTML(u.upiDetails||'')}" placeholder="UPI ID / Number"></div><button class="btn" style="background:linear-gradient(135deg,#0284c7,#38bdf8);color:#082f49;width:100%;" onclick="savePaymentDetails()">Save Payment Details</button></div>
+                <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">🏦 Send Withdrawal Request</h4><div class="input-group"><input type="number" id="withdrawAmt" inputmode="numeric" min="500" placeholder="Enter Amount (Min ₹500)"></div><button class="btn" style="background:linear-gradient(135deg,#e11d48,#f43f5e);color:#fff;width:100%;" onclick="sendWithdrawalRequest()">Send Withdrawal Request</button></div>
                 <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">📤 My Withdrawal Status</h4><div style="max-height:150px;overflow-y:auto;">${wHtml}</div></div>
                 <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">📥 My Deposit Status</h4><div style="max-height:150px;overflow-y:auto;">${dHtml}</div></div>
                 <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">📒 Wallet Passbook</h4><div style="max-height:190px;overflow-y:auto;">${tHtml}</div></div>
-                <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">📅 Filter Game History by Date</h4><div class="input-group"><label>तारीख चुनें</label><input type="date" id="filterDate" onchange="filterHistory()"></div><div id="historyFilteredBox" style="max-height:180px;overflow-y:auto;"><p style="color:#94a3b8;font-size:12px;">तारीख चुनें...</p></div></div>
-                <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">🔐 Change Password</h4><div class="input-group"><label>Current Password</label><div class="pass-wrap"><input type="password" id="chgOldPass" placeholder="पुराना पासवर्ड"><button type="button" class="pass-eye" onclick="togglePassVisibility('chgOldPass',this)">👁️</button></div></div><div class="input-group"><label>New Password</label><div class="pass-wrap"><input type="password" id="chgNewPass" placeholder="नया पासवर्ड"><button type="button" class="pass-eye" onclick="togglePassVisibility('chgNewPass',this)">👁️</button></div></div><div class="input-group"><label>Confirm Password</label><div class="pass-wrap"><input type="password" id="chgConfPass" placeholder="दोबारा लिखें"><button type="button" class="pass-eye" onclick="togglePassVisibility('chgConfPass',this)">👁️</button></div></div><button class="btn" style="background:var(--primary);color:#000;width:100%;" onclick="changePlayerPassword()">🔑 Update Password</button></div>
-                <a href="https://wa.me/${waNum}?text=Hello%20Admin" target="_blank" rel="noopener noreferrer" class="btn" style="background:#27ae60;color:#fff;display:block;text-decoration:none;padding:12px;margin-bottom:8px;">💬 WhatsApp Support Team</a>
-                <button class="btn" style="background:#c0392b;color:#fff;width:100%;padding:10px;" onclick="logoutPlayer()">🔒 Logout</button>`;
+                <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">📅 Filter Game History by Date</h4><div class="input-group"><label>तारीख चुनें</label><input type="date" id="filterDate" onchange="filterHistory()"></div><div id="historyFilteredBox" style="max-height:180px;overflow-y:auto;"><p style="color:#cbd5e1;font-size:12px;">तारीख चुनें...</p></div></div>
+                <div class="form-card"><h4 style="margin-bottom:8px;color:var(--primary);">🔐 Change Password</h4><div class="input-group"><label>Current Password</label><div class="pass-wrap"><input type="password" id="chgOldPass" placeholder="पुराना पासवर्ड"><button type="button" class="pass-eye" onclick="togglePassVisibility('chgOldPass',this)">👁️</button></div></div><div class="input-group"><label>New Password</label><div class="pass-wrap"><input type="password" id="chgNewPass" placeholder="नया पासवर्ड"><button type="button" class="pass-eye" onclick="togglePassVisibility('chgNewPass',this)">👁️</button></div></div><div class="input-group"><label>Confirm Password</label><div class="pass-wrap"><input type="password" id="chgConfPass" placeholder="दोबारा लिखें"><button type="button" class="pass-eye" onclick="togglePassVisibility('chgConfPass',this)">👁️</button></div></div><button class="btn btn-play" style="width:100%;" onclick="changePlayerPassword()">🔑 Update Password</button></div>
+                <a href="https://wa.me/${waNum}?text=Hello%20Admin" target="_blank" rel="noopener noreferrer" class="btn" style="background:linear-gradient(135deg,#059669,#22c55e);color:#042f2e;display:block;text-decoration:none;padding:12px;margin-bottom:8px;">💬 WhatsApp Support Team</a>
+                <button class="btn" style="background:linear-gradient(135deg,#be123c,#e11d48);color:#fff;width:100%;padding:10px;" onclick="logoutPlayer()">🔒 Logout</button>`;
         }
 
         function changeAvatarGallery(ev) {
             let f = ev.target.files[0]; if (!f) return;
+            if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!");
             let r = new FileReader();
             r.onload = e => {
                 let img = new Image();
+                img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!");
                 img.onload = () => {
                     let w = img.width, h = img.height, m = 180;
                     if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; }
@@ -1127,12 +1410,12 @@
         function filterHistory() {
             let dt = document.getElementById('filterDate')?.value, box = document.getElementById('historyFilteredBox'); if (!box) return;
             let f = state.bids.filter(b => b.phone === state.currentUserPhone && b.date === dt);
-            box.innerHTML = !f.length ? `<p style="color:#94a3b8;font-size:12px;">कोई गेम नहीं है।</p>` : f.map(b => `<div class="dark-row"><b>${escapeHTML(b.marketName)}</b> | ${escapeHTML(b.gameType)} (${escapeHTML(b.session)}) - ₹${b.amount} [<b>${escapeHTML(b.status)}</b>]</div>`).join('');
+            box.innerHTML = !f.length ? `<p style="color:#cbd5e1;font-size:12px;">कोई गेम नहीं है।</p>` : f.map(b => `<div class="dark-row"><b>${escapeHTML(b.marketName)}</b> (${escapeHTML(b.session)})<br>${escapeHTML(b.gameType)} | Digit: <b>${escapeHTML(b.digit)}</b> | ₹${b.amount} [<b>${escapeHTML(b.status)}</b>]${b.status==='WON'?` <span class="win-badge">+₹${b.winAmount}</span>`:''}</div>`).join('');
         }
-        function renderRates(root) { root.innerHTML = `<h3 style="margin-bottom:12px;color:var(--primary);">📊 Official Game Rates</h3>` + state.gameRates.map(r => `<div class="list-card">${escapeHTML(r.name)}: <b style="color:var(--green)">${escapeHTML(r.rate)}</b></div>`).join(''); }
+        function renderRates(root) { root.innerHTML = `<h3 style="margin-bottom:12px;color:var(--primary);">📊 Official Game Rates</h3>` + state.gameRates.map(r => `<div class="list-card">${escapeHTML(r.name)}: <b style="color:#4ade80">${escapeHTML(r.rate)}</b></div>`).join(''); }
 
         function renderAdminLogin(root) {
-            root.innerHTML = `<div class="form-card" style="max-width:350px;margin:40px auto;text-align:center;"><h3 style="color:var(--primary);margin-bottom:15px;">🔐 Admin Login</h3><div class="input-group"><input type="text" id="admLoginPhone" placeholder="Admin Mobile"></div><div class="input-group"><div class="pass-wrap"><input type="password" id="admLoginPass" placeholder="Password" onkeydown="if(event.key==='Enter') verifyAdminLogin()"><button type="button" class="pass-eye" onclick="togglePassVisibility('admLoginPass',this)">👁️</button></div></div><button class="btn" style="background:var(--green);color:#000;width:100%;" onclick="verifyAdminLogin()">Login to Admin</button></div>`;
+            root.innerHTML = `<div class="form-card" style="max-width:350px;margin:40px auto;text-align:center;"><h3 style="color:var(--primary);margin-bottom:15px;">🔐 Admin Login</h3><div class="input-group"><input type="text" id="admLoginPhone" placeholder="Admin Mobile"></div><div class="input-group"><div class="pass-wrap"><input type="password" id="admLoginPass" placeholder="Password" onkeydown="if(event.key==='Enter') verifyAdminLogin()"><button type="button" class="pass-eye" onclick="togglePassVisibility('admLoginPass',this)">👁️</button></div></div><button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;margin-bottom:8px;" onclick="verifyAdminLogin()">Login to Admin</button>${state.currentUserPhone ? `<button class="btn btn-chart" style="width:100%;" onclick="navigate('home')">← Back to App</button>` : `<button class="btn btn-chart" style="width:100%;" onclick="renderLoginScreen()">← Back to Player Login</button>`}</div>`;
         }
         function verifyAdminLogin() {
             let ph = (document.getElementById('admLoginPhone')?.value||'').trim(), pw = (document.getElementById('admLoginPass')?.value||'').trim();
@@ -1141,24 +1424,52 @@
                 state.isAdminLoggedIn = true; sessionStorage.setItem('mk_admin_logged_in', '1'); navigate('adminLogin');
             } else alert("गलत मोबाइल नंबर या पासवर्ड!");
         }
-        function adminLogout() { state.isAdminLoggedIn = false; sessionStorage.removeItem('mk_admin_logged_in'); navigate('adminLogin'); }
+        function adminLogout() {
+            state.isAdminLoggedIn = false; sessionStorage.removeItem('mk_admin_logged_in');
+            if (state.currentUserPhone && state.users[state.currentUserPhone]) navigate('home');
+            else renderLoginScreen();
+        }
 
         function computeAdminPnL(df = null) {
             let vb = state.bids.filter(b => b.status !== "REFUNDED" && (!df || b.date === df));
-            let tBid = vb.reduce((s,b)=>s+Number(b.amount||0),0), tWin = vb.filter(b=>b.status==="WON").reduce((s,b)=>s+Number(b.winAmount||0),0), pBid = vb.filter(b=>b.status==="PENDING").reduce((s,b)=>s+Number(b.amount||0),0);
+            let sb = vb.filter(b => b.status === "WON" || b.status === "LOST");
+            let sBid = sb.reduce((s,b)=>s+Number(b.amount||0),0);
+            let tWin = sb.filter(b=>b.status==="WON").reduce((s,b)=>s+Number(b.winAmount||0),0);
+            let pBid = vb.filter(b=>b.status==="PENDING").reduce((s,b)=>s+Number(b.amount||0),0);
             let reqDep = state.depositRequests.filter(d=>d.status==="APPROVED"&&(!df||d.date===df)).reduce((s,d)=>s+Number(d.amount||0),0);
-            let admDep = state.transactions.filter(t=>t.type==="Admin Added"&&(!df||t.date===df)).reduce((s,t)=>s+Number(t.amount||0),0);
+            let admAdd = state.transactions.filter(t=>t.type==="Admin Added"&&(!df||t.date===df)).reduce((s,t)=>s+Number(t.amount||0),0);
+            let admDed = state.transactions.filter(t=>t.type==="Admin Deducted"&&(!df||t.date===df)).reduce((s,t)=>s+Math.abs(Number(t.amount||0)),0);
             let appW = state.withdrawRequests.filter(w=>w.status==="APPROVED"&&(!df||w.date===df)).reduce((s,w)=>s+Number(w.amount||0),0);
+            let giftComm = state.giftCommissions.filter(g=>!df||g.date===df).reduce((s,g)=>s+Number(g.adminCommission||0),0);
+            let giftTotal = state.giftCommissions.filter(g=>!df||g.date===df).reduce((s,g)=>s+Number(g.giftAmount||0),0);
             let liab = 0, refAll = 0;
             Object.values(state.users).forEach(u => { if (!u.isSystem) { liab += Number(u.balance||0) + Number(u.referralBalance||0); refAll += Number(u.referralTotalEarned||0); } });
-            return { cnt:vb.length, tBid:Math.round(tBid*100)/100, tWin:Math.round(tWin*100)/100, pBid:Math.round(pBid*100)/100, net:Math.round((tBid-tWin)*100)/100, dep:Math.round((reqDep+admDep)*100)/100, wdr:Math.round(appW*100)/100, liab:Math.round(liab*100)/100, refAll:Math.round(refAll*100)/100 };
+            let gameNet = Math.round((sBid - tWin) * 100) / 100;
+            return {
+                cnt:vb.length, sCnt:sb.length,
+                sBid:Math.round(sBid*100)/100, tWin:Math.round(tWin*100)/100,
+                pBid:Math.round(pBid*100)/100, net:gameNet,
+                giftComm:Math.round(giftComm*100)/100, giftTotal:Math.round(giftTotal*100)/100,
+                totalBusinessNet:Math.round((gameNet + giftComm)*100)/100,
+                dep:Math.round(reqDep*100)/100, admNet:Math.round((admAdd-admDed)*100)/100,
+                wdr:Math.round(appW*100)/100, liab:Math.round(liab*100)/100, refAll:Math.round(refAll*100)/100
+            };
         }
         function renderPnLBox(df = null) {
             let box = document.getElementById('admPnlBox'); if (!box) return;
-            let p = computeAdminPnL(df), c = p.net >= 0 ? 'var(--green)' : 'var(--red)';
-            box.innerHTML = `<div style="font-size:11px;color:#94a3b8;margin-bottom:6px;text-align:center;">Showing: <b style="color:var(--primary)">${df||'All Time'}</b> (${p.cnt} Bids)</div>
-                <div class="pnl-grid"><div class="pnl-card"><div class="pnl-val">₹${p.tBid}</div><div class="pnl-lbl">Bid Collection</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--red);">₹${p.tWin}</div><div class="pnl-lbl">Winning Payout</div></div><div class="pnl-card"><div class="pnl-val" style="color:${c};">₹${p.net}</div><div class="pnl-lbl">Game ${p.net>=0?'Profit':'Loss'}</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--primary);">₹${p.pBid}</div><div class="pnl-lbl">Pending Bids</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--green);">₹${p.dep}</div><div class="pnl-lbl">Deposits (Req+Adm)</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--blue);">₹${p.wdr}</div><div class="pnl-lbl">Withdrawals</div></div></div>
-                <div class="dark-row flex-between" style="font-size:11px;"><span>Wallet Liability: <b style="color:var(--primary)">₹${p.liab}</b></span><span>Ref Given: <b style="color:var(--green)">₹${p.refAll}</b></span></div>`;
+            let p = computeAdminPnL(df), c = p.net >= 0 ? '#4ade80' : '#fda4af', tc = p.totalBusinessNet >= 0 ? '#4ade80' : '#fda4af';
+            box.innerHTML = `<div style="font-size:11px;color:#cbd5e1;margin-bottom:6px;text-align:center;">Showing: <b style="color:var(--primary)">${df||'All Time'}</b> (${p.sCnt} Settled / ${p.cnt} Total Bids)</div>
+                <div class="pnl-grid">
+                    <div class="pnl-card"><div class="pnl-val">₹${p.sBid}</div><div class="pnl-lbl">Settled Collection</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:#fda4af;">₹${p.tWin}</div><div class="pnl-lbl">Winning Payout</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:${c};">₹${p.net}</div><div class="pnl-lbl">Game ${p.net>=0?'Profit':'Loss'}</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:var(--primary);">₹${p.pBid}</div><div class="pnl-lbl">Pending Bids</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:#4ade80;">₹${p.giftComm}</div><div class="pnl-lbl">🎁 Gift Commission (20%)</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:${tc};">₹${p.totalBusinessNet}</div><div class="pnl-lbl">💎 Net (Game + Gift)</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:#4ade80;">₹${p.dep}</div><div class="pnl-lbl">Approved Deposits</div></div>
+                    <div class="pnl-card"><div class="pnl-val" style="color:var(--blue);">₹${p.wdr}</div><div class="pnl-lbl">Approved Withdrawals</div></div>
+                </div>
+                <div class="dark-row flex-between" style="font-size:11px;flex-wrap:wrap;gap:4px;"><span>Admin Bal Adj: <b style="color:#fff">₹${p.admNet}</b></span><span>Wallet Liability: <b style="color:var(--primary)">₹${p.liab}</b></span><span>Ref Given: <b style="color:#4ade80">₹${p.refAll}</b></span></div>`;
         }
         function adminFilterPnL(all) { renderPnLBox(all ? null : (document.getElementById('admPnlDate')?.value || getLocalDateString())); }
 
@@ -1175,13 +1486,13 @@
             let list = Object.values(state.users).filter(u => !u.isSystem);
             if (mode === 'blocked') list = list.filter(u => u.isBlocked);
             else if (q) list = list.filter(u => u.phone.toLowerCase().includes(q) || (u.name||'').toLowerCase().includes(q));
-            if (!list.length) { box.innerHTML = `<p style="color:#94a3b8;">कोई प्लेयर नहीं मिला।</p>`; return; }
+            if (!list.length) { box.innerHTML = `<p style="color:#cbd5e1;">कोई प्लेयर नहीं मिला।</p>`; return; }
             box.innerHTML = `<div style="margin-bottom:6px;color:var(--primary);font-size:12px;"><b>Players Found: ${list.length}</b></div>` + list.map(u => {
-                let s = getPlayerPnLStats(u.phone), pc = s.pNet>=0?'var(--green)':'var(--red)';
-                return `<div class="dark-row" style="border-left:3px solid ${u.isBlocked?'var(--red)':'var(--green)'};">
+                let s = getPlayerPnLStats(u.phone), pc = s.pNet>=0?'#4ade80':'#fda4af';
+                return `<div class="dark-row" style="border-left:3px solid ${u.isBlocked?'#f43f5e':'#22c55e'};">
                     <div class="flex-between" style="margin-bottom:4px;"><span><b>${escapeHTML(u.name)}</b> (ID: <b>${escapeHTML(u.phone)}</b>)</span>${u.isBlocked?'<span class="loss-badge">BLOCKED</span>':'<span class="win-badge">ACTIVE</span>'}</div>
-                    <div style="font-size:11px;color:#cbd5e1;margin-bottom:6px;">Wallet: <b style="color:var(--green)">₹${u.balance}</b> | Bet: <b>₹${s.bet}</b> | Win: <b>₹${s.won}</b><br>Player P&L: <b style="color:${pc}">${s.pNet>=0?'+':''}₹${s.pNet}</b></div>
-                    <div style="display:flex;gap:6px;"><button class="btn btn-sm" style="background:var(--blue);color:#fff;flex:1;" data-ph="${escapeHTML(u.phone)}" onclick="adminViewPlayerFullHistory(this.dataset.ph)">📊 Full History & P&L</button><button class="btn btn-sm" style="background:${u.isBlocked?'var(--green)':'var(--red)'};color:${u.isBlocked?'#000':'#fff'};" data-ph="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.ph)">${u.isBlocked?'✅ Unblock':'🚫 Block'}</button></div>
+                    <div style="font-size:11px;color:#e2e8f0;margin-bottom:6px;">Wallet: <b style="color:#4ade80">₹${u.balance}</b> | Bet: <b>₹${s.bet}</b> | Win: <b>₹${s.won}</b><br>Player P&L: <b style="color:${pc}">${s.pNet>=0?'+':''}₹${s.pNet}</b></div>
+                    <div style="display:flex;gap:6px;"><button class="btn btn-sm" style="background:var(--blue);color:#082f49;flex:1;" data-ph="${escapeHTML(u.phone)}" onclick="adminViewPlayerFullHistory(this.dataset.ph)">📊 Full History & P&L</button><button class="btn btn-sm" style="background:${u.isBlocked?'#22c55e':'#f43f5e'};color:${u.isBlocked?'#052e16':'#fff'};" data-ph="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.ph)">${u.isBlocked?'✅ Unblock':'🚫 Block'}</button></div>
                 </div>`;
             }).join('');
         }
@@ -1189,12 +1500,12 @@
             let box = document.getElementById('admProfResultBox'), u = state.users[ph];
             if (!box || !u || u.isSystem) return;
             let s = getPlayerPnLStats(ph), refCnt = Object.values(state.users).filter(x => !x.isSystem && x.referredBy === ph).length;
-            let bidsH = state.bids.filter(b => b.phone === ph).slice().reverse().map(b => `<div class="dark-row" style="font-size:11px;"><div class="flex-between"><b>${escapeHTML(b.marketName)} (${escapeHTML(b.session)})</b><b>${escapeHTML(b.status)}</b></div><div>${escapeHTML(b.gameType)} | ${escapeHTML(b.digit)} | ₹${b.amount} ${b.status==='WON'?'| Win: ₹'+b.winAmount:''}</div><small style="color:#64748b">${escapeHTML(b.date)} ${escapeHTML(b.time)}</small></div>`).join('') || `<small style="color:#94a3b8;">कोई बिड नहीं।</small>`;
-            let txH = state.transactions.filter(t => t.phone === ph).slice().reverse().map(t => `<div style="font-size:11px;border-bottom:1px solid #1e293b;padding:4px 0;" class="flex-between"><span>${escapeHTML(t.type)}<br><small style="color:#64748b">${escapeHTML(t.time)}</small></span><b style="color:${t.amount>=0?'var(--green)':'var(--red)'}">${t.amount>=0?'+':''}₹${t.amount}</b></div>`).join('') || `<small style="color:#94a3b8;">कोई ट्रांजैक्शन नहीं।</small>`;
+            let bidsH = state.bids.filter(b => b.phone === ph).slice().reverse().map(b => `<div class="dark-row" style="font-size:11px;"><div class="flex-between"><b>${escapeHTML(b.marketName)} (${escapeHTML(b.session)})</b><b>${escapeHTML(b.status)}</b></div><div>${escapeHTML(b.gameType)} | ${escapeHTML(b.digit)} | ₹${b.amount} ${b.status==='WON'?'| Win: ₹'+b.winAmount:''}</div><small style="color:#94a3b8">${escapeHTML(b.date)} ${escapeHTML(b.time)}</small></div>`).join('') || `<small style="color:#cbd5e1;">कोई बिड नहीं।</small>`;
+            let txH = state.transactions.filter(t => t.phone === ph).slice().reverse().map(t => `<div style="font-size:11px;border-bottom:1px solid rgba(129,140,248,0.22);padding:4px 0;" class="flex-between"><span>${escapeHTML(t.type)}<br><small style="color:#94a3b8">${escapeHTML(t.time)}</small></span><b style="color:${t.amount>=0?'#4ade80':'#fda4af'}">${t.amount>=0?'+':''}₹${t.amount}</b></div>`).join('') || `<small style="color:#cbd5e1;">कोई ट्रांजैक्शन नहीं।</small>`;
             box.innerHTML = `<div class="dark-row" style="border:1px solid var(--primary);">
-                <div class="flex-between" style="margin-bottom:8px;"><button class="btn btn-sm" style="background:#334155;color:#fff;" onclick="adminRenderPlayerDirectory('search')">← Back</button><button class="btn btn-sm" style="background:${u.isBlocked?'var(--green)':'var(--red)'};color:${u.isBlocked?'#000':'#fff'};" data-ph="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.ph)">${u.isBlocked?'✅ Unblock ID':'🚫 Block ID'}</button></div>
-                <div style="font-size:12px;line-height:1.55;margin-bottom:8px;"><b>${escapeHTML(u.name)}</b> (${escapeHTML(u.phone)}) ${u.isBlocked?'<span class="loss-badge">BLOCKED</span>':'<span class="win-badge">ACTIVE</span>'}<br>${u.isBlocked&&u.blockReason?`<b>Reason:</b> <span style="color:var(--red)">${escapeHTML(u.blockReason)}</span><br>`:''}Wallet: <b style="color:var(--green)">₹${u.balance}</b> | Ref By: ${escapeHTML(u.referredBy||'None')} | Referred: ${refCnt}<br>Bank: ${escapeHTML(u.bankDetails||'N/A')} | UPI: ${escapeHTML(u.upiDetails||'N/A')}</div>
-                <div class="pnl-grid"><div class="pnl-card"><div class="pnl-val">₹${s.dep}</div><div class="pnl-lbl">Deposited</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--blue)">₹${s.wdr}</div><div class="pnl-lbl">Withdrawn</div></div><div class="pnl-card"><div class="pnl-val">₹${s.bet} (${s.cnt})</div><div class="pnl-lbl">Total Bets</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--green)">₹${s.won}</div><div class="pnl-lbl">Winning</div></div><div class="pnl-card"><div class="pnl-val" style="color:${s.pNet>=0?'var(--green)':'var(--red)'}">${s.pNet>=0?'+':''}₹${s.pNet}</div><div class="pnl-lbl">Player ${s.pNet>=0?'Profit':'Loss'}</div></div><div class="pnl-card"><div class="pnl-val" style="color:${s.hNet>=0?'var(--green)':'var(--red)'}">${s.hNet>=0?'+':''}₹${s.hNet}</div><div class="pnl-lbl">Admin ${s.hNet>=0?'Profit':'Loss'}</div></div></div>
+                <div class="flex-between" style="margin-bottom:8px;"><button class="btn btn-sm btn-chart" onclick="adminRenderPlayerDirectory('search')">← Back</button><button class="btn btn-sm" style="background:${u.isBlocked?'#22c55e':'#f43f5e'};color:${u.isBlocked?'#052e16':'#fff'};" data-ph="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.ph)">${u.isBlocked?'✅ Unblock ID':'🚫 Block ID'}</button></div>
+                <div style="font-size:12px;line-height:1.55;margin-bottom:8px;"><b>${escapeHTML(u.name)}</b> (${escapeHTML(u.phone)}) ${u.isBlocked?'<span class="loss-badge">BLOCKED</span>':'<span class="win-badge">ACTIVE</span>'}<br>${u.isBlocked&&u.blockReason?`<b>Reason:</b> <span style="color:#fda4af">${escapeHTML(u.blockReason)}</span><br>`:''}Wallet: <b style="color:#4ade80">₹${u.balance}</b> | Ref By: ${escapeHTML(u.referredBy||'None')} | Referred: ${refCnt}<br>Bank: ${escapeHTML(u.bankDetails||'N/A')} | UPI: ${escapeHTML(u.upiDetails||'N/A')}</div>
+                <div class="pnl-grid"><div class="pnl-card"><div class="pnl-val">₹${s.dep}</div><div class="pnl-lbl">Deposited</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--blue)">₹${s.wdr}</div><div class="pnl-lbl">Withdrawn</div></div><div class="pnl-card"><div class="pnl-val">₹${s.bet} (${s.cnt})</div><div class="pnl-lbl">Total Bets</div></div><div class="pnl-card"><div class="pnl-val" style="color:#4ade80">₹${s.won}</div><div class="pnl-lbl">Winning</div></div><div class="pnl-card"><div class="pnl-val" style="color:${s.pNet>=0?'#4ade80':'#fda4af'}">${s.pNet>=0?'+':''}₹${s.pNet}</div><div class="pnl-lbl">Player ${s.pNet>=0?'Profit':'Loss'}</div></div><div class="pnl-card"><div class="pnl-val" style="color:${s.hNet>=0?'#4ade80':'#fda4af'}">${s.hNet>=0?'+':''}₹${s.hNet}</div><div class="pnl-lbl">Admin ${s.hNet>=0?'Profit':'Loss'}</div></div></div>
                 <b style="color:var(--primary);font-size:12px;">📜 Full Bids History</b><div style="max-height:160px;overflow-y:auto;margin:5px 0;">${bidsH}</div>
                 <b style="color:var(--primary);font-size:12px;">📒 Full Transactions</b><div style="max-height:160px;overflow-y:auto;margin-top:5px;">${txH}</div>
             </div>`;
@@ -1215,14 +1526,14 @@
             if (document.getElementById('admProfResultBox')) navigate('adminLogin');
             else renderGuessingForum(document.getElementById('appRoot'));
         }
-        function adminBlockByInput() { let p = (document.getElementById('admBlockPhoneInput')?.value||'').replace(/\D/g,''); if (p.length!==10) return alert("❌ 10 अंकों का नंबर दर्ज करें!"); adminToggleBlockUser(p); }
+        function adminBlockByInput() { let p = normalizePhone(document.getElementById('admBlockPhoneInput')?.value||''); if (p.length!==10) return alert("❌ 10 अंकों का नंबर दर्ज करें!"); adminToggleBlockUser(p); }
         function adminDeleteGuessPost(id) { if (!confirm("पोस्ट डिलीट करें?")) return; state.guessingPosts = state.guessingPosts.filter(p => p.id !== id); saveState(); navigate('adminLogin'); }
         function updateAdminPendingBidDateHint() {
             let mEl = document.getElementById('admResMarket'), hEl = document.getElementById('admPendingDateHint'); if (!mEl || !hEl) return;
             let mId = parseInt(mEl.value, 10), counts = {};
             state.bids.forEach(b => { if (b.marketId === mId && b.status === "PENDING") counts[b.date] = (counts[b.date] || 0) + 1; });
             let e = Object.entries(counts);
-            hEl.innerHTML = !e.length ? `<span style="color:#94a3b8;">कोई PENDING बिड नहीं है।</span>` : `<span style="color:#cbd5e1;">Pending Dates: </span>` + e.map(([dt,cnt])=>`<button type="button" class="btn btn-sm" style="background:#1e293b;color:var(--primary);border:1px solid var(--primary);padding:2px 6px;font-size:10px;margin-right:4px;" onclick="document.getElementById('admResDate').value='${escapeHTML(dt)}'">${escapeHTML(dt)} (${cnt})</button>`).join('');
+            hEl.innerHTML = !e.length ? `<span style="color:#cbd5e1;">कोई PENDING बिड नहीं है।</span>` : `<span style="color:#e2e8f0;">Pending Dates: </span>` + e.map(([dt,cnt])=>`<button type="button" class="btn btn-sm" style="background:var(--surface);color:var(--primary);border:1px solid var(--primary);padding:2px 6px;font-size:10px;margin-right:4px;" onclick="document.getElementById('admResDate').value='${escapeHTML(dt)}'">${escapeHTML(dt)} (${cnt})</button>`).join('');
         }
 
         function renderAdmin(root) {
@@ -1231,33 +1542,37 @@
             let vipCnt = state.guesserChats[DEFAULT_VIP_PHONE] ? Object.keys(state.guesserChats[DEFAULT_VIP_PHONE]).length : 0;
             let depList = state.depositRequests.filter(d=>d.status==="PENDING"), wdrList = state.withdrawRequests.filter(w=>w.status==="PENDING"), today = getLocalDateString();
 
-            let dHtml = depList.map(d => `<div class="dark-row flex-between"><div><b>${escapeHTML(d.name)}</b> (${escapeHTML(d.phone)})<br>₹${d.amount} | UTR: <b>${escapeHTML(d.utr)}</b></div><div style="display:flex;gap:4px;"><button class="btn btn-sm" style="background:var(--green);color:#000;" onclick="approveDeposit(${d.id})">Approve</button><button class="btn btn-sm" style="background:var(--red);color:#fff;" onclick="rejectDeposit(${d.id})">Reject</button></div></div>`).join('') || `<p style="color:#94a3b8;font-size:12px;">कोई नई डिपॉजिट रिक्वेस्ट नहीं।</p>`;
-            let wHtml = wdrList.map(w => `<div class="dark-row flex-between"><div><b>${escapeHTML(w.name)}</b> (${escapeHTML(w.phone)})<br>₹${w.amount}</div><div style="display:flex;gap:4px;"><button class="btn btn-sm" style="background:var(--green);color:#000;" onclick="approveWithdraw(${w.id})">Approve</button><button class="btn btn-sm" style="background:var(--red);color:#fff;" onclick="rejectWithdraw(${w.id})">Reject</button></div></div>`).join('') || `<p style="color:#94a3b8;font-size:12px;">कोई नई विड्रॉल रिक्वेस्ट नहीं।</p>`;
-            let fHtml = state.forgotRequests.slice().reverse().map(f => `<div class="dark-row flex-between"><div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#94a3b8">${escapeHTML(f.time)}</small></div><button class="btn btn-sm" style="background:var(--primary);color:#000;" data-ph="${escapeHTML(f.phone)}" data-id="${f.id}" onclick="adminResetUserPassword(this.dataset.ph,Number(this.dataset.id))">🔑 Reset</button></div>`).join('') || `<p style="color:#94a3b8;font-size:12px;">कोई रिक्वेस्ट नहीं।</p>`;
+            let totalGiftCommAll = Math.round(state.giftCommissions.reduce((s,g)=>s+Number(g.adminCommission||0),0)*100)/100;
+            let giftLogHtml = state.giftCommissions.slice().reverse().slice(0,25).map(g => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(g.senderName)}</b> ➔ <b>${escapeHTML(g.receiverName)}</b><br><small style="color:#cbd5e1">${escapeHTML(g.giftName)} | Guesser को मिला: ₹${g.guesserReceived}<br>${escapeHTML(g.time)}</small></div><b style="color:#4ade80">+₹${g.adminCommission}</b></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">अभी तक कोई गिफ्ट कमीशन नहीं आया।</p>`;
+
+            let dHtml = depList.map(d => `<div class="dark-row flex-between"><div><b>${escapeHTML(d.name)}</b> (${escapeHTML(d.phone)})<br>₹${d.amount} | UTR: <b>${escapeHTML(d.utr)}</b></div><div style="display:flex;gap:4px;"><button class="btn btn-sm" style="background:#22c55e;color:#052e16;" onclick="approveDeposit(${d.id})">Approve</button><button class="btn btn-sm" style="background:#f43f5e;color:#fff;" onclick="rejectDeposit(${d.id})">Reject</button></div></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई नई डिपॉजिट रिक्वेस्ट नहीं।</p>`;
+            let wHtml = wdrList.map(w => `<div class="dark-row flex-between"><div><b>${escapeHTML(w.name)}</b> (${escapeHTML(w.phone)})<br>₹${w.amount}</div><div style="display:flex;gap:4px;"><button class="btn btn-sm" style="background:#22c55e;color:#052e16;" onclick="approveWithdraw(${w.id})">Approve</button><button class="btn btn-sm" style="background:#f43f5e;color:#fff;" onclick="rejectWithdraw(${w.id})">Reject</button></div></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई नई विड्रॉल रिक्वेस्ट नहीं।</p>`;
+            let fHtml = state.forgotRequests.slice().reverse().map(f => `<div class="dark-row flex-between"><div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#cbd5e1">${escapeHTML(f.time)}</small></div><button class="btn btn-sm btn-play" data-ph="${escapeHTML(f.phone)}" data-id="${f.id}" onclick="adminResetUserPassword(this.dataset.ph,Number(this.dataset.id))">🔑 Reset</button></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई रिक्वेस्ट नहीं।</p>`;
             let gMod = state.guessingPosts.slice().reverse().slice(0,15).map(p => {
                 let blk = (state.users[p.phone]||{}).isBlocked, vip = p.phone === DEFAULT_VIP_PHONE;
-                return `<div class="dark-row" style="border-left:3px solid ${blk?'var(--red)':'var(--primary)'};"><div class="flex-between"><b>${escapeHTML(p.name)} (${escapeHTML(p.phone)})</b><span style="color:var(--green)">${escapeHTML(p.market)}</span></div><div style="margin:5px 0;white-space:pre-wrap;">${escapeHTML(p.text)}</div><div style="display:flex;gap:6px;"><button class="btn btn-sm" style="background:var(--red);color:#fff;font-size:10px;" onclick="adminDeleteGuessPost(${p.id})">🗑️ Del</button>${!vip?`<button class="btn btn-sm" style="background:${blk?'var(--green)':'#8e44ad'};color:${blk?'#000':'#fff'};font-size:10px;" data-ph="${escapeHTML(p.phone)}" data-id="${p.id}" onclick="adminToggleBlockUser(this.dataset.ph,${blk?'null':'Number(this.dataset.id)'})">${blk?'✅ Unblock':'🚫 Block & Del'}</button>`:''}</div></div>`;
-            }).join('') || `<p style="color:#94a3b8;font-size:12px;">कोई पोस्ट नहीं।</p>`;
+                return `<div class="dark-row" style="border-left:3px solid ${blk?'#f43f5e':'#fbbf24'};"><div class="flex-between"><b>${escapeHTML(p.name)} (${escapeHTML(p.phone)})</b><span style="color:#4ade80">${escapeHTML(p.market)}</span></div><div style="margin:5px 0;white-space:pre-wrap;">${escapeHTML(p.text)}</div><div style="display:flex;gap:6px;"><button class="btn btn-sm" style="background:#f43f5e;color:#fff;font-size:10px;" onclick="adminDeleteGuessPost(${p.id})">🗑️ Del</button>${!vip?`<button class="btn btn-sm" style="background:${blk?'#22c55e':'#7c3aed'};color:${blk?'#052e16':'#fff'};font-size:10px;" data-ph="${escapeHTML(p.phone)}" data-id="${p.id}" onclick="adminToggleBlockUser(this.dataset.ph,${blk?'null':'Number(this.dataset.id)'})">${blk?'✅ Unblock':'🚫 Block & Del'}</button>`:''}</div></div>`;
+            }).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई पोस्ट नहीं।</p>`;
             let rHtml = state.gameRates.map((r,i) => `<div class="input-group"><label>${escapeHTML(r.name)} Rate</label><input type="text" id="rateInput_${i}" value="${escapeHTML(r.rate)}"></div>`).join('');
 
             root.innerHTML = `
-                <div class="flex-between" style="margin-bottom:15px;"><h3 style="color:var(--primary);">⚙️ Admin Dashboard</h3><button class="btn btn-sm" style="background:var(--red);color:#fff;" onclick="adminLogout()">Logout</button></div>
-                <div class="admin-section"><h4>📈 Profit / Loss & Business Dashboard</h4><div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:8px;"><input type="date" id="admPnlDate" value="${today}" onchange="adminFilterPnL(false)" style="background:rgba(9,13,22,0.9);border:1px solid #334155;color:#fff;padding:8px;border-radius:8px;"><button class="btn btn-sm" style="background:var(--blue);color:#fff;" onclick="adminFilterPnL(true)">All Time</button></div><div id="admPnlBox"></div></div>
-                <div class="admin-section"><h4>👑 M.KING VIP Private Chat Inbox (${vipCnt})</h4><button class="btn" style="background:var(--primary);color:#000;width:100%;" onclick="openChatWithGuesserPhone('${DEFAULT_VIP_PHONE}')">💬 Open VIP Chat Inbox (${vipCnt})</button></div>
-                <div class="admin-section"><h4>🔍 Search Players & Full Loss/Profit History (${allP} | Blocked: ${blkP})</h4><div class="input-group"><input type="text" id="admProfSearchPhone" oninput="adminRenderPlayerDirectory('search')" placeholder="🔍 Search Mobile Number (ID) or Name..."></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;"><button class="btn btn-sm" style="background:var(--blue);color:#fff;" onclick="adminRenderPlayerDirectory('search')">🔍 Search</button><button class="btn btn-sm" style="background:#2c3e50;color:#fff;" onclick="document.getElementById('admProfSearchPhone').value='';adminRenderPlayerDirectory('all')">👥 All (${allP})</button><button class="btn btn-sm" style="background:#8e44ad;color:#fff;" onclick="adminRenderPlayerDirectory('blocked')">🚫 Blocked (${blkP})</button></div><div id="admProfResultBox" style="margin-top:10px;max-height:350px;overflow-y:auto;"></div></div>
-                <div class="admin-section"><h4>🚫 Block / Unblock ID & Guessing Moderation</h4><div class="input-group"><div style="display:flex;gap:6px;"><input type="tel" id="admBlockPhoneInput" maxlength="10" placeholder="10 Digit Mobile"><button class="btn btn-sm" style="background:var(--red);color:#fff;white-space:nowrap;" onclick="adminBlockByInput()">🚫 Block/Unblock</button></div></div><div style="max-height:220px;overflow-y:auto;">${gMod}</div></div>
+                <div class="flex-between" style="margin-bottom:15px;"><h3 style="color:var(--primary);">⚙️ Admin Dashboard</h3><div style="display:flex;gap:6px;">${state.currentUserPhone?`<button class="btn btn-sm btn-chart" onclick="navigate('home')">← App</button>`:''}<button class="btn btn-sm" style="background:#f43f5e;color:#fff;" onclick="adminLogout()">Logout</button></div></div>
+                <div class="admin-section"><h4>📈 Profit / Loss & Business Dashboard</h4><div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:8px;"><input type="date" id="admPnlDate" value="${today}" onchange="adminFilterPnL(false)" style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:8px;border-radius:8px;"><button class="btn btn-sm" style="background:var(--blue);color:#082f49;" onclick="adminFilterPnL(true)">All Time</button></div><div id="admPnlBox"></div></div>
+                <div class="admin-section"><h4>🎁 Gift Commission Report (Total: ₹${totalGiftCommAll})</h4><p style="font-size:11px;color:#cbd5e1;margin-bottom:8px;">हर गिफ्ट का 20% एडमिन कमीशन (₹50 में ₹10, ₹100 में ₹20, ₹150 में ₹30) यहाँ जुड़ता है:</p><div style="max-height:190px;overflow-y:auto;">${giftLogHtml}</div></div>
+                <div class="admin-section"><h4>👑 M.KING VIP Private Chat Inbox (${vipCnt})</h4><button class="btn btn-play" style="width:100%;" onclick="openChatWithGuesserPhone('${DEFAULT_VIP_PHONE}')">💬 Open VIP Chat Inbox (${vipCnt})</button></div>
+                <div class="admin-section"><h4>🔍 Search Players & Full Loss/Profit History (${allP} | Blocked: ${blkP})</h4><div class="input-group"><input type="text" id="admProfSearchPhone" oninput="adminRenderPlayerDirectory('search')" placeholder="🔍 Search Mobile Number (ID) or Name..."></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;"><button class="btn btn-sm" style="background:var(--blue);color:#082f49;" onclick="adminRenderPlayerDirectory('search')">🔍 Search</button><button class="btn btn-sm btn-chart" onclick="document.getElementById('admProfSearchPhone').value='';adminRenderPlayerDirectory('all')">👥 All (${allP})</button><button class="btn btn-sm" style="background:#7c3aed;color:#fff;" onclick="adminRenderPlayerDirectory('blocked')">🚫 Blocked (${blkP})</button></div><div id="admProfResultBox" style="margin-top:10px;max-height:350px;overflow-y:auto;"></div></div>
+                <div class="admin-section"><h4>🚫 Block / Unblock ID & Guessing Moderation</h4><div class="input-group"><div style="display:flex;gap:6px;"><input type="tel" id="admBlockPhoneInput" maxlength="20" inputmode="numeric" placeholder="10 Digit Mobile"><button class="btn btn-sm" style="background:#f43f5e;color:#fff;white-space:nowrap;" onclick="adminBlockByInput()">🚫 Block/Unblock</button></div></div><div style="max-height:220px;overflow-y:auto;">${gMod}</div></div>
                 <div class="admin-section"><h4>🔑 Forgot Password Requests (${state.forgotRequests.length})</h4>${fHtml}</div>
                 <div class="admin-section"><h4>💰 Player Deposit Requests (${depList.length})</h4>${dHtml}</div>
-                <div class="admin-section"><h4>💳 Deposit QR & UPI Settings</h4><div class="input-group"><label>Upload QR</label><input type="file" accept="image/*" onchange="handleQrUpload(event)" style="background:rgba(9,13,22,0.9);color:#fff;padding:8px;border:1px solid #334155;border-radius:8px;width:100%;"></div><div style="text-align:center;margin:8px 0;"><img id="adminQrPreview" src="${safeImageURL(state.depositQR,DEFAULT_QR_SVG)}" style="width:100px;height:100px;object-fit:contain;background:#fff;border-radius:6px;"></div><div class="input-group"><label>UPI / PhonePe</label><input type="text" id="admUpiInput" value="${escapeHTML(state.depositUPI)}"></div><button class="btn" style="background:var(--green);color:#000;width:100%;" onclick="adminSaveDepositSettings()">💾 Save Deposit Info</button></div>
-                <div class="admin-section"><h4>📊 Market Bid Load / Jantri Summary</h4><div class="input-group"><label>Market</label><select id="admLoadMarket">${mOpts}</select></div><div class="input-group"><label>Date</label><input type="date" id="admLoadDate" value="${today}"></div><button class="btn" style="background:var(--primary);color:#000;width:100%;" onclick="adminCheckBidLoad()">Check Total Bid Load</button><div id="admLoadResultBox" style="margin-top:10px;max-height:200px;overflow-y:auto;"></div></div>
-                <div class="admin-section"><h4>🔍 Player Game History Check</h4><div class="input-group"><label>Mobile Number</label><input type="text" id="admGameSearchPhone" placeholder="Mobile Number"></div><div class="input-group"><label>Date (Optional)</label><input type="date" id="admGameSearchDate"></div><button class="btn" style="background:var(--blue);color:#fff;width:100%;" onclick="adminSearchGameHistory()">Search Game History</button><div id="admGameResultBox" style="margin-top:10px;max-height:200px;overflow-y:auto;"></div></div>
+                <div class="admin-section"><h4>💳 Deposit QR & UPI Settings</h4><div class="input-group"><label>Upload QR</label><input type="file" accept="image/*" onchange="handleQrUpload(event)" style="background:var(--surface);color:#fff;padding:8px;border:1px solid var(--border-soft);border-radius:8px;width:100%;"></div><div style="text-align:center;margin:8px 0;"><img id="adminQrPreview" src="${safeImageURL(state.depositQR,DEFAULT_QR_SVG)}" style="width:100px;height:100px;object-fit:contain;background:#fff;border-radius:6px;"></div><div class="input-group"><label>UPI / PhonePe</label><input type="text" id="admUpiInput" value="${escapeHTML(state.depositUPI)}"></div><button class="btn" style="background:#22c55e;color:#052e16;width:100%;" onclick="adminSaveDepositSettings()">💾 Save Deposit Info</button></div>
+                <div class="admin-section"><h4>📊 Market Bid Load / Jantri Summary</h4><div class="input-group"><label>Market</label><select id="admLoadMarket">${mOpts}</select></div><div class="input-group"><label>Date</label><input type="date" id="admLoadDate" value="${today}"></div><button class="btn btn-play" style="width:100%;" onclick="adminCheckBidLoad()">Check Total Bid Load</button><div id="admLoadResultBox" style="margin-top:10px;max-height:200px;overflow-y:auto;"></div></div>
+                <div class="admin-section"><h4>🔍 Player Game History Check</h4><div class="input-group"><label>Mobile Number</label><input type="tel" id="admGameSearchPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number"></div><div class="input-group"><label>Date (Optional)</label><input type="date" id="admGameSearchDate"></div><button class="btn" style="background:var(--blue);color:#082f49;width:100%;" onclick="adminSearchGameHistory()">Search Game History</button><div id="admGameResultBox" style="margin-top:10px;max-height:200px;overflow-y:auto;"></div></div>
                 <div class="admin-section"><h4>5️⃣ Player Withdrawal Requests (${wdrList.length})</h4>${wHtml}</div>
-                <div class="admin-section"><h4>1️⃣ Balance Add / Deduct</h4><div class="input-group"><input type="text" id="admPhone" placeholder="Mobile Number"></div><div class="input-group"><select id="admAction"><option value="add">Add</option><option value="deduct">Deduct</option></select></div><div class="input-group"><input type="number" id="admAmount" min="1" placeholder="Amount"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;"><input type="checkbox" id="admCountAsDeposit" checked style="width:auto;"><label for="admCountAsDeposit" style="margin:0;">Deposit मानें (Referral Bonus / 3% Commission दें)</label></div><button class="btn" style="background:var(--green);color:#000;width:100%;" onclick="adminModBal()">Update Balance</button></div>
-                <div class="admin-section"><h4>2️⃣ Market, Timing & Holiday Management</h4><div class="input-group"><input type="text" id="admMarketName" placeholder="Market Name"></div><div style="display:grid;grid-template-columns:2fr 1fr;gap:5px;"><div class="input-group"><input type="text" id="admOpenTime" placeholder="Open (04:15)"></div><div class="input-group"><select id="admOpenAmPm"><option value="AM">AM</option><option value="PM" selected>PM</option></select></div></div><div style="display:grid;grid-template-columns:2fr 1fr;gap:5px;"><div class="input-group"><input type="text" id="admCloseTime" placeholder="Close (06:15)"></div><div class="input-group"><select id="admCloseAmPm"><option value="AM">AM</option><option value="PM" selected>PM</option></select></div></div><button class="btn" style="background:var(--blue);color:#fff;width:100%;margin-bottom:10px;" onclick="adminAddMarket()">➕ Add Market</button><div class="input-group"><label>Select Market</label><select id="admDelMarketId" onchange="loadMarketForEdit()">${mOpts}</select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;"><button class="btn" style="background:var(--primary);color:#000;" onclick="adminEditMarket()">✏️ Update</button><button class="btn" style="background:#8e44ad;color:#fff;" onclick="toggleMarketHoliday()">🏖️ Holiday</button></div><button class="btn" style="background:var(--red);color:#fff;width:100%;" onclick="adminDelMarket()">❌ Delete Market</button></div>
-                <div class="admin-section"><h4>📊 Manage Game Rates</h4>${rHtml}<button class="btn" style="background:var(--green);color:#000;width:100%;" onclick="adminSaveRates()">💾 Save Rates</button></div>
-                <div class="admin-section"><h4>📢 Declare Result</h4><div class="input-group"><label>Market</label><select id="admResMarket" onchange="updateAdminPendingBidDateHint()">${mOpts}</select></div><div class="input-group"><label>Bids Date</label><input type="date" id="admResDate" value="${today}"></div><div id="admPendingDateHint" style="font-size:11px;margin-bottom:8px;"></div><div class="input-group"><label>Result String</label><input type="text" id="admResStr" placeholder="123-6*-*** या 123-68-459"></div><div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;"><button class="btn" style="background:var(--primary);color:#000;" onclick="adminDeclare()">Publish Result</button><button class="btn" style="background:#2c3e50;color:#fff;" onclick="adminResetMarketResult()">🔄 Reset</button></div></div>
-                <div class="admin-section"><h4>4️⃣ Change Admin Password</h4><div class="input-group"><label>Admin Mobile</label><input type="text" id="newAdminPhone" value="${escapeHTML(state.adminCreds.phone)}"></div><div class="input-group"><label>New Password</label><div class="pass-wrap"><input type="password" id="newAdminPass" placeholder="नया पासवर्ड (4+ अक्षर)"><button type="button" class="pass-eye" onclick="togglePassVisibility('newAdminPass',this)">👁️</button></div></div><button class="btn" style="background:var(--blue);color:#fff;width:100%;" onclick="adminChangeCreds()">Save New Password</button></div>
-                <div class="admin-section"><h4>Settings (WhatsApp & Notice)</h4><div class="input-group"><label>WhatsApp</label><input type="text" id="admWa" value="${escapeHTML(state.adminWhatsApp)}"></div><div class="input-group"><label>Notice</label><textarea id="admNotice" rows="2">${escapeHTML(state.noticeText)}</textarea></div><button class="btn" style="background:var(--green);color:#000;width:100%;" onclick="adminSaveSettings()">Save Settings</button></div>`;
+                <div class="admin-section"><h4>1️⃣ Balance Add / Deduct</h4><div class="input-group"><input type="tel" id="admPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number"></div><div class="input-group"><select id="admAction"><option value="add">Add</option><option value="deduct">Deduct</option></select></div><div class="input-group"><input type="number" id="admAmount" inputmode="numeric" min="1" placeholder="Amount"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;"><input type="checkbox" id="admCountAsDeposit" checked style="width:auto;"><label for="admCountAsDeposit" style="margin:0;">Deposit मानें (Referral Bonus / 3% Commission दें)</label></div><button class="btn" style="background:#22c55e;color:#052e16;width:100%;" onclick="adminModBal()">Update Balance</button></div>
+                <div class="admin-section"><h4>2️⃣ Market, Timing & Holiday Management</h4><div class="input-group"><input type="text" id="admMarketName" placeholder="Market Name"></div><div style="display:grid;grid-template-columns:2fr 1fr;gap:5px;"><div class="input-group"><input type="text" id="admOpenTime" placeholder="Open (04:15)"></div><div class="input-group"><select id="admOpenAmPm"><option value="AM">AM</option><option value="PM" selected>PM</option></select></div></div><div style="display:grid;grid-template-columns:2fr 1fr;gap:5px;"><div class="input-group"><input type="text" id="admCloseTime" placeholder="Close (06:15)"></div><div class="input-group"><select id="admCloseAmPm"><option value="AM">AM</option><option value="PM" selected>PM</option></select></div></div><button class="btn" style="background:var(--blue);color:#082f49;width:100%;margin-bottom:10px;" onclick="adminAddMarket()">➕ Add Market</button><div class="input-group"><label>Select Market (Edit / Holiday / Delete)</label><div style="display:flex;gap:6px;"><select id="admDelMarketId" onchange="loadMarketForEdit()" style="flex:1;">${mOpts}</select><button type="button" class="btn btn-sm btn-chart" onclick="loadMarketForEdit()">📥 Load</button></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;"><button class="btn btn-play" onclick="adminEditMarket()">✏️ Update</button><button class="btn" style="background:#7c3aed;color:#fff;" onclick="toggleMarketHoliday()">🏖️ Holiday</button></div><button class="btn" style="background:#f43f5e;color:#fff;width:100%;" onclick="adminDelMarket()">❌ Delete Market</button></div>
+                <div class="admin-section"><h4>📊 Manage Game Rates</h4>${rHtml}<button class="btn" style="background:#22c55e;color:#052e16;width:100%;" onclick="adminSaveRates()">💾 Save Rates</button></div>
+                <div class="admin-section"><h4>📢 Declare Result & Rollback</h4><div class="input-group"><label>Market</label><select id="admResMarket" onchange="updateAdminPendingBidDateHint()">${mOpts}</select></div><div class="input-group"><label>Bids Date</label><input type="date" id="admResDate" value="${today}"></div><div id="admPendingDateHint" style="font-size:11px;margin-bottom:8px;"></div><div class="input-group"><label>Result String</label><input type="text" id="admResStr" placeholder="123-6*-*** या 123-68-459"></div><div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:6px;"><button class="btn btn-play" onclick="adminDeclare()">Publish Result</button><button class="btn btn-chart" onclick="adminResetMarketResult()">🔄 Reset Text</button></div><button class="btn" style="background:#f43f5e;color:#fff;width:100%;font-size:12px;" onclick="adminRollbackResult()">↩️ Rollback Selected Date Result & Bids (गलती सुधारें)</button></div>
+                <div class="admin-section"><h4>4️⃣ Change Admin Password</h4><div class="input-group"><label>Admin Mobile</label><input type="text" id="newAdminPhone" value="${escapeHTML(state.adminCreds.phone)}"></div><div class="input-group"><label>New Password</label><div class="pass-wrap"><input type="password" id="newAdminPass" placeholder="नया पासवर्ड (4+ अक्षर)"><button type="button" class="pass-eye" onclick="togglePassVisibility('newAdminPass',this)">👁️</button></div></div><button class="btn" style="background:var(--blue);color:#082f49;width:100%;" onclick="adminChangeCreds()">Save New Password</button></div>
+                <div class="admin-section"><h4>Settings (WhatsApp & Notice)</h4><div class="input-group"><label>WhatsApp</label><input type="text" id="admWa" value="${escapeHTML(state.adminWhatsApp)}"></div><div class="input-group"><label>Notice</label><textarea id="admNotice" rows="2">${escapeHTML(state.noticeText)}</textarea></div><button class="btn" style="background:#22c55e;color:#052e16;width:100%;" onclick="adminSaveSettings()">Save Settings</button></div>`;
             renderPnLBox(today); adminRenderPlayerDirectory('all'); updateAdminPendingBidDateHint();
         }
 
@@ -1278,9 +1593,11 @@
         function rejectDeposit(id) { let req = state.depositRequests.find(d=>d.id===id); if (!req || req.status!=="PENDING") return; req.status="REJECTED"; saveState(); alert("डिपॉजिट रिजेक्ट हो गया!"); navigate('adminLogin'); }
         function handleQrUpload(ev) {
             let f = ev.target.files[0]; if (!f) return;
+            if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!");
             let r = new FileReader();
             r.onload = e => {
                 let img = new Image();
+                img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!");
                 img.onload = () => {
                     let w = img.width, h = img.height, m = 360;
                     if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; }
@@ -1294,16 +1611,16 @@
         function adminCheckBidLoad() {
             let mId = parseInt(document.getElementById('admLoadMarket')?.value, 10), dt = document.getElementById('admLoadDate')?.value || getLocalDateString(), box = document.getElementById('admLoadResultBox'); if (!box) return;
             let f = state.bids.filter(b => b.marketId === mId && b.date === dt && b.status !== "REFUNDED");
-            if (!f.length) { box.innerHTML = `<p style="color:#94a3b8;">कोई बिड नहीं लगी है।</p>`; return; }
+            if (!f.length) { box.innerHTML = `<p style="color:#cbd5e1;">कोई बिड नहीं लगी है।</p>`; return; }
             let tot = 0, grp = {};
             f.forEach(b => { tot += b.amount; let k = `${b.gameType} (${b.session}) - ${b.digit}`; if (!grp[k]) grp[k]={c:0,a:0}; grp[k].c++; grp[k].a+=b.amount; });
-            box.innerHTML = `<div class="dark-row" style="border:1px solid var(--primary);">Bids: <b>${f.length}</b> | Total Load: <b style="color:var(--green)">₹${tot}</b></div>` + Object.entries(grp).sort((a,b)=>b[1].a-a[1].a).map(([k,v])=>`<div class="dark-row flex-between"><span>${escapeHTML(k)} (${v.c})</span><b style="color:var(--primary)">₹${v.a}</b></div>`).join('');
+            box.innerHTML = `<div class="dark-row" style="border:1px solid var(--primary);">Bids: <b>${f.length}</b> | Total Load: <b style="color:#4ade80">₹${tot}</b></div>` + Object.entries(grp).sort((a,b)=>b[1].a-a[1].a).map(([k,v])=>`<div class="dark-row flex-between"><span>${escapeHTML(k)} (${v.c})</span><b style="color:var(--primary)">₹${v.a}</b></div>`).join('');
         }
         function adminSearchGameHistory() {
-            let ph = (document.getElementById('admGameSearchPhone')?.value||'').trim(), dt = document.getElementById('admGameSearchDate')?.value, box = document.getElementById('admGameResultBox'); if (!box) return;
+            let ph = normalizePhone(document.getElementById('admGameSearchPhone')?.value||''), dt = document.getElementById('admGameSearchDate')?.value, box = document.getElementById('admGameResultBox'); if (!box) return;
             if (!ph) return alert("मोबाइल नंबर दर्ज करें!");
             let f = state.bids.filter(b => b.phone === ph && (!dt || b.date === dt)).slice().reverse();
-            box.innerHTML = !f.length ? `<p style="color:var(--red);">कोई रिकॉर्ड नहीं मिला।</p>` : f.map(b => `<div class="dark-row" style="border-left:3px solid ${b.status==='WON'?'var(--green)':(b.status==='LOST'?'var(--red)':'var(--primary)')};"><b>${escapeHTML(b.marketName)}</b> (${escapeHTML(b.session)})<br>${escapeHTML(b.gameType)} | ${escapeHTML(b.digit)} | ₹${b.amount} | <b>${escapeHTML(b.status)}</b> ${b.status==='WON'?'(Win: ₹'+b.winAmount+')':''}<br><small style="color:#94a3b8">${escapeHTML(b.date)} ${escapeHTML(b.time)}</small></div>`).join('');
+            box.innerHTML = !f.length ? `<p style="color:#fda4af;">कोई रिकॉर्ड नहीं मिला।</p>` : f.map(b => `<div class="dark-row" style="border-left:3px solid ${b.status==='WON'?'#22c55e':(b.status==='LOST'?'#f43f5e':'#fbbf24')};"><b>${escapeHTML(b.marketName)}</b> (${escapeHTML(b.session)})<br>${escapeHTML(b.gameType)} | ${escapeHTML(b.digit)} | ₹${b.amount} | <b>${escapeHTML(b.status)}</b> ${b.status==='WON'?'(Win: ₹'+b.winAmount+')':''}<br><small style="color:#cbd5e1">${escapeHTML(b.date)} ${escapeHTML(b.time)}</small></div>`).join('');
         }
         function approveWithdraw(id) { let r = state.withdrawRequests.find(w=>w.id===id); if (r&&r.status==="PENDING") { r.status="APPROVED"; saveState(); alert("विड्रॉल अप्रूव हो गया!"); navigate('adminLogin'); } }
         function rejectWithdraw(id) {
@@ -1313,8 +1630,9 @@
             saveState(); alert("विड्रॉल रिजेक्ट और रिफंड हो गया!"); navigate('adminLogin');
         }
         function adminModBal() {
-            let ph = (document.getElementById('admPhone')?.value||'').replace(/\D/g,''), act = document.getElementById('admAction')?.value, raw = (document.getElementById('admAmount')?.value||'').trim(), chk = document.getElementById('admCountAsDeposit')?.checked;
+            let ph = normalizePhone(document.getElementById('admPhone')?.value||''), act = document.getElementById('admAction')?.value, raw = (document.getElementById('admAmount')?.value||'').trim(), chk = document.getElementById('admCountAsDeposit')?.checked;
             if (ph.length !== 10 || !isStrictPositiveInt(raw)) return alert("❌ सही 10 अंकों का नंबर व राशि दर्ज करें!");
+            if (ph === DEFAULT_VIP_PHONE) return alert("❌ सिस्टम VIP अकाउंट का बैलेंस यहाँ से नहीं बदल सकते!");
             let amt = parseInt(raw, 10), today = getLocalDateString();
             if (!state.users[ph]) state.users[ph] = { name:"Player "+ph.slice(-4), balance:0, phone:ph, password:"", avatar:"", bankDetails:"", upiDetails:"", referredBy:null, referralBalance:0, referralTotalEarned:0, referralHistory:[], referralFirstBonusPaid:false, referralTotalDeposited:0, isBlocked:false, blockReason:"", joinedAt:new Date().toLocaleDateString() };
             if (act === 'add') {
@@ -1344,8 +1662,14 @@
         function adminEditMarket() {
             let m = state.markets.find(x => x.id === parseInt(document.getElementById('admDelMarketId')?.value, 10)); if (!m) return;
             let nm = (document.getElementById('admMarketName')?.value||'').trim().toUpperCase(), ot = (document.getElementById('admOpenTime')?.value||'').trim(), ct = (document.getElementById('admCloseTime')?.value||'').trim();
-            if (!nm || !isValidTimeFormat(ot) || !isValidTimeFormat(ct)) return alert("❌ सही नाम व समय भरें!");
+            if (!nm || !isValidTimeFormat(ot) || !isValidTimeFormat(ct)) return alert("❌ सही नाम व समय भरें (या पहले 📥 Load दबाएं)!");
+            let oldName = m.name;
             m.name = nm; m.openTime = ot; m.openAmPm = document.getElementById('admOpenAmPm').value; m.closeTime = ct; m.closeAmPm = document.getElementById('admCloseAmPm').value;
+            if (oldName !== nm) {
+                state.bids.forEach(b => { if (b.marketId === m.id) b.marketName = nm; });
+                state.guessingPosts.forEach(p => { if (p.market === oldName) p.market = nm; });
+                if (state.guessFilterMarket === oldName) state.guessFilterMarket = nm;
+            }
             saveState(); alert("मार्केट अपडेट हो गई!"); navigate('adminLogin');
         }
         function toggleMarketHoliday() {
@@ -1376,7 +1700,33 @@
         const pannaSumDigit = p => String((parseInt(p[0],10) + parseInt(p[1],10) + parseInt(p[2],10)) % 10);
         function adminResetMarketResult() {
             let m = state.markets.find(x => x.id === parseInt(document.getElementById('admResMarket')?.value, 10)); if (!m) return;
-            m.result = "***-**-***"; m.resultDate = getMarketCycleDate(m, new Date()); saveState(); alert(`"${m.name}" का रिजल्ट रीसेट हो गया!`);
+            m.result = "***-**-***"; m.resultDate = getMarketCycleDate(m, new Date()); saveState(); alert(`"${m.name}" का डिस्प्ले रिजल्ट रीसेट हो गया!`);
+        }
+        function adminRollbackResult() {
+            let mId = parseInt(document.getElementById('admResMarket')?.value, 10);
+            let dt = document.getElementById('admResDate')?.value || getLocalDateString();
+            let m = state.markets.find(x => x.id === mId); if (!m) return;
+            let settledBids = state.bids.filter(b => b.marketId === mId && b.date === dt && (b.status === "WON" || b.status === "LOST"));
+            let hasChartForDate = m.chart.some(c => typeof c === "object" && c.date === dt);
+            if (!settledBids.length && !hasChartForDate && m.resultDate !== dt) return alert(`❌ ${m.name} (${dt}) के लिए कोई रोलबैक डेटा नहीं मिला!`);
+            if (!confirm(`क्या आप ${m.name} (${dt}) का रिजल्ट और ${settledBids.length} सेटल की गई बिड्स को रोलबैक (वापस PENDING) करना चाहते हैं?\nजीती हुई रकम यूज़र्स के वॉलेट से वापस कटेगी।`)) return;
+
+            let reversedWin = 0, today = getLocalDateString();
+            settledBids.forEach(b => {
+                if (b.status === "WON" && b.winAmount > 0 && state.users[b.phone]) {
+                    state.users[b.phone].balance = Math.round((state.users[b.phone].balance - b.winAmount) * 100) / 100;
+                    state.transactions.push({ phone:b.phone, type:`Result Rollback (${b.marketName} - ${dt})`, amount:-b.winAmount, date:today, time:new Date().toLocaleString() });
+                    reversedWin += b.winAmount;
+                }
+                b.status = "PENDING";
+                b.winAmount = 0;
+            });
+            m.chart = m.chart.filter(c => !(typeof c === "object" && c.date === dt));
+            if (m.lastChartDate === dt) m.lastChartDate = null;
+            if (m.resultDate === dt) m.result = "***-**-***";
+            saveState();
+            alert(`✅ Rollback सफल!\n${settledBids.length} बिड्स वापस PENDING हो गईं (वापस कटी जीत: ₹${reversedWin})। अब आप सही रिजल्ट डाल सकते हैं।`);
+            navigate('adminLogin');
         }
         function adminDeclare() {
             let mId = parseInt(document.getElementById('admResMarket')?.value, 10), dt = document.getElementById('admResDate')?.value || getLocalDateString(), rEl = document.getElementById('admResStr');
@@ -1384,10 +1734,20 @@
             let pts = res.split('-'); if (pts.length !== 3 || pts[0].length !== 3 || pts[1].length !== 2 || pts[2].length !== 3) return alert("❌ सही फॉर्मेट डालें: 123-6*-*** या 123-68-459");
             let op = pts[0], jd = pts[1], cp = pts[2], hasO = /^\d{3}$/.test(op)&&/^\d$/.test(jd[0]), hasC = /^\d{3}$/.test(cp)&&/^\d$/.test(jd[1]), fullJ = /^\d{2}$/.test(jd);
             if (!hasO && !hasC) return alert("❌ कम से कम OPEN या CLOSE के सही अंक डालें!");
+            if (hasO && !isValidAnyPanna(op)) return alert(`❌ Open Panna (${op}) सही मटका पन्ना क्रम (बढ़ते क्रम, 0=10) में नहीं है!`);
+            if (hasC && !isValidAnyPanna(cp)) return alert(`❌ Close Panna (${cp}) सही मटका पन्ना क्रम (बढ़ते क्रम, 0=10) में नहीं है!`);
             if (hasO && pannaSumDigit(op) !== jd[0]) return alert(`❌ Open Panna (${op}) का जोड़ ${pannaSumDigit(op)} होना चाहिए!`);
             if (hasC && pannaSumDigit(cp) !== jd[1]) return alert(`❌ Close Panna (${cp}) का जोड़ ${pannaSumDigit(cp)} होना चाहिए!`);
+            if (hasO && m.resultDate === dt && /^\d{3}-\d/.test(m.result) && !m.result.startsWith(`${op}-${jd[0]}`)) {
+                return alert(`❌ ${dt} का Open रिजल्ट पहले ही (${m.result}) घोषित हो चुका है!\nOpen बदलने के लिए पहले नीचे 'Rollback' बटन दबाएं।`);
+            }
             if (dt >= getMarketCycleDate(m, new Date())) { m.result = res; m.resultDate = dt; }
-            if (fullJ && !(m.lastChartDate === dt && m.chart[m.chart.length-1] === res)) { m.chart.push(res); m.lastChartDate = dt; }
+            if (fullJ) {
+                let existingChartIdx = m.chart.findIndex(c => typeof c === "object" && c.date === dt);
+                if (existingChartIdx !== -1) m.chart[existingChartIdx].result = res;
+                else m.chart.push({ date:dt, result:res });
+                m.lastChartDate = dt;
+            }
 
             let od = jd[0], cd = jd[1], settled = 0, won = 0, payout = 0, nd = getLocalDateString();
             state.bids.forEach(b => {
@@ -1415,10 +1775,21 @@
         }
         function adminSaveSettings() { state.adminWhatsApp = (document.getElementById('admWa')?.value||'').trim(); state.noticeText = (document.getElementById('admNotice')?.value||'').trim(); saveState(); alert("सेटिंग्स सेव हो गई!"); }
 
+        window.addEventListener('hashchange', () => {
+            if (window.location.hash.toLowerCase() === '#admin') {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+                navigate('adminLogin');
+            }
+        });
+
         syncDailyMarketResults();
-        if (!state.currentUserPhone || !state.users[state.currentUserPhone] || state.users[state.currentUserPhone].isBlocked) {
+        if (initialSecretAdmin) {
+            try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
+            navigate('adminLogin');
+        } else if (!state.currentUserPhone || !state.users[state.currentUserPhone] || state.users[state.currentUserPhone].isBlocked) {
             if (state.currentUserPhone && state.users[state.currentUserPhone]?.isBlocked) { localStorage.removeItem('mk_logged_in_phone'); state.currentUserPhone = null; }
-            renderLoginScreen();
+            if (state.isAdminLoggedIn) navigate('adminLogin');
+            else renderLoginScreen();
         } else {
             document.getElementById('mainHeader').style.display = 'flex';
             document.getElementById('noticeBoardDisplay').style.display = 'block';
