@@ -5,108 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M.KING - Matka App</title>
+    <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-database-compat.js"></script>
     <style>
-        :root {
-            --primary:#fbbf24;
-            --primary-dark:#ea580c;
-            --bg-deep:#13183b;
-            --card-top:rgba(43, 53, 108, 0.90);
-            --card-bot:rgba(26, 33, 74, 0.94);
-            --surface:rgba(20, 27, 65, 0.88);
-            --border-soft:rgba(129, 140, 248, 0.35);
-            --text:#f8fafc;
-            --muted:#cbd5e1;
-            --green:#22c55e;
-            --red:#f43f5e;
-            --blue:#38bdf8;
-        }
+        :root { --primary:#fbbf24; --primary-dark:#ea580c; --bg-deep:#13183b; --card-top:rgba(43,53,108,0.90); --card-bot:rgba(26,33,74,0.94); --surface:rgba(20,27,65,0.88); --border-soft:rgba(129,140,248,0.35); --text:#f8fafc; --muted:#cbd5e1; --green:#22c55e; --red:#f43f5e; --blue:#38bdf8; }
         * { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI',Roboto,sans-serif; }
         body {
-            background:
-                radial-gradient(circle at 10% 8%, rgba(251,191,36,0.24), transparent 36%),
-                radial-gradient(circle at 90% 16%, rgba(236,72,153,0.26), transparent 40%),
-                radial-gradient(circle at 15% 78%, rgba(56,189,248,0.22), transparent 42%),
-                radial-gradient(circle at 85% 88%, rgba(34,197,94,0.20), transparent 44%),
-                linear-gradient(155deg, #1b1f4b 0%, #24215a 38%, #183059 72%, #15224a 100%);
-            background-attachment:fixed;
-            color:var(--text);
-            padding-bottom:78px;
-            min-height:100vh;
+            background: radial-gradient(circle at 10% 8%, rgba(251,191,36,0.24), transparent 36%), radial-gradient(circle at 90% 16%, rgba(236,72,153,0.26), transparent 40%), radial-gradient(circle at 15% 78%, rgba(56,189,248,0.22), transparent 42%), radial-gradient(circle at 85% 88%, rgba(34,197,94,0.20), transparent 44%), linear-gradient(155deg, #1b1f4b 0%, #24215a 38%, #183059 72%, #15224a 100%);
+            background-attachment:fixed; color:var(--text); padding-bottom:78px; min-height:100vh;
         }
-        header {
-            background:linear-gradient(135deg, rgba(49,46,129,0.94), rgba(30,58,138,0.94), rgba(88,28,135,0.92));
-            backdrop-filter:blur(14px);
-            padding:13px 18px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            border-bottom:2px solid var(--primary);
-            box-shadow:0 6px 24px rgba(15,23,42,0.35);
-            position:sticky;
-            top:0;
-            z-index:100;
-        }
-        header h1 {
-            background:linear-gradient(90deg, #fde047, #fbbf24, #fb923c);
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
-            font-size:22px;
-            font-weight:900;
-            letter-spacing:1.2px;
-            cursor:pointer;
-            user-select:none;
-        }
-        .wallet-badge {
-            background:linear-gradient(135deg,#10b981,#22c55e);
-            color:#042f2e;
-            padding:7px 14px;
-            border-radius:20px;
-            font-weight:800;
-            font-size:14px;
-            cursor:pointer;
-            box-shadow:0 4px 12px rgba(34,197,94,0.35);
-        }
-        .notice-board {
-            background:linear-gradient(90deg, rgba(76,29,149,0.85), rgba(30,64,175,0.85));
-            border:1px solid rgba(251,191,36,0.35);
-            border-left:4px solid var(--primary);
-            padding:10px 15px;
-            margin:10px auto;
-            max-width:580px;
-            border-radius:10px;
-            font-size:13px;
-            color:#fef08a;
-            line-height:1.5;
-            box-shadow:0 4px 14px rgba(0,0,0,0.22);
-        }
+        header { background:linear-gradient(135deg, rgba(49,46,129,0.94), rgba(30,58,138,0.94), rgba(88,28,135,0.92)); backdrop-filter:blur(14px); padding:13px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--primary); box-shadow:0 6px 24px rgba(15,23,42,0.35); position:sticky; top:0; z-index:100; }
+        header h1 { background:linear-gradient(90deg,#fde047,#fbbf24,#fb923c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:22px; font-weight:900; letter-spacing:1.2px; cursor:pointer; user-select:none; }
+        .wallet-badge { background:linear-gradient(135deg,#10b981,#22c55e); color:#042f2e; padding:7px 14px; border-radius:20px; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 4px 12px rgba(34,197,94,0.35); }
+        .notice-board { background:linear-gradient(90deg, rgba(76,29,149,0.85), rgba(30,64,175,0.85)); border:1px solid rgba(251,191,36,0.35); border-left:4px solid var(--primary); padding:10px 15px; margin:10px auto; max-width:580px; border-radius:10px; font-size:13px; color:#fef08a; line-height:1.5; }
         .container { padding:12px; max-width:600px; margin:auto; }
         .quick-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:15px; }
-        .q-btn {
-            background:linear-gradient(135deg, rgba(67,56,202,0.88), rgba(37,99,235,0.86));
-            border:1px solid rgba(165,180,252,0.4);
-            color:#fff;
-            padding:11px 5px;
-            border-radius:12px;
-            font-size:12px;
-            font-weight:bold;
-            text-align:center;
-            cursor:pointer;
-            text-decoration:none;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            gap:4px;
-            box-shadow:0 4px 14px rgba(30,41,59,0.28);
-        }
-        .market-card,.form-card,.profile-top {
-            background:linear-gradient(145deg, var(--card-top), var(--card-bot));
-            backdrop-filter:blur(10px);
-            border:1px solid rgba(251,191,36,0.32);
-            border-radius:16px;
-            padding:14px;
-            margin-bottom:13px;
-            box-shadow:0 10px 26px rgba(10,14,40,0.38);
-        }
+        .q-btn { background:linear-gradient(135deg, rgba(67,56,202,0.88), rgba(37,99,235,0.86)); border:1px solid rgba(165,180,252,0.4); color:#fff; padding:11px 5px; border-radius:12px; font-size:12px; font-weight:bold; text-align:center; cursor:pointer; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:4px; }
+        .market-card,.form-card,.profile-top { background:linear-gradient(145deg, var(--card-top), var(--card-bot)); backdrop-filter:blur(10px); border:1px solid rgba(251,191,36,0.32); border-radius:16px; padding:14px; margin-bottom:13px; box-shadow:0 10px 26px rgba(10,14,40,0.38); }
         .m-top,.flex-between { display:flex; justify-content:space-between; align-items:center; gap:6px; }
         .m-title { font-size:17px; font-weight:800; color:#fef9c3; }
         .m-status { font-size:10px; padding:3px 9px; border-radius:12px; font-weight:bold; }
@@ -115,26 +31,10 @@
         .status-holiday { background:rgba(251,191,36,0.22); color:#fde047; border:1px solid #fbbf24; }
         .m-times { font-size:11px; color:#cbd5e1; margin:6px 0; }
         .m-timers-grid,.game-grid,.pnl-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; }
-        .m-timer-box,.pnl-card {
-            font-size:11px;
-            color:var(--primary);
-            font-weight:bold;
-            background:linear-gradient(145deg, rgba(24,33,77,0.9), rgba(34,26,77,0.9));
-            padding:7px;
-            border-radius:10px;
-            text-align:center;
-            border:1px solid var(--border-soft);
-        }
+        .m-timer-box,.pnl-card { font-size:11px; color:var(--primary); font-weight:bold; background:linear-gradient(145deg, rgba(24,33,77,0.9), rgba(34,26,77,0.9)); padding:7px; border-radius:10px; text-align:center; border:1px solid var(--border-soft); }
         .pnl-val { font-size:15px; font-weight:800; color:#fff; }
         .pnl-lbl { font-size:10px; color:#cbd5e1; margin-top:3px; font-weight:normal; }
-        .m-result-box {
-            background:linear-gradient(135deg, rgba(49,46,129,0.75), rgba(88,28,135,0.68));
-            border:1px dashed rgba(251,191,36,0.55);
-            padding:9px;
-            border-radius:12px;
-            text-align:center;
-            margin:8px 0;
-        }
+        .m-result-box { background:linear-gradient(135deg, rgba(49,46,129,0.75), rgba(88,28,135,0.68)); border:1px dashed rgba(251,191,36,0.55); padding:9px; border-radius:12px; text-align:center; margin:8px 0; }
         .m-result-text { font-size:20px; font-weight:900; color:#fde047; letter-spacing:3px; text-shadow:0 2px 10px rgba(251,191,36,0.3); }
         .m-btns { display:grid; grid-template-columns:1fr 2fr; gap:8px; margin-top:8px; }
         .btn { padding:10px; border:none; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; text-align:center; transition:transform 0.1s ease; }
@@ -142,29 +42,12 @@
         .btn-sm { padding:5px 9px; font-size:11px; }
         .btn-chart { background:linear-gradient(135deg,#334155,#475569); color:#fff; border:1px solid rgba(148,163,184,0.45); }
         .btn-play { background:linear-gradient(135deg,#fde047,#f59e0b,#ea580c); color:#1e1b4b; font-size:14px; font-weight:800; box-shadow:0 4px 12px rgba(245,158,11,0.35); }
-        .game-box {
-            background:linear-gradient(145deg, rgba(55,48,163,0.72), rgba(30,58,138,0.82));
-            border:1px solid rgba(251,191,36,0.35);
-            padding:18px 10px;
-            border-radius:14px;
-            text-align:center;
-            cursor:pointer;
-            box-shadow:0 6px 16px rgba(15,23,42,0.3);
-        }
+        .game-box { background:linear-gradient(145deg, rgba(55,48,163,0.72), rgba(30,58,138,0.82)); border:1px solid rgba(251,191,36,0.35); padding:18px 10px; border-radius:14px; text-align:center; cursor:pointer; }
         .game-label { font-size:14px; font-weight:bold; color:#fff; }
         .game-rate { font-size:11px; color:#86efac; margin-top:3px; font-weight:600; }
         .input-group { margin-bottom:12px; text-align:left; }
         .input-group label { display:block; font-size:12px; color:#e2e8f0; margin-bottom:5px; font-weight:600; }
-        .input-group input,.input-group select,.input-group textarea {
-            width:100%;
-            padding:11px;
-            background:var(--surface);
-            border:1px solid rgba(129,140,248,0.45);
-            color:#fff;
-            border-radius:10px;
-            font-size:14px;
-            outline:none;
-        }
+        .input-group input,.input-group select,.input-group textarea { width:100%; padding:11px; background:var(--surface); border:1px solid rgba(129,140,248,0.45); color:#fff; border-radius:10px; font-size:14px; outline:none; }
         .input-group input:focus,.input-group select:focus,.input-group textarea:focus { border-color:var(--primary); }
         .input-group input::placeholder,.input-group textarea::placeholder { color:#94a3b8; }
         .pass-wrap { position:relative; display:flex; align-items:center; }
@@ -188,12 +71,11 @@
         .ref-stat-val { font-size:16px; font-weight:800; color:#4ade80; }
         .ref-stat-lbl { font-size:10px; color:#cbd5e1; margin-top:2px; }
         .ref-link-box { background:rgba(20,27,65,0.88); border:1px dashed var(--primary); padding:8px; border-radius:8px; font-size:11px; color:#fef08a; word-break:break-all; margin-bottom:8px; text-align:center; }
-
         .gf-toolbar { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:10px; }
         .gf-icon-group { display:flex; align-items:center; gap:5px; }
         .gf-icon-btn { width:35px; height:35px; border-radius:50%; border:1px solid var(--border-soft); background:rgba(38,48,96,0.92); color:#fff; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative; }
         .gf-icon-btn.active { border-color:var(--primary); color:var(--primary); background:rgba(251,191,36,0.18); }
-        .gf-post-cta { background:linear-gradient(135deg,#ec4899,#6366f1); color:#fff; border:none; padding:9px 13px; border-radius:22px; font-weight:700; font-size:12px; cursor:pointer; white-space:nowrap; box-shadow:0 4px 12px rgba(236,72,153,0.35); }
+        .gf-post-cta { background:linear-gradient(135deg,#ec4899,#6366f1); color:#fff; border:none; padding:9px 13px; border-radius:22px; font-weight:700; font-size:12px; cursor:pointer; white-space:nowrap; }
         .gf-toggle-bar { background:rgba(36,46,94,0.88); border:1px solid var(--border-soft); border-radius:12px; padding:9px 12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:13px; }
         .gf-switch-pill { padding:4px 12px; border-radius:14px; font-size:11px; font-weight:800; border:1px solid #6366f1; cursor:pointer; background:#1e1b4b; color:#cbd5e1; }
         .gf-switch-pill.on { background:var(--green); color:#052e16; border-color:var(--green); }
@@ -222,23 +104,10 @@
         .gf-send-icon { background:transparent; border:none; color:#f472b6; font-size:16px; cursor:pointer; padding:2px 5px; }
         .gf-quote-btn { background:rgba(30,58,138,0.85); border:1px solid #38bdf8; color:#e0f2fe; border-radius:8px; padding:6px 9px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap; }
         .gf-comments-list { padding:6px 12px 2px 12px; }
-
         .tab-row { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:15px; }
         .tab-btn { padding:9px; border-radius:8px; border:1px solid rgba(129,140,248,0.45); background:var(--surface); color:#cbd5e1; font-weight:bold; font-size:13px; cursor:pointer; }
         .tab-btn.active { background:linear-gradient(135deg,#fde047,#f59e0b); color:#1e1b4b; border-color:var(--primary); }
-        nav {
-            position:fixed;
-            bottom:0;
-            left:0;
-            width:100%;
-            background:linear-gradient(135deg, rgba(30,27,75,0.95), rgba(30,58,138,0.95));
-            backdrop-filter:blur(12px);
-            justify-content:space-around;
-            padding:8px 0;
-            border-top:1px solid rgba(251,191,36,0.4);
-            z-index:200;
-            display:none;
-        }
+        nav { position:fixed; bottom:0; left:0; width:100%; background:linear-gradient(135deg, rgba(30,27,75,0.95), rgba(30,58,138,0.95)); backdrop-filter:blur(12px); justify-content:space-around; padding:8px 0; border-top:1px solid rgba(251,191,36,0.4); z-index:200; display:none; }
         .nav-item { color:#cbd5e1; text-align:center; font-size:10px; cursor:pointer; flex:1; }
         .nav-item.active { color:var(--primary); font-weight:bold; }
         .nav-icon { font-size:18px; margin-bottom:2px; }
@@ -252,7 +121,12 @@
         <div class="wallet-badge" onclick="navigate('profile')">₹ <span id="headerBalance">0</span></div>
     </header>
     <div class="notice-board" id="noticeBoardDisplay" style="display:none;"></div>
-    <div class="container" id="appRoot"></div>
+    <div class="container" id="appRoot">
+        <div class="form-card" style="max-width:340px;margin:70px auto;text-align:center;border:2px solid var(--primary);">
+            <h2 style="color:var(--primary);margin-bottom:8px;">M.KING 👑</h2>
+            <p style="color:#cbd5e1;font-size:13px;">⏳ Secure Auth & Live Server se connect ho raha hai...</p>
+        </div>
+    </div>
     <nav id="bottomNav">
         <div class="nav-item active" id="nav-home" onclick="navigate('home')"><div class="nav-icon">🏠</div>Home</div>
         <div class="nav-item" id="nav-bids" onclick="navigate('bids')"><div class="nav-icon">📜</div>My Bids</div>
@@ -262,6 +136,30 @@
     </nav>
 
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXEuTEoGQinQYsPiUPIdf5HfUSGH2ijWk",
+            authDomain: "mking-8ae29.firebaseapp.com",
+            databaseURL: "https://mking-8ae29-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "mking-8ae29",
+            storageBucket: "mking-8ae29.firebasestorage.app",
+            messagingSenderId: "612082394974",
+            appId: "1:612082394974:web:b9c134649e36b22159d1cf",
+            measurementId: "G-ZNTVW9ZVNT"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+        const mkRef = (path = '') => db.ref('mking' + (path ? '/' + path : ''));
+
+        let _idSeq = Math.floor(Math.random() * 1000);
+        function genId() { _idSeq = (_idSeq + 1) % 1000; return Date.now() * 1000 + _idSeq; }
+        function toList(val) {
+            if (!val) return [];
+            if (Array.isArray(val)) return val.filter(Boolean);
+            if (typeof val === "object") return Object.values(val).filter(Boolean);
+            return [];
+        }
+
         const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="#312e81"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fde047" font-family="sans-serif" font-size="26" font-weight="bold">U</text></svg>');
         const DEFAULT_QR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect width="180" height="180" fill="#fff"/><rect x="16" y="16" width="148" height="148" fill="none" stroke="#312e81" stroke-width="4" stroke-dasharray="8 6"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#1e1b4b" font-family="sans-serif" font-size="14" font-weight="bold">Upload QR</text><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#4f46e5" font-family="sans-serif" font-size="11">from Admin Panel</text></svg>');
         const DEFAULT_VIP_PHONE = "9990009990";
@@ -278,7 +176,6 @@
             }
             return str;
         }
-
         function sha256(ascii) {
             const rr = (v, a) => (v >>> a) | (v << (32 - a));
             const maxWord = Math.pow(2, 32), words = [], len = ascii.length * 8;
@@ -320,8 +217,7 @@
         const isHashedPassword = s => typeof s === "string" && s.startsWith("sha256:");
         const verifyPassword = (inp, st) => !st ? false : (isHashedPassword(st) ? hashPassword(inp) === st : inp === st);
         function togglePassVisibility(id, btn) {
-            let el = document.getElementById(id);
-            if (!el) return;
+            let el = document.getElementById(id); if (!el) return;
             el.type = el.type === "password" ? "text" : "password";
             if (btn) btn.innerText = el.type === "password" ? "👁️" : "🙈";
         }
@@ -345,31 +241,15 @@
         }
         const isChatTimeOpen = (d = new Date()) => { const h = d.getHours(); return h >= 7 && h <= 23; };
         const isStrictPositiveInt = s => /^\d+$/.test(String(s || "").trim()) && parseInt(s, 10) > 0;
-        function getUrlRefCode() {
-            try {
-                let r = normalizePhone(new URLSearchParams(window.location.search).get('ref') || "");
-                return r.length === 10 ? r : "";
-            } catch (e) { return ""; }
-        }
-        function isSecretAdminRequested() {
-            try {
-                const sp = new URLSearchParams(window.location.search);
-                return sp.get('admin') === '1' || window.location.hash.toLowerCase() === '#admin';
-            } catch (e) { return false; }
-        }
-        function safeJSONParse(k, fb) { try { let x = localStorage.getItem(k); return x ? JSON.parse(x) : fb; } catch (e) { return fb; } }
+        function getUrlRefCode() { try { let r = normalizePhone(new URLSearchParams(window.location.search).get('ref') || ""); return r.length === 10 ? r : ""; } catch (e) { return ""; } }
+        function isSecretAdminRequested() { try { const sp = new URLSearchParams(window.location.search); return sp.get('admin') === '1' || window.location.hash.toLowerCase() === '#admin'; } catch (e) { return false; } }
 
         let logoTapCount = 0, logoTapTimer = null;
         function handleLogoTap(isLoginScreen = false) {
             logoTapCount++;
             clearTimeout(logoTapTimer);
             logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1800);
-            if (logoTapCount >= 5) {
-                logoTapCount = 0;
-                clearTimeout(logoTapTimer);
-                navigate('adminLogin');
-                return;
-            }
+            if (logoTapCount >= 5) { logoTapCount = 0; clearTimeout(logoTapTimer); navigate('adminLogin'); return; }
             if (!isLoginScreen && state.currentScreen !== 'home') navigate('home');
         }
 
@@ -387,255 +267,278 @@
         ];
         const initialUrlRef = getUrlRefCode();
         const initialSecretAdmin = isSecretAdminRequested();
+
         let state = {
             currentUserPhone: localStorage.getItem('mk_logged_in_phone') || null,
             isAdminLoggedIn: sessionStorage.getItem('mk_admin_logged_in') === '1',
-            adminCreds: safeJSONParse('mk_admin_creds', { phone:"9999999999", pass:hashPassword("admin123") }),
-            users: safeJSONParse('mk_users', {}),
-            adminWhatsApp: localStorage.getItem('mk_whatsapp') || "919876543210",
-            noticeText: localStorage.getItem('mk_notice') || "M.KING Me Sabhi Player Ka Swagat Hai",
-            depositQR: localStorage.getItem('mk_deposit_qr') || DEFAULT_QR_SVG,
-            depositUPI: localStorage.getItem('mk_deposit_upi') || "9876543210@paytm",
-            markets: safeJSONParse('mk_markets', defaultMarkets),
-            gameRates: safeJSONParse('mk_gamerates', defaultRates),
-            bids: safeJSONParse('mk_bids', []),
-            depositRequests: safeJSONParse('mk_deposits', []),
-            withdrawRequests: safeJSONParse('mk_withdraws', []),
-            forgotRequests: safeJSONParse('mk_forgot', []),
-            transactions: safeJSONParse('mk_txns', []),
-            giftCommissions: safeJSONParse('mk_gift_comms', []),
-            guesserChats: safeJSONParse('mk_guesser_chats', {}),
-            guessingPosts: safeJSONParse('mk_guessing', [
-                { id:1, phone:DEFAULT_VIP_PHONE, name:"M.KING VIP", avatar:"", market:"KALYAN MORNING", text:"KALYAN MORNING OPEN\n\n3\n8\n\n38___83___33___88\n\n148___260___139___468\n\nBest of luck 🤞👍", time:formatForumDateTime(), likes:5, likedBy:[], comments:[], wishes:[] }
-            ]),
+            adminCreds: { phone:"9999999999", pass:hashPassword("admin123") },
+            users: {}, adminWhatsApp: "919876543210", noticeText: "M.KING Me Sabhi Player Ka Swagat Hai",
+            depositQR: DEFAULT_QR_SVG, depositUPI: "9876543210@paytm",
+            markets: defaultMarkets, gameRates: defaultRates,
+            bids: [], depositRequests: [], withdrawRequests: [], forgotRequests: [], transactions: [], giftCommissions: [],
+            guesserChats: {}, guessingPosts: [],
             selectedMarket:null, selectedGameType:null, activeChatGuesserPhone:null, activeChatBuyerPhone:null,
-            authTab: initialUrlRef ? 'register' : 'login', pendingRefCode: initialUrlRef,
-            currentScreen: 'home',
+            authTab: initialUrlRef ? 'register' : 'login', pendingRefCode: initialUrlRef, currentScreen: 'loading',
             bidCart:[], guessShowComposer:false, guessShowSearchBar:false, guessFilterOriginalOnly:false,
             guessFilterMarket:"ALL", guessSearchQuery:"", guessQuoteTargetId:null, lastGuessPostTs:0
         };
-        let homeTimerInterval = null, isSubmittingBids = false;
+        let homeTimerInterval = null, isSubmittingBids = false, isFirebaseReady = false;
 
-        if (!state.markets || !state.markets.length) state.markets = defaultMarkets;
-        if (!state.gameRates || !state.gameRates.length) state.gameRates = defaultRates;
-        defaultRates.forEach(dr => { if (!state.gameRates.some(r => r.name === dr.name)) state.gameRates.push({ ...dr }); });
-        if (!state.users[DEFAULT_VIP_PHONE]) state.users[DEFAULT_VIP_PHONE] = { name:"M.KING VIP", balance:0, phone:DEFAULT_VIP_PHONE, password:hashPassword("vip_sys_" + Date.now()), avatar:"", bankDetails:"", upiDetails:"", isSystem:true };
-        if (state.adminCreds && state.adminCreds.pass && !isHashedPassword(state.adminCreds.pass)) state.adminCreds.pass = hashPassword(state.adminCreds.pass);
-        if (!Array.isArray(state.giftCommissions)) state.giftCommissions = [];
-
-        state.markets = state.markets.map((m, i) => {
-            const d = defaultMarkets[i] || { openTime:"10:00", openAmPm:"AM", closeTime:"12:00", closeAmPm:"PM" };
-            const normChart = Array.isArray(m.chart) ? m.chart.map(c => (typeof c === "string" ? { date:"", result:c } : c)) : [];
-            return {
-                ...m,
-                openTime: (m.openTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.openTime).trim())) ? String(m.openTime).trim() : d.openTime,
-                openAmPm: m.openAmPm || d.openAmPm,
-                closeTime: (m.closeTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.closeTime).trim())) ? String(m.closeTime).trim() : d.closeTime,
-                closeAmPm: m.closeAmPm || d.closeAmPm,
-                isHoliday: Boolean(m.isHoliday), resultDate: m.resultDate || null, chart: normChart
-            };
-        });
-        if (!state.guesserChats || typeof state.guesserChats !== "object") state.guesserChats = {};
-        state.guessingPosts = state.guessingPosts.map(p => {
-            if (p.chats && typeof p.chats === "object") {
-                if (!state.guesserChats[p.phone]) state.guesserChats[p.phone] = {};
-                Object.keys(p.chats).forEach(bp => { if (!state.guesserChats[p.phone][bp] || !state.guesserChats[p.phone][bp].length) state.guesserChats[p.phone][bp] = p.chats[bp]; });
+        const saveSettingsToFB = () => mkRef('settings').update({ adminCreds:state.adminCreds, adminWhatsApp:state.adminWhatsApp, noticeText:state.noticeText, depositQR:state.depositQR, depositUPI:state.depositUPI });
+        const saveUserToFB = (ph) => {
+            let u = state.users[ph]; if (!u) return Promise.resolve();
+            let copy = { ...u };
+            if (Array.isArray(copy.referralHistory)) {
+                let rh = {}; copy.referralHistory.forEach(h => { if (h && h.id) rh[h.id] = h; }); copy.referralHistory = rh;
             }
-            if (p.quoteOf && !Array.isArray(p.quoteChain)) p.quoteChain = [p.quoteOf];
-            return p;
-        });
+            return mkRef('users/' + ph).set(copy);
+        };
+        const adjustUserBalanceFB = (ph, delta) => mkRef('users/' + ph + '/balance').transaction(cur => Math.round(((Number(cur) || 0) + delta) * 100) / 100);
+        const saveMarketToFB = (m) => mkRef('markets/' + m.id).set(m);
+        const deleteMarketFromFB = (mId) => mkRef('markets/' + mId).remove();
+        const saveRatesToFB = () => mkRef('gameRates').set(state.gameRates);
+        const saveBidToFB = (b) => mkRef('bids/' + b.id).set(b);
+        const saveDepositToFB = (d) => mkRef('depositRequests/' + d.id).set(d);
+        const saveWithdrawToFB = (w) => mkRef('withdrawRequests/' + w.id).set(w);
+        const saveForgotToFB = (f) => mkRef('forgotRequests/' + f.id).set(f);
+        const removeForgotFromFB = (id) => mkRef('forgotRequests/' + id).remove();
+        const addTransactionToFB = (tx) => { if (!tx.id) tx.id = genId(); state.transactions.push(tx); return mkRef('transactions/' + tx.id).set(tx); };
+        const addGiftCommissionToFB = (gc) => { if (!gc.id) gc.id = genId(); state.giftCommissions.push(gc); return mkRef('giftCommissions/' + gc.id).set(gc); };
+        const saveGuessPostToFB = (p) => mkRef('guessingPosts/' + p.id).set(p);
+        const deleteGuessPostFromFB = (id) => mkRef('guessingPosts/' + id).remove();
+        const saveChatMessageToFB = (gp, bp, msg) => {
+            if (!msg.id) msg.id = genId();
+            if (!state.guesserChats[gp]) state.guesserChats[gp] = {};
+            if (!state.guesserChats[gp][bp]) state.guesserChats[gp][bp] = [];
+            state.guesserChats[gp][bp].push(msg);
+            return mkRef(`guesserChats/${gp}/${bp}/${msg.id}`).set(msg);
+        };
 
-        function saveState() {
-            try {
-                localStorage.setItem('mk_users', JSON.stringify(state.users));
-                localStorage.setItem('mk_markets', JSON.stringify(state.markets));
-                localStorage.setItem('mk_gamerates', JSON.stringify(state.gameRates));
-                localStorage.setItem('mk_bids', JSON.stringify(state.bids));
-                localStorage.setItem('mk_deposits', JSON.stringify(state.depositRequests));
-                localStorage.setItem('mk_withdraws', JSON.stringify(state.withdrawRequests));
-                localStorage.setItem('mk_forgot', JSON.stringify(state.forgotRequests));
-                localStorage.setItem('mk_txns', JSON.stringify(state.transactions));
-                localStorage.setItem('mk_gift_comms', JSON.stringify(state.giftCommissions));
-                localStorage.setItem('mk_guesser_chats', JSON.stringify(state.guesserChats));
-                localStorage.setItem('mk_guessing', JSON.stringify(state.guessingPosts));
-                localStorage.setItem('mk_admin_creds', JSON.stringify(state.adminCreds));
-                localStorage.setItem('mk_whatsapp', state.adminWhatsApp);
-                localStorage.setItem('mk_notice', state.noticeText);
-                localStorage.setItem('mk_deposit_qr', state.depositQR);
-                localStorage.setItem('mk_deposit_upi', state.depositUPI);
-                if (state.currentUserPhone && state.users[state.currentUserPhone]) {
-                    let hb = document.getElementById('headerBalance');
-                    if (hb) hb.innerText = state.users[state.currentUserPhone].balance;
+        function updateChromeUI() {
+            if (state.currentUserPhone && state.users[state.currentUserPhone]) {
+                let hb = document.getElementById('headerBalance');
+                if (hb) hb.innerText = state.users[state.currentUserPhone].balance;
+            }
+            let nb = document.getElementById('noticeBoardDisplay');
+            if (nb) nb.innerHTML = `📌 <b>Notice:</b> ${escapeHTML(state.noticeText)}`;
+        }
+
+        function applyFirebaseSnapshot(data) {
+            if (!data) data = {};
+            if (data.settings) {
+                if (data.settings.adminCreds) state.adminCreds = data.settings.adminCreds;
+                if (data.settings.adminWhatsApp !== undefined) state.adminWhatsApp = data.settings.adminWhatsApp;
+                if (data.settings.noticeText !== undefined) state.noticeText = data.settings.noticeText;
+                if (data.settings.depositQR !== undefined) state.depositQR = data.settings.depositQR;
+                if (data.settings.depositUPI !== undefined) state.depositUPI = data.settings.depositUPI;
+            }
+            let normUsers = {};
+            if (data.users && typeof data.users === "object") {
+                Object.keys(data.users).forEach(ph => {
+                    let u = data.users[ph]; if (!u) return;
+                    normUsers[ph] = { ...u, balance:Number(u.balance||0), referralBalance:Number(u.referralBalance||0), referralTotalEarned:Number(u.referralTotalEarned||0), referralTotalDeposited:Number(u.referralTotalDeposited||0), referralHistory:toList(u.referralHistory).sort((a,b)=>(a.id||0)-(b.id||0)), isBlocked:Boolean(u.isBlocked) };
+                });
+            }
+            if (!normUsers[DEFAULT_VIP_PHONE]) normUsers[DEFAULT_VIP_PHONE] = { name:"M.KING VIP", balance:0, phone:DEFAULT_VIP_PHONE, password:hashPassword("vip_sys_" + Date.now()), avatar:"", bankDetails:"", upiDetails:"", isSystem:true };
+            state.users = normUsers;
+
+            let mList = toList(data.markets);
+            state.markets = (mList.length ? mList : defaultMarkets).map((m, i) => {
+                const d = defaultMarkets[i] || { openTime:"10:00", openAmPm:"AM", closeTime:"12:00", closeAmPm:"PM" };
+                const normChart = toList(m.chart).map(c => (typeof c === "string" ? { date:"", result:c } : c));
+                return { ...m, openTime:(m.openTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.openTime).trim()))?String(m.openTime).trim():d.openTime, openAmPm:m.openAmPm||d.openAmPm, closeTime:(m.closeTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.closeTime).trim()))?String(m.closeTime).trim():d.closeTime, closeAmPm:m.closeAmPm||d.closeAmPm, isHoliday:Boolean(m.isHoliday), resultDate:m.resultDate||null, chart:normChart };
+            }).sort((a,b) => a.id - b.id);
+
+            let rList = toList(data.gameRates);
+            state.gameRates = rList.length ? rList : [...defaultRates];
+            defaultRates.forEach(dr => { if (!state.gameRates.some(r => r.name === dr.name)) state.gameRates.push({ ...dr }); });
+
+            state.bids = toList(data.bids).sort((a,b)=>(a.id||0)-(b.id||0));
+            state.depositRequests = toList(data.depositRequests).sort((a,b)=>(a.id||0)-(b.id||0));
+            state.withdrawRequests = toList(data.withdrawRequests).sort((a,b)=>(a.id||0)-(b.id||0));
+            state.forgotRequests = toList(data.forgotRequests).sort((a,b)=>(a.id||0)-(b.id||0));
+            state.transactions = toList(data.transactions).sort((a,b)=>(a.id||0)-(b.id||0));
+            state.giftCommissions = toList(data.giftCommissions).sort((a,b)=>(a.id||0)-(b.id||0));
+
+            let normChats = {};
+            if (data.guesserChats && typeof data.guesserChats === "object") {
+                Object.keys(data.guesserChats).forEach(gp => {
+                    normChats[gp] = {};
+                    let gMap = data.guesserChats[gp];
+                    if (gMap && typeof gMap === "object") Object.keys(gMap).forEach(bp => { normChats[gp][bp] = toList(gMap[bp]).sort((a,b)=>(a.id||0)-(b.id||0)); });
+                });
+            }
+            state.guesserChats = normChats;
+            state.guessingPosts = toList(data.guessingPosts).map(p => ({ ...p, likedBy:toList(p.likedBy), comments:toList(p.comments), wishes:toList(p.wishes), quoteChain:toList(p.quoteChain) })).sort((a,b)=>(a.id||0)-(b.id||0));
+            updateChromeUI();
+        }
+
+        function refreshActiveViewOnSync() {
+            if (!isFirebaseReady) return;
+            if (state.currentScreen !== 'adminLogin' && state.currentScreen !== 'login' && state.currentScreen !== 'loading' && enforceNotBlocked()) return;
+            const isTyping = ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement ? document.activeElement.tagName : "");
+            const root = document.getElementById('appRoot'); if (!root) return;
+
+            if (state.currentScreen === 'home') renderHome(root);
+            else if (state.currentScreen === 'bids') renderBids(root);
+            else if (state.currentScreen === 'rates') renderRates(root);
+            else if (state.currentScreen === 'myChats') renderMyChats(root);
+            else if (state.currentScreen === 'chart' && state.selectedMarket) renderChart(root, state.selectedMarket.id);
+            else if (state.currentScreen === 'chatBox' && state.activeChatGuesserPhone) {
+                let area = document.getElementById('chatMsgArea');
+                if (area) {
+                    let gp = state.activeChatGuesserPhone, isVipAdm = state.isAdminLoggedIn && gp === DEFAULT_VIP_PHONE, isAuthor = gp === state.currentUserPhone || isVipAdm;
+                    let gMap = state.guesserChats[gp] || {}, buyers = Object.keys(gMap);
+                    let targetBuyer = isAuthor ? (state.activeChatBuyerPhone && gMap[state.activeChatBuyerPhone] ? state.activeChatBuyerPhone : (buyers[0] || null)) : state.currentUserPhone;
+                    let thread = targetBuyer ? (gMap[targetBuyer] || []) : [];
+                    area.innerHTML = buildChatMessagesHTML(thread, isVipAdm, isAuthor);
+                    area.scrollTop = area.scrollHeight;
+                } else if (!isTyping) renderChatBox(root, state.activeChatGuesserPhone);
+            } else if (state.currentScreen === 'guessing') {
+                if (!isTyping && !state.guessShowComposer && !state.guessQuoteTargetId) {
+                    let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML();
                 }
-                let nb = document.getElementById('noticeBoardDisplay');
-                if (nb) nb.innerHTML = `📌 <b>Notice:</b> ${escapeHTML(state.noticeText)}`;
-                return true;
-            } catch (e) {
-                alert("डेटा सेव करने में समस्या आई (Storage Limit)।");
-                return false;
-            }
+            } else if (state.currentScreen === 'profile' && !isTyping) renderProfile(root);
+            else if (state.currentScreen === 'adminLogin' && state.isAdminLoggedIn && !isTyping) renderAdmin(root);
+        }
+
+        function seedInitialFirebaseData() {
+            let marketsObj = {}; defaultMarkets.forEach(m => { marketsObj[m.id] = m; });
+            let vipPost = { id:1, phone:DEFAULT_VIP_PHONE, name:"M.KING VIP", avatar:"", market:"KALYAN MORNING", text:"KALYAN MORNING OPEN\n\n3\n8\n\n38___83___33___88\n\n148___260___139___468\n\nBest of luck 🤞👍", time:formatForumDateTime(), likes:5, likedBy:[], comments:[], wishes:[] };
+            return mkRef().set({
+                settings: { adminCreds:{ phone:"9999999999", pass:hashPassword("admin123") }, adminWhatsApp:"919876543210", noticeText:"M.KING Me Sabhi Player Ka Swagat Hai", depositQR:DEFAULT_QR_SVG, depositUPI:"9876543210@paytm" },
+                markets: marketsObj, gameRates: defaultRates,
+                users: { [DEFAULT_VIP_PHONE]: { name:"M.KING VIP", balance:0, phone:DEFAULT_VIP_PHONE, password:hashPassword("vip_sys_" + Date.now()), avatar:"", bankDetails:"", upiDetails:"", isSystem:true } },
+                guessingPosts: { "1": vipPost }
+            });
         }
 
         function enforceNotBlocked() {
             if (!state.currentUserPhone) return false;
             let u = state.users[state.currentUserPhone];
-            if (u && u.isBlocked) {
-                alert("🚫 आपका अकाउंट एडमिन द्वारा ब्लॉक कर दिया गया है!" + (u.blockReason ? `\nकारण: ${u.blockReason}` : ""));
-                logoutPlayer();
-                return true;
-            }
+            if (u && u.isBlocked) { alert("🚫 आपका अकाउंट एडमिन द्वारा ब्लॉक कर दिया गया है!" + (u.blockReason ? `\nकारण: ${u.blockReason}` : "")); logoutPlayer(); return true; }
             return false;
         }
-
         function parseMarketDate(timeStr, ampm, refNow) {
             let [h, m] = (timeStr || "10:00").split(':').map(n => parseInt(n, 10));
             if (isNaN(h)) h = 10; if (isNaN(m)) m = 0;
             let ap = (ampm || "").toUpperCase();
-            if (ap === "PM" && h < 12) h += 12;
-            if (ap === "AM" && h === 12) h = 0;
+            if (ap === "PM" && h < 12) h += 12; if (ap === "AM" && h === 12) h = 0;
             return new Date(refNow.getFullYear(), refNow.getMonth(), refNow.getDate(), h, m, 0, 0);
         }
-
         function getMarketSessionStatus(market, refNow = new Date()) {
             let ot = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", refNow);
             let ct = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", refNow);
             if (ct.getTime() <= ot.getTime()) {
                 let yOpen = new Date(ot.getTime()); yOpen.setDate(yOpen.getDate() - 1);
-                if (refNow.getTime() < ct.getTime()) ot = yOpen;
-                else ct.setDate(ct.getDate() + 1);
+                if (refNow.getTime() < ct.getTime()) ot = yOpen; else ct.setDate(ct.getDate() + 1);
             }
             if (market.isHoliday) return { openTarget:ot, closeTarget:ct, isOpenSessionActive:false, isCloseSessionActive:false, isMarketActive:false, isHoliday:true };
             let active = refNow.getTime() < ct.getTime();
             return { openTarget:ot, closeTarget:ct, isOpenSessionActive:refNow.getTime() < ot.getTime(), isCloseSessionActive:active, isMarketActive:active, isHoliday:false };
         }
-
         function getMarketCycleDate(market, now = new Date()) {
             let ot = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", now);
             let ct = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", now);
             if (ct.getTime() <= ot.getTime() && now.getTime() < ct.getTime()) ot.setDate(ot.getDate() - 1);
             return getLocalDateString(ot);
         }
-
         function syncDailyMarketResults() {
-            let now = new Date(), changed = false;
+            if (!isFirebaseReady) return;
+            let now = new Date();
             state.markets.forEach(m => {
                 let cd = getMarketCycleDate(m, now);
-                if (!m.resultDate) { m.resultDate = cd; changed = true; }
+                if (!m.resultDate) { m.resultDate = cd; mkRef('markets/' + m.id).update({ resultDate: cd }); }
                 else if (m.resultDate !== cd) {
-                    if (m.result !== "***-**-***") {
-                        m.result = "***-**-***";
-                        let el = document.getElementById(`resultText_${m.id}`);
-                        if (el) el.innerText = "***-**-***";
-                    }
-                    m.resultDate = cd; changed = true;
+                    if (m.result !== "***-**-***") { m.result = "***-**-***"; let el = document.getElementById(`resultText_${m.id}`); if (el) el.innerText = "***-**-***"; }
+                    m.resultDate = cd; mkRef('markets/' + m.id).update({ result:"***-**-***", resultDate:cd });
                 }
             });
-            if (changed) saveState();
         }
 
         function processReferralDeposit(depositorPhone, depositAmount) {
-            let dep = state.users[depositorPhone];
-            if (!dep || !dep.referredBy) return;
-            let ref = state.users[dep.referredBy];
-            if (!ref || ref.phone === depositorPhone || ref.isSystem) return;
-
-            let prevTotal = dep.referralTotalDeposited || 0;
-            let newTotal = prevTotal + depositAmount;
+            let dep = state.users[depositorPhone]; if (!dep || !dep.referredBy) return;
+            let ref = state.users[dep.referredBy]; if (!ref || ref.phone === depositorPhone || ref.isSystem) return;
+            let prevTotal = dep.referralTotalDeposited || 0, newTotal = prevTotal + depositAmount;
             dep.referralTotalDeposited = newTotal;
-            if (!Array.isArray(ref.referralHistory)) ref.referralHistory = [];
-            if (typeof ref.referralBalance !== "number") ref.referralBalance = 0;
-            if (typeof ref.referralTotalEarned !== "number") ref.referralTotalEarned = 0;
+            let nowStr = new Date().toLocaleString(), firstBonusGivenNow = false, totalCreditForRef = 0;
 
-            let nowStr = new Date().toLocaleString();
             if (!dep.referralFirstBonusPaid && newTotal >= 200) {
-                dep.referralFirstBonusPaid = true;
-                let bonus = 100;
-                ref.referralBalance = Math.round((ref.referralBalance + bonus) * 100) / 100;
-                ref.referralTotalEarned = Math.round((ref.referralTotalEarned + bonus) * 100) / 100;
-                ref.referralHistory.push({ id:Date.now() + Math.floor(Math.random()*1000), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:bonus, type:"Starting Bonus (₹200+ Deposit)", time:nowStr });
-
+                dep.referralFirstBonusPaid = true; firstBonusGivenNow = true; totalCreditForRef += 100;
+                let h1 = { id:genId(), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:100, type:"Starting Bonus (₹200+ Deposit)", time:nowStr };
+                mkRef(`users/${ref.phone}/referralHistory/${h1.id}`).set(h1);
                 let extraAmt = Math.min(depositAmount, newTotal - 200);
                 if (extraAmt > 0) {
                     let extraComm = Math.round((extraAmt * 0.03) * 100) / 100;
                     if (extraComm > 0) {
-                        ref.referralBalance = Math.round((ref.referralBalance + extraComm) * 100) / 100;
-                        ref.referralTotalEarned = Math.round((ref.referralTotalEarned + extraComm) * 100) / 100;
-                        ref.referralHistory.push({ id:Date.now() + Math.floor(Math.random()*1000) + 1, friendPhone:dep.phone, friendName:dep.name, depositAmount:extraAmt, commission:extraComm, type:"3% Commission (Extra Deposit)", time:nowStr });
+                        totalCreditForRef += extraComm;
+                        let h2 = { id:genId(), friendPhone:dep.phone, friendName:dep.name, depositAmount:extraAmt, commission:extraComm, type:"3% Commission (Extra Deposit)", time:nowStr };
+                        mkRef(`users/${ref.phone}/referralHistory/${h2.id}`).set(h2);
                     }
                 }
             } else {
                 let comm = Math.round((depositAmount * 0.03) * 100) / 100;
                 if (comm > 0) {
-                    ref.referralBalance = Math.round((ref.referralBalance + comm) * 100) / 100;
-                    ref.referralTotalEarned = Math.round((ref.referralTotalEarned + comm) * 100) / 100;
-                    ref.referralHistory.push({ id:Date.now() + Math.floor(Math.random()*1000), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:comm, type:"3% Commission", time:nowStr });
+                    totalCreditForRef += comm;
+                    let h3 = { id:genId(), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:comm, type:"3% Commission", time:nowStr };
+                    mkRef(`users/${ref.phone}/referralHistory/${h3.id}`).set(h3);
                 }
+            }
+            mkRef(`users/${dep.phone}`).update({ referralTotalDeposited:newTotal, referralFirstBonusPaid:Boolean(dep.referralFirstBonusPaid || firstBonusGivenNow) });
+            if (totalCreditForRef > 0) {
+                mkRef(`users/${ref.phone}/referralBalance`).transaction(c => Math.round(((Number(c)||0) + totalCreditForRef)*100)/100);
+                mkRef(`users/${ref.phone}/referralTotalEarned`).transaction(c => Math.round(((Number(c)||0) + totalCreditForRef)*100)/100);
             }
         }
 
         function switchAuthTab(tab) { state.authTab = tab; renderLoginScreen(); }
-
         function renderLoginScreen() {
             if (homeTimerInterval) clearInterval(homeTimerInterval);
             state.currentScreen = 'login';
             ['mainHeader','noticeBoardDisplay','bottomNav'].forEach(id => { let e = document.getElementById(id); if (e) e.style.display = 'none'; });
             let root = document.getElementById('appRoot'); if (!root) return;
             let isReg = state.authTab === 'register';
-            root.innerHTML = `
-                <div class="form-card" style="max-width:350px; margin:30px auto; text-align:center; border:2px solid var(--primary);">
-                    <h2 onclick="handleLogoTap(true)" style="color:var(--primary); margin-bottom:5px; cursor:pointer; user-select:none;">M.KING 👑</h2>
-                    <p style="color:#cbd5e1; font-size:12px; margin-bottom:15px;">${isReg ? 'नया खाता बनाएं' : 'अपने खाते में लॉगिन करें'}</p>
-                    <div class="tab-row">
-                        <button class="tab-btn ${!isReg ? 'active' : ''}" onclick="switchAuthTab('login')">Login</button>
-                        <button class="tab-btn ${isReg ? 'active' : ''}" onclick="switchAuthTab('register')">New Register</button>
-                    </div>
-                    ${isReg ? `
-                        <div class="input-group"><input type="text" id="regName" placeholder="आपका नाम (Optional)"></div>
-                        <div class="input-group"><input type="tel" id="regPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number (10 Digits)"></div>
-                        <div class="input-group"><div class="pass-wrap"><input type="password" id="regPass" placeholder="Password (कम से कम 4 अक्षर)"><button type="button" class="pass-eye" onclick="togglePassVisibility('regPass',this)">👁️</button></div></div>
-                        <div class="input-group"><div class="pass-wrap"><input type="password" id="regPassConfirm" placeholder="Confirm Password"><button type="button" class="pass-eye" onclick="togglePassVisibility('regPassConfirm',this)">👁️</button></div></div>
-                        <div class="input-group"><label>Referral Code / Friend Mobile (Optional)</label><input type="text" id="regRefCode" value="${escapeHTML(state.pendingRefCode || '')}" placeholder="दोस्त का मोबाइल नंबर" onkeydown="if(event.key==='Enter') handlePlayerRegister()"></div>
-                        <button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e); color:#042f2e; width:100%; font-size:15px; padding:12px;" onclick="handlePlayerRegister()">Create Account</button>
-                    ` : `
-                        <div class="input-group"><input type="tel" id="playerPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number (10 Digits)"></div>
-                        <div class="input-group"><div class="pass-wrap"><input type="password" id="playerPass" placeholder="Password" onkeydown="if(event.key==='Enter') handlePlayerLogin()"><button type="button" class="pass-eye" onclick="togglePassVisibility('playerPass',this)">👁️</button></div></div>
-                        <button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e); color:#042f2e; width:100%; font-size:15px; padding:12px; margin-bottom:10px;" onclick="handlePlayerLogin()">Login</button>
-                        <button class="btn" style="background:transparent; color:var(--primary); font-size:12px;" onclick="renderForgotScreen()">❓ Forgot Password?</button>
-                    `}
-                </div>`;
+            root.innerHTML = `<div class="form-card" style="max-width:350px;margin:30px auto;text-align:center;border:2px solid var(--primary);">
+                <h2 onclick="handleLogoTap(true)" style="color:var(--primary);margin-bottom:5px;cursor:pointer;user-select:none;">M.KING 👑</h2>
+                <p style="color:#cbd5e1;font-size:12px;margin-bottom:15px;">${isReg ? 'नया खाता बनाएं' : 'अपने खाते में लॉगिन करें'}</p>
+                <div class="tab-row"><button class="tab-btn ${!isReg?'active':''}" onclick="switchAuthTab('login')">Login</button><button class="tab-btn ${isReg?'active':''}" onclick="switchAuthTab('register')">New Register</button></div>
+                ${isReg ? `
+                    <div class="input-group"><input type="text" id="regName" placeholder="आपका नाम (Optional)"></div>
+                    <div class="input-group"><input type="tel" id="regPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number (10 Digits)"></div>
+                    <div class="input-group"><div class="pass-wrap"><input type="password" id="regPass" placeholder="Password (कम से कम 4 अक्षर)"><button type="button" class="pass-eye" onclick="togglePassVisibility('regPass',this)">👁️</button></div></div>
+                    <div class="input-group"><div class="pass-wrap"><input type="password" id="regPassConfirm" placeholder="Confirm Password"><button type="button" class="pass-eye" onclick="togglePassVisibility('regPassConfirm',this)">👁️</button></div></div>
+                    <div class="input-group"><label>Referral Code / Friend Mobile (Optional)</label><input type="text" id="regRefCode" value="${escapeHTML(state.pendingRefCode||'')}" placeholder="दोस्त का मोबाइल नंबर" onkeydown="if(event.key==='Enter') handlePlayerRegister()"></div>
+                    <button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;font-size:15px;padding:12px;" onclick="handlePlayerRegister()">Create Account</button>
+                ` : `
+                    <div class="input-group"><input type="tel" id="playerPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number (10 Digits)"></div>
+                    <div class="input-group"><div class="pass-wrap"><input type="password" id="playerPass" placeholder="Password" onkeydown="if(event.key==='Enter') handlePlayerLogin()"><button type="button" class="pass-eye" onclick="togglePassVisibility('playerPass',this)">👁️</button></div></div>
+                    <button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;font-size:15px;padding:12px;margin-bottom:10px;" onclick="handlePlayerLogin()">Login</button>
+                    <button class="btn" style="background:transparent;color:var(--primary);font-size:12px;" onclick="renderForgotScreen()">❓ Forgot Password?</button>
+                `}
+            </div>`;
         }
-
         function renderForgotScreen() {
             if (homeTimerInterval) clearInterval(homeTimerInterval);
             let root = document.getElementById('appRoot'); if (!root) return;
-            root.innerHTML = `
-                <div class="form-card" style="max-width:350px; margin:40px auto; text-align:center; border:2px solid var(--red);">
-                    <h3 style="color:#fda4af; margin-bottom:10px;">🔒 Forgot Password</h3>
-                    <p style="color:#cbd5e1; font-size:12px; margin-bottom:15px;">रजिस्टर्ड मोबाइल नंबर दर्ज करें। रिक्वेस्ट एडमिन को भेज दी जाएगी।</p>
-                    <div class="input-group"><input type="tel" id="forgotPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number" onkeydown="if(event.key==='Enter') submitForgotPassword()"></div>
-                    <button class="btn btn-play" style="width:100%; margin-bottom:10px;" onclick="submitForgotPassword()">Send Request to Admin</button>
-                    <button class="btn btn-chart" style="width:100%;" onclick="renderLoginScreen()">← Back to Login</button>
-                </div>`;
+            root.innerHTML = `<div class="form-card" style="max-width:350px;margin:40px auto;text-align:center;border:2px solid var(--red);"><h3 style="color:#fda4af;margin-bottom:10px;">🔒 Forgot Password</h3><p style="color:#cbd5e1;font-size:12px;margin-bottom:15px;">रजिस्टर्ड मोबाइल नंबर दर्ज करें। रिक्वेस्ट एडमिन को भेज दी जाएगी।</p><div class="input-group"><input type="tel" id="forgotPhone" maxlength="20" inputmode="numeric" placeholder="Mobile Number" onkeydown="if(event.key==='Enter') submitForgotPassword()"></div><button class="btn btn-play" style="width:100%;margin-bottom:10px;" onclick="submitForgotPassword()">Send Request to Admin</button><button class="btn btn-chart" style="width:100%;" onclick="renderLoginScreen()">← Back to Login</button></div>`;
         }
-
         function submitForgotPassword() {
             let pEl = document.getElementById('forgotPhone'); if (!pEl) return;
             let phone = normalizePhone(pEl.value);
             if (phone.length !== 10) return alert("कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!");
             if (!state.users[phone] || state.users[phone].isSystem) return alert("यह मोबाइल नंबर रजिस्टर नहीं है!");
             if (state.forgotRequests.some(r => r.phone === phone)) { alert("रिक्वेस्ट पहले से पेंडिंग है!"); return renderLoginScreen(); }
-            state.forgotRequests.push({ id:Date.now(), phone, name:state.users[phone].name, time:new Date().toLocaleString() });
-            saveState(); alert("पासवर्ड रीसेट रिक्वेस्ट एडमिन के पास भेज दी गई है!"); renderLoginScreen();
+            let req = { id:genId(), phone, name:state.users[phone].name, time:new Date().toLocaleString() };
+            state.forgotRequests.push(req); saveForgotToFB(req);
+            alert("पासवर्ड रीसेट रिक्वेस्ट एडमिन के पास भेज दी गई है!"); renderLoginScreen();
         }
-
         function completeUserLogin(phone) {
-            state.currentUserPhone = phone; localStorage.setItem('mk_logged_in_phone', phone); saveState();
+            state.currentUserPhone = phone; localStorage.setItem('mk_logged_in_phone', phone); updateChromeUI();
             document.getElementById('mainHeader').style.display = 'flex';
             document.getElementById('noticeBoardDisplay').style.display = 'block';
             document.getElementById('bottomNav').style.display = 'flex';
             navigate('home');
         }
-
         function handlePlayerRegister() {
             let nEl = document.getElementById('regName'), pEl = document.getElementById('regPhone'), pwEl = document.getElementById('regPass'), pcEl = document.getElementById('regPassConfirm'), rEl = document.getElementById('regRefCode');
             if (!pEl || !pwEl || !pcEl) return;
@@ -643,27 +546,23 @@
             let refCode = rEl ? normalizePhone(rEl.value) : '';
             if (phone.length !== 10 || pass.length < 4) return alert("कृपया 10 अंकों का मोबाइल नंबर और कम से कम 4 अक्षर का पासवर्ड दर्ज करें!");
             if (pass !== passConf) return alert("दोनों पासवर्ड एक जैसे होने चाहिए!");
-            if (refCode && (refCode === phone || refCode.length !== 10 || !state.users[refCode] || state.users[refCode].isSystem)) {
-                return alert("❌ दर्ज किया गया Referral Code सही नहीं है!");
-            }
+            if (refCode && (refCode === phone || refCode.length !== 10 || !state.users[refCode] || state.users[refCode].isSystem)) return alert("❌ दर्ज किया गया Referral Code सही नहीं है!");
             let ex = state.users[phone];
             if (ex && ex.isBlocked) return alert("🚫 यह मोबाइल नंबर एडमिन द्वारा ब्लॉक किया गया है!");
             if (ex && ex.password) { alert("यह नंबर पहले से रजिस्टर है! कृपया Login करें।"); state.authTab = 'login'; return renderLoginScreen(); }
             if (ex && !ex.password) {
                 ex.password = hashPassword(pass); if (name) ex.name = name;
                 if (refCode && !ex.referredBy) ex.referredBy = refCode;
-                ex.referralBalance = Number(ex.referralBalance || 0); ex.referralTotalEarned = Number(ex.referralTotalEarned || 0);
+                ex.referralBalance = Number(ex.referralBalance||0); ex.referralTotalEarned = Number(ex.referralTotalEarned||0);
                 if (!Array.isArray(ex.referralHistory)) ex.referralHistory = [];
                 if (!ex.joinedAt) ex.joinedAt = new Date().toLocaleDateString();
             } else {
                 state.users[phone] = { name:name||("Player "+phone.slice(-4)), balance:0, phone, password:hashPassword(pass), avatar:"", bankDetails:"", upiDetails:"", referredBy:refCode||null, referralBalance:0, referralTotalEarned:0, referralHistory:[], referralFirstBonusPaid:false, referralTotalDeposited:0, isBlocked:false, blockReason:"", joinedAt:new Date().toLocaleDateString() };
             }
-            state.pendingRefCode = ""; alert("नया खाता सफलतापूर्वक बन गया है!"); completeUserLogin(phone);
+            saveUserToFB(phone); state.pendingRefCode = ""; alert("नया खाता सफलतापूर्वक बन गया है!"); completeUserLogin(phone);
         }
-
         function handlePlayerLogin() {
-            let pEl = document.getElementById('playerPhone'), pwEl = document.getElementById('playerPass');
-            if (!pEl || !pwEl) return;
+            let pEl = document.getElementById('playerPhone'), pwEl = document.getElementById('playerPass'); if (!pEl || !pwEl) return;
             let phone = normalizePhone(pEl.value), pass = pwEl.value.trim();
             if (phone.length !== 10 || pass.length < 4) return alert("कृपया 10 अंकों का मोबाइल नंबर और कम से कम 4 अक्षर का पासवर्ड दर्ज करें!");
             let user = state.users[phone];
@@ -671,10 +570,9 @@
             if (!user.password) return alert("कृपया पहले 'New Register' टैब में जाकर पासवर्ड सेट करें!");
             if (!verifyPassword(pass, user.password)) return alert("गलत पासवर्ड!");
             if (user.isBlocked) return alert("🚫 आपका अकाउंट एडमिन द्वारा ब्लॉक कर दिया गया है!" + (user.blockReason ? `\nकारण: ${user.blockReason}` : ""));
-            if (!isHashedPassword(user.password)) user.password = hashPassword(pass);
+            if (!isHashedPassword(user.password)) { user.password = hashPassword(pass); mkRef(`users/${phone}/password`).set(user.password); }
             completeUserLogin(phone);
         }
-
         function logoutPlayer() {
             if (homeTimerInterval) clearInterval(homeTimerInterval);
             localStorage.removeItem('mk_logged_in_phone');
@@ -686,16 +584,11 @@
                 if (!confirm("आपके कार्ट में बिड्स बाकी हैं! बिना सबमिट किए बाहर जाने पर ये हट जाएंगी। क्या आप बाहर जाना चाहते हैं?")) return;
                 state.bidCart = [];
             }
-
-            if (screen !== 'adminLogin' && !(screen === 'chatBox' && state.isAdminLoggedIn && param1 === DEFAULT_VIP_PHONE) && (!state.currentUserPhone || !state.users[state.currentUserPhone])) {
-                return renderLoginScreen();
-            }
+            if (screen !== 'adminLogin' && !(screen === 'chatBox' && state.isAdminLoggedIn && param1 === DEFAULT_VIP_PHONE) && (!state.currentUserPhone || !state.users[state.currentUserPhone])) return renderLoginScreen();
             if (screen !== 'adminLogin' && !(screen === 'chatBox' && state.isAdminLoggedIn && param1 === DEFAULT_VIP_PHONE) && enforceNotBlocked()) return;
             if (screen !== 'home' && homeTimerInterval) { clearInterval(homeTimerInterval); homeTimerInterval = null; }
-
             const root = document.getElementById('appRoot'); if (!root) return;
             state.currentScreen = screen;
-
             if ((screen === 'adminLogin' || screen === 'chatBox') && !state.currentUserPhone) {
                 ['mainHeader','noticeBoardDisplay','bottomNav'].forEach(id => { let e = document.getElementById(id); if (e) e.style.display = 'none'; });
             } else {
@@ -703,11 +596,9 @@
                 document.getElementById('noticeBoardDisplay').style.display = 'block';
                 document.getElementById('bottomNav').style.display = 'flex';
             }
-
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             let navEl = document.getElementById(`nav-${screen}`); if (navEl) navEl.classList.add('active');
-
-            syncDailyMarketResults(); saveState();
+            syncDailyMarketResults(); updateChromeUI();
             if (screen === 'home') renderHome(root);
             else if (screen === 'gameSelect') renderGameSelect(root, param1);
             else if (screen === 'playGame') renderPlayGame(root, param1.mId, param1.gType);
@@ -746,36 +637,24 @@
             updateMarketTimers();
             homeTimerInterval = setInterval(updateMarketTimers, 1000);
         }
-
-        function formatCountdown(diff) {
-            if (diff <= 0) return "00:00:00";
-            let t = Math.floor(diff / 1000);
-            return `${String(Math.floor(t/3600)).padStart(2,'0')}:${String(Math.floor((t%3600)/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`;
-        }
-
+        function formatCountdown(diff) { if (diff <= 0) return "00:00:00"; let t = Math.floor(diff / 1000); return `${String(Math.floor(t/3600)).padStart(2,'0')}:${String(Math.floor((t%3600)/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`; }
         function updateMarketTimers() {
-            syncDailyMarketResults();
-            let now = new Date();
+            syncDailyMarketResults(); let now = new Date();
             state.markets.forEach(m => {
                 let ot = document.getElementById(`openTimer_${m.id}`), ct = document.getElementById(`closeTimer_${m.id}`), bc = document.getElementById(`badgeContainer_${m.id}`), pb = document.getElementById(`playBtn_${m.id}`);
                 if (!ot || !ct) return;
                 let st = getMarketSessionStatus(m, now);
                 if (st.isHoliday) {
-                    ot.innerHTML = "🏖️ Market Holiday"; ot.style.color = "var(--primary)";
-                    ct.innerHTML = "🔴 Closed Today"; ct.style.color = "#fda4af";
-                    if (bc && !bc.innerHTML.includes('HOLIDAY')) bc.innerHTML = `<span class="m-status status-holiday">HOLIDAY</span>`;
-                    if (pb) pb.style.opacity = "0.5"; return;
+                    ot.innerHTML = "🏖️ Market Holiday"; ot.style.color = "var(--primary)"; ct.innerHTML = "🔴 Closed Today"; ct.style.color = "#fda4af";
+                    if (bc && !bc.innerHTML.includes('HOLIDAY')) bc.innerHTML = `<span class="m-status status-holiday">HOLIDAY</span>`; if (pb) pb.style.opacity = "0.5"; return;
                 }
                 let od = st.openTarget.getTime() - now.getTime(), cd = st.closeTarget.getTime() - now.getTime();
-                ot.innerHTML = od <= 0 ? "🔴 Open Closed" : `⏳ Open: ${formatCountdown(od)}`;
-                ot.style.color = od <= 0 ? "#fda4af" : "#86efac";
-                ct.innerHTML = cd <= 0 ? "🔴 Close Closed" : `⏳ Close: ${formatCountdown(cd)}`;
-                ct.style.color = cd <= 0 ? "#fda4af" : "var(--primary)";
+                ot.innerHTML = od <= 0 ? "🔴 Open Closed" : `⏳ Open: ${formatCountdown(od)}`; ot.style.color = od <= 0 ? "#fda4af" : "#86efac";
+                ct.innerHTML = cd <= 0 ? "🔴 Close Closed" : `⏳ Close: ${formatCountdown(cd)}`; ct.style.color = cd <= 0 ? "#fda4af" : "var(--primary)";
                 if (bc) bc.innerHTML = cd <= 0 ? `<span class="m-status status-closed">CLOSED</span>` : `<span class="m-status status-open">RUNNING</span>`;
                 if (pb) pb.style.opacity = cd <= 0 ? "0.6" : "1";
             });
         }
-
         function handlePlayClick(id) {
             if (enforceNotBlocked()) return;
             let m = state.markets.find(x => x.id === id); if (!m) return;
@@ -783,13 +662,10 @@
             if (!getMarketSessionStatus(m, new Date()).isMarketActive) return alert("❌ इस मार्केट का समय समाप्त हो चुका है!");
             navigate('gameSelect', id);
         }
-
         const isOpenRequiredGame = n => n === "Jodi Digit" || n === "Half Sangam" || n === "Full Sangam";
-
         function renderGameSelect(root, marketId) {
             let m = state.markets.find(x => x.id === marketId); if (!m) return navigate('home');
-            state.selectedMarket = m;
-            let st = getMarketSessionStatus(m, new Date());
+            state.selectedMarket = m; let st = getMarketSessionStatus(m, new Date());
             if (st.isHoliday || !st.isMarketActive) return navigate('home');
             let html = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(m.name)}</h3></div><div class="game-grid">`;
             state.gameRates.forEach((g, idx) => {
@@ -798,7 +674,6 @@
             });
             root.innerHTML = html + `</div>`;
         }
-
         function openGameByIndex(mId, idx) { let r = state.gameRates[idx]; if (r) navigate('playGame', { mId, gType:r.name }); }
         const getRequiredDigitLength = gt => gt === "Single Digit" ? 1 : (gt === "Jodi Digit" ? 2 : 3);
         const pannaDigitVal = ch => ch === '0' ? 10 : parseInt(ch, 10);
@@ -810,26 +685,15 @@
             if (gt === "Triple Panna") return d[0] === d[1] && d[1] === d[2];
             return a <= b && b <= c;
         }
-        function isValidAnyPanna(d) {
-            if (!/^\d{3}$/.test(d)) return false;
-            const a = pannaDigitVal(d[0]), b = pannaDigitVal(d[1]), c = pannaDigitVal(d[2]);
-            return a <= b && b <= c;
-        }
-        function enforceDigitLimit(el, fixedMax = null) {
-            let max = fixedMax !== null ? fixedMax : getRequiredDigitLength(state.selectedGameType || "");
-            let cl = el.value.replace(/\D/g, '');
-            if (cl.length > max) cl = cl.slice(0, max);
-            el.value = cl;
-        }
+        function isValidAnyPanna(d) { if (!/^\d{3}$/.test(d)) return false; const a = pannaDigitVal(d[0]), b = pannaDigitVal(d[1]), c = pannaDigitVal(d[2]); return a <= b && b <= c; }
+        function enforceDigitLimit(el, fixedMax = null) { let max = fixedMax !== null ? fixedMax : getRequiredDigitLength(state.selectedGameType || ""); let cl = el.value.replace(/\D/g, ''); if (cl.length > max) cl = cl.slice(0, max); el.value = cl; }
         function updateHalfSangamLabels() {
             let mode = document.getElementById('halfSangamMode'), l1 = document.getElementById('sangamLbl1'), l2 = document.getElementById('sangamLbl2'), p1 = document.getElementById('sangamPart1'), p2 = document.getElementById('sangamPart2');
             if (!mode || !l1 || !l2 || !p1 || !p2) return;
-            p1.value = ''; p2.value = '';
-            let o1 = mode.value === 'OPEN_ANK_CLOSE_PANNA';
+            p1.value = ''; p2.value = ''; let o1 = mode.value === 'OPEN_ANK_CLOSE_PANNA';
             l1.innerText = o1 ? 'Open Ank (1 Digit)' : 'Open Panna (3 Digits)'; p1.maxLength = o1 ? 1 : 3; p1.placeholder = o1 ? '0-9 एक अंक' : '128, 112, 000'; p1.setAttribute('oninput', `enforceDigitLimit(this,${o1?1:3})`);
             l2.innerText = o1 ? 'Close Panna (3 Digits)' : 'Close Ank (1 Digit)'; p2.maxLength = o1 ? 3 : 1; p2.placeholder = o1 ? '128, 112, 000' : '0-9 एक अंक'; p2.setAttribute('oninput', `enforceDigitLimit(this,${o1?3:1})`);
         }
-
         function renderPlayGame(root, marketId, gameType) {
             let m = state.markets.find(x => x.id === marketId); if (!m) return navigate('home');
             state.selectedMarket = m; state.selectedGameType = gameType; state.bidCart = [];
@@ -837,31 +701,25 @@
             if (st.isHoliday || !st.isCloseSessionActive) { alert(st.isHoliday ? "🏖️ आज छुट्टी है!" : "❌ समय समाप्त हो चुका है!"); return navigate('home'); }
             if (isOpenRequiredGame(gameType) && !st.isOpenSessionActive) { alert(`❌ ओपन बंद होने के बाद ${gameType} नहीं खेल सकते!`); return navigate('gameSelect', marketId); }
             let curBal = (state.users[state.currentUserPhone] || {}).balance || 0;
-
             if (gameType === "Half Sangam" || gameType === "Full Sangam") {
                 let isH = gameType === "Half Sangam";
                 root.innerHTML = `<div class="sub-header flex-between"><div style="display:flex;align-items:center;gap:10px;"><button class="back-btn" onclick="navigate('gameSelect',${m.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(m.name)}</h4><small>${gameType}</small></div></div><span class="win-badge">₹${curBal}</span></div>
-                    <div class="form-card">
-                        ${isH ? `<div class="input-group"><label>Sangam Type</label><select id="halfSangamMode" onchange="updateHalfSangamLabels()"><option value="OPEN_ANK_CLOSE_PANNA">Open Ank (1) + Close Panna (3)</option><option value="OPEN_PANNA_CLOSE_ANK">Open Panna (3) + Close Ank (1)</option></select></div>` : ''}
+                    <div class="form-card">${isH ? `<div class="input-group"><label>Sangam Type</label><select id="halfSangamMode" onchange="updateHalfSangamLabels()"><option value="OPEN_ANK_CLOSE_PANNA">Open Ank (1) + Close Panna (3)</option><option value="OPEN_PANNA_CLOSE_ANK">Open Panna (3) + Close Ank (1)</option></select></div>` : ''}
                         <div class="input-group"><label id="sangamLbl1">${isH ? 'Open Ank (1 Digit)' : 'Open Panna (3 Digits)'}</label><input type="tel" id="sangamPart1" inputmode="numeric" maxlength="${isH?1:3}" oninput="enforceDigitLimit(this,${isH?1:3})" placeholder="${isH?'0-9 एक अंक':'128, 112, 000'}"></div>
                         <div class="input-group"><label id="sangamLbl2">${isH ? 'Close Panna (3 Digits)' : 'Close Panna (3 Digits)'}</label><input type="tel" id="sangamPart2" inputmode="numeric" maxlength="3" oninput="enforceDigitLimit(this,3)" placeholder="128, 112, 000"></div>
                         <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" inputmode="numeric" min="10" placeholder="राशि"></div>
-                        <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button>
-                    </div><div id="cartContainer"></div>`;
+                        <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button></div><div id="cartContainer"></div>`;
                 return;
             }
             let opts = (st.isOpenSessionActive ? `<option value="OPEN">OPEN</option>` : '') + (gameType !== "Jodi Digit" && st.isCloseSessionActive ? `<option value="CLOSE">CLOSE</option>` : '');
             let reqLen = getRequiredDigitLength(gameType);
             let ph = reqLen === 1 ? "0 से 9 तक एक अंक" : (reqLen === 2 ? "00 से 99 तक दो अंक" : (gameType === "Single Panna" ? "128, 120 (बढ़ते क्रम में)" : (gameType === "Double Panna" ? "112, 100 (बढ़ते क्रम में)" : "000, 111 ... 999")));
             root.innerHTML = `<div class="sub-header flex-between"><div style="display:flex;align-items:center;gap:10px;"><button class="back-btn" onclick="navigate('gameSelect',${m.id})">← Back</button><div><h4 style="color:var(--primary)">${escapeHTML(m.name)}</h4><small>${escapeHTML(gameType)}</small></div></div><span class="win-badge">₹${curBal}</span></div>
-                <div class="form-card">
-                    <div class="input-group"><label>Session</label><select id="bidSession" onchange="if(state.selectedGameType==='Jodi Digit'&&this.value==='CLOSE'){alert('❌ क्लोज में जोड़ी नहीं खेल सकते!');this.value='OPEN';}">${opts}</select></div>
+                <div class="form-card"><div class="input-group"><label>Session</label><select id="bidSession" onchange="if(state.selectedGameType==='Jodi Digit'&&this.value==='CLOSE'){alert('❌ क्लोज में जोड़ी नहीं खेल सकते!');this.value='OPEN';}">${opts}</select></div>
                     <div class="input-group"><label>${escapeHTML(gameType)} (${reqLen} Digit)</label><input type="tel" id="bidDigitInput" inputmode="numeric" maxlength="${reqLen}" oninput="enforceDigitLimit(this)" placeholder="${ph}"></div>
                     <div class="input-group"><label>Points (Min ₹10)</label><input type="number" id="bidAmountInput" inputmode="numeric" min="10" placeholder="राशि"></div>
-                    <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button>
-                </div><div id="cartContainer"></div>`;
+                    <button class="btn btn-play" style="width:100%" onclick="addToCart()">+ ADD TO LIST</button></div><div id="cartContainer"></div>`;
         }
-
         function addToCart() {
             if (enforceNotBlocked()) return;
             let amtEl = document.getElementById('bidAmountInput'); if (!amtEl) return;
@@ -876,12 +734,11 @@
                     if (mode === 'OPEN_PANNA_CLOSE_ANK' && (!isValidAnyPanna(p1) || !/^\d$/.test(p2))) return alert("❌ सही 3 अंक Open Panna और 1 अंक Close Ank डालें!");
                 } else if (!isValidAnyPanna(p1) || !isValidAnyPanna(p2)) return alert("❌ सही Open Panna और Close Panna डालें!");
                 if (!isStrictPositiveInt(rawAmt) || parseInt(rawAmt,10) < 10) return alert("कम से कम ₹10 दर्ज करें!");
-                state.bidCart.push({ id:Date.now()+Math.floor(Math.random()*999), marketId:state.selectedMarket.id, marketName:state.selectedMarket.name, gameType:state.selectedGameType, session:state.selectedGameType.toUpperCase(), digit:`${p1}-${p2}`, amount:parseInt(rawAmt,10), phone:state.currentUserPhone });
+                state.bidCart.push({ id:genId(), marketId:state.selectedMarket.id, marketName:state.selectedMarket.name, gameType:state.selectedGameType, session:state.selectedGameType.toUpperCase(), digit:`${p1}-${p2}`, amount:parseInt(rawAmt,10), phone:state.currentUserPhone });
                 document.getElementById('sangamPart1').value = ''; document.getElementById('sangamPart2').value = ''; amtEl.value = '';
                 return renderCartList();
             }
-            let digEl = document.getElementById('bidDigitInput'), sesEl = document.getElementById('bidSession');
-            if (!digEl || !sesEl) return;
+            let digEl = document.getElementById('bidDigitInput'), sesEl = document.getElementById('bidSession'); if (!digEl || !sesEl) return;
             let digit = digEl.value.trim(), session = sesEl.value, reqLen = getRequiredDigitLength(state.selectedGameType);
             if (session === "OPEN" && !st.isOpenSessionActive) return alert("❌ OPEN सेशन समय समाप्त!");
             if (session === "CLOSE" && !st.isCloseSessionActive) return alert("❌ CLOSE सेशन समय समाप्त!");
@@ -889,10 +746,9 @@
             if (!/^\d+$/.test(digit) || digit.length !== reqLen) return alert(`❌ ठीक ${reqLen} अंक ही दर्ज करें!`);
             if (state.selectedGameType.includes("Panna") && !isValidPannaDigit(digit, state.selectedGameType)) return alert(`❌ ${state.selectedGameType} के सही नियम के अनुसार 3 अंक डालें!`);
             if (!isStrictPositiveInt(rawAmt) || parseInt(rawAmt,10) < 10) return alert("कम से कम ₹10 दर्ज करें!");
-            state.bidCart.push({ id:Date.now()+Math.floor(Math.random()*999), marketId:state.selectedMarket.id, marketName:state.selectedMarket.name, gameType:state.selectedGameType, session, digit, amount:parseInt(rawAmt,10), phone:state.currentUserPhone });
+            state.bidCart.push({ id:genId(), marketId:state.selectedMarket.id, marketName:state.selectedMarket.name, gameType:state.selectedGameType, session, digit, amount:parseInt(rawAmt,10), phone:state.currentUserPhone });
             digEl.value = ''; amtEl.value = ''; renderCartList();
         }
-
         function renderCartList() {
             let box = document.getElementById('cartContainer'); if (!box) return;
             if (!state.bidCart.length) { box.innerHTML = ''; return; }
@@ -902,51 +758,45 @@
                 `<button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;margin-top:8px;" onclick="submitBids()">✅ SUBMIT ALL (₹${total})</button>`;
         }
         function removeFromCart(id) { state.bidCart = state.bidCart.filter(x => x.id !== id); renderCartList(); }
-
         function submitBids() {
             if (enforceNotBlocked() || isSubmittingBids || !state.bidCart.length) return;
             isSubmittingBids = true;
-            try {
-                let total = state.bidCart.reduce((s, i) => s + i.amount, 0), now = new Date();
-                for (const b of state.bidCart) {
-                    const m = state.markets.find(mk => mk.id === b.marketId);
-                    if (!m) return alert("❌ मार्केट उपलब्ध नहीं है!");
-                    const st = getMarketSessionStatus(m, now);
-                    if (st.isHoliday) return alert(`🏖️ ${m.name} आज छुट्टी पर है!`);
-                    let needOpen = (b.session === "OPEN" || isOpenRequiredGame(b.gameType));
-                    if ((needOpen && !st.isOpenSessionActive) || (!needOpen && !st.isCloseSessionActive)) return alert(`❌ ${m.name} (${b.session}) का समय समाप्त हो चुका है!`);
-                }
-                let user = state.users[state.currentUserPhone];
-                if (!user || user.balance < total) return alert("पर्याप्त बैलेंस नहीं है!");
-                user.balance = Math.round((user.balance - total) * 100) / 100;
+            let cartCopy = [...state.bidCart], total = cartCopy.reduce((s, i) => s + i.amount, 0), now = new Date();
+            for (const b of cartCopy) {
+                const m = state.markets.find(mk => mk.id === b.marketId);
+                if (!m) { isSubmittingBids = false; return alert("❌ मार्केट उपलब्ध नहीं है!"); }
+                const st = getMarketSessionStatus(m, now);
+                if (st.isHoliday) { isSubmittingBids = false; return alert(`🏖️ ${m.name} आज छुट्टी पर है!`); }
+                let needOpen = (b.session === "OPEN" || isOpenRequiredGame(b.gameType));
+                if ((needOpen && !st.isOpenSessionActive) || (!needOpen && !st.isCloseSessionActive)) { isSubmittingBids = false; return alert(`❌ ${m.name} (${b.session}) का समय समाप्त हो चुका है!`); }
+            }
+            let myPhone = state.currentUserPhone;
+            mkRef(`users/${myPhone}/balance`).transaction(cur => {
+                let bal = Number(cur) || 0; if (bal < total) return;
+                return Math.round((bal - total) * 100) / 100;
+            }, (err, committed) => {
+                isSubmittingBids = false;
+                if (err || !committed) return alert(err ? "❌ नेटवर्क त्रुटि, कृपया पुनः प्रयास करें!" : "पर्याप्त बैलेंस नहीं है!");
                 let today = getLocalDateString(now), nt = now.toLocaleTimeString();
-                state.bidCart.forEach(b => {
+                cartCopy.forEach(b => {
                     const m = state.markets.find(mk => mk.id === b.marketId);
-                    state.bids.push({ ...b, date: m ? getMarketCycleDate(m, now) : today, status:"PENDING", winAmount:0, time:nt });
+                    let bidObj = { ...b, date: m ? getMarketCycleDate(m, now) : today, status:"PENDING", winAmount:0, time:nt };
+                    state.bids.push(bidObj); saveBidToFB(bidObj);
                 });
-                state.transactions.push({ phone:state.currentUserPhone, type:`Bids Placed (${state.bidCart.length})`, amount:-total, date:today, time:now.toLocaleString() });
-                state.bidCart = []; saveState(); alert("बिड सफलतापूर्वक लग गई!"); navigate('bids');
-            } finally { isSubmittingBids = false; }
+                addTransactionToFB({ phone:myPhone, type:`Bids Placed (${cartCopy.length})`, amount:-total, date:today, time:now.toLocaleString() });
+                state.bidCart = []; alert("बिड सफलतापूर्वक लग गई!"); navigate('bids');
+            });
         }
-
         function renderChart(root, mId) {
             let m = state.markets.find(x => x.id === mId); if (!m) return navigate('home');
+            state.selectedMarket = m;
             let chartRows = (m.chart && m.chart.length) ? m.chart.slice().reverse().map(c => {
-                let dt = (typeof c === "object" && c.date) ? c.date : "";
-                let res = (typeof c === "object") ? c.result : c;
-                let dayLabel = "";
-                if (dt) {
-                    let dObj = new Date(dt + "T00:00:00");
-                    if (!isNaN(dObj.getTime())) dayLabel = dObj.toLocaleDateString('en-IN', { weekday:'short' });
-                }
-                return `<div class="flex-between" style="padding:10px;border-bottom:1px solid rgba(129,140,248,0.28);">
-                    <span style="color:#cbd5e1;font-size:12px;">${dt ? `📅 ${escapeHTML(dt)} (${escapeHTML(dayLabel)})` : '📅 Purana Record'}</span>
-                    <span style="color:var(--primary);font-weight:bold;letter-spacing:1px;">${escapeHTML(res)}</span>
-                </div>`;
+                let dt = (typeof c === "object" && c.date) ? c.date : "", res = (typeof c === "object") ? c.result : c, dayLabel = "";
+                if (dt) { let dObj = new Date(dt + "T00:00:00"); if (!isNaN(dObj.getTime())) dayLabel = dObj.toLocaleDateString('en-IN', { weekday:'short' }); }
+                return `<div class="flex-between" style="padding:10px;border-bottom:1px solid rgba(129,140,248,0.28);"><span style="color:#cbd5e1;font-size:12px;">${dt ? `📅 ${escapeHTML(dt)} (${escapeHTML(dayLabel)})` : '📅 Purana Record'}</span><span style="color:var(--primary);font-weight:bold;letter-spacing:1px;">${escapeHTML(res)}</span></div>`;
             }).join('') : `<p style="color:#cbd5e1;padding:15px;">कोई पुराना चार्ट नहीं है।</p>`;
             root.innerHTML = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>${escapeHTML(m.name)} Chart</h3></div><div class="form-card">${chartRows}</div>`;
         }
-
         function renderBids(root) {
             let my = state.bids.filter(b => b.phone === state.currentUserPhone).slice().reverse();
             root.innerHTML = `<h3 style="margin-bottom:12px;color:var(--primary);">📜 My Bids History</h3>` +
@@ -961,8 +811,7 @@
         function toggleGuessSearchBar() { state.guessShowSearchBar = !state.guessShowSearchBar; renderGuessingForum(document.getElementById('appRoot')); }
         function toggleOriginalPostFilter() {
             state.guessFilterOriginalOnly = !state.guessFilterOriginalOnly;
-            let pill = document.getElementById('gfOrigPill');
-            if (pill) { pill.classList.toggle('on', state.guessFilterOriginalOnly); pill.innerText = state.guessFilterOriginalOnly ? 'ON' : 'OFF'; }
+            let pill = document.getElementById('gfOrigPill'); if (pill) { pill.classList.toggle('on', state.guessFilterOriginalOnly); pill.innerText = state.guessFilterOriginalOnly ? 'ON' : 'OFF'; }
             let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML();
         }
         function applyGuessFilters() {
@@ -970,35 +819,26 @@
             if (sEl) state.guessSearchQuery = sEl.value; if (mEl) state.guessFilterMarket = mEl.value;
             let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML();
         }
-        function insertGuessTemplate() {
-            let mEl = document.getElementById('guessMarket'), tEl = document.getElementById('guessText'); if (!tEl) return;
-            tEl.value = `${mEl ? mEl.value : 'MARKET'} OPEN\n\n4\n9\n8\n\n48___49___98___97___87___82\n\n167___112___126___667\n260___125___170___117\n\nBest of luck 🤞🤞👍👍`;
-            tEl.focus();
-        }
-        function openQuoteBox(id) {
-            state.guessQuoteTargetId = state.guessQuoteTargetId === id ? null : id; state.guessShowComposer = false;
-            let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML();
-            if (state.guessQuoteTargetId) document.getElementById(`quoteText_${id}`)?.focus();
-        }
+        function insertGuessTemplate() { let mEl = document.getElementById('guessMarket'), tEl = document.getElementById('guessText'); if (!tEl) return; tEl.value = `${mEl ? mEl.value : 'MARKET'} OPEN\n\n4\n9\n8\n\n48___49___98___97___87___82\n\n167___112___126___667\n260___125___170___117\n\nBest of luck 🤞🤞👍👍`; tEl.focus(); }
+        function openQuoteBox(id) { state.guessQuoteTargetId = state.guessQuoteTargetId === id ? null : id; state.guessShowComposer = false; let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML(); if (state.guessQuoteTargetId) document.getElementById(`quoteText_${id}`)?.focus(); }
         function setQuickQuoteText(id, txt) { let q = document.getElementById(`quoteText_${id}`); if (q) q.value = txt; }
         function submitQuotePost(targetId) {
             if (enforceNotBlocked()) return;
             let nowMs = Date.now();
             if (!state.isAdminLoggedIn && state.lastGuessPostTs && (nowMs - state.lastGuessPostTs) < 15000) return alert(`⏳ कृपया ${Math.ceil((15000-(nowMs-state.lastGuessPostTs))/1000)} सेकंड प्रतीक्षा करें!`);
-            let target = state.guessingPosts.find(p => p.id === targetId), qIn = document.getElementById(`quoteText_${targetId}`);
-            if (!target || !qIn) return;
+            let target = state.guessingPosts.find(p => p.id === targetId), qIn = document.getElementById(`quoteText_${targetId}`); if (!target || !qIn) return;
             let text = qIn.value.trim(); if (!text) return alert("कृपया अपना Quote या बधाई संदेश लिखें!");
             let user = state.users[state.currentUserPhone];
             let prev = Array.isArray(target.quoteChain) ? target.quoteChain.slice(-3) : (target.quoteOf ? [target.quoteOf] : []);
             let chain = [...prev, { id:target.id, name:target.name, phone:target.phone, time:target.time, text:target.text }];
-            state.guessingPosts.push({ id:nowMs, phone:state.currentUserPhone, name:user.name, market:target.market, text, time:formatForumDateTime(), likes:0, likedBy:[], comments:[], wishes:[], quoteOf:chain[chain.length-1], quoteChain:chain });
-            state.lastGuessPostTs = nowMs; state.guessQuoteTargetId = null; saveState(); renderGuessingForum(document.getElementById('appRoot'));
+            let postObj = { id:genId(), phone:state.currentUserPhone, name:user.name, market:target.market, text, time:formatForumDateTime(), likes:0, likedBy:[], comments:[], wishes:[], quoteOf:chain[chain.length-1], quoteChain:chain };
+            state.guessingPosts.push(postObj); saveGuessPostToFB(postObj);
+            state.lastGuessPostTs = nowMs; state.guessQuoteTargetId = null; renderGuessingForum(document.getElementById('appRoot'));
         }
         function shareGuessPost(id) {
             let p = state.guessingPosts.find(x => x.id === id); if (!p) return;
             let msg = `🎯 M.KING Guessing (${p.market})\nBy ${p.name}:\n\n${p.text}\n\nJoin: ${REFERRAL_BASE_URL}`;
-            if (navigator.share) navigator.share({ title:`M.KING - ${p.market}`, text:msg }).catch(()=>{});
-            else fallbackCopyText(msg);
+            if (navigator.share) navigator.share({ title:`M.KING - ${p.market}`, text:msg }).catch(()=>{}); else fallbackCopyText(msg);
         }
         function getGuesserRoleBadge(p) {
             if (p.phone === DEFAULT_VIP_PHONE) return `<span class="gf-role-badge vip">VIP</span>`;
@@ -1006,30 +846,18 @@
             return `<span class="gf-role-badge" style="border-color:#38bdf8;color:#bae6fd;background:rgba(56,189,248,0.16);">Guesser</span>`;
         }
         function getUnreadChatsCount() {
-            let me = state.currentUserPhone, unread = 0;
-            let inc = state.guesserChats[me] || {};
-            Object.keys(inc).forEach(bp => {
-                (inc[bp] || []).forEach(m => { if (m.sender !== me && m.read === false) unread++; });
-            });
-            Object.keys(state.guesserChats).forEach(gp => {
-                if (gp !== me && state.guesserChats[gp] && state.guesserChats[gp][me]) {
-                    (state.guesserChats[gp][me] || []).forEach(m => { if (m.sender !== me && m.read === false) unread++; });
-                }
-            });
+            let me = state.currentUserPhone, unread = 0, inc = state.guesserChats[me] || {};
+            Object.keys(inc).forEach(bp => { (inc[bp] || []).forEach(m => { if (m.sender !== me && m.read === false) unread++; }); });
+            Object.keys(state.guesserChats).forEach(gp => { if (gp !== me && state.guesserChats[gp] && state.guesserChats[gp][me]) (state.guesserChats[gp][me] || []).forEach(m => { if (m.sender !== me && m.read === false) unread++; }); });
             return unread;
         }
-
         function buildGuessPostsHTML() {
             let list = state.guessingPosts.slice().reverse().filter(p => {
-                let author = state.users[p.phone];
-                if (author && author.isBlocked && !state.isAdminLoggedIn) return false;
+                let author = state.users[p.phone]; if (author && author.isBlocked && !state.isAdminLoggedIn) return false;
                 let hasQ = Boolean(p.quoteOf || (Array.isArray(p.quoteChain) && p.quoteChain.length));
                 if (state.guessFilterOriginalOnly && hasQ) return false;
                 if (state.guessFilterMarket !== "ALL" && p.market !== state.guessFilterMarket) return false;
-                if (state.guessSearchQuery.trim()) {
-                    let q = state.guessSearchQuery.trim().toLowerCase();
-                    if (!(p.name||'').toLowerCase().includes(q) && !(p.text||'').toLowerCase().includes(q) && !(p.market||'').toLowerCase().includes(q)) return false;
-                }
+                if (state.guessSearchQuery.trim()) { let q = state.guessSearchQuery.trim().toLowerCase(); if (!(p.name||'').toLowerCase().includes(q) && !(p.text||'').toLowerCase().includes(q) && !(p.market||'').toLowerCase().includes(q)) return false; }
                 return true;
             });
             if (!list.length) return `<p style="text-align:center;color:#cbd5e1;margin-top:25px;">कोई गेसिंग पोस्ट नहीं मिली।</p>`;
@@ -1045,104 +873,90 @@
                 let qBox = state.guessQuoteTargetId === p.id ? `<div style="margin:8px 10px;background:rgba(24,33,77,0.92);border:1px solid #38bdf8;border-radius:10px;padding:10px;"><div style="font-size:11px;color:#7dd3fc;margin-bottom:6px;font-weight:bold;">🔁 Quoting ${escapeHTML(p.name)}:</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;"><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'BIG CONGRATULATIONS 🎉🎉')">🎉 Congrats</button><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'PASS 🎯🔥')">🎯 Pass</button><button class="gf-chip-btn" onclick="setQuickQuoteText(${p.id},'Dil se badhai Boss! 👏')">👏 Badhai</button></div><textarea id="quoteText_${p.id}" rows="2" maxlength="500" placeholder="अपना जवाब लिखें..." style="width:100%;background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:8px;border-radius:8px;font-size:12px;margin-bottom:6px;"></textarea><div style="display:flex;gap:6px;"><button class="btn btn-chart" style="padding:6px;font-size:11px;flex:1;" onclick="openQuoteBox(${p.id})">Cancel</button><button class="btn btn-play" style="padding:6px;font-size:11px;flex:2;" onclick="submitQuotePost(${p.id})">Post Quote</button></div></div>` : '';
                 return `<div class="gf-card" id="guessPostCard_${p.id}">
                     <div class="gf-card-head"><div class="gf-author-wrap"><div class="gf-avatar-wrap"><img src="${av}" class="gf-avatar"><span class="gf-online-dot"></span></div><div><div class="gf-author-name">${escapeHTML(p.name)} ${getGuesserRoleBadge(p)}</div><div class="gf-time">${escapeHTML(p.time)}</div></div></div><div class="gf-ribbon">${escapeHTML(p.market)}</div></div>
-                    ${body}
-                    <div id="wishesContainer_${p.id}" style="margin:0 12px 8px 12px;font-size:11px;color:#86efac;${wHtml?'':'display:none;'}">${wHtml}</div>
+                    ${body}<div id="wishesContainer_${p.id}" style="margin:0 12px 8px 12px;font-size:11px;color:#86efac;${wHtml?'':'display:none;'}">${wHtml}</div>
                     <div class="gf-meta-actions">
                         <button class="gf-chip-btn ${liked?'liked':''}" id="likeBtn_${p.id}" onclick="toggleLike(${p.id})">❤️ Like (${p.likes||0})</button>
                         <button class="gf-chip-btn" style="border-color:#4ade80;color:#86efac;" onclick="sendWish(${p.id})">🎉 Wish Pass</button>
                         <button class="gf-chip-btn" style="border-color:#38bdf8;color:#bae6fd;" data-phone="${escapeHTML(p.phone)}" onclick="openChatWithGuesserPhone(this.dataset.phone)">💬 Chat / Gift</button>
                         ${canDel ? `<button class="gf-chip-btn" style="border-color:#fb7185;color:#fecdd3;" onclick="deleteGuessingPost(${p.id})">🗑️</button>` : ''}
                         ${canBlk ? `<button class="gf-chip-btn" style="border-color:#c084fc;color:#e9d5ff;" data-phone="${escapeHTML(p.phone)}" data-postid="${p.id}" onclick="adminToggleBlockUser(this.dataset.phone,Number(this.dataset.postid))">${u.isBlocked ? '✅ Unblock' : '🚫 Block'}</button>` : ''}
-                    </div>
-                    ${qBox}
-                    <div class="gf-footer-bar">
-                        <span class="gf-stat-mini">💬 <span id="commentCount_${p.id}">${visibleComments.length}</span></span>
-                        <button class="gf-stat-mini" onclick="shareGuessPost(${p.id})">🔗</button>
-                        <div class="gf-comment-pill"><input type="text" id="commentInput_${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') addComment(${p.id})"><button class="gf-send-icon" onclick="addComment(${p.id})">➤</button></div>
-                        <button class="gf-quote-btn" onclick="openQuoteBox(${p.id})">🔁 Quote</button>
-                    </div>
-                    <div class="gf-comments-list" id="commentsContainer_${p.id}">${cHtml}</div>
-                </div>`;
+                    </div>${qBox}
+                    <div class="gf-footer-bar"><span class="gf-stat-mini">💬 <span id="commentCount_${p.id}">${visibleComments.length}</span></span><button class="gf-stat-mini" onclick="shareGuessPost(${p.id})">🔗</button><div class="gf-comment-pill"><input type="text" id="commentInput_${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') addComment(${p.id})"><button class="gf-send-icon" onclick="addComment(${p.id})">➤</button></div><button class="gf-quote-btn" onclick="openQuoteBox(${p.id})">🔁 Quote</button></div>
+                    <div class="gf-comments-list" id="commentsContainer_${p.id}">${cHtml}</div></div>`;
             }).join('');
         }
-
         function renderGuessingForum(root) {
             let mOpts = state.markets.map(m => `<option value="${escapeHTML(m.name)}">${escapeHTML(m.name)}</option>`).join('');
             let fOpts = `<option value="ALL" ${state.guessFilterMarket==='ALL'?'selected':''}>All Markets</option>` + state.markets.map(m => `<option value="${escapeHTML(m.name)}" ${state.guessFilterMarket===m.name?'selected':''}>${escapeHTML(m.name)}</option>`).join('');
             let uc = getUnreadChatsCount();
             root.innerHTML = `
-                <div class="gf-toolbar">
-                    <div class="gf-icon-group">
-                        <button class="gf-icon-btn" onclick="renderGuessingForum(document.getElementById('appRoot'))" title="Refresh">🔄</button>
-                        <button class="gf-icon-btn ${state.guessShowSearchBar?'active':''}" onclick="toggleGuessSearchBar()" title="Search">🔍</button>
-                        <button class="gf-icon-btn ${state.guessFilterMarket!=='ALL'?'active':''}" onclick="toggleGuessSearchBar()" title="Filter">🎛️</button>
-                        <button class="gf-icon-btn" onclick="navigate('myChats')" title="My Chats">💬${uc>0?`<span style="position:absolute;top:-4px;right:-4px;background:var(--green);color:#052e16;border-radius:50%;font-size:9px;padding:1px 4px;font-weight:bold;">${uc}</span>`:''}</button>
-                        <button class="gf-icon-btn" onclick="alert('📌 Guessing Forum Rules:\\n1. यहाँ केवल लकी नंबर व बधाई पोस्ट करें।\\n2. किसी गेसर को गिफ्ट भेजने के बाद आप उनके साथ सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात कर सकते हैं।\\n3. गाली-गलौज करने पर ID ब्लॉक कर दी जाएगी।')" title="Info">ℹ️</button>
-                    </div>
-                    <button class="gf-post-cta" onclick="toggleGuessComposer()">Post Your Guess 💡</button>
-                </div>
+                <div class="gf-toolbar"><div class="gf-icon-group"><button class="gf-icon-btn" onclick="renderGuessingForum(document.getElementById('appRoot'))" title="Refresh">🔄</button><button class="gf-icon-btn ${state.guessShowSearchBar?'active':''}" onclick="toggleGuessSearchBar()" title="Search">🔍</button><button class="gf-icon-btn ${state.guessFilterMarket!=='ALL'?'active':''}" onclick="toggleGuessSearchBar()" title="Filter">🎛️</button><button class="gf-icon-btn" onclick="navigate('myChats')" title="My Chats">💬${uc>0?`<span style="position:absolute;top:-4px;right:-4px;background:var(--green);color:#052e16;border-radius:50%;font-size:9px;padding:1px 4px;font-weight:bold;">${uc}</span>`:''}</button><button class="gf-icon-btn" onclick="alert('📌 Guessing Forum Rules:\\n1. यहाँ केवल लकी नंबर व बधाई पोस्ट करें।\\n2. किसी गेसर को गिफ्ट भेजने के बाद आप उनके साथ सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात कर सकते हैं।\\n3. गाली-गलौज करने पर ID ब्लॉक कर दी जाएगी।')" title="Info">ℹ️</button></div><button class="gf-post-cta" onclick="toggleGuessComposer()">Post Your Guess 💡</button></div>
                 <div class="gf-toggle-bar"><span style="color:#f1f5f9;font-weight:600;">💠 Original Post</span><button id="gfOrigPill" class="gf-switch-pill ${state.guessFilterOriginalOnly?'on':''}" onclick="toggleOriginalPostFilter()">${state.guessFilterOriginalOnly?'ON':'OFF'}</button></div>
                 ${state.guessShowSearchBar ? `<div class="form-card" style="padding:10px;margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><input type="text" id="gfSearchInput" value="${escapeHTML(state.guessSearchQuery)}" placeholder="नाम या अंक खोजें..." style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:8px;border-radius:8px;font-size:12px;" oninput="applyGuessFilters()"><select id="gfMarketFilter" style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:8px;border-radius:8px;font-size:12px;" onchange="applyGuessFilters()">${fOpts}</select></div></div>` : ''}
                 ${state.guessShowComposer ? `<div class="form-card" style="border:1px solid var(--primary);"><div class="flex-between" style="margin-bottom:10px;"><h4 style="color:var(--primary);font-size:14px;">💡 Post Your Guess</h4><button class="btn btn-sm btn-chart" onclick="insertGuessTemplate()">📋 Format</button></div><div class="input-group"><label>Market चुनें</label><select id="guessMarket">${mOpts}</select></div><div class="input-group"><label>आपकी गेसिंग</label><textarea id="guessText" rows="5" maxlength="500" placeholder="OPEN / JODI / PANNA लिखें..."></textarea></div><div style="display:grid;grid-template-columns:1fr 2fr;gap:6px;"><button class="btn btn-chart" onclick="toggleGuessComposer()">Cancel</button><button class="btn btn-play" onclick="postGuessing()">📤 Publish Guess</button></div></div>` : ''}
                 <div id="gfPostsFeed">${buildGuessPostsHTML()}</div>`;
         }
-
         function postGuessing() {
             if (enforceNotBlocked()) return;
             let nowMs = Date.now();
             if (!state.isAdminLoggedIn && state.lastGuessPostTs && (nowMs - state.lastGuessPostTs) < 15000) return alert(`⏳ कृपया ${Math.ceil((15000-(nowMs-state.lastGuessPostTs))/1000)} सेकंड प्रतीक्षा करें!`);
             let mEl = document.getElementById('guessMarket'), tEl = document.getElementById('guessText'); if (!mEl || !tEl) return;
             let text = tEl.value.trim(); if (!text) return alert("कृपया अपना गेसिंग नंबर लिखें!");
-            state.guessingPosts.push({ id:nowMs, phone:state.currentUserPhone, name:state.users[state.currentUserPhone].name, market:mEl.value, text, time:formatForumDateTime(), likes:0, likedBy:[], comments:[], wishes:[] });
-            state.lastGuessPostTs = nowMs; state.guessShowComposer = false; saveState(); renderGuessingForum(document.getElementById('appRoot'));
+            let postObj = { id:genId(), phone:state.currentUserPhone, name:state.users[state.currentUserPhone].name, market:mEl.value, text, time:formatForumDateTime(), likes:0, likedBy:[], comments:[], wishes:[] };
+            state.guessingPosts.push(postObj); saveGuessPostToFB(postObj);
+            state.lastGuessPostTs = nowMs; state.guessShowComposer = false; renderGuessingForum(document.getElementById('appRoot'));
         }
         function deleteGuessingPost(id) {
-            let p = state.guessingPosts.find(x => x.id === id);
-            if (!p || (p.phone !== state.currentUserPhone && !state.isAdminLoggedIn)) return;
+            let p = state.guessingPosts.find(x => x.id === id); if (!p || (p.phone !== state.currentUserPhone && !state.isAdminLoggedIn)) return;
             if (!confirm("पोस्ट डिलीट करें?")) return;
-            state.guessingPosts = state.guessingPosts.filter(x => x.id !== id); saveState();
+            state.guessingPosts = state.guessingPosts.filter(x => x.id !== id); deleteGuessPostFromFB(id);
             let card = document.getElementById(`guessPostCard_${id}`); if (card) card.remove(); else renderGuessingForum(document.getElementById('appRoot'));
         }
         function toggleLike(id) {
             if (enforceNotBlocked()) return;
-            let p = state.guessingPosts.find(x => x.id === id); if (!p) return;
-            if (!p.likedBy) p.likedBy = [];
-            let idx = p.likedBy.indexOf(state.currentUserPhone), nowLiked = idx === -1;
-            if (nowLiked) { p.likedBy.push(state.currentUserPhone); p.likes = (p.likes || 0) + 1; }
-            else { p.likedBy.splice(idx, 1); p.likes = Math.max(0, (p.likes || 1) - 1); }
-            saveState();
-            let btn = document.getElementById(`likeBtn_${id}`); if (btn) { btn.classList.toggle('liked', nowLiked); btn.innerText = `❤️ Like (${p.likes})`; }
+            let myPhone = state.currentUserPhone;
+            mkRef(`guessingPosts/${id}`).transaction(cur => {
+                if (!cur) return cur;
+                let lb = toList(cur.likedBy), idx = lb.indexOf(myPhone);
+                if (idx === -1) lb.push(myPhone); else lb.splice(idx, 1);
+                cur.likedBy = lb; cur.likes = lb.length; return cur;
+            }, (err, committed, snap) => {
+                if (err || !committed) return;
+                let val = snap.val(), btn = document.getElementById(`likeBtn_${id}`);
+                if (btn && val) { btn.classList.toggle('liked', toList(val.likedBy).includes(myPhone)); btn.innerText = `❤️ Like (${val.likes || 0})`; }
+            });
         }
         function addComment(id) {
             if (enforceNotBlocked()) return;
             let inp = document.getElementById(`commentInput_${id}`); if (!inp) return;
             let text = inp.value.trim(); if (!text) return;
-            let p = state.guessingPosts.find(x => x.id === id), u = state.users[state.currentUserPhone]; if (!p) return;
-            if (!p.comments) p.comments = [];
-            p.comments.push({ phone:state.currentUserPhone, name:u.name, text }); saveState();
-            let box = document.getElementById(`commentsContainer_${id}`);
-            if (box) {
-                let d = document.createElement('div');
-                d.style.cssText = "background:rgba(24,33,77,0.88);padding:6px 9px;margin-top:4px;border-radius:8px;font-size:11px;color:#e2e8f0;border-left:2px solid var(--primary);";
-                d.innerHTML = `<b>${escapeHTML(u.name)}:</b> ${escapeHTML(text)}`;
-                box.appendChild(d); inp.value = '';
-            }
-            let visibleCount = p.comments.filter(c => state.isAdminLoggedIn || !(c.phone && state.users[c.phone]?.isBlocked)).length;
-            let cEl = document.getElementById(`commentCount_${id}`); if (cEl) cEl.innerText = visibleCount;
+            let u = state.users[state.currentUserPhone]; inp.value = '';
+            mkRef(`guessingPosts/${id}/comments`).transaction(cur => {
+                let arr = toList(cur); arr.push({ phone:state.currentUserPhone, name:u.name, text }); return arr;
+            }, (err, committed, snap) => {
+                if (err || !committed) return;
+                let box = document.getElementById(`commentsContainer_${id}`);
+                if (box) { let d = document.createElement('div'); d.style.cssText = "background:rgba(24,33,77,0.88);padding:6px 9px;margin-top:4px;border-radius:8px;font-size:11px;color:#e2e8f0;border-left:2px solid var(--primary);"; d.innerHTML = `<b>${escapeHTML(u.name)}:</b> ${escapeHTML(text)}`; box.appendChild(d); }
+                let visibleCount = toList(snap.val()).filter(c => state.isAdminLoggedIn || !(c.phone && state.users[c.phone]?.isBlocked)).length;
+                let cEl = document.getElementById(`commentCount_${id}`); if (cEl) cEl.innerText = visibleCount;
+            });
         }
         function sendWish(id) {
             if (enforceNotBlocked()) return;
-            let p = state.guessingPosts.find(x => x.id === id), u = state.users[state.currentUserPhone]; if (!p) return;
-            if (!p.wishes) p.wishes = [];
-            if (p.wishes.includes(u.name)) return alert("आप पहले ही बधाई दे चुके हैं!");
-            p.wishes.push(u.name); saveState();
-            let wb = document.getElementById(`wishesContainer_${id}`); if (wb) { wb.style.display = 'block'; wb.innerHTML = `🎉 Wishes: ${p.wishes.map(escapeHTML).join(', ')}`; }
-            alert("आपने बधाई भेज दी है!");
+            let u = state.users[state.currentUserPhone], alreadyWished = false;
+            mkRef(`guessingPosts/${id}/wishes`).transaction(cur => {
+                let arr = toList(cur); if (arr.includes(u.name)) { alreadyWished = true; return; } arr.push(u.name); return arr;
+            }, (err, committed, snap) => {
+                if (alreadyWished) return alert("आप पहले ही बधाई दे चुके हैं!");
+                if (err || !committed) return;
+                let wb = document.getElementById(`wishesContainer_${id}`);
+                if (wb) { wb.style.display = 'block'; wb.innerHTML = `🎉 Wishes: ${toList(snap.val()).map(escapeHTML).join(', ')}`; }
+                alert("आपने बधाई भेज दी है!");
+            });
         }
 
         function openChatWithGuesserPhone(guesserPhone, buyerPhone = null) { state.activeChatGuesserPhone = guesserPhone; state.activeChatBuyerPhone = buyerPhone; navigate('chatBox', guesserPhone); }
         function selectChatBuyer(gp, bp) { state.activeChatGuesserPhone = gp; state.activeChatBuyerPhone = bp; renderChatBox(document.getElementById('appRoot'), gp); }
-
         function renderMyChats(root) {
             let me = state.currentUserPhone, open = isChatTimeOpen(), inc = state.guesserChats[me] || {}, incBuyers = Object.keys(inc), outGuessers = [];
             Object.keys(state.guesserChats).forEach(g => { if (g !== me && state.guesserChats[g] && state.guesserChats[g][me]) outGuessers.push(g); });
@@ -1150,48 +964,40 @@
                 <div class="form-card" style="padding:10px;text-align:center;font-size:12px;color:${open?'#86efac':'#fda4af'};">${open ? '🟢 Chat Open: सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात करें' : '🔴 Chat Closed: समय सुबह 7:00 AM से रात 12:00 AM है'}</div>
                 <div class="form-card"><h4 style="color:var(--primary);margin-bottom:8px;font-size:14px;">🎁 आपको मिले गिफ्ट / चैट (${incBuyers.length})</h4>` +
                 (!incBuyers.length ? `<p style="color:#cbd5e1;font-size:12px;">अभी कोई गिफ्ट नहीं मिला है।</p>` : incBuyers.map(bp => {
-                    let bU = state.users[bp], msgs = inc[bp] || [], last = msgs[msgs.length-1];
-                    let unread = msgs.filter(m => m.sender !== me && m.read === false).length;
+                    let bU = state.users[bp], msgs = inc[bp] || [], last = msgs[msgs.length-1], unread = msgs.filter(m => m.sender !== me && m.read === false).length;
                     return `<div class="list-card" style="cursor:pointer;" data-g="${escapeHTML(me)}" data-b="${escapeHTML(bp)}" onclick="openChatWithGuesserPhone(this.dataset.g,this.dataset.b)"><div class="flex-between"><b>${escapeHTML(bU?bU.name:("Player "+bp.slice(-4)))} (${escapeHTML(bp)})${bU&&bU.isBlocked?' <span class="loss-badge">BLOCKED</span>':''}</b><span>${unread>0?`<span class="pend-badge">${unread} new</span> `:''}<span class="win-badge">${msgs.length} msgs</span></span></div><div style="font-size:11px;color:#e2e8f0;margin-top:4px;">${last?escapeHTML(last.text):''}</div></div>`;
                 }).join('')) + `</div>
                 <div class="form-card"><h4 style="color:var(--primary);margin-bottom:8px;font-size:14px;">🔮 जिन गेसर को आपने गिफ्ट भेजा (${outGuessers.length})</h4>` +
                 (!outGuessers.length ? `<p style="color:#cbd5e1;font-size:12px;">आपने अभी किसी को गिफ्ट नहीं भेजा है।</p>` : outGuessers.map(gp => {
-                    let gU = state.users[gp], msgs = state.guesserChats[gp][me] || [], last = msgs[msgs.length-1];
-                    let unread = msgs.filter(m => m.sender !== me && m.read === false).length;
+                    let gU = state.users[gp], msgs = state.guesserChats[gp][me] || [], last = msgs[msgs.length-1], unread = msgs.filter(m => m.sender !== me && m.read === false).length;
                     return `<div class="list-card" style="cursor:pointer;" data-g="${escapeHTML(gp)}" data-b="${escapeHTML(me)}" onclick="openChatWithGuesserPhone(this.dataset.g,this.dataset.b)"><div class="flex-between"><b>${escapeHTML(gU?gU.name:("Guesser "+gp.slice(-4)))}${gU&&gU.isBlocked?' <span class="loss-badge">BLOCKED</span>':''}</b><span>${unread>0?`<span class="pend-badge">${unread} new</span> `:''}<span class="win-badge">Unlocked</span></span></div><div style="font-size:11px;color:#e2e8f0;margin-top:4px;">${last?escapeHTML(last.text):''}</div></div>`;
                 }).join('')) + `</div>`;
             root.innerHTML = html;
         }
-
+        function buildChatMessagesHTML(thread, isVipAdm, isAuthor) {
+            if (!thread.length) return `<p style="text-align:center;color:#cbd5e1;font-size:12px;margin-top:20px;">${isAuthor ? 'कोई संदेश नहीं है।' : 'प्राइवेट चैट शुरू करने के लिए नीचे से कोई गिफ्ट भेजें!'}</p>`;
+            return thread.map(m => {
+                let isMe = isVipAdm ? m.sender === DEFAULT_VIP_PHONE : m.sender === state.currentUserPhone;
+                return `<div style="margin-bottom:8px;text-align:${isMe?'right':'left'};"><div style="display:inline-block;background:${m.isGift?'linear-gradient(135deg,#ea580c,#f59e0b)':(isMe?'linear-gradient(135deg,#059669,#22c55e)':'linear-gradient(135deg,#3730a3,#4338ca)')};color:#fff;padding:8px 12px;border-radius:12px;font-size:12px;max-width:82%;text-align:left;box-shadow:0 3px 10px rgba(0,0,0,0.2);"><b>${escapeHTML(m.senderName)}:</b> ${escapeHTML(m.text)}<div style="font-size:9px;opacity:0.8;margin-top:2px;">${escapeHTML(m.time||'')}</div></div></div>`;
+            }).join('');
+        }
         function renderChatBox(root, guesserPhone) {
             if (!guesserPhone) return navigate('guessing');
             let gU = state.users[guesserPhone], gPost = state.guessingPosts.find(p => p.phone === guesserPhone);
             let gName = gU ? gU.name : (gPost ? gPost.name : ("User " + guesserPhone.slice(-4)));
             if (!state.guesserChats[guesserPhone] || typeof state.guesserChats[guesserPhone] !== "object") state.guesserChats[guesserPhone] = {};
-            let isVipAdm = state.isAdminLoggedIn && guesserPhone === DEFAULT_VIP_PHONE;
-            let isAuthor = guesserPhone === state.currentUserPhone || isVipAdm;
+            let isVipAdm = state.isAdminLoggedIn && guesserPhone === DEFAULT_VIP_PHONE, isAuthor = guesserPhone === state.currentUserPhone || isVipAdm;
             let gMap = state.guesserChats[guesserPhone], buyers = Object.keys(gMap);
             let targetBuyer = isAuthor ? (state.activeChatBuyerPhone && gMap[state.activeChatBuyerPhone] ? state.activeChatBuyerPhone : (buyers[0] || null)) : state.currentUserPhone;
             let thread = targetBuyer ? (gMap[targetBuyer] || []) : [];
-
             let viewerId = isVipAdm ? DEFAULT_VIP_PHONE : state.currentUserPhone;
-            let markedRead = false;
-            thread.forEach(m => { if (m.sender !== viewerId && m.read === false) { m.read = true; markedRead = true; } });
-            if (markedRead) saveState();
-
+            thread.forEach(m => { if (m.sender !== viewerId && m.read === false) { m.read = true; if (m.id && targetBuyer) mkRef(`guesserChats/${guesserPhone}/${targetBuyer}/${m.id}/read`).set(true); } });
             let hasGifted = !isAuthor && thread.some(m => m.sender === state.currentUserPhone && m.isGift);
-            let canChat = isAuthor ? Boolean(targetBuyer) : hasGifted, open = isChatTimeOpen();
-            let backTarget = isVipAdm ? "adminLogin" : "guessing";
-
+            let canChat = isAuthor ? Boolean(targetBuyer) : hasGifted, open = isChatTimeOpen(), backTarget = isVipAdm ? "adminLogin" : "guessing";
             let buyerBar = isAuthor ? (!buyers.length ? `<div class="dark-row" style="text-align:center;color:#cbd5e1;">अभी तक किसी यूज़र ने आपको गिफ्ट/चैट नहीं भेजा है।</div>` :
                 `<div class="form-card" style="padding:10px;margin-bottom:10px;"><div style="font-size:11px;color:#e2e8f0;margin-bottom:6px;">${isVipAdm?'👑 VIP Admin Mode — ':''}प्राइवेट चैट चुनें:</div><div style="display:flex;flex-wrap:wrap;gap:6px;">` +
                 buyers.map(bp => `<button class="btn btn-sm" style="background:${bp===targetBuyer?'var(--primary)':'rgba(51,65,85,0.9)'};color:${bp===targetBuyer?'#1e1b4b':'#fff'};" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(bp)}" onclick="selectChatBuyer(this.dataset.g,this.dataset.b)">${escapeHTML((state.users[bp]||{}).name || ("User "+bp.slice(-4)))} (${bp.slice(-4)})</button>`).join('') + `</div></div>`) : '';
-
-            let msgsHtml = thread.length ? thread.map(m => {
-                let isMe = isVipAdm ? m.sender === DEFAULT_VIP_PHONE : m.sender === state.currentUserPhone;
-                return `<div style="margin-bottom:8px;text-align:${isMe?'right':'left'};"><div style="display:inline-block;background:${m.isGift?'linear-gradient(135deg,#ea580c,#f59e0b)':(isMe?'linear-gradient(135deg,#059669,#22c55e)':'linear-gradient(135deg,#3730a3,#4338ca)')};color:#fff;padding:8px 12px;border-radius:12px;font-size:12px;max-width:82%;text-align:left;box-shadow:0 3px 10px rgba(0,0,0,0.2);"><b>${escapeHTML(m.senderName)}:</b> ${escapeHTML(m.text)}<div style="font-size:9px;opacity:0.8;margin-top:2px;">${escapeHTML(m.time||'')}</div></div></div>`;
-            }).join('') : `<p style="text-align:center;color:#cbd5e1;font-size:12px;margin-top:20px;">${isAuthor ? 'कोई संदेश नहीं है।' : 'प्राइवेट चैट शुरू करने के लिए नीचे से कोई गिफ्ट भेजें!'}</p>`;
-
+            let msgsHtml = buildChatMessagesHTML(thread, isVipAdm, isAuthor);
             root.innerHTML = `
                 <div class="sub-header flex-between"><div style="display:flex;align-items:center;gap:8px;"><button class="back-btn" onclick="navigate('${backTarget}')">← Back</button><h3 style="font-size:15px;">💬 Chat - ${escapeHTML(gName)}</h3></div><button class="btn btn-sm btn-chart" data-g="${escapeHTML(guesserPhone)}" onclick="renderChatBox(document.getElementById('appRoot'),this.dataset.g)">🔄</button></div>
                 <div style="background:var(--surface);border:1px solid ${open?'#4ade80':'#fb7185'};padding:7px 10px;border-radius:10px;font-size:11px;text-align:center;margin-bottom:10px;color:${open?'#86efac':'#fda4af'};">${open ? '🟢 चैट चालू है — सुबह 7:00 बजे से रात 12:00 बजे तक कभी भी बात करें' : '🔴 चैट अभी बंद है (समय: सुबह 7:00 AM से रात 12:00 AM)'}</div>
@@ -1200,61 +1006,37 @@
                 ${canChat ? (open ? `<div style="display:flex;gap:6px;"><input type="text" id="chatInputText" placeholder="संदेश लिखें..." style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:10px;border-radius:10px;font-size:13px;flex:1;" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(targetBuyer||'')}" onkeydown="if(event.key==='Enter') sendChatMessage(this.dataset.g,this.dataset.b)"><button class="btn btn-play" data-g="${escapeHTML(guesserPhone)}" data-b="${escapeHTML(targetBuyer||'')}" onclick="sendChatMessage(this.dataset.g,this.dataset.b)">Send</button></div>` : `<div style="text-align:center;background:rgba(244,63,94,0.18);border:1px solid #fb7185;padding:10px;border-radius:10px;color:#fecdd3;font-size:12px;">🌙 चैट का समय सुबह 7:00 बजे से रात 12:00 बजे तक है।</div>`) : `<div style="text-align:center;background:var(--surface);padding:10px;border-radius:10px;color:#fef08a;font-size:12px;border:1px solid rgba(251,191,36,0.4);">${isAuthor?'🔒 रिप्लाई करने के लिए पहले किसी यूज़र का गिफ्ट आना ज़रूरी है।':'🔒 चैट करने के लिए ऊपर से कोई भी गिफ्ट भेजना अनिवार्य है।'}</div>`}`;
             let area = document.getElementById('chatMsgArea'); if (area) area.scrollTop = area.scrollHeight;
         }
-
         function sendGift(gp, giftName, amt) {
             if (enforceNotBlocked()) return;
             let me = state.users[state.currentUserPhone]; if (!gp || gp === state.currentUserPhone) return;
             let gU = state.users[gp];
             if (gU && gU.isBlocked) return alert("🚫 यह यूज़र ब्लॉक है, इन्हें गिफ्ट नहीं भेजा जा सकता!");
-            if (me.balance < amt) return alert("आपके वॉलेट में पर्याप्त बैलेंस नहीं है! कृपया पहले डिपॉजिट करें।");
-
-            let isVipReceiver = gp === DEFAULT_VIP_PHONE;
-            let adminComm = isVipReceiver ? amt : Math.round((amt * 0.20) * 100) / 100;
-            let guesserGet = Math.round((amt - adminComm) * 100) / 100;
-
-            me.balance = Math.round((me.balance - amt) * 100) / 100;
-            let gName = gU ? gU.name : ("User " + gp.slice(-4));
-            if (gU && guesserGet > 0) gU.balance = Math.round((gU.balance + guesserGet) * 100) / 100;
-
-            if (!state.guesserChats[gp]) state.guesserChats[gp] = {};
-            if (!state.guesserChats[gp][state.currentUserPhone]) state.guesserChats[gp][state.currentUserPhone] = [];
-            state.guesserChats[gp][state.currentUserPhone].push({ sender:state.currentUserPhone, senderName:me.name, text:`🎁 Sent a gift: ${giftName}`, isGift:true, read:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
-
-            let today = getLocalDateString(), nowStr = new Date().toLocaleString();
-            state.transactions.push({ phone:state.currentUserPhone, type:`Gift Sent to ${gName} (${giftName})`, amount:-amt, date:today, time:nowStr });
-            if (gU && guesserGet > 0) {
-                state.transactions.push({ phone:gp, type:`Gift Received from ${me.name} (₹${amt} - ₹${adminComm} Admin Fee)`, amount:guesserGet, date:today, time:nowStr });
-            }
-            state.giftCommissions.push({
-                id: Date.now() + Math.floor(Math.random() * 1000),
-                date: today,
-                time: nowStr,
-                senderPhone: state.currentUserPhone,
-                senderName: me.name,
-                receiverPhone: gp,
-                receiverName: gName,
-                giftName,
-                giftAmount: amt,
-                adminCommission: adminComm,
-                guesserReceived: guesserGet
+            mkRef(`users/${me.phone}/balance`).transaction(cur => {
+                let b = Number(cur) || 0; if (b < amt) return; return Math.round((b - amt) * 100) / 100;
+            }, (err, committed) => {
+                if (err || !committed) return alert(err ? "❌ नेटवर्क त्रुटि!" : "आपके वॉलेट में पर्याप्त बैलेंस नहीं है! कृपया पहले डिपॉजिट करें।");
+                let isVipReceiver = gp === DEFAULT_VIP_PHONE, adminComm = isVipReceiver ? amt : Math.round((amt * 0.20) * 100) / 100, guesserGet = Math.round((amt - adminComm) * 100) / 100;
+                let gName = gU ? gU.name : ("User " + gp.slice(-4));
+                if (gU && guesserGet > 0) adjustUserBalanceFB(gp, guesserGet);
+                saveChatMessageToFB(gp, me.phone, { id:genId(), sender:me.phone, senderName:me.name, text:`🎁 Sent a gift: ${giftName}`, isGift:true, read:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
+                let today = getLocalDateString(), nowStr = new Date().toLocaleString();
+                addTransactionToFB({ phone:me.phone, type:`Gift Sent to ${gName} (${giftName})`, amount:-amt, date:today, time:nowStr });
+                if (gU && guesserGet > 0) addTransactionToFB({ phone:gp, type:`Gift Received from ${me.name} (₹${amt} - ₹${adminComm} Admin Fee)`, amount:guesserGet, date:today, time:nowStr });
+                addGiftCommissionToFB({ id:genId(), date:today, time:nowStr, senderPhone:me.phone, senderName:me.name, receiverPhone:gp, receiverName:gName, giftName, giftAmount:amt, adminCommission:adminComm, guesserReceived:guesserGet });
+                alert(`✅ ${giftName} भेज दिया गया!\nअब आप ${gName} से सुबह 7:00 बजे से रात 12:00 बजे तक बात कर सकते हैं।`);
+                renderChatBox(document.getElementById('appRoot'), gp);
             });
-
-            saveState();
-            alert(`✅ ${giftName} भेज दिया गया!\nअब आप ${gName} से सुबह 7:00 बजे से रात 12:00 बजे तक बात कर सकते हैं।`);
-            renderChatBox(document.getElementById('appRoot'), gp);
         }
-
         function sendChatMessage(gp, bp) {
             if (enforceNotBlocked()) return;
             if (!isChatTimeOpen()) { alert("🌙 चैट का समय सुबह 7:00 बजे से रात 12:00 बजे तक है!"); return renderChatBox(document.getElementById('appRoot'), gp); }
             let inp = document.getElementById('chatInputText'); if (!inp) return;
             let text = inp.value.trim(); if (!text) return;
-            if (!state.guesserChats[gp]) state.guesserChats[gp] = {};
             let isVipAdm = state.isAdminLoggedIn && gp === DEFAULT_VIP_PHONE, isAuth = gp === state.currentUserPhone || isVipAdm;
             let key = isAuth ? bp : state.currentUserPhone; if (!key) return;
-            if (!state.guesserChats[gp][key]) state.guesserChats[gp][key] = [];
-            state.guesserChats[gp][key].push({ sender:isVipAdm?DEFAULT_VIP_PHONE:state.currentUserPhone, senderName:isVipAdm?"M.KING VIP (Admin)":state.users[state.currentUserPhone].name, text, isGift:false, read:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
-            saveState(); renderChatBox(document.getElementById('appRoot'), gp);
+            inp.value = '';
+            saveChatMessageToFB(gp, key, { id:genId(), sender:isVipAdm?DEFAULT_VIP_PHONE:state.currentUserPhone, senderName:isVipAdm?"M.KING VIP (Admin)":state.users[state.currentUserPhone].name, text, isGift:false, read:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
+            renderChatBox(document.getElementById('appRoot'), gp);
         }
 
         function renderDeposit(root) {
@@ -1263,7 +1045,7 @@
             root.innerHTML = `<div class="sub-header"><button class="back-btn" onclick="navigate('home')">← Back</button><h3>➕ Add Points / Deposit</h3></div>
                 <div class="form-card" style="text-align:center;">
                     <p style="color:#e2e8f0;font-size:12px;margin-bottom:15px;">QR कोड स्कैन करें या UPI नंबर पर पेमेंट करके नीचे UTR सबमिट करें या WhatsApp पर स्क्रीनशॉट भेजें।</p>
-                    <div style="background:#fff;padding:10px;display:inline-block;border-radius:12px;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,0.25);"><img src="${qr}" style="width:180px;height:180px;object-fit:contain;display:block;"></div>
+                    <div style="background:#fff;padding:10px;display:inline-block;border-radius:12px;margin-bottom:12px;"><img src="${qr}" style="width:180px;height:180px;object-fit:contain;display:block;"></div>
                     <div style="margin-bottom:12px;"><a href="${qr}" download="${dl}" class="btn btn-sm btn-chart" style="text-decoration:none;">📥 Download QR Code</a></div>
                     <div style="background:var(--surface);padding:12px;border-radius:10px;margin-bottom:15px;border:1px dashed var(--primary);"><div style="font-size:12px;color:#cbd5e1;">PhonePe / GPay / Paytm:</div><div style="font-size:18px;font-weight:bold;color:var(--primary);margin-top:4px;">${escapeHTML(state.depositUPI)}</div></div>
                     <div class="form-card" style="background:var(--surface);margin-bottom:12px;"><h4 style="color:var(--primary);font-size:13px;margin-bottom:10px;">💳 Submit Deposit Request</h4>
@@ -1274,7 +1056,6 @@
                     <a href="https://wa.me/${waNum}?text=Hello%20Admin,%20I%20have%20made%20payment,%20please%20add%20balance" target="_blank" rel="noopener noreferrer" class="btn" style="background:linear-gradient(135deg,#059669,#22c55e);color:#042f2e;display:block;text-decoration:none;padding:12px;">💬 Send Payment Screenshot on WhatsApp</a>
                 </div>`;
         }
-
         function submitDepositRequest() {
             if (enforceNotBlocked()) return;
             let aEl = document.getElementById('depAmtInput'), uEl = document.getElementById('depUtrInput'); if (!aEl || !uEl) return;
@@ -1282,33 +1063,28 @@
             if (!isStrictPositiveInt(raw) || parseInt(raw,10) < 100) return alert("❌ कम से कम ₹100 दर्ज करें!");
             if (!/^[A-Z0-9_-]{6,40}$/.test(utr)) return alert("❌ सही UTR / Ref नंबर दर्ज करें!");
             if (state.depositRequests.some(d => String(d.utr||'').replace(/\s+/g,'').toUpperCase() === utr && (d.status==="PENDING"||d.status==="APPROVED"))) return alert("❌ यह UTR पहले ही सबमिट या अप्रूव हो चुका है!");
-            let u = state.users[state.currentUserPhone];
-            state.depositRequests.push({ id:Date.now(), phone:u.phone, name:u.name, amount:parseInt(raw,10), utr, status:"PENDING", date:getLocalDateString(), time:new Date().toLocaleString() });
-            aEl.value = ''; uEl.value = ''; saveState(); alert("डिपॉजिट रिक्वेस्ट एडमिन को भेज दी गई है!"); navigate('profile');
+            let u = state.users[state.currentUserPhone], req = { id:genId(), phone:u.phone, name:u.name, amount:parseInt(raw,10), utr, status:"PENDING", date:getLocalDateString(), time:new Date().toLocaleString() };
+            state.depositRequests.push(req); saveDepositToFB(req); aEl.value = ''; uEl.value = '';
+            alert("डिपॉजिट रिक्वेस्ट एडमिन को भेज दी गई है!"); navigate('profile');
         }
-
         function copyReferralLink() { fallbackCopyText(`${REFERRAL_BASE_URL}/?ref=${state.currentUserPhone}`); }
-        function fallbackCopyText(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => alert("✅ कॉपी हो गया!\n" + text)).catch(() => legacyCopy(text));
-            } else legacyCopy(text);
-        }
-        function legacyCopy(text) {
-            let ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = "position:fixed;opacity:0;";
-            document.body.appendChild(ta); ta.select();
-            try { document.execCommand('copy'); alert("✅ कॉपी हो गया!\n" + text); } catch (e) { prompt("कॉपी करें:", text); }
-            document.body.removeChild(ta);
-        }
+        function fallbackCopyText(text) { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => alert("✅ कॉपी हो गया!\n" + text)).catch(() => legacyCopy(text)); else legacyCopy(text); }
+        function legacyCopy(text) { let ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = "position:fixed;opacity:0;"; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); alert("✅ कॉपी हो गया!\n" + text); } catch (e) { prompt("कॉपी करें:", text); } document.body.removeChild(ta); }
 
         function claimReferralToWallet() {
             if (enforceNotBlocked()) return;
-            let u = state.users[state.currentUserPhone], rb = Number(u.referralBalance || 0);
-            if (rb <= 0) return alert("❌ Referral Commission Box में अभी कोई बैलेंस नहीं है!");
-            u.balance = Math.round((u.balance + rb) * 100) / 100; u.referralBalance = 0;
-            state.transactions.push({ phone:u.phone, type:"Referral Commission Added to Wallet", amount:rb, date:getLocalDateString(), time:new Date().toLocaleString() });
-            saveState(); alert(`✅ ₹${rb} मेन वॉलेट में जुड़ गया!`); navigate('profile');
+            let ph = state.currentUserPhone, claimedAmt = 0;
+            mkRef(`users/${ph}`).transaction(cur => {
+                if (!cur) return cur;
+                let rb = Number(cur.referralBalance || 0); if (rb <= 0) { claimedAmt = 0; return; }
+                claimedAmt = rb; cur.balance = Math.round(((Number(cur.balance) || 0) + rb) * 100) / 100; cur.referralBalance = 0; return cur;
+            }, (err, committed) => {
+                if (err) return alert("❌ नेटवर्क त्रुटि!");
+                if (!committed || claimedAmt <= 0) return alert("❌ Referral Commission Box में अभी कोई बैलेंस नहीं है!");
+                addTransactionToFB({ phone:ph, type:"Referral Commission Added to Wallet", amount:claimedAmt, date:getLocalDateString(), time:new Date().toLocaleString() });
+                alert(`✅ ₹${claimedAmt} मेन वॉलेट में जुड़ गया!`); navigate('profile');
+            });
         }
-
         function changePlayerPassword() {
             if (enforceNotBlocked()) return;
             let op = (document.getElementById('chgOldPass')?.value||'').trim(), np = (document.getElementById('chgNewPass')?.value||'').trim(), cp = (document.getElementById('chgConfPass')?.value||'').trim();
@@ -1316,17 +1092,20 @@
             if (!op || !np || !cp) return alert("❌ सभी पासवर्ड बॉक्स भरें!");
             if (!verifyPassword(op, u.password)) return alert("❌ वर्तमान पासवर्ड गलत है!");
             if (np.length < 4 || np !== cp || np === op) return alert("❌ कम से कम 4 अक्षर का नया पासवर्ड सही से दर्ज करें!");
-            u.password = hashPassword(np); saveState(); alert("✅ पासवर्ड बदल गया!"); navigate('profile');
+            u.password = hashPassword(np); mkRef(`users/${u.phone}/password`).set(u.password); alert("✅ पासवर्ड बदल गया!"); navigate('profile');
         }
-
         function cancelPendingWithdrawal(id) {
             if (enforceNotBlocked()) return;
             let req = state.withdrawRequests.find(w => w.id === id && w.phone === state.currentUserPhone && w.status === "PENDING");
             if (!req || !confirm(`₹${req.amount} की विड्रॉल रिक्वेस्ट कैंसिल करें?`)) return;
-            req.status = "CANCELLED";
-            let u = state.users[state.currentUserPhone]; u.balance = Math.round((u.balance + req.amount) * 100) / 100;
-            state.transactions.push({ phone:u.phone, type:"Withdrawal Cancelled (Refund)", amount:req.amount, date:getLocalDateString(), time:new Date().toLocaleString() });
-            saveState(); alert(`✅ ₹${req.amount} वापस वॉलेट में जुड़ गए!`); navigate('profile');
+            mkRef(`withdrawRequests/${id}`).transaction(cur => {
+                if (!cur || cur.status !== "PENDING") return; cur.status = "CANCELLED"; return cur;
+            }, (err, committed) => {
+                if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!");
+                adjustUserBalanceFB(req.phone, req.amount);
+                addTransactionToFB({ phone:req.phone, type:"Withdrawal Cancelled (Refund)", amount:req.amount, date:getLocalDateString(), time:new Date().toLocaleString() });
+                alert(`✅ ₹${req.amount} वापस वॉलेट में जुड़ गए!`); navigate('profile');
+            });
         }
 
         function renderProfile(root) {
@@ -1335,7 +1114,6 @@
             let refBal = Number(u.referralBalance || 0), refTot = Number(u.referralTotalEarned || 0);
             let refFriends = Object.values(state.users).filter(x => !x.isSystem && x.referredBy === u.phone);
             let refHist = Array.isArray(u.referralHistory) ? u.referralHistory.slice().reverse() : [];
-
             let refFHtml = !refFriends.length ? `<p style="color:#cbd5e1;font-size:11px;">अभी किसी को रेफर नहीं किया।</p>` : refFriends.map(f => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#cbd5e1">Deposit: ₹${Number(f.referralTotalDeposited||0)} • ${escapeHTML(f.joinedAt||'Recent')}</small></div>${f.referralFirstBonusPaid?'<span class="win-badge">₹100 Bonus Unlocked</span>':`<span class="pend-badge">₹${Number(f.referralTotalDeposited||0)}/200</span>`}</div>`).join('');
             let refHHtml = !refHist.length ? `<p style="color:#cbd5e1;font-size:11px;">अभी कोई कमीशन हिस्ट्री नहीं है।</p>` : refHist.map(h => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(h.type)}</b><br><small style="color:#cbd5e1">${escapeHTML(h.friendName)} (${escapeHTML(h.friendPhone)}) • ₹${h.depositAmount}<br>${escapeHTML(h.time)}</small></div><b style="color:#4ade80">+₹${h.commission}</b></div>`).join('');
             let wHtml = state.withdrawRequests.filter(w => w.phone === u.phone).slice().reverse().map(w => {
@@ -1373,39 +1151,43 @@
                 <a href="https://wa.me/${waNum}?text=Hello%20Admin" target="_blank" rel="noopener noreferrer" class="btn" style="background:linear-gradient(135deg,#059669,#22c55e);color:#042f2e;display:block;text-decoration:none;padding:12px;margin-bottom:8px;">💬 WhatsApp Support Team</a>
                 <button class="btn" style="background:linear-gradient(135deg,#be123c,#e11d48);color:#fff;width:100%;padding:10px;" onclick="logoutPlayer()">🔒 Logout</button>`;
         }
-
         function changeAvatarGallery(ev) {
             let f = ev.target.files[0]; if (!f) return;
             if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!");
             let r = new FileReader();
             r.onload = e => {
-                let img = new Image();
-                img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!");
+                let img = new Image(); img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!");
                 img.onload = () => {
                     let w = img.width, h = img.height, m = 180;
                     if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; }
                     let c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img,0,0,w,h);
-                    state.users[state.currentUserPhone].avatar = c.toDataURL('image/jpeg', 0.7); saveState(); navigate('profile');
+                    let av = c.toDataURL('image/jpeg', 0.7); state.users[state.currentUserPhone].avatar = av;
+                    mkRef(`users/${state.currentUserPhone}/avatar`).set(av); navigate('profile');
                 }; img.src = e.target.result;
             }; r.readAsDataURL(f);
         }
         function changeAvatarUrl() {
             let u = prompt("HTTPS Image URL डालें:", ""); if (u === null) return;
             if (!/^https?:\/\//i.test(u.trim())) return alert("❌ सही http/https URL डालें!");
-            state.users[state.currentUserPhone].avatar = u.trim(); saveState(); navigate('profile');
+            let av = u.trim(); state.users[state.currentUserPhone].avatar = av; mkRef(`users/${state.currentUserPhone}/avatar`).set(av); navigate('profile');
         }
-        function saveProfileName() { let n = (document.getElementById('profileNameInput')?.value||'').trim(); if (n) { state.users[state.currentUserPhone].name = n; saveState(); alert("नाम सेव हो गया!"); navigate('profile'); } }
-        function savePaymentDetails() { state.users[state.currentUserPhone].bankDetails = (document.getElementById('userBankInput')?.value||'').trim(); state.users[state.currentUserPhone].upiDetails = (document.getElementById('userUpiInput')?.value||'').trim(); saveState(); alert("डिटेल्स सेव हो गई!"); }
+        function saveProfileName() { let n = (document.getElementById('profileNameInput')?.value||'').trim(); if (n) { state.users[state.currentUserPhone].name = n; mkRef(`users/${state.currentUserPhone}/name`).set(n); alert("नाम सेव हो गया!"); navigate('profile'); } }
+        function savePaymentDetails() { let b = (document.getElementById('userBankInput')?.value||'').trim(), u = (document.getElementById('userUpiInput')?.value||'').trim(); state.users[state.currentUserPhone].bankDetails = b; state.users[state.currentUserPhone].upiDetails = u; mkRef(`users/${state.currentUserPhone}`).update({ bankDetails:b, upiDetails:u }); alert("डिटेल्स सेव हो गई!"); }
         function sendWithdrawalRequest() {
             if (enforceNotBlocked()) return;
             let raw = (document.getElementById('withdrawAmt')?.value||'').trim(), u = state.users[state.currentUserPhone];
             if (!u.bankDetails && !u.upiDetails) return alert("❌ पहले Bank या UPI डिटेल्स सेव करें!");
             if (!isStrictPositiveInt(raw) || parseInt(raw,10) < 500) return alert("कम से कम ₹500 दर्ज करें!");
-            let amt = parseInt(raw, 10); if (u.balance < amt) return alert("पर्याप्त बैलेंस नहीं है!");
-            u.balance = Math.round((u.balance - amt) * 100) / 100;
-            state.withdrawRequests.push({ id:Date.now(), phone:u.phone, name:u.name, amount:amt, status:"PENDING", date:getLocalDateString(), time:new Date().toLocaleString() });
-            state.transactions.push({ phone:u.phone, type:"Withdrawal Requested", amount:-amt, date:getLocalDateString(), time:new Date().toLocaleString() });
-            saveState(); alert("विड्रॉल रिक्वेस्ट भेज दी गई है!"); navigate('profile');
+            let amt = parseInt(raw, 10);
+            mkRef(`users/${u.phone}/balance`).transaction(cur => {
+                let b = Number(cur) || 0; if (b < amt) return; return Math.round((b - amt) * 100) / 100;
+            }, (err, committed) => {
+                if (err || !committed) return alert(err ? "❌ नेटवर्क त्रुटि!" : "पर्याप्त बैलेंस नहीं है!");
+                let req = { id:genId(), phone:u.phone, name:u.name, amount:amt, status:"PENDING", date:getLocalDateString(), time:new Date().toLocaleString() };
+                state.withdrawRequests.push(req); saveWithdrawToFB(req);
+                addTransactionToFB({ phone:u.phone, type:"Withdrawal Requested", amount:-amt, date:getLocalDateString(), time:new Date().toLocaleString() });
+                alert("विड्रॉल रिक्वेस्ट भेज दी गई है!"); navigate('profile');
+            });
         }
         function filterHistory() {
             let dt = document.getElementById('filterDate')?.value, box = document.getElementById('historyFilteredBox'); if (!box) return;
@@ -1420,55 +1202,29 @@
         function verifyAdminLogin() {
             let ph = (document.getElementById('admLoginPhone')?.value||'').trim(), pw = (document.getElementById('admLoginPass')?.value||'').trim();
             if (ph === state.adminCreds.phone && verifyPassword(pw, state.adminCreds.pass)) {
-                if (!isHashedPassword(state.adminCreds.pass)) { state.adminCreds.pass = hashPassword(pw); saveState(); }
+                if (!isHashedPassword(state.adminCreds.pass)) { state.adminCreds.pass = hashPassword(pw); saveSettingsToFB(); }
                 state.isAdminLoggedIn = true; sessionStorage.setItem('mk_admin_logged_in', '1'); navigate('adminLogin');
             } else alert("गलत मोबाइल नंबर या पासवर्ड!");
         }
-        function adminLogout() {
-            state.isAdminLoggedIn = false; sessionStorage.removeItem('mk_admin_logged_in');
-            if (state.currentUserPhone && state.users[state.currentUserPhone]) navigate('home');
-            else renderLoginScreen();
-        }
+        function adminLogout() { state.isAdminLoggedIn = false; sessionStorage.removeItem('mk_admin_logged_in'); if (state.currentUserPhone && state.users[state.currentUserPhone]) navigate('home'); else renderLoginScreen(); }
 
         function computeAdminPnL(df = null) {
-            let vb = state.bids.filter(b => b.status !== "REFUNDED" && (!df || b.date === df));
-            let sb = vb.filter(b => b.status === "WON" || b.status === "LOST");
-            let sBid = sb.reduce((s,b)=>s+Number(b.amount||0),0);
-            let tWin = sb.filter(b=>b.status==="WON").reduce((s,b)=>s+Number(b.winAmount||0),0);
-            let pBid = vb.filter(b=>b.status==="PENDING").reduce((s,b)=>s+Number(b.amount||0),0);
+            let vb = state.bids.filter(b => b.status !== "REFUNDED" && (!df || b.date === df)), sb = vb.filter(b => b.status === "WON" || b.status === "LOST");
+            let sBid = sb.reduce((s,b)=>s+Number(b.amount||0),0), tWin = sb.filter(b=>b.status==="WON").reduce((s,b)=>s+Number(b.winAmount||0),0), pBid = vb.filter(b=>b.status==="PENDING").reduce((s,b)=>s+Number(b.amount||0),0);
             let reqDep = state.depositRequests.filter(d=>d.status==="APPROVED"&&(!df||d.date===df)).reduce((s,d)=>s+Number(d.amount||0),0);
             let admAdd = state.transactions.filter(t=>t.type==="Admin Added"&&(!df||t.date===df)).reduce((s,t)=>s+Number(t.amount||0),0);
             let admDed = state.transactions.filter(t=>t.type==="Admin Deducted"&&(!df||t.date===df)).reduce((s,t)=>s+Math.abs(Number(t.amount||0)),0);
             let appW = state.withdrawRequests.filter(w=>w.status==="APPROVED"&&(!df||w.date===df)).reduce((s,w)=>s+Number(w.amount||0),0);
             let giftComm = state.giftCommissions.filter(g=>!df||g.date===df).reduce((s,g)=>s+Number(g.adminCommission||0),0);
-            let giftTotal = state.giftCommissions.filter(g=>!df||g.date===df).reduce((s,g)=>s+Number(g.giftAmount||0),0);
-            let liab = 0, refAll = 0;
-            Object.values(state.users).forEach(u => { if (!u.isSystem) { liab += Number(u.balance||0) + Number(u.referralBalance||0); refAll += Number(u.referralTotalEarned||0); } });
+            let liab = 0, refAll = 0; Object.values(state.users).forEach(u => { if (!u.isSystem) { liab += Number(u.balance||0) + Number(u.referralBalance||0); refAll += Number(u.referralTotalEarned||0); } });
             let gameNet = Math.round((sBid - tWin) * 100) / 100;
-            return {
-                cnt:vb.length, sCnt:sb.length,
-                sBid:Math.round(sBid*100)/100, tWin:Math.round(tWin*100)/100,
-                pBid:Math.round(pBid*100)/100, net:gameNet,
-                giftComm:Math.round(giftComm*100)/100, giftTotal:Math.round(giftTotal*100)/100,
-                totalBusinessNet:Math.round((gameNet + giftComm)*100)/100,
-                dep:Math.round(reqDep*100)/100, admNet:Math.round((admAdd-admDed)*100)/100,
-                wdr:Math.round(appW*100)/100, liab:Math.round(liab*100)/100, refAll:Math.round(refAll*100)/100
-            };
+            return { cnt:vb.length, sCnt:sb.length, sBid:Math.round(sBid*100)/100, tWin:Math.round(tWin*100)/100, pBid:Math.round(pBid*100)/100, net:gameNet, giftComm:Math.round(giftComm*100)/100, totalBusinessNet:Math.round((gameNet+giftComm)*100)/100, dep:Math.round(reqDep*100)/100, admNet:Math.round((admAdd-admDed)*100)/100, wdr:Math.round(appW*100)/100, liab:Math.round(liab*100)/100, refAll:Math.round(refAll*100)/100 };
         }
         function renderPnLBox(df = null) {
             let box = document.getElementById('admPnlBox'); if (!box) return;
             let p = computeAdminPnL(df), c = p.net >= 0 ? '#4ade80' : '#fda4af', tc = p.totalBusinessNet >= 0 ? '#4ade80' : '#fda4af';
             box.innerHTML = `<div style="font-size:11px;color:#cbd5e1;margin-bottom:6px;text-align:center;">Showing: <b style="color:var(--primary)">${df||'All Time'}</b> (${p.sCnt} Settled / ${p.cnt} Total Bids)</div>
-                <div class="pnl-grid">
-                    <div class="pnl-card"><div class="pnl-val">₹${p.sBid}</div><div class="pnl-lbl">Settled Collection</div></div>
-                    <div class="pnl-card"><div class="pnl-val" style="color:#fda4af;">₹${p.tWin}</div><div class="pnl-lbl">Winning Payout</div></div>
-                    <div class="pnl-card"><div class="pnl-val" style="color:${c};">₹${p.net}</div><div class="pnl-lbl">Game ${p.net>=0?'Profit':'Loss'}</div></div>
-                    <div class="pnl-card"><div class="pnl-val" style="color:var(--primary);">₹${p.pBid}</div><div class="pnl-lbl">Pending Bids</div></div>
-                    <div class="pnl-card"><div class="pnl-val" style="color:#4ade80;">₹${p.giftComm}</div><div class="pnl-lbl">🎁 Gift Commission (20%)</div></div>
-                    <div class="pnl-card"><div class="pnl-val" style="color:${tc};">₹${p.totalBusinessNet}</div><div class="pnl-lbl">💎 Net (Game + Gift)</div></div>
-                    <div class="pnl-card"><div class="pnl-val" style="color:#4ade80;">₹${p.dep}</div><div class="pnl-lbl">Approved Deposits</div></div>
-                    <div class="pnl-card"><div class="pnl-val" style="color:var(--blue);">₹${p.wdr}</div><div class="pnl-lbl">Approved Withdrawals</div></div>
-                </div>
+                <div class="pnl-grid"><div class="pnl-card"><div class="pnl-val">₹${p.sBid}</div><div class="pnl-lbl">Settled Collection</div></div><div class="pnl-card"><div class="pnl-val" style="color:#fda4af;">₹${p.tWin}</div><div class="pnl-lbl">Winning Payout</div></div><div class="pnl-card"><div class="pnl-val" style="color:${c};">₹${p.net}</div><div class="pnl-lbl">Game ${p.net>=0?'Profit':'Loss'}</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--primary);">₹${p.pBid}</div><div class="pnl-lbl">Pending Bids</div></div><div class="pnl-card"><div class="pnl-val" style="color:#4ade80;">₹${p.giftComm}</div><div class="pnl-lbl">🎁 Gift Commission (20%)</div></div><div class="pnl-card"><div class="pnl-val" style="color:${tc};">₹${p.totalBusinessNet}</div><div class="pnl-lbl">💎 Net (Game + Gift)</div></div><div class="pnl-card"><div class="pnl-val" style="color:#4ade80;">₹${p.dep}</div><div class="pnl-lbl">Approved Deposits</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--blue);">₹${p.wdr}</div><div class="pnl-lbl">Approved Withdrawals</div></div></div>
                 <div class="dark-row flex-between" style="font-size:11px;flex-wrap:wrap;gap:4px;"><span>Admin Bal Adj: <b style="color:#fff">₹${p.admNet}</b></span><span>Wallet Liability: <b style="color:var(--primary)">₹${p.liab}</b></span><span>Ref Given: <b style="color:#4ade80">₹${p.refAll}</b></span></div>`;
         }
         function adminFilterPnL(all) { renderPnLBox(all ? null : (document.getElementById('admPnlDate')?.value || getLocalDateString())); }
@@ -1482,52 +1238,39 @@
         }
         function adminRenderPlayerDirectory(mode = 'search') {
             let box = document.getElementById('admProfResultBox'); if (!box) return;
-            let q = (document.getElementById('admProfSearchPhone')?.value || '').trim().toLowerCase();
-            let list = Object.values(state.users).filter(u => !u.isSystem);
-            if (mode === 'blocked') list = list.filter(u => u.isBlocked);
-            else if (q) list = list.filter(u => u.phone.toLowerCase().includes(q) || (u.name||'').toLowerCase().includes(q));
+            let q = (document.getElementById('admProfSearchPhone')?.value || '').trim().toLowerCase(), list = Object.values(state.users).filter(u => !u.isSystem);
+            if (mode === 'blocked') list = list.filter(u => u.isBlocked); else if (q) list = list.filter(u => u.phone.toLowerCase().includes(q) || (u.name||'').toLowerCase().includes(q));
             if (!list.length) { box.innerHTML = `<p style="color:#cbd5e1;">कोई प्लेयर नहीं मिला।</p>`; return; }
             box.innerHTML = `<div style="margin-bottom:6px;color:var(--primary);font-size:12px;"><b>Players Found: ${list.length}</b></div>` + list.map(u => {
                 let s = getPlayerPnLStats(u.phone), pc = s.pNet>=0?'#4ade80':'#fda4af';
-                return `<div class="dark-row" style="border-left:3px solid ${u.isBlocked?'#f43f5e':'#22c55e'};">
-                    <div class="flex-between" style="margin-bottom:4px;"><span><b>${escapeHTML(u.name)}</b> (ID: <b>${escapeHTML(u.phone)}</b>)</span>${u.isBlocked?'<span class="loss-badge">BLOCKED</span>':'<span class="win-badge">ACTIVE</span>'}</div>
-                    <div style="font-size:11px;color:#e2e8f0;margin-bottom:6px;">Wallet: <b style="color:#4ade80">₹${u.balance}</b> | Bet: <b>₹${s.bet}</b> | Win: <b>₹${s.won}</b><br>Player P&L: <b style="color:${pc}">${s.pNet>=0?'+':''}₹${s.pNet}</b></div>
-                    <div style="display:flex;gap:6px;"><button class="btn btn-sm" style="background:var(--blue);color:#082f49;flex:1;" data-ph="${escapeHTML(u.phone)}" onclick="adminViewPlayerFullHistory(this.dataset.ph)">📊 Full History & P&L</button><button class="btn btn-sm" style="background:${u.isBlocked?'#22c55e':'#f43f5e'};color:${u.isBlocked?'#052e16':'#fff'};" data-ph="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.ph)">${u.isBlocked?'✅ Unblock':'🚫 Block'}</button></div>
-                </div>`;
+                return `<div class="dark-row" style="border-left:3px solid ${u.isBlocked?'#f43f5e':'#22c55e'};"><div class="flex-between" style="margin-bottom:4px;"><span><b>${escapeHTML(u.name)}</b> (ID: <b>${escapeHTML(u.phone)}</b>)</span>${u.isBlocked?'<span class="loss-badge">BLOCKED</span>':'<span class="win-badge">ACTIVE</span>'}</div><div style="font-size:11px;color:#e2e8f0;margin-bottom:6px;">Wallet: <b style="color:#4ade80">₹${u.balance}</b> | Bet: <b>₹${s.bet}</b> | Win: <b>₹${s.won}</b><br>Player P&L: <b style="color:${pc}">${s.pNet>=0?'+':''}₹${s.pNet}</b></div><div style="display:flex;gap:6px;"><button class="btn btn-sm" style="background:var(--blue);color:#082f49;flex:1;" data-ph="${escapeHTML(u.phone)}" onclick="adminViewPlayerFullHistory(this.dataset.ph)">📊 Full History & P&L</button><button class="btn btn-sm" style="background:${u.isBlocked?'#22c55e':'#f43f5e'};color:${u.isBlocked?'#052e16':'#fff'};" data-ph="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.ph)">${u.isBlocked?'✅ Unblock':'🚫 Block'}</button></div></div>`;
             }).join('');
         }
         function adminViewPlayerFullHistory(ph) {
-            let box = document.getElementById('admProfResultBox'), u = state.users[ph];
-            if (!box || !u || u.isSystem) return;
+            let box = document.getElementById('admProfResultBox'), u = state.users[ph]; if (!box || !u || u.isSystem) return;
             let s = getPlayerPnLStats(ph), refCnt = Object.values(state.users).filter(x => !x.isSystem && x.referredBy === ph).length;
             let bidsH = state.bids.filter(b => b.phone === ph).slice().reverse().map(b => `<div class="dark-row" style="font-size:11px;"><div class="flex-between"><b>${escapeHTML(b.marketName)} (${escapeHTML(b.session)})</b><b>${escapeHTML(b.status)}</b></div><div>${escapeHTML(b.gameType)} | ${escapeHTML(b.digit)} | ₹${b.amount} ${b.status==='WON'?'| Win: ₹'+b.winAmount:''}</div><small style="color:#94a3b8">${escapeHTML(b.date)} ${escapeHTML(b.time)}</small></div>`).join('') || `<small style="color:#cbd5e1;">कोई बिड नहीं।</small>`;
             let txH = state.transactions.filter(t => t.phone === ph).slice().reverse().map(t => `<div style="font-size:11px;border-bottom:1px solid rgba(129,140,248,0.22);padding:4px 0;" class="flex-between"><span>${escapeHTML(t.type)}<br><small style="color:#94a3b8">${escapeHTML(t.time)}</small></span><b style="color:${t.amount>=0?'#4ade80':'#fda4af'}">${t.amount>=0?'+':''}₹${t.amount}</b></div>`).join('') || `<small style="color:#cbd5e1;">कोई ट्रांजैक्शन नहीं।</small>`;
-            box.innerHTML = `<div class="dark-row" style="border:1px solid var(--primary);">
-                <div class="flex-between" style="margin-bottom:8px;"><button class="btn btn-sm btn-chart" onclick="adminRenderPlayerDirectory('search')">← Back</button><button class="btn btn-sm" style="background:${u.isBlocked?'#22c55e':'#f43f5e'};color:${u.isBlocked?'#052e16':'#fff'};" data-ph="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.ph)">${u.isBlocked?'✅ Unblock ID':'🚫 Block ID'}</button></div>
-                <div style="font-size:12px;line-height:1.55;margin-bottom:8px;"><b>${escapeHTML(u.name)}</b> (${escapeHTML(u.phone)}) ${u.isBlocked?'<span class="loss-badge">BLOCKED</span>':'<span class="win-badge">ACTIVE</span>'}<br>${u.isBlocked&&u.blockReason?`<b>Reason:</b> <span style="color:#fda4af">${escapeHTML(u.blockReason)}</span><br>`:''}Wallet: <b style="color:#4ade80">₹${u.balance}</b> | Ref By: ${escapeHTML(u.referredBy||'None')} | Referred: ${refCnt}<br>Bank: ${escapeHTML(u.bankDetails||'N/A')} | UPI: ${escapeHTML(u.upiDetails||'N/A')}</div>
-                <div class="pnl-grid"><div class="pnl-card"><div class="pnl-val">₹${s.dep}</div><div class="pnl-lbl">Deposited</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--blue)">₹${s.wdr}</div><div class="pnl-lbl">Withdrawn</div></div><div class="pnl-card"><div class="pnl-val">₹${s.bet} (${s.cnt})</div><div class="pnl-lbl">Total Bets</div></div><div class="pnl-card"><div class="pnl-val" style="color:#4ade80">₹${s.won}</div><div class="pnl-lbl">Winning</div></div><div class="pnl-card"><div class="pnl-val" style="color:${s.pNet>=0?'#4ade80':'#fda4af'}">${s.pNet>=0?'+':''}₹${s.pNet}</div><div class="pnl-lbl">Player ${s.pNet>=0?'Profit':'Loss'}</div></div><div class="pnl-card"><div class="pnl-val" style="color:${s.hNet>=0?'#4ade80':'#fda4af'}">${s.hNet>=0?'+':''}₹${s.hNet}</div><div class="pnl-lbl">Admin ${s.hNet>=0?'Profit':'Loss'}</div></div></div>
-                <b style="color:var(--primary);font-size:12px;">📜 Full Bids History</b><div style="max-height:160px;overflow-y:auto;margin:5px 0;">${bidsH}</div>
-                <b style="color:var(--primary);font-size:12px;">📒 Full Transactions</b><div style="max-height:160px;overflow-y:auto;margin-top:5px;">${txH}</div>
-            </div>`;
+            box.innerHTML = `<div class="dark-row" style="border:1px solid var(--primary);"><div class="flex-between" style="margin-bottom:8px;"><button class="btn btn-sm btn-chart" onclick="adminRenderPlayerDirectory('search')">← Back</button><button class="btn btn-sm" style="background:${u.isBlocked?'#22c55e':'#f43f5e'};color:${u.isBlocked?'#052e16':'#fff'};" data-ph="${escapeHTML(u.phone)}" onclick="adminToggleBlockUser(this.dataset.ph)">${u.isBlocked?'✅ Unblock ID':'🚫 Block ID'}</button></div><div style="font-size:12px;line-height:1.55;margin-bottom:8px;"><b>${escapeHTML(u.name)}</b> (${escapeHTML(u.phone)}) ${u.isBlocked?'<span class="loss-badge">BLOCKED</span>':'<span class="win-badge">ACTIVE</span>'}<br>${u.isBlocked&&u.blockReason?`<b>Reason:</b> <span style="color:#fda4af">${escapeHTML(u.blockReason)}</span><br>`:''}Wallet: <b style="color:#4ade80">₹${u.balance}</b> | Ref By: ${escapeHTML(u.referredBy||'None')} | Referred: ${refCnt}<br>Bank: ${escapeHTML(u.bankDetails||'N/A')} | UPI: ${escapeHTML(u.upiDetails||'N/A')}</div><div class="pnl-grid"><div class="pnl-card"><div class="pnl-val">₹${s.dep}</div><div class="pnl-lbl">Deposited</div></div><div class="pnl-card"><div class="pnl-val" style="color:var(--blue)">₹${s.wdr}</div><div class="pnl-lbl">Withdrawn</div></div><div class="pnl-card"><div class="pnl-val">₹${s.bet} (${s.cnt})</div><div class="pnl-lbl">Total Bets</div></div><div class="pnl-card"><div class="pnl-val" style="color:#4ade80">₹${s.won}</div><div class="pnl-lbl">Winning</div></div><div class="pnl-card"><div class="pnl-val" style="color:${s.pNet>=0?'#4ade80':'#fda4af'}">${s.pNet>=0?'+':''}₹${s.pNet}</div><div class="pnl-lbl">Player ${s.pNet>=0?'Profit':'Loss'}</div></div><div class="pnl-card"><div class="pnl-val" style="color:${s.hNet>=0?'#4ade80':'#fda4af'}">${s.hNet>=0?'+':''}₹${s.hNet}</div><div class="pnl-lbl">Admin ${s.hNet>=0?'Profit':'Loss'}</div></div></div><b style="color:var(--primary);font-size:12px;">📜 Full Bids History</b><div style="max-height:160px;overflow-y:auto;margin:5px 0;">${bidsH}</div><b style="color:var(--primary);font-size:12px;">📒 Full Transactions</b><div style="max-height:160px;overflow-y:auto;margin-top:5px;">${txH}</div></div>`;
         }
-
         function adminToggleBlockUser(ph, delPostId = null) {
             if (!ph || ph === DEFAULT_VIP_PHONE) return alert("❌ VIP अकाउंट ब्लॉक नहीं किया जा सकता!");
             let u = state.users[ph]; if (!u) return alert("❌ यह नंबर रजिस्टर नहीं है!");
             if (!u.isBlocked) {
                 let r = prompt(`${u.name} (${ph}) को ब्लॉक करने का कारण:`, "Abuse language / Spam"); if (r === null) return;
                 u.isBlocked = true; u.blockReason = r.trim() || "Rule Violation";
-                if (delPostId) state.guessingPosts = state.guessingPosts.filter(p => p.id !== delPostId);
-                saveState(); alert(`🚫 ${ph} की ID ब्लॉक हो गई!`);
+                mkRef(`users/${ph}`).update({ isBlocked:true, blockReason:u.blockReason });
+                if (delPostId) { state.guessingPosts = state.guessingPosts.filter(p => p.id !== delPostId); deleteGuessPostFromFB(delPostId); }
+                alert(`🚫 ${ph} की ID ब्लॉक हो गई!`);
             } else {
                 if (!confirm(`${u.name} (${ph}) को अनब्लॉक करें?`)) return;
-                u.isBlocked = false; u.blockReason = ""; saveState(); alert(`✅ ${ph} अनब्लॉक हो गया!`);
+                u.isBlocked = false; u.blockReason = ""; mkRef(`users/${ph}`).update({ isBlocked:false, blockReason:"" });
+                alert(`✅ ${ph} अनब्लॉक हो गया!`);
             }
-            if (document.getElementById('admProfResultBox')) navigate('adminLogin');
-            else renderGuessingForum(document.getElementById('appRoot'));
+            if (document.getElementById('admProfResultBox')) navigate('adminLogin'); else renderGuessingForum(document.getElementById('appRoot'));
         }
         function adminBlockByInput() { let p = normalizePhone(document.getElementById('admBlockPhoneInput')?.value||''); if (p.length!==10) return alert("❌ 10 अंकों का नंबर दर्ज करें!"); adminToggleBlockUser(p); }
-        function adminDeleteGuessPost(id) { if (!confirm("पोस्ट डिलीट करें?")) return; state.guessingPosts = state.guessingPosts.filter(p => p.id !== id); saveState(); navigate('adminLogin'); }
+        function adminDeleteGuessPost(id) { if (!confirm("पोस्ट डिलीट करें?")) return; state.guessingPosts = state.guessingPosts.filter(p => p.id !== id); deleteGuessPostFromFB(id); navigate('adminLogin'); }
         function updateAdminPendingBidDateHint() {
             let mEl = document.getElementById('admResMarket'), hEl = document.getElementById('admPendingDateHint'); if (!mEl || !hEl) return;
             let mId = parseInt(mEl.value, 10), counts = {};
@@ -1541,10 +1284,8 @@
             let allP = Object.values(state.users).filter(u=>!u.isSystem).length, blkP = Object.values(state.users).filter(u=>!u.isSystem&&u.isBlocked).length;
             let vipCnt = state.guesserChats[DEFAULT_VIP_PHONE] ? Object.keys(state.guesserChats[DEFAULT_VIP_PHONE]).length : 0;
             let depList = state.depositRequests.filter(d=>d.status==="PENDING"), wdrList = state.withdrawRequests.filter(w=>w.status==="PENDING"), today = getLocalDateString();
-
             let totalGiftCommAll = Math.round(state.giftCommissions.reduce((s,g)=>s+Number(g.adminCommission||0),0)*100)/100;
             let giftLogHtml = state.giftCommissions.slice().reverse().slice(0,25).map(g => `<div class="dark-row flex-between" style="font-size:11px;"><div><b>${escapeHTML(g.senderName)}</b> ➔ <b>${escapeHTML(g.receiverName)}</b><br><small style="color:#cbd5e1">${escapeHTML(g.giftName)} | Guesser को मिला: ₹${g.guesserReceived}<br>${escapeHTML(g.time)}</small></div><b style="color:#4ade80">+₹${g.adminCommission}</b></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">अभी तक कोई गिफ्ट कमीशन नहीं आया।</p>`;
-
             let dHtml = depList.map(d => `<div class="dark-row flex-between"><div><b>${escapeHTML(d.name)}</b> (${escapeHTML(d.phone)})<br>₹${d.amount} | UTR: <b>${escapeHTML(d.utr)}</b></div><div style="display:flex;gap:4px;"><button class="btn btn-sm" style="background:#22c55e;color:#052e16;" onclick="approveDeposit(${d.id})">Approve</button><button class="btn btn-sm" style="background:#f43f5e;color:#fff;" onclick="rejectDeposit(${d.id})">Reject</button></div></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई नई डिपॉजिट रिक्वेस्ट नहीं।</p>`;
             let wHtml = wdrList.map(w => `<div class="dark-row flex-between"><div><b>${escapeHTML(w.name)}</b> (${escapeHTML(w.phone)})<br>₹${w.amount}</div><div style="display:flex;gap:4px;"><button class="btn btn-sm" style="background:#22c55e;color:#052e16;" onclick="approveWithdraw(${w.id})">Approve</button><button class="btn btn-sm" style="background:#f43f5e;color:#fff;" onclick="rejectWithdraw(${w.id})">Reject</button></div></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई नई विड्रॉल रिक्वेस्ट नहीं।</p>`;
             let fHtml = state.forgotRequests.slice().reverse().map(f => `<div class="dark-row flex-between"><div><b>${escapeHTML(f.name)}</b> (${escapeHTML(f.phone)})<br><small style="color:#cbd5e1">${escapeHTML(f.time)}</small></div><button class="btn btn-sm btn-play" data-ph="${escapeHTML(f.phone)}" data-id="${f.id}" onclick="adminResetUserPassword(this.dataset.ph,Number(this.dataset.id))">🔑 Reset</button></div>`).join('') || `<p style="color:#cbd5e1;font-size:12px;">कोई रिक्वेस्ट नहीं।</p>`;
@@ -1576,44 +1317,28 @@
             renderPnLBox(today); adminRenderPlayerDirectory('all'); updateAdminPendingBidDateHint();
         }
 
-        function adminResetUserPassword(ph, id) {
-            let u = state.users[ph]; if (!u) return;
-            let np = prompt(`${ph} के लिए नया पासवर्ड लिखें (4+ अक्षर):`); if (!np || np.trim().length < 4) return;
-            u.password = hashPassword(np.trim()); state.forgotRequests = state.forgotRequests.filter(r => r.id !== id);
-            saveState(); alert("नया पासवर्ड सेट हो गया!"); navigate('adminLogin');
-        }
+        function adminResetUserPassword(ph, id) { let u = state.users[ph]; if (!u) return; let np = prompt(`${ph} के लिए नया पासवर्ड लिखें (4+ अक्षर):`); if (!np || np.trim().length < 4) return; u.password = hashPassword(np.trim()); mkRef(`users/${ph}/password`).set(u.password); state.forgotRequests = state.forgotRequests.filter(r => r.id !== id); removeForgotFromFB(id); alert("नया पासवर्ड सेट हो गया!"); navigate('adminLogin'); }
         function approveDeposit(id) {
-            let req = state.depositRequests.find(d => d.id === id); if (!req || req.status !== "PENDING") return;
-            req.status = "APPROVED";
-            if (!state.users[req.phone]) state.users[req.phone] = { name:req.name||("Player "+req.phone.slice(-4)), balance:0, phone:req.phone, password:"", avatar:"", bankDetails:"", upiDetails:"", referredBy:null, referralBalance:0, referralTotalEarned:0, referralHistory:[], referralFirstBonusPaid:false, referralTotalDeposited:0, isBlocked:false, blockReason:"", joinedAt:new Date().toLocaleDateString() };
-            state.users[req.phone].balance = Math.round((state.users[req.phone].balance + req.amount) * 100) / 100;
-            state.transactions.push({ phone:req.phone, type:`Deposit Approved (UTR: ${req.utr})`, amount:req.amount, date:getLocalDateString(), time:new Date().toLocaleString() });
-            processReferralDeposit(req.phone, req.amount); saveState(); alert("डिपॉजिट अप्रूव हो गया!"); navigate('adminLogin');
+            mkRef(`depositRequests/${id}`).transaction(cur => { if (!cur || cur.status !== "PENDING") return; cur.status = "APPROVED"; return cur; }, (err, committed, snap) => {
+                if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!");
+                let req = snap.val();
+                if (!state.users[req.phone]) { state.users[req.phone] = { name:req.name||("Player "+req.phone.slice(-4)), balance:0, phone:req.phone, password:"", avatar:"", bankDetails:"", upiDetails:"", referredBy:null, referralBalance:0, referralTotalEarned:0, referralHistory:[], referralFirstBonusPaid:false, referralTotalDeposited:0, isBlocked:false, blockReason:"", joinedAt:new Date().toLocaleDateString() }; saveUserToFB(req.phone); }
+                adjustUserBalanceFB(req.phone, req.amount);
+                addTransactionToFB({ phone:req.phone, type:`Deposit Approved (UTR: ${req.utr})`, amount:req.amount, date:getLocalDateString(), time:new Date().toLocaleString() });
+                processReferralDeposit(req.phone, req.amount); alert("डिपॉजिट अप्रूव हो गया!"); navigate('adminLogin');
+            });
         }
-        function rejectDeposit(id) { let req = state.depositRequests.find(d=>d.id===id); if (!req || req.status!=="PENDING") return; req.status="REJECTED"; saveState(); alert("डिपॉजिट रिजेक्ट हो गया!"); navigate('adminLogin'); }
+        function rejectDeposit(id) { mkRef(`depositRequests/${id}`).transaction(cur => { if (!cur || cur.status !== "PENDING") return; cur.status = "REJECTED"; return cur; }, (err, committed) => { if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!"); alert("डिपॉजिट रिजेक्ट हो गया!"); navigate('adminLogin'); }); }
         function handleQrUpload(ev) {
-            let f = ev.target.files[0]; if (!f) return;
-            if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!");
-            let r = new FileReader();
-            r.onload = e => {
-                let img = new Image();
-                img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!");
-                img.onload = () => {
-                    let w = img.width, h = img.height, m = 360;
-                    if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; }
-                    let c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img,0,0,w,h);
-                    state.depositQR = c.toDataURL('image/jpeg', 0.75);
-                    let prev = document.getElementById('adminQrPreview'); if (prev) prev.src = state.depositQR; saveState();
-                }; img.src = e.target.result;
-            }; r.readAsDataURL(f);
+            let f = ev.target.files[0]; if (!f) return; if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!");
+            let r = new FileReader(); r.onload = e => { let img = new Image(); img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!"); img.onload = () => { let w = img.width, h = img.height, m = 360; if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; } let c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img,0,0,w,h); state.depositQR = c.toDataURL('image/jpeg', 0.75); let prev = document.getElementById('adminQrPreview'); if (prev) prev.src = state.depositQR; saveSettingsToFB(); }; img.src = e.target.result; }; r.readAsDataURL(f);
         }
-        function adminSaveDepositSettings() { let u = (document.getElementById('admUpiInput')?.value||'').trim(); if (u) state.depositUPI = u; saveState(); alert("QR व UPI सेव हो गया!"); }
+        function adminSaveDepositSettings() { let u = (document.getElementById('admUpiInput')?.value||'').trim(); if (u) state.depositUPI = u; saveSettingsToFB(); alert("QR व UPI सेव हो गया!"); }
         function adminCheckBidLoad() {
             let mId = parseInt(document.getElementById('admLoadMarket')?.value, 10), dt = document.getElementById('admLoadDate')?.value || getLocalDateString(), box = document.getElementById('admLoadResultBox'); if (!box) return;
             let f = state.bids.filter(b => b.marketId === mId && b.date === dt && b.status !== "REFUNDED");
             if (!f.length) { box.innerHTML = `<p style="color:#cbd5e1;">कोई बिड नहीं लगी है।</p>`; return; }
-            let tot = 0, grp = {};
-            f.forEach(b => { tot += b.amount; let k = `${b.gameType} (${b.session}) - ${b.digit}`; if (!grp[k]) grp[k]={c:0,a:0}; grp[k].c++; grp[k].a+=b.amount; });
+            let tot = 0, grp = {}; f.forEach(b => { tot += b.amount; let k = `${b.gameType} (${b.session}) - ${b.digit}`; if (!grp[k]) grp[k]={c:0,a:0}; grp[k].c++; grp[k].a+=b.amount; });
             box.innerHTML = `<div class="dark-row" style="border:1px solid var(--primary);">Bids: <b>${f.length}</b> | Total Load: <b style="color:#4ade80">₹${tot}</b></div>` + Object.entries(grp).sort((a,b)=>b[1].a-a[1].a).map(([k,v])=>`<div class="dark-row flex-between"><span>${escapeHTML(k)} (${v.c})</span><b style="color:var(--primary)">₹${v.a}</b></div>`).join('');
         }
         function adminSearchGameHistory() {
@@ -1622,37 +1347,37 @@
             let f = state.bids.filter(b => b.phone === ph && (!dt || b.date === dt)).slice().reverse();
             box.innerHTML = !f.length ? `<p style="color:#fda4af;">कोई रिकॉर्ड नहीं मिला।</p>` : f.map(b => `<div class="dark-row" style="border-left:3px solid ${b.status==='WON'?'#22c55e':(b.status==='LOST'?'#f43f5e':'#fbbf24')};"><b>${escapeHTML(b.marketName)}</b> (${escapeHTML(b.session)})<br>${escapeHTML(b.gameType)} | ${escapeHTML(b.digit)} | ₹${b.amount} | <b>${escapeHTML(b.status)}</b> ${b.status==='WON'?'(Win: ₹'+b.winAmount+')':''}<br><small style="color:#cbd5e1">${escapeHTML(b.date)} ${escapeHTML(b.time)}</small></div>`).join('');
         }
-        function approveWithdraw(id) { let r = state.withdrawRequests.find(w=>w.id===id); if (r&&r.status==="PENDING") { r.status="APPROVED"; saveState(); alert("विड्रॉल अप्रूव हो गया!"); navigate('adminLogin'); } }
+        function approveWithdraw(id) { mkRef(`withdrawRequests/${id}`).transaction(cur => { if (!cur || cur.status !== "PENDING") return; cur.status = "APPROVED"; return cur; }, (err, committed) => { if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!"); alert("विड्रॉल अप्रूव हो गया!"); navigate('adminLogin'); }); }
         function rejectWithdraw(id) {
-            let r = state.withdrawRequests.find(w=>w.id===id); if (!r || r.status!=="PENDING") return;
-            r.status = "REJECTED";
-            if (state.users[r.phone]) { state.users[r.phone].balance = Math.round((state.users[r.phone].balance + r.amount)*100)/100; state.transactions.push({ phone:r.phone, type:"Withdrawal Rejected (Refund)", amount:r.amount, date:getLocalDateString(), time:new Date().toLocaleString() }); }
-            saveState(); alert("विड्रॉल रिजेक्ट और रिफंड हो गया!"); navigate('adminLogin');
+            mkRef(`withdrawRequests/${id}`).transaction(cur => { if (!cur || cur.status !== "PENDING") return; cur.status = "REJECTED"; return cur; }, (err, committed, snap) => {
+                if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!");
+                let r = snap.val(); if (state.users[r.phone]) { adjustUserBalanceFB(r.phone, r.amount); addTransactionToFB({ phone:r.phone, type:"Withdrawal Rejected (Refund)", amount:r.amount, date:getLocalDateString(), time:new Date().toLocaleString() }); }
+                alert("विड्रॉल रिजेक्ट और रिफंड हो गया!"); navigate('adminLogin');
+            });
         }
         function adminModBal() {
             let ph = normalizePhone(document.getElementById('admPhone')?.value||''), act = document.getElementById('admAction')?.value, raw = (document.getElementById('admAmount')?.value||'').trim(), chk = document.getElementById('admCountAsDeposit')?.checked;
             if (ph.length !== 10 || !isStrictPositiveInt(raw)) return alert("❌ सही 10 अंकों का नंबर व राशि दर्ज करें!");
             if (ph === DEFAULT_VIP_PHONE) return alert("❌ सिस्टम VIP अकाउंट का बैलेंस यहाँ से नहीं बदल सकते!");
             let amt = parseInt(raw, 10), today = getLocalDateString();
-            if (!state.users[ph]) state.users[ph] = { name:"Player "+ph.slice(-4), balance:0, phone:ph, password:"", avatar:"", bankDetails:"", upiDetails:"", referredBy:null, referralBalance:0, referralTotalEarned:0, referralHistory:[], referralFirstBonusPaid:false, referralTotalDeposited:0, isBlocked:false, blockReason:"", joinedAt:new Date().toLocaleDateString() };
+            if (!state.users[ph]) { state.users[ph] = { name:"Player "+ph.slice(-4), balance:0, phone:ph, password:"", avatar:"", bankDetails:"", upiDetails:"", referredBy:null, referralBalance:0, referralTotalEarned:0, referralHistory:[], referralFirstBonusPaid:false, referralTotalDeposited:0, isBlocked:false, blockReason:"", joinedAt:new Date().toLocaleDateString() }; saveUserToFB(ph); }
             if (act === 'add') {
-                state.users[ph].balance = Math.round((state.users[ph].balance + amt) * 100) / 100;
-                state.transactions.push({ phone:ph, type:"Admin Added", amount:amt, date:today, time:new Date().toLocaleString() });
-                if (chk) processReferralDeposit(ph, amt);
+                adjustUserBalanceFB(ph, amt); addTransactionToFB({ phone:ph, type:"Admin Added", amount:amt, date:today, time:new Date().toLocaleString() });
+                if (chk) processReferralDeposit(ph, amt); alert("बैलेंस अपडेट हो गया!"); navigate('adminLogin');
             } else {
-                if (state.users[ph].balance < amt) return alert(`❌ बैलेंस (₹${state.users[ph].balance}) कम है!`);
-                state.users[ph].balance = Math.round((state.users[ph].balance - amt) * 100) / 100;
-                state.transactions.push({ phone:ph, type:"Admin Deducted", amount:-amt, date:today, time:new Date().toLocaleString() });
+                mkRef(`users/${ph}/balance`).transaction(cur => { let b = Number(cur) || 0; if (b < amt) return; return Math.round((b - amt) * 100) / 100; }, (err, committed) => {
+                    if (err || !committed) return alert("❌ बैलेंस कम है!");
+                    addTransactionToFB({ phone:ph, type:"Admin Deducted", amount:-amt, date:today, time:new Date().toLocaleString() }); alert("बैलेंस अपडेट हो गया!"); navigate('adminLogin');
+                });
             }
-            saveState(); alert("बैलेंस अपडेट हो गया!"); navigate('adminLogin');
         }
         const isValidTimeFormat = s => /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(s);
         function adminAddMarket() {
             let nm = (document.getElementById('admMarketName')?.value||'').trim().toUpperCase(), ot = (document.getElementById('admOpenTime')?.value||'').trim(), ct = (document.getElementById('admCloseTime')?.value||'').trim();
             if (!nm || !isValidTimeFormat(ot) || !isValidTimeFormat(ct)) return alert("❌ सही नाम व समय (जैसे 04:15) दर्ज करें!");
             let nid = state.markets.length ? Math.max(...state.markets.map(m=>m.id))+1 : 1;
-            state.markets.push({ id:nid, name:nm, openTime:ot, openAmPm:document.getElementById('admOpenAmPm').value, closeTime:ct, closeAmPm:document.getElementById('admCloseAmPm').value, result:"***-**-***", resultDate:getLocalDateString(), isHoliday:false, chart:[] });
-            saveState(); alert("मार्केट जुड़ गई!"); navigate('adminLogin');
+            let mObj = { id:nid, name:nm, openTime:ot, openAmPm:document.getElementById('admOpenAmPm').value, closeTime:ct, closeAmPm:document.getElementById('admCloseAmPm').value, result:"***-**-***", resultDate:getLocalDateString(), isHoliday:false, chart:[] };
+            state.markets.push(mObj); saveMarketToFB(mObj); alert("मार्केट जुड़ गई!"); navigate('adminLogin');
         }
         function loadMarketForEdit() {
             let m = state.markets.find(x => x.id === parseInt(document.getElementById('admDelMarketId')?.value, 10)); if (!m) return;
@@ -1663,68 +1388,49 @@
             let m = state.markets.find(x => x.id === parseInt(document.getElementById('admDelMarketId')?.value, 10)); if (!m) return;
             let nm = (document.getElementById('admMarketName')?.value||'').trim().toUpperCase(), ot = (document.getElementById('admOpenTime')?.value||'').trim(), ct = (document.getElementById('admCloseTime')?.value||'').trim();
             if (!nm || !isValidTimeFormat(ot) || !isValidTimeFormat(ct)) return alert("❌ सही नाम व समय भरें (या पहले 📥 Load दबाएं)!");
-            let oldName = m.name;
-            m.name = nm; m.openTime = ot; m.openAmPm = document.getElementById('admOpenAmPm').value; m.closeTime = ct; m.closeAmPm = document.getElementById('admCloseAmPm').value;
+            let oldName = m.name; m.name = nm; m.openTime = ot; m.openAmPm = document.getElementById('admOpenAmPm').value; m.closeTime = ct; m.closeAmPm = document.getElementById('admCloseAmPm').value;
+            saveMarketToFB(m);
             if (oldName !== nm) {
-                state.bids.forEach(b => { if (b.marketId === m.id) b.marketName = nm; });
-                state.guessingPosts.forEach(p => { if (p.market === oldName) p.market = nm; });
+                state.bids.forEach(b => { if (b.marketId === m.id) { b.marketName = nm; mkRef(`bids/${b.id}/marketName`).set(nm); } });
+                state.guessingPosts.forEach(p => { if (p.market === oldName) { p.market = nm; mkRef(`guessingPosts/${p.id}/market`).set(nm); } });
                 if (state.guessFilterMarket === oldName) state.guessFilterMarket = nm;
             }
-            saveState(); alert("मार्केट अपडेट हो गई!"); navigate('adminLogin');
+            alert("मार्केट अपडेट हो गई!"); navigate('adminLogin');
         }
-        function toggleMarketHoliday() {
-            let m = state.markets.find(x => x.id === parseInt(document.getElementById('admDelMarketId')?.value, 10)); if (!m) return;
-            m.isHoliday = !m.isHoliday; saveState(); alert(`🏖️ "${m.name}" अब ${m.isHoliday?'HOLIDAY (बंद)':'ACTIVE (चालू)'} है!`); navigate('adminLogin');
-        }
+        function toggleMarketHoliday() { let m = state.markets.find(x => x.id === parseInt(document.getElementById('admDelMarketId')?.value, 10)); if (!m) return; m.isHoliday = !m.isHoliday; mkRef(`markets/${m.id}/isHoliday`).set(m.isHoliday); alert(`🏖️ "${m.name}" अब ${m.isHoliday?'HOLIDAY (बंद)':'ACTIVE (चालू)'} है!`); navigate('adminLogin'); }
         function adminDelMarket() {
             let mId = parseInt(document.getElementById('admDelMarketId')?.value, 10), m = state.markets.find(x => x.id === mId); if (!m) return;
             if (!confirm(`"${m.name}" डिलीट करें? पेंडिंग बिड्स रिफंड हो जाएंगी।`)) return;
             let cnt = 0, today = getLocalDateString();
-            state.bids.forEach(b => { if (b.marketId === mId && b.status === "PENDING") { b.status = "REFUNDED"; if (state.users[b.phone]) { state.users[b.phone].balance = Math.round((state.users[b.phone].balance+b.amount)*100)/100; state.transactions.push({ phone:b.phone, type:`Market Deleted Refund (${b.marketName})`, amount:b.amount, date:today, time:new Date().toLocaleString() }); } cnt++; } });
-            state.markets = state.markets.filter(x => x.id !== mId); saveState(); alert(`डिलीट हो गई! (${cnt} बिड्स रिफंड)`); navigate('adminLogin');
+            state.bids.forEach(b => { if (b.marketId === mId && b.status === "PENDING") { b.status = "REFUNDED"; mkRef(`bids/${b.id}/status`).set("REFUNDED"); if (state.users[b.phone]) { adjustUserBalanceFB(b.phone, b.amount); addTransactionToFB({ phone:b.phone, type:`Market Deleted Refund (${b.marketName})`, amount:b.amount, date:today, time:new Date().toLocaleString() }); } cnt++; } });
+            state.markets = state.markets.filter(x => x.id !== mId); deleteMarketFromFB(mId); alert(`डिलीट हो गई! (${cnt} बिड्स रिफंड)`); navigate('adminLogin');
         }
         function adminSaveRates() {
             const rp = /^\d+(?:\.\d+)?\s*ka\s*\d+(?:\.\d+)?$/i; let upd = [];
-            for (let i = 0; i < state.gameRates.length; i++) {
-                let v = (document.getElementById(`rateInput_${i}`)?.value||'').trim();
-                if (!rp.test(v)) return alert(`❌ "${state.gameRates[i].name}" का रेट '10 ka 95' फॉर्मेट में लिखें!`);
-                upd.push({ name:state.gameRates[i].name, rate:v });
-            }
-            state.gameRates = upd; saveState(); alert("सभी रेट्स अपडेट हो गए!");
+            for (let i = 0; i < state.gameRates.length; i++) { let v = (document.getElementById(`rateInput_${i}`)?.value||'').trim(); if (!rp.test(v)) return alert(`❌ "${state.gameRates[i].name}" का रेट '10 ka 95' फॉर्मेट में लिखें!`); upd.push({ name:state.gameRates[i].name, rate:v }); }
+            state.gameRates = upd; saveRatesToFB(); alert("सभी रेट्स अपडेट हो गए!");
         }
-        function getRateMultiplier(gt) {
-            const r = state.gameRates.find(x => x.name === gt);
-            if (r && r.rate) { const m = r.rate.match(/(\d+(?:\.\d+)?)\s*ka\s*(\d+(?:\.\d+)?)/i); if (m && parseFloat(m[1]) > 0) return parseFloat(m[2]) / parseFloat(m[1]); }
-            return ({ "Single Digit":9.5, "Jodi Digit":95, "Single Panna":140, "Double Panna":280, "Triple Panna":600, "Half Sangam":1000, "Full Sangam":10000 })[gt] || 0;
-        }
+        function getRateMultiplier(gt) { const r = state.gameRates.find(x => x.name === gt); if (r && r.rate) { const m = r.rate.match(/(\d+(?:\.\d+)?)\s*ka\s*(\d+(?:\.\d+)?)/i); if (m && parseFloat(m[1]) > 0) return parseFloat(m[2]) / parseFloat(m[1]); } return ({ "Single Digit":9.5, "Jodi Digit":95, "Single Panna":140, "Double Panna":280, "Triple Panna":600, "Half Sangam":1000, "Full Sangam":10000 })[gt] || 0; }
         const pannaSumDigit = p => String((parseInt(p[0],10) + parseInt(p[1],10) + parseInt(p[2],10)) % 10);
-        function adminResetMarketResult() {
-            let m = state.markets.find(x => x.id === parseInt(document.getElementById('admResMarket')?.value, 10)); if (!m) return;
-            m.result = "***-**-***"; m.resultDate = getMarketCycleDate(m, new Date()); saveState(); alert(`"${m.name}" का डिस्प्ले रिजल्ट रीसेट हो गया!`);
-        }
+        function adminResetMarketResult() { let m = state.markets.find(x => x.id === parseInt(document.getElementById('admResMarket')?.value, 10)); if (!m) return; m.result = "***-**-***"; m.resultDate = getMarketCycleDate(m, new Date()); mkRef(`markets/${m.id}`).update({ result:m.result, resultDate:m.resultDate }); alert(`"${m.name}" का डिस्प्ले रिजल्ट रीसेट हो गया!`); }
         function adminRollbackResult() {
-            let mId = parseInt(document.getElementById('admResMarket')?.value, 10);
-            let dt = document.getElementById('admResDate')?.value || getLocalDateString();
-            let m = state.markets.find(x => x.id === mId); if (!m) return;
+            let mId = parseInt(document.getElementById('admResMarket')?.value, 10), dt = document.getElementById('admResDate')?.value || getLocalDateString(), m = state.markets.find(x => x.id === mId); if (!m) return;
             let settledBids = state.bids.filter(b => b.marketId === mId && b.date === dt && (b.status === "WON" || b.status === "LOST"));
             let hasChartForDate = m.chart.some(c => typeof c === "object" && c.date === dt);
             if (!settledBids.length && !hasChartForDate && m.resultDate !== dt) return alert(`❌ ${m.name} (${dt}) के लिए कोई रोलबैक डेटा नहीं मिला!`);
             if (!confirm(`क्या आप ${m.name} (${dt}) का रिजल्ट और ${settledBids.length} सेटल की गई बिड्स को रोलबैक (वापस PENDING) करना चाहते हैं?\nजीती हुई रकम यूज़र्स के वॉलेट से वापस कटेगी।`)) return;
-
             let reversedWin = 0, today = getLocalDateString();
             settledBids.forEach(b => {
                 if (b.status === "WON" && b.winAmount > 0 && state.users[b.phone]) {
-                    state.users[b.phone].balance = Math.round((state.users[b.phone].balance - b.winAmount) * 100) / 100;
-                    state.transactions.push({ phone:b.phone, type:`Result Rollback (${b.marketName} - ${dt})`, amount:-b.winAmount, date:today, time:new Date().toLocaleString() });
+                    adjustUserBalanceFB(b.phone, -b.winAmount);
+                    addTransactionToFB({ phone:b.phone, type:`Result Rollback (${b.marketName} - ${dt})`, amount:-b.winAmount, date:today, time:new Date().toLocaleString() });
                     reversedWin += b.winAmount;
                 }
-                b.status = "PENDING";
-                b.winAmount = 0;
+                b.status = "PENDING"; b.winAmount = 0; mkRef(`bids/${b.id}`).update({ status:"PENDING", winAmount:0 });
             });
             m.chart = m.chart.filter(c => !(typeof c === "object" && c.date === dt));
-            if (m.lastChartDate === dt) m.lastChartDate = null;
-            if (m.resultDate === dt) m.result = "***-**-***";
-            saveState();
+            if (m.lastChartDate === dt) m.lastChartDate = null; if (m.resultDate === dt) m.result = "***-**-***";
+            saveMarketToFB(m);
             alert(`✅ Rollback सफल!\n${settledBids.length} बिड्स वापस PENDING हो गईं (वापस कटी जीत: ₹${reversedWin})। अब आप सही रिजल्ट डाल सकते हैं।`);
             navigate('adminLogin');
         }
@@ -1734,21 +1440,18 @@
             let pts = res.split('-'); if (pts.length !== 3 || pts[0].length !== 3 || pts[1].length !== 2 || pts[2].length !== 3) return alert("❌ सही फॉर्मेट डालें: 123-6*-*** या 123-68-459");
             let op = pts[0], jd = pts[1], cp = pts[2], hasO = /^\d{3}$/.test(op)&&/^\d$/.test(jd[0]), hasC = /^\d{3}$/.test(cp)&&/^\d$/.test(jd[1]), fullJ = /^\d{2}$/.test(jd);
             if (!hasO && !hasC) return alert("❌ कम से कम OPEN या CLOSE के सही अंक डालें!");
-            if (hasO && !isValidAnyPanna(op)) return alert(`❌ Open Panna (${op}) सही मटका पन्ना क्रम (बढ़ते क्रम, 0=10) में नहीं है!`);
-            if (hasC && !isValidAnyPanna(cp)) return alert(`❌ Close Panna (${cp}) सही मटका पन्ना क्रम (बढ़ते क्रम, 0=10) में नहीं है!`);
+            if (hasO && !isValidAnyPanna(op)) return alert(`❌ Open Panna (${op}) सही मटका पन्ना क्रम में नहीं है!`);
+            if (hasC && !isValidAnyPanna(cp)) return alert(`❌ Close Panna (${cp}) सही मटका पन्ना क्रम में नहीं है!`);
             if (hasO && pannaSumDigit(op) !== jd[0]) return alert(`❌ Open Panna (${op}) का जोड़ ${pannaSumDigit(op)} होना चाहिए!`);
             if (hasC && pannaSumDigit(cp) !== jd[1]) return alert(`❌ Close Panna (${cp}) का जोड़ ${pannaSumDigit(cp)} होना चाहिए!`);
-            if (hasO && m.resultDate === dt && /^\d{3}-\d/.test(m.result) && !m.result.startsWith(`${op}-${jd[0]}`)) {
-                return alert(`❌ ${dt} का Open रिजल्ट पहले ही (${m.result}) घोषित हो चुका है!\nOpen बदलने के लिए पहले नीचे 'Rollback' बटन दबाएं।`);
-            }
+            if (hasO && m.resultDate === dt && /^\d{3}-\d/.test(m.result) && !m.result.startsWith(`${op}-${jd[0]}`)) return alert(`❌ ${dt} का Open रिजल्ट पहले ही (${m.result}) घोषित हो चुका है!\nOpen बदलने के लिए पहले 'Rollback' बटन दबाएं।`);
             if (dt >= getMarketCycleDate(m, new Date())) { m.result = res; m.resultDate = dt; }
             if (fullJ) {
                 let existingChartIdx = m.chart.findIndex(c => typeof c === "object" && c.date === dt);
-                if (existingChartIdx !== -1) m.chart[existingChartIdx].result = res;
-                else m.chart.push({ date:dt, result:res });
+                if (existingChartIdx !== -1) m.chart[existingChartIdx].result = res; else m.chart.push({ date:dt, result:res });
                 m.lastChartDate = dt;
             }
-
+            saveMarketToFB(m);
             let od = jd[0], cd = jd[1], settled = 0, won = 0, payout = 0, nd = getLocalDateString();
             state.bids.forEach(b => {
                 if (b.marketId !== mId || b.status !== "PENDING" || b.date !== dt) return;
@@ -1762,18 +1465,19 @@
                     settled++;
                     if (win) {
                         won++; b.status = "WON"; b.winAmount = Math.round(b.amount * getRateMultiplier(b.gameType)); payout += b.winAmount;
-                        if (state.users[b.phone]) { state.users[b.phone].balance = Math.round((state.users[b.phone].balance + b.winAmount)*100)/100; state.transactions.push({ phone:b.phone, type:`Won (${b.marketName} - ${b.gameType})`, amount:b.winAmount, date:nd, time:new Date().toLocaleString() }); }
-                    } else b.status = "LOST";
+                        mkRef(`bids/${b.id}`).update({ status:"WON", winAmount:b.winAmount });
+                        if (state.users[b.phone]) { adjustUserBalanceFB(b.phone, b.winAmount); addTransactionToFB({ phone:b.phone, type:`Won (${b.marketName} - ${b.gameType})`, amount:b.winAmount, date:nd, time:new Date().toLocaleString() }); }
+                    } else { b.status = "LOST"; mkRef(`bids/${b.id}`).update({ status:"LOST", winAmount:0 }); }
                 }
             });
-            rEl.value = ''; saveState(); alert(`रिजल्ट सेटल हो गया!\nतारीख: ${dt}\nकुल सेटल: ${settled}\nजीत: ${won} (भुगतान: ₹${payout})`); navigate('adminLogin');
+            rEl.value = ''; alert(`रिजल्ट सेटल हो गया!\nतारीख: ${dt}\nकुल सेटल: ${settled}\nजीत: ${won} (भुगतान: ₹${payout})`); navigate('adminLogin');
         }
         function adminChangeCreds() {
             let p = (document.getElementById('newAdminPhone')?.value||'').trim(), pw = (document.getElementById('newAdminPass')?.value||'').trim();
             if (!p || pw.length < 4) return alert("❌ 4+ अक्षर का नया पासवर्ड डालें!");
-            state.adminCreds = { phone:p, pass:hashPassword(pw) }; document.getElementById('newAdminPass').value = ''; saveState(); alert("पासवर्ड बदल गया!");
+            state.adminCreds = { phone:p, pass:hashPassword(pw) }; document.getElementById('newAdminPass').value = ''; saveSettingsToFB(); alert("पासवर्ड बदल गया!");
         }
-        function adminSaveSettings() { state.adminWhatsApp = (document.getElementById('admWa')?.value||'').trim(); state.noticeText = (document.getElementById('admNotice')?.value||'').trim(); saveState(); alert("सेटिंग्स सेव हो गई!"); }
+        function adminSaveSettings() { state.adminWhatsApp = (document.getElementById('admWa')?.value||'').trim(); state.noticeText = (document.getElementById('admNotice')?.value||'').trim(); saveSettingsToFB(); updateChromeUI(); alert("सेटिंग्स सेव हो गई!"); }
 
         window.addEventListener('hashchange', () => {
             if (window.location.hash.toLowerCase() === '#admin') {
@@ -1782,20 +1486,49 @@
             }
         });
 
-        syncDailyMarketResults();
-        if (initialSecretAdmin) {
-            try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
-            navigate('adminLogin');
-        } else if (!state.currentUserPhone || !state.users[state.currentUserPhone] || state.users[state.currentUserPhone].isBlocked) {
-            if (state.currentUserPhone && state.users[state.currentUserPhone]?.isBlocked) { localStorage.removeItem('mk_logged_in_phone'); state.currentUserPhone = null; }
-            if (state.isAdminLoggedIn) navigate('adminLogin');
-            else renderLoginScreen();
-        } else {
-            document.getElementById('mainHeader').style.display = 'flex';
-            document.getElementById('noticeBoardDisplay').style.display = 'block';
-            document.getElementById('bottomNav').style.display = 'flex';
-            navigate('home');
+        function showBootError(err) {
+            let code = err && err.code ? err.code : '', msg = err && err.message ? err.message : 'Connection failed';
+            let hint = (code === 'auth/operation-not-allowed' || code === 'auth/admin-restricted-operation')
+                ? "Firebase Console ➔ Build ➔ Authentication ➔ Sign-in method me jakar <b>Anonymous</b> ko Enable karein!"
+                : (String(msg).toLowerCase().includes('permission_denied')
+                    ? "Realtime Database ➔ Rules me <b>\"auth != null\"</b> rule Publish karein!"
+                    : escapeHTML(msg));
+            document.getElementById('appRoot').innerHTML = `<div class="form-card" style="max-width:350px;margin:60px auto;text-align:center;border:2px solid var(--red);"><h3 style="color:#fda4af;margin-bottom:8px;">⚠️ Connection Error</h3><p style="font-size:12px;color:#e2e8f0;margin-bottom:12px;line-height:1.5;">${hint}</p><button class="btn btn-play" onclick="location.reload()">🔄 Retry</button></div>`;
         }
+
+        function bootFirebase() {
+            const unsubscribe = auth.onAuthStateChanged(user => {
+                unsubscribe();
+                const authPromise = user ? Promise.resolve(user) : auth.signInAnonymously();
+                authPromise.then(() => mkRef().once('value')).then(snap => {
+                    if (!snap.exists()) return seedInitialFirebaseData();
+                }).then(() => {
+                    mkRef().on('value', snap => {
+                        applyFirebaseSnapshot(snap.val());
+                        if (!isFirebaseReady) {
+                            isFirebaseReady = true;
+                            syncDailyMarketResults();
+                            if (initialSecretAdmin) {
+                                try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
+                                navigate('adminLogin');
+                            } else if (!state.currentUserPhone || !state.users[state.currentUserPhone] || state.users[state.currentUserPhone].isBlocked) {
+                                if (state.currentUserPhone && state.users[state.currentUserPhone]?.isBlocked) { localStorage.removeItem('mk_logged_in_phone'); state.currentUserPhone = null; }
+                                if (state.isAdminLoggedIn) navigate('adminLogin');
+                                else renderLoginScreen();
+                            } else {
+                                document.getElementById('mainHeader').style.display = 'flex';
+                                document.getElementById('noticeBoardDisplay').style.display = 'block';
+                                document.getElementById('bottomNav').style.display = 'flex';
+                                navigate('home');
+                            }
+                        } else {
+                            refreshActiveViewOnSync();
+                        }
+                    }, showBootError);
+                }).catch(showBootError);
+            });
+        }
+        bootFirebase();
     </script>
 </body>
 </html>
