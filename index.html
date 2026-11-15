@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M.KING - Matka App</title>
+    <meta name="theme-color" content="#1e1b4b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/icon-192.png">
+    <link rel="apple-touch-icon" href="/icon-192.png">
     <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-database-compat.js"></script>
@@ -20,6 +26,9 @@
         .wallet-badge { background:linear-gradient(135deg,#10b981,#22c55e); color:#042f2e; padding:7px 14px; border-radius:20px; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 4px 12px rgba(34,197,94,0.35); }
         .notice-board { background:linear-gradient(90deg, rgba(76,29,149,0.85), rgba(30,64,175,0.85)); border:1px solid rgba(251,191,36,0.35); border-left:4px solid var(--primary); padding:10px 15px; margin:10px auto; max-width:580px; border-radius:10px; font-size:13px; color:#fef08a; line-height:1.5; }
         .container { padding:12px; max-width:600px; margin:auto; }
+        .pwa-banner { background:linear-gradient(135deg,#db2777,#7c3aed,#2563eb); border:1px solid rgba(251,191,36,0.65); border-radius:14px; padding:11px 13px; margin-bottom:13px; display:flex; justify-content:space-between; align-items:center; gap:10px; box-shadow:0 8px 20px rgba(124,58,237,0.38); }
+        .pwa-banner-txt { font-size:12px; line-height:1.35; color:#fff; text-align:left; }
+        .pwa-banner-btn { background:linear-gradient(135deg,#fde047,#f59e0b); color:#1e1b4b; border:none; padding:8px 13px; border-radius:20px; font-weight:900; font-size:12px; cursor:pointer; white-space:nowrap; box-shadow:0 4px 10px rgba(0,0,0,0.25); }
         .quick-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:15px; }
         .q-btn { background:linear-gradient(135deg, rgba(67,56,202,0.88), rgba(37,99,235,0.86)); border:1px solid rgba(165,180,252,0.4); color:#fff; padding:11px 5px; border-radius:12px; font-size:12px; font-weight:bold; text-align:center; cursor:pointer; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:4px; }
         .market-card,.form-card,.profile-top { background:linear-gradient(145deg, var(--card-top), var(--card-bot)); backdrop-filter:blur(10px); border:1px solid rgba(251,191,36,0.32); border-radius:16px; padding:14px; margin-bottom:13px; box-shadow:0 10px 26px rgba(10,14,40,0.38); }
@@ -151,14 +160,63 @@
         const db = firebase.database();
         const mkRef = (path = '') => db.ref('mking' + (path ? '/' + path : ''));
 
+        // PWA Install & Service Worker Setup
+        let deferredInstallPrompt = null;
+        if ('serviceWorker' in navigator && /^https?:$/i.test(window.location.protocol)) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });
+        }
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            document.querySelectorAll('.pwa-banner-wrap').forEach(el => { el.style.display = 'block'; });
+        });
+        window.addEventListener('appinstalled', () => {
+            deferredInstallPrompt = null;
+            document.querySelectorAll('.pwa-banner-wrap').forEach(el => { el.style.display = 'none'; });
+            alert("✅ M.KING App aapke phone par install ho gaya hai!");
+        });
+        const isAppInstalled = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        function triggerPwaInstall() {
+            if (isAppInstalled()) return alert("✅ App pehle se installed hai!");
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                deferredInstallPrompt.userChoice.then(res => {
+                    if (res && res.outcome === 'accepted') deferredInstallPrompt = null;
+                }).catch(() => {});
+                return;
+            }
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if (isIOS) alert("📲 iPhone par App Install karne ke liye:\n1. Neeche Share (⬆️) button dabayein.\n2. 'Add to Home Screen' par click karein.");
+            else alert("📲 App Install karne ke liye:\nBrowser ke upar right corner me ⋮ (3 dots) menu par click karein aur 'Install app' ya 'Add to Home screen' chunein!");
+        }
+        function getInstallBannerHTML() {
+            if (isAppInstalled()) return '';
+            return `<div class="pwa-banner-wrap"><div class="pwa-banner"><div class="pwa-banner-txt"><b>👑 M.KING Mobile App</b><br><small>1-Click me Home Screen par install karein</small></div><button class="pwa-banner-btn" onclick="triggerPwaInstall()">📲 Install App</button></div></div>`;
+        }
+        function downloadPwaIcon(size) {
+            const c = document.createElement('canvas'); c.width = size; c.height = size;
+            const ctx = c.getContext('2d');
+            const g = ctx.createLinearGradient(0, 0, size, size);
+            g.addColorStop(0, '#312e81'); g.addColorStop(0.55, '#4c1d95'); g.addColorStop(1, '#1e3a8a');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, size, size);
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = Math.max(4, Math.round(size * 0.04));
+            const pad = Math.round(size * 0.10);
+            ctx.strokeRect(pad, pad, size - pad * 2, size - pad * 2);
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.font = `${Math.round(size * 0.30)}px sans-serif`;
+            ctx.fillText('👑', size / 2, size * 0.38);
+            ctx.fillStyle = '#fde047';
+            ctx.font = `900 ${Math.round(size * 0.17)}px sans-serif`;
+            ctx.fillText('M.KING', size / 2, size * 0.68);
+            const a = document.createElement('a');
+            a.href = c.toDataURL('image/png');
+            a.download = `icon-${size}.png`;
+            a.click();
+        }
+
         let _idSeq = Math.floor(Math.random() * 1000);
         function genId() { _idSeq = (_idSeq + 1) % 1000; return Date.now() * 1000 + _idSeq; }
-        function toList(val) {
-            if (!val) return [];
-            if (Array.isArray(val)) return val.filter(Boolean);
-            if (typeof val === "object") return Object.values(val).filter(Boolean);
-            return [];
-        }
+        function toList(val) { if (!val) return []; if (Array.isArray(val)) return val.filter(Boolean); if (typeof val === "object") return Object.values(val).filter(Boolean); return []; }
 
         const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="#312e81"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fde047" font-family="sans-serif" font-size="26" font-weight="bold">U</text></svg>');
         const DEFAULT_QR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect width="180" height="180" fill="#fff"/><rect x="16" y="16" width="148" height="148" fill="none" stroke="#312e81" stroke-width="4" stroke-dasharray="8 6"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#1e1b4b" font-family="sans-serif" font-size="14" font-weight="bold">Upload QR</text><text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#4f46e5" font-family="sans-serif" font-size="11">from Admin Panel</text></svg>');
@@ -168,77 +226,46 @@
             : "https://star-slot.vercel.app";
 
         function utf8ToBinaryString(str) {
-            if (typeof TextEncoder !== "undefined") {
-                const bytes = new TextEncoder().encode(str);
-                let bin = "";
-                for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-                return bin;
-            }
+            if (typeof TextEncoder !== "undefined") { const bytes = new TextEncoder().encode(str); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return bin; }
             return str;
         }
         function sha256(ascii) {
-            const rr = (v, a) => (v >>> a) | (v << (32 - a));
-            const maxWord = Math.pow(2, 32), words = [], len = ascii.length * 8;
+            const rr = (v, a) => (v >>> a) | (v << (32 - a)), maxWord = Math.pow(2, 32), words = [], len = ascii.length * 8;
             let i, j, res = '';
             if (!sha256.h) {
-                sha256.h = []; sha256.k = [];
-                let pc = 0, comp = {};
-                for (let c = 2; pc < 64; c++) if (!comp[c]) {
-                    for (i = 0; i < 313; i += c) comp[i] = c;
-                    sha256.h[pc] = (Math.pow(c, 0.5) * maxWord) | 0;
-                    sha256.k[pc++] = (Math.pow(c, 1 / 3) * maxWord) | 0;
-                }
+                sha256.h = []; sha256.k = []; let pc = 0, comp = {};
+                for (let c = 2; pc < 64; c++) if (!comp[c]) { for (i = 0; i < 313; i += c) comp[i] = c; sha256.h[pc] = (Math.pow(c, 0.5) * maxWord) | 0; sha256.k[pc++] = (Math.pow(c, 1 / 3) * maxWord) | 0; }
             }
-            let hash = sha256.h.slice(0, 8), k = sha256.k;
-            ascii += '\x80';
+            let hash = sha256.h.slice(0, 8), k = sha256.k; ascii += '\x80';
             while (ascii.length % 64 - 56) ascii += '\x00';
             for (i = 0; i < ascii.length; i++) words[i >> 2] |= ascii.charCodeAt(i) << ((3 - i) % 4) * 8;
             words[words.length] = (len / maxWord) | 0; words[words.length] = len;
             for (j = 0; j < words.length;) {
-                const w = words.slice(j, j += 16), old = hash;
-                hash = hash.slice(0, 8);
+                const w = words.slice(j, j += 16), old = hash; hash = hash.slice(0, 8);
                 for (i = 0; i < 64; i++) {
                     const w15 = w[i - 15], w2 = w[i - 2], a = hash[0], e = hash[4];
-                    const t1 = hash[7] + (rr(e,6)^rr(e,11)^rr(e,25)) + ((e&hash[5])^((~e)&hash[6])) + k[i] +
-                        (w[i] = i < 16 ? w[i] : (w[i-16] + (rr(w15,7)^rr(w15,18)^(w15>>>3)) + w[i-7] + (rr(w2,17)^rr(w2,19)^(w2>>>10))) | 0);
+                    const t1 = hash[7] + (rr(e,6)^rr(e,11)^rr(e,25)) + ((e&hash[5])^((~e)&hash[6])) + k[i] + (w[i] = i < 16 ? w[i] : (w[i-16] + (rr(w15,7)^rr(w15,18)^(w15>>>3)) + w[i-7] + (rr(w2,17)^rr(w2,19)^(w2>>>10))) | 0);
                     const t2 = (rr(a,2)^rr(a,13)^rr(a,22)) + ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
-                    hash = [(t1 + t2) | 0].concat(hash);
-                    hash[4] = (hash[4] + t1) | 0;
+                    hash = [(t1 + t2) | 0].concat(hash); hash[4] = (hash[4] + t1) | 0;
                 }
                 for (i = 0; i < 8; i++) hash[i] = (hash[i] + old[i]) | 0;
             }
-            for (i = 0; i < 8; i++) for (j = 3; j + 1; j--) {
-                const b = (hash[i] >> (j * 8)) & 255;
-                res += (b < 16 ? '0' : '') + b.toString(16);
-            }
+            for (i = 0; i < 8; i++) for (j = 3; j + 1; j--) { const b = (hash[i] >> (j * 8)) & 255; res += (b < 16 ? '0' : '') + b.toString(16); }
             return res;
         }
         const hashPassword = pw => "sha256:" + sha256(utf8ToBinaryString("mking_salt_v1:" + String(pw)));
         const isHashedPassword = s => typeof s === "string" && s.startsWith("sha256:");
         const verifyPassword = (inp, st) => !st ? false : (isHashedPassword(st) ? hashPassword(inp) === st : inp === st);
-        function togglePassVisibility(id, btn) {
-            let el = document.getElementById(id); if (!el) return;
-            el.type = el.type === "password" ? "text" : "password";
-            if (btn) btn.innerText = el.type === "password" ? "👁️" : "🙈";
-        }
+        function togglePassVisibility(id, btn) { let el = document.getElementById(id); if (!el) return; el.type = el.type === "password" ? "text" : "password"; if (btn) btn.innerText = el.type === "password" ? "👁️" : "🙈"; }
         const escapeHTML = s => (s === null || s === undefined) ? "" : String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
         const safeImageURL = (u, fb) => (!u || typeof u !== "string") ? fb : (/^(https?:\/\/|data:image\/(png|jpe?g|gif|webp|svg\+xml);)/i.test(u.trim()) ? u.trim() : fb);
         const getLocalDateString = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
         function normalizePhone(val) {
             let d = String(val || "").replace(/^MK/i, '').replace(/\D/g, '');
-            if (d.length > 10) {
-                if (d.startsWith('0091') && d.length === 14) d = d.slice(4);
-                else if (d.startsWith('91') && d.length === 12) d = d.slice(2);
-                else if (d.startsWith('0') && d.length === 11) d = d.slice(1);
-            }
+            if (d.length > 10) { if (d.startsWith('0091') && d.length === 14) d = d.slice(4); else if (d.startsWith('91') && d.length === 12) d = d.slice(2); else if (d.startsWith('0') && d.length === 11) d = d.slice(1); }
             return d;
         }
-        function formatForumDateTime(d = new Date()) {
-            const m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-            let h = d.getHours(), ap = h >= 12 ? "PM" : "AM";
-            h = h % 12 || 12;
-            return `${String(d.getDate()).padStart(2,"0")} ${m[d.getMonth()]} ${String(h).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")} ${ap}`;
-        }
+        function formatForumDateTime(d = new Date()) { const m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; let h = d.getHours(), ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; return `${String(d.getDate()).padStart(2,"0")} ${m[d.getMonth()]} ${String(h).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")} ${ap}`; }
         const isChatTimeOpen = (d = new Date()) => { const h = d.getHours(); return h >= 7 && h <= 23; };
         const isStrictPositiveInt = s => /^\d+$/.test(String(s || "").trim()) && parseInt(s, 10) > 0;
         function getUrlRefCode() { try { let r = normalizePhone(new URLSearchParams(window.location.search).get('ref') || ""); return r.length === 10 ? r : ""; } catch (e) { return ""; } }
@@ -246,9 +273,7 @@
 
         let logoTapCount = 0, logoTapTimer = null;
         function handleLogoTap(isLoginScreen = false) {
-            logoTapCount++;
-            clearTimeout(logoTapTimer);
-            logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1800);
+            logoTapCount++; clearTimeout(logoTapTimer); logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1800);
             if (logoTapCount >= 5) { logoTapCount = 0; clearTimeout(logoTapTimer); navigate('adminLogin'); return; }
             if (!isLoginScreen && state.currentScreen !== 'home') navigate('home');
         }
@@ -288,9 +313,7 @@
         const saveUserToFB = (ph) => {
             let u = state.users[ph]; if (!u) return Promise.resolve();
             let copy = { ...u };
-            if (Array.isArray(copy.referralHistory)) {
-                let rh = {}; copy.referralHistory.forEach(h => { if (h && h.id) rh[h.id] = h; }); copy.referralHistory = rh;
-            }
+            if (Array.isArray(copy.referralHistory)) { let rh = {}; copy.referralHistory.forEach(h => { if (h && h.id) rh[h.id] = h; }); copy.referralHistory = rh; }
             return mkRef('users/' + ph).set(copy);
         };
         const adjustUserBalanceFB = (ph, delta) => mkRef('users/' + ph + '/balance').transaction(cur => Math.round(((Number(cur) || 0) + delta) * 100) / 100);
@@ -316,11 +339,9 @@
 
         function updateChromeUI() {
             if (state.currentUserPhone && state.users[state.currentUserPhone]) {
-                let hb = document.getElementById('headerBalance');
-                if (hb) hb.innerText = state.users[state.currentUserPhone].balance;
+                let hb = document.getElementById('headerBalance'); if (hb) hb.innerText = state.users[state.currentUserPhone].balance;
             }
-            let nb = document.getElementById('noticeBoardDisplay');
-            if (nb) nb.innerHTML = `📌 <b>Notice:</b> ${escapeHTML(state.noticeText)}`;
+            let nb = document.getElementById('noticeBoardDisplay'); if (nb) nb.innerHTML = `📌 <b>Notice:</b> ${escapeHTML(state.noticeText)}`;
         }
 
         function applyFirebaseSnapshot(data) {
@@ -341,32 +362,24 @@
             }
             if (!normUsers[DEFAULT_VIP_PHONE]) normUsers[DEFAULT_VIP_PHONE] = { name:"M.KING VIP", balance:0, phone:DEFAULT_VIP_PHONE, password:hashPassword("vip_sys_" + Date.now()), avatar:"", bankDetails:"", upiDetails:"", isSystem:true };
             state.users = normUsers;
-
             let mList = toList(data.markets);
             state.markets = (mList.length ? mList : defaultMarkets).map((m, i) => {
                 const d = defaultMarkets[i] || { openTime:"10:00", openAmPm:"AM", closeTime:"12:00", closeAmPm:"PM" };
                 const normChart = toList(m.chart).map(c => (typeof c === "string" ? { date:"", result:c } : c));
                 return { ...m, openTime:(m.openTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.openTime).trim()))?String(m.openTime).trim():d.openTime, openAmPm:m.openAmPm||d.openAmPm, closeTime:(m.closeTime && /^(0?[1-9]|1[0-2]):[0-5]\d$/.test(String(m.closeTime).trim()))?String(m.closeTime).trim():d.closeTime, closeAmPm:m.closeAmPm||d.closeAmPm, isHoliday:Boolean(m.isHoliday), resultDate:m.resultDate||null, chart:normChart };
             }).sort((a,b) => a.id - b.id);
-
             let rList = toList(data.gameRates);
             state.gameRates = rList.length ? rList : [...defaultRates];
             defaultRates.forEach(dr => { if (!state.gameRates.some(r => r.name === dr.name)) state.gameRates.push({ ...dr }); });
-
             state.bids = toList(data.bids).sort((a,b)=>(a.id||0)-(b.id||0));
             state.depositRequests = toList(data.depositRequests).sort((a,b)=>(a.id||0)-(b.id||0));
             state.withdrawRequests = toList(data.withdrawRequests).sort((a,b)=>(a.id||0)-(b.id||0));
             state.forgotRequests = toList(data.forgotRequests).sort((a,b)=>(a.id||0)-(b.id||0));
             state.transactions = toList(data.transactions).sort((a,b)=>(a.id||0)-(b.id||0));
             state.giftCommissions = toList(data.giftCommissions).sort((a,b)=>(a.id||0)-(b.id||0));
-
             let normChats = {};
             if (data.guesserChats && typeof data.guesserChats === "object") {
-                Object.keys(data.guesserChats).forEach(gp => {
-                    normChats[gp] = {};
-                    let gMap = data.guesserChats[gp];
-                    if (gMap && typeof gMap === "object") Object.keys(gMap).forEach(bp => { normChats[gp][bp] = toList(gMap[bp]).sort((a,b)=>(a.id||0)-(b.id||0)); });
-                });
+                Object.keys(data.guesserChats).forEach(gp => { normChats[gp] = {}; let gMap = data.guesserChats[gp]; if (gMap && typeof gMap === "object") Object.keys(gMap).forEach(bp => { normChats[gp][bp] = toList(gMap[bp]).sort((a,b)=>(a.id||0)-(b.id||0)); }); });
             }
             state.guesserChats = normChats;
             state.guessingPosts = toList(data.guessingPosts).map(p => ({ ...p, likedBy:toList(p.likedBy), comments:toList(p.comments), wishes:toList(p.wishes), quoteChain:toList(p.quoteChain) })).sort((a,b)=>(a.id||0)-(b.id||0));
@@ -378,7 +391,6 @@
             if (state.currentScreen !== 'adminLogin' && state.currentScreen !== 'login' && state.currentScreen !== 'loading' && enforceNotBlocked()) return;
             const isTyping = ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement ? document.activeElement.tagName : "");
             const root = document.getElementById('appRoot'); if (!root) return;
-
             if (state.currentScreen === 'home') renderHome(root);
             else if (state.currentScreen === 'bids') renderBids(root);
             else if (state.currentScreen === 'rates') renderRates(root);
@@ -391,13 +403,10 @@
                     let gMap = state.guesserChats[gp] || {}, buyers = Object.keys(gMap);
                     let targetBuyer = isAuthor ? (state.activeChatBuyerPhone && gMap[state.activeChatBuyerPhone] ? state.activeChatBuyerPhone : (buyers[0] || null)) : state.currentUserPhone;
                     let thread = targetBuyer ? (gMap[targetBuyer] || []) : [];
-                    area.innerHTML = buildChatMessagesHTML(thread, isVipAdm, isAuthor);
-                    area.scrollTop = area.scrollHeight;
+                    area.innerHTML = buildChatMessagesHTML(thread, isVipAdm, isAuthor); area.scrollTop = area.scrollHeight;
                 } else if (!isTyping) renderChatBox(root, state.activeChatGuesserPhone);
             } else if (state.currentScreen === 'guessing') {
-                if (!isTyping && !state.guessShowComposer && !state.guessQuoteTargetId) {
-                    let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML();
-                }
+                if (!isTyping && !state.guessShowComposer && !state.guessQuoteTargetId) { let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML(); }
             } else if (state.currentScreen === 'profile' && !isTyping) renderProfile(root);
             else if (state.currentScreen === 'adminLogin' && state.isAdminLoggedIn && !isTyping) renderAdmin(root);
         }
@@ -421,25 +430,19 @@
         }
         function parseMarketDate(timeStr, ampm, refNow) {
             let [h, m] = (timeStr || "10:00").split(':').map(n => parseInt(n, 10));
-            if (isNaN(h)) h = 10; if (isNaN(m)) m = 0;
-            let ap = (ampm || "").toUpperCase();
+            if (isNaN(h)) h = 10; if (isNaN(m)) m = 0; let ap = (ampm || "").toUpperCase();
             if (ap === "PM" && h < 12) h += 12; if (ap === "AM" && h === 12) h = 0;
             return new Date(refNow.getFullYear(), refNow.getMonth(), refNow.getDate(), h, m, 0, 0);
         }
         function getMarketSessionStatus(market, refNow = new Date()) {
-            let ot = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", refNow);
-            let ct = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", refNow);
-            if (ct.getTime() <= ot.getTime()) {
-                let yOpen = new Date(ot.getTime()); yOpen.setDate(yOpen.getDate() - 1);
-                if (refNow.getTime() < ct.getTime()) ot = yOpen; else ct.setDate(ct.getDate() + 1);
-            }
+            let ot = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", refNow), ct = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", refNow);
+            if (ct.getTime() <= ot.getTime()) { let yOpen = new Date(ot.getTime()); yOpen.setDate(yOpen.getDate() - 1); if (refNow.getTime() < ct.getTime()) ot = yOpen; else ct.setDate(ct.getDate() + 1); }
             if (market.isHoliday) return { openTarget:ot, closeTarget:ct, isOpenSessionActive:false, isCloseSessionActive:false, isMarketActive:false, isHoliday:true };
             let active = refNow.getTime() < ct.getTime();
             return { openTarget:ot, closeTarget:ct, isOpenSessionActive:refNow.getTime() < ot.getTime(), isCloseSessionActive:active, isMarketActive:active, isHoliday:false };
         }
         function getMarketCycleDate(market, now = new Date()) {
-            let ot = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", now);
-            let ct = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", now);
+            let ot = parseMarketDate(market.openTime || "10:00", market.openAmPm || "AM", now), ct = parseMarketDate(market.closeTime || "12:00", market.closeAmPm || "PM", now);
             if (ct.getTime() <= ot.getTime() && now.getTime() < ct.getTime()) ot.setDate(ot.getDate() - 1);
             return getLocalDateString(ot);
         }
@@ -459,10 +462,8 @@
         function processReferralDeposit(depositorPhone, depositAmount) {
             let dep = state.users[depositorPhone]; if (!dep || !dep.referredBy) return;
             let ref = state.users[dep.referredBy]; if (!ref || ref.phone === depositorPhone || ref.isSystem) return;
-            let prevTotal = dep.referralTotalDeposited || 0, newTotal = prevTotal + depositAmount;
-            dep.referralTotalDeposited = newTotal;
+            let prevTotal = dep.referralTotalDeposited || 0, newTotal = prevTotal + depositAmount; dep.referralTotalDeposited = newTotal;
             let nowStr = new Date().toLocaleString(), firstBonusGivenNow = false, totalCreditForRef = 0;
-
             if (!dep.referralFirstBonusPaid && newTotal >= 200) {
                 dep.referralFirstBonusPaid = true; firstBonusGivenNow = true; totalCreditForRef += 100;
                 let h1 = { id:genId(), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:100, type:"Starting Bonus (₹200+ Deposit)", time:nowStr };
@@ -470,19 +471,11 @@
                 let extraAmt = Math.min(depositAmount, newTotal - 200);
                 if (extraAmt > 0) {
                     let extraComm = Math.round((extraAmt * 0.03) * 100) / 100;
-                    if (extraComm > 0) {
-                        totalCreditForRef += extraComm;
-                        let h2 = { id:genId(), friendPhone:dep.phone, friendName:dep.name, depositAmount:extraAmt, commission:extraComm, type:"3% Commission (Extra Deposit)", time:nowStr };
-                        mkRef(`users/${ref.phone}/referralHistory/${h2.id}`).set(h2);
-                    }
+                    if (extraComm > 0) { totalCreditForRef += extraComm; let h2 = { id:genId(), friendPhone:dep.phone, friendName:dep.name, depositAmount:extraAmt, commission:extraComm, type:"3% Commission (Extra Deposit)", time:nowStr }; mkRef(`users/${ref.phone}/referralHistory/${h2.id}`).set(h2); }
                 }
             } else {
                 let comm = Math.round((depositAmount * 0.03) * 100) / 100;
-                if (comm > 0) {
-                    totalCreditForRef += comm;
-                    let h3 = { id:genId(), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:comm, type:"3% Commission", time:nowStr };
-                    mkRef(`users/${ref.phone}/referralHistory/${h3.id}`).set(h3);
-                }
+                if (comm > 0) { totalCreditForRef += comm; let h3 = { id:genId(), friendPhone:dep.phone, friendName:dep.name, depositAmount, commission:comm, type:"3% Commission", time:nowStr }; mkRef(`users/${ref.phone}/referralHistory/${h3.id}`).set(h3); }
             }
             mkRef(`users/${dep.phone}`).update({ referralTotalDeposited:newTotal, referralFirstBonusPaid:Boolean(dep.referralFirstBonusPaid || firstBonusGivenNow) });
             if (totalCreditForRef > 0) {
@@ -498,7 +491,7 @@
             ['mainHeader','noticeBoardDisplay','bottomNav'].forEach(id => { let e = document.getElementById(id); if (e) e.style.display = 'none'; });
             let root = document.getElementById('appRoot'); if (!root) return;
             let isReg = state.authTab === 'register';
-            root.innerHTML = `<div class="form-card" style="max-width:350px;margin:30px auto;text-align:center;border:2px solid var(--primary);">
+            root.innerHTML = `<div style="max-width:350px;margin:20px auto;">${getInstallBannerHTML()}<div class="form-card" style="text-align:center;border:2px solid var(--primary);">
                 <h2 onclick="handleLogoTap(true)" style="color:var(--primary);margin-bottom:5px;cursor:pointer;user-select:none;">M.KING 👑</h2>
                 <p style="color:#cbd5e1;font-size:12px;margin-bottom:15px;">${isReg ? 'नया खाता बनाएं' : 'अपने खाते में लॉगिन करें'}</p>
                 <div class="tab-row"><button class="tab-btn ${!isReg?'active':''}" onclick="switchAuthTab('login')">Login</button><button class="tab-btn ${isReg?'active':''}" onclick="switchAuthTab('register')">New Register</button></div>
@@ -515,7 +508,7 @@
                     <button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;font-size:15px;padding:12px;margin-bottom:10px;" onclick="handlePlayerLogin()">Login</button>
                     <button class="btn" style="background:transparent;color:var(--primary);font-size:12px;" onclick="renderForgotScreen()">❓ Forgot Password?</button>
                 `}
-            </div>`;
+            </div></div>`;
         }
         function renderForgotScreen() {
             if (homeTimerInterval) clearInterval(homeTimerInterval);
@@ -573,11 +566,7 @@
             if (!isHashedPassword(user.password)) { user.password = hashPassword(pass); mkRef(`users/${phone}/password`).set(user.password); }
             completeUserLogin(phone);
         }
-        function logoutPlayer() {
-            if (homeTimerInterval) clearInterval(homeTimerInterval);
-            localStorage.removeItem('mk_logged_in_phone');
-            state.currentUserPhone = null; state.bidCart = []; state.authTab = 'login'; renderLoginScreen();
-        }
+        function logoutPlayer() { if (homeTimerInterval) clearInterval(homeTimerInterval); localStorage.removeItem('mk_logged_in_phone'); state.currentUserPhone = null; state.bidCart = []; state.authTab = 'login'; renderLoginScreen(); }
 
         function navigate(screen, param1 = null) {
             if (state.currentScreen === 'playGame' && screen !== 'playGame' && state.bidCart.length > 0) {
@@ -617,7 +606,7 @@
             if (homeTimerInterval) clearInterval(homeTimerInterval);
             syncDailyMarketResults();
             let waNum = encodeURIComponent((state.adminWhatsApp || "").replace(/\D/g, ""));
-            let html = `<div class="quick-actions"><div class="q-btn" onclick="navigate('deposit')">➕ Deposit</div><div class="q-btn" onclick="navigate('profile')">🏦 Withdraw</div><a class="q-btn" href="https://wa.me/${waNum}?text=Hello%20Admin,%20I%20need%20help" target="_blank" rel="noopener noreferrer" style="background:linear-gradient(135deg,#059669,#22c55e);border-color:#4ade80;color:#052e16;">💬 WhatsApp</a></div>`;
+            let html = `<div class="quick-actions"><div class="q-btn" onclick="navigate('deposit')">➕ Deposit</div><div class="q-btn" onclick="navigate('profile')">🏦 Withdraw</div><a class="q-btn" href="https://wa.me/${waNum}?text=Hello%20Admin,%20I%20need%20help" target="_blank" rel="noopener noreferrer" style="background:linear-gradient(135deg,#059669,#22c55e);border-color:#4ade80;color:#052e16;">💬 WhatsApp</a></div>` + getInstallBannerHTML();
             if (!state.markets.length) html += `<p style="text-align:center;color:#cbd5e1;margin-top:20px;">कोई मार्केट उपलब्ध नहीं है।</p>`;
             else {
                 let now = new Date();
@@ -771,18 +760,11 @@
                 if ((needOpen && !st.isOpenSessionActive) || (!needOpen && !st.isCloseSessionActive)) { isSubmittingBids = false; return alert(`❌ ${m.name} (${b.session}) का समय समाप्त हो चुका है!`); }
             }
             let myPhone = state.currentUserPhone;
-            mkRef(`users/${myPhone}/balance`).transaction(cur => {
-                let bal = Number(cur) || 0; if (bal < total) return;
-                return Math.round((bal - total) * 100) / 100;
-            }, (err, committed) => {
+            mkRef(`users/${myPhone}/balance`).transaction(cur => { let bal = Number(cur) || 0; if (bal < total) return; return Math.round((bal - total) * 100) / 100; }, (err, committed) => {
                 isSubmittingBids = false;
                 if (err || !committed) return alert(err ? "❌ नेटवर्क त्रुटि, कृपया पुनः प्रयास करें!" : "पर्याप्त बैलेंस नहीं है!");
                 let today = getLocalDateString(now), nt = now.toLocaleTimeString();
-                cartCopy.forEach(b => {
-                    const m = state.markets.find(mk => mk.id === b.marketId);
-                    let bidObj = { ...b, date: m ? getMarketCycleDate(m, now) : today, status:"PENDING", winAmount:0, time:nt };
-                    state.bids.push(bidObj); saveBidToFB(bidObj);
-                });
+                cartCopy.forEach(b => { const m = state.markets.find(mk => mk.id === b.marketId); let bidObj = { ...b, date: m ? getMarketCycleDate(m, now) : today, status:"PENDING", winAmount:0, time:nt }; state.bids.push(bidObj); saveBidToFB(bidObj); });
                 addTransactionToFB({ phone:myPhone, type:`Bids Placed (${cartCopy.length})`, amount:-total, date:today, time:now.toLocaleString() });
                 state.bidCart = []; alert("बिड सफलतापूर्वक लग गई!"); navigate('bids');
             });
@@ -809,16 +791,8 @@
 
         function toggleGuessComposer() { state.guessShowComposer = !state.guessShowComposer; state.guessQuoteTargetId = null; renderGuessingForum(document.getElementById('appRoot')); }
         function toggleGuessSearchBar() { state.guessShowSearchBar = !state.guessShowSearchBar; renderGuessingForum(document.getElementById('appRoot')); }
-        function toggleOriginalPostFilter() {
-            state.guessFilterOriginalOnly = !state.guessFilterOriginalOnly;
-            let pill = document.getElementById('gfOrigPill'); if (pill) { pill.classList.toggle('on', state.guessFilterOriginalOnly); pill.innerText = state.guessFilterOriginalOnly ? 'ON' : 'OFF'; }
-            let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML();
-        }
-        function applyGuessFilters() {
-            let sEl = document.getElementById('gfSearchInput'), mEl = document.getElementById('gfMarketFilter');
-            if (sEl) state.guessSearchQuery = sEl.value; if (mEl) state.guessFilterMarket = mEl.value;
-            let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML();
-        }
+        function toggleOriginalPostFilter() { state.guessFilterOriginalOnly = !state.guessFilterOriginalOnly; let pill = document.getElementById('gfOrigPill'); if (pill) { pill.classList.toggle('on', state.guessFilterOriginalOnly); pill.innerText = state.guessFilterOriginalOnly ? 'ON' : 'OFF'; } let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML(); }
+        function applyGuessFilters() { let sEl = document.getElementById('gfSearchInput'), mEl = document.getElementById('gfMarketFilter'); if (sEl) state.guessSearchQuery = sEl.value; if (mEl) state.guessFilterMarket = mEl.value; let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML(); }
         function insertGuessTemplate() { let mEl = document.getElementById('guessMarket'), tEl = document.getElementById('guessText'); if (!tEl) return; tEl.value = `${mEl ? mEl.value : 'MARKET'} OPEN\n\n4\n9\n8\n\n48___49___98___97___87___82\n\n167___112___126___667\n260___125___170___117\n\nBest of luck 🤞🤞👍👍`; tEl.focus(); }
         function openQuoteBox(id) { state.guessQuoteTargetId = state.guessQuoteTargetId === id ? null : id; state.guessShowComposer = false; let feed = document.getElementById('gfPostsFeed'); if (feed) feed.innerHTML = buildGuessPostsHTML(); if (state.guessQuoteTargetId) document.getElementById(`quoteText_${id}`)?.focus(); }
         function setQuickQuoteText(id, txt) { let q = document.getElementById(`quoteText_${id}`); if (q) q.value = txt; }
@@ -832,19 +806,10 @@
             let prev = Array.isArray(target.quoteChain) ? target.quoteChain.slice(-3) : (target.quoteOf ? [target.quoteOf] : []);
             let chain = [...prev, { id:target.id, name:target.name, phone:target.phone, time:target.time, text:target.text }];
             let postObj = { id:genId(), phone:state.currentUserPhone, name:user.name, market:target.market, text, time:formatForumDateTime(), likes:0, likedBy:[], comments:[], wishes:[], quoteOf:chain[chain.length-1], quoteChain:chain };
-            state.guessingPosts.push(postObj); saveGuessPostToFB(postObj);
-            state.lastGuessPostTs = nowMs; state.guessQuoteTargetId = null; renderGuessingForum(document.getElementById('appRoot'));
+            state.guessingPosts.push(postObj); saveGuessPostToFB(postObj); state.lastGuessPostTs = nowMs; state.guessQuoteTargetId = null; renderGuessingForum(document.getElementById('appRoot'));
         }
-        function shareGuessPost(id) {
-            let p = state.guessingPosts.find(x => x.id === id); if (!p) return;
-            let msg = `🎯 M.KING Guessing (${p.market})\nBy ${p.name}:\n\n${p.text}\n\nJoin: ${REFERRAL_BASE_URL}`;
-            if (navigator.share) navigator.share({ title:`M.KING - ${p.market}`, text:msg }).catch(()=>{}); else fallbackCopyText(msg);
-        }
-        function getGuesserRoleBadge(p) {
-            if (p.phone === DEFAULT_VIP_PHONE) return `<span class="gf-role-badge vip">VIP</span>`;
-            if ((p.likes || 0) >= 3) return `<span class="gf-role-badge">Expert</span>`;
-            return `<span class="gf-role-badge" style="border-color:#38bdf8;color:#bae6fd;background:rgba(56,189,248,0.16);">Guesser</span>`;
-        }
+        function shareGuessPost(id) { let p = state.guessingPosts.find(x => x.id === id); if (!p) return; let msg = `🎯 M.KING Guessing (${p.market})\nBy ${p.name}:\n\n${p.text}\n\nJoin: ${REFERRAL_BASE_URL}`; if (navigator.share) navigator.share({ title:`M.KING - ${p.market}`, text:msg }).catch(()=>{}); else fallbackCopyText(msg); }
+        function getGuesserRoleBadge(p) { if (p.phone === DEFAULT_VIP_PHONE) return `<span class="gf-role-badge vip">VIP</span>`; if ((p.likes || 0) >= 3) return `<span class="gf-role-badge">Expert</span>`; return `<span class="gf-role-badge" style="border-color:#38bdf8;color:#bae6fd;background:rgba(56,189,248,0.16);">Guesser</span>`; }
         function getUnreadChatsCount() {
             let me = state.currentUserPhone, unread = 0, inc = state.guesserChats[me] || {};
             Object.keys(inc).forEach(bp => { (inc[bp] || []).forEach(m => { if (m.sender !== me && m.read === false) unread++; }); });
@@ -903,37 +868,20 @@
             let mEl = document.getElementById('guessMarket'), tEl = document.getElementById('guessText'); if (!mEl || !tEl) return;
             let text = tEl.value.trim(); if (!text) return alert("कृपया अपना गेसिंग नंबर लिखें!");
             let postObj = { id:genId(), phone:state.currentUserPhone, name:state.users[state.currentUserPhone].name, market:mEl.value, text, time:formatForumDateTime(), likes:0, likedBy:[], comments:[], wishes:[] };
-            state.guessingPosts.push(postObj); saveGuessPostToFB(postObj);
-            state.lastGuessPostTs = nowMs; state.guessShowComposer = false; renderGuessingForum(document.getElementById('appRoot'));
+            state.guessingPosts.push(postObj); saveGuessPostToFB(postObj); state.lastGuessPostTs = nowMs; state.guessShowComposer = false; renderGuessingForum(document.getElementById('appRoot'));
         }
-        function deleteGuessingPost(id) {
-            let p = state.guessingPosts.find(x => x.id === id); if (!p || (p.phone !== state.currentUserPhone && !state.isAdminLoggedIn)) return;
-            if (!confirm("पोस्ट डिलीट करें?")) return;
-            state.guessingPosts = state.guessingPosts.filter(x => x.id !== id); deleteGuessPostFromFB(id);
-            let card = document.getElementById(`guessPostCard_${id}`); if (card) card.remove(); else renderGuessingForum(document.getElementById('appRoot'));
-        }
+        function deleteGuessingPost(id) { let p = state.guessingPosts.find(x => x.id === id); if (!p || (p.phone !== state.currentUserPhone && !state.isAdminLoggedIn)) return; if (!confirm("पोस्ट डिलीट करें?")) return; state.guessingPosts = state.guessingPosts.filter(x => x.id !== id); deleteGuessPostFromFB(id); let card = document.getElementById(`guessPostCard_${id}`); if (card) card.remove(); else renderGuessingForum(document.getElementById('appRoot')); }
         function toggleLike(id) {
-            if (enforceNotBlocked()) return;
-            let myPhone = state.currentUserPhone;
-            mkRef(`guessingPosts/${id}`).transaction(cur => {
-                if (!cur) return cur;
-                let lb = toList(cur.likedBy), idx = lb.indexOf(myPhone);
-                if (idx === -1) lb.push(myPhone); else lb.splice(idx, 1);
-                cur.likedBy = lb; cur.likes = lb.length; return cur;
-            }, (err, committed, snap) => {
-                if (err || !committed) return;
-                let val = snap.val(), btn = document.getElementById(`likeBtn_${id}`);
+            if (enforceNotBlocked()) return; let myPhone = state.currentUserPhone;
+            mkRef(`guessingPosts/${id}`).transaction(cur => { if (!cur) return cur; let lb = toList(cur.likedBy), idx = lb.indexOf(myPhone); if (idx === -1) lb.push(myPhone); else lb.splice(idx, 1); cur.likedBy = lb; cur.likes = lb.length; return cur; }, (err, committed, snap) => {
+                if (err || !committed) return; let val = snap.val(), btn = document.getElementById(`likeBtn_${id}`);
                 if (btn && val) { btn.classList.toggle('liked', toList(val.likedBy).includes(myPhone)); btn.innerText = `❤️ Like (${val.likes || 0})`; }
             });
         }
         function addComment(id) {
-            if (enforceNotBlocked()) return;
-            let inp = document.getElementById(`commentInput_${id}`); if (!inp) return;
-            let text = inp.value.trim(); if (!text) return;
+            if (enforceNotBlocked()) return; let inp = document.getElementById(`commentInput_${id}`); if (!inp) return; let text = inp.value.trim(); if (!text) return;
             let u = state.users[state.currentUserPhone]; inp.value = '';
-            mkRef(`guessingPosts/${id}/comments`).transaction(cur => {
-                let arr = toList(cur); arr.push({ phone:state.currentUserPhone, name:u.name, text }); return arr;
-            }, (err, committed, snap) => {
+            mkRef(`guessingPosts/${id}/comments`).transaction(cur => { let arr = toList(cur); arr.push({ phone:state.currentUserPhone, name:u.name, text }); return arr; }, (err, committed, snap) => {
                 if (err || !committed) return;
                 let box = document.getElementById(`commentsContainer_${id}`);
                 if (box) { let d = document.createElement('div'); d.style.cssText = "background:rgba(24,33,77,0.88);padding:6px 9px;margin-top:4px;border-radius:8px;font-size:11px;color:#e2e8f0;border-left:2px solid var(--primary);"; d.innerHTML = `<b>${escapeHTML(u.name)}:</b> ${escapeHTML(text)}`; box.appendChild(d); }
@@ -942,16 +890,10 @@
             });
         }
         function sendWish(id) {
-            if (enforceNotBlocked()) return;
-            let u = state.users[state.currentUserPhone], alreadyWished = false;
-            mkRef(`guessingPosts/${id}/wishes`).transaction(cur => {
-                let arr = toList(cur); if (arr.includes(u.name)) { alreadyWished = true; return; } arr.push(u.name); return arr;
-            }, (err, committed, snap) => {
-                if (alreadyWished) return alert("आप पहले ही बधाई दे चुके हैं!");
-                if (err || !committed) return;
-                let wb = document.getElementById(`wishesContainer_${id}`);
-                if (wb) { wb.style.display = 'block'; wb.innerHTML = `🎉 Wishes: ${toList(snap.val()).map(escapeHTML).join(', ')}`; }
-                alert("आपने बधाई भेज दी है!");
+            if (enforceNotBlocked()) return; let u = state.users[state.currentUserPhone], alreadyWished = false;
+            mkRef(`guessingPosts/${id}/wishes`).transaction(cur => { let arr = toList(cur); if (arr.includes(u.name)) { alreadyWished = true; return; } arr.push(u.name); return arr; }, (err, committed, snap) => {
+                if (alreadyWished) return alert("आप पहले ही बधाई दे चुके हैं!"); if (err || !committed) return;
+                let wb = document.getElementById(`wishesContainer_${id}`); if (wb) { wb.style.display = 'block'; wb.innerHTML = `🎉 Wishes: ${toList(snap.val()).map(escapeHTML).join(', ')}`; } alert("आपने बधाई भेज दी है!");
             });
         }
 
@@ -1007,33 +949,25 @@
             let area = document.getElementById('chatMsgArea'); if (area) area.scrollTop = area.scrollHeight;
         }
         function sendGift(gp, giftName, amt) {
-            if (enforceNotBlocked()) return;
-            let me = state.users[state.currentUserPhone]; if (!gp || gp === state.currentUserPhone) return;
-            let gU = state.users[gp];
-            if (gU && gU.isBlocked) return alert("🚫 यह यूज़र ब्लॉक है, इन्हें गिफ्ट नहीं भेजा जा सकता!");
-            mkRef(`users/${me.phone}/balance`).transaction(cur => {
-                let b = Number(cur) || 0; if (b < amt) return; return Math.round((b - amt) * 100) / 100;
-            }, (err, committed) => {
+            if (enforceNotBlocked()) return; let me = state.users[state.currentUserPhone]; if (!gp || gp === state.currentUserPhone) return;
+            let gU = state.users[gp]; if (gU && gU.isBlocked) return alert("🚫 यह यूज़र ब्लॉक है, इन्हें गिफ्ट नहीं भेजा जा सकता!");
+            mkRef(`users/${me.phone}/balance`).transaction(cur => { let b = Number(cur) || 0; if (b < amt) return; return Math.round((b - amt) * 100) / 100; }, (err, committed) => {
                 if (err || !committed) return alert(err ? "❌ नेटवर्क त्रुटि!" : "आपके वॉलेट में पर्याप्त बैलेंस नहीं है! कृपया पहले डिपॉजिट करें।");
                 let isVipReceiver = gp === DEFAULT_VIP_PHONE, adminComm = isVipReceiver ? amt : Math.round((amt * 0.20) * 100) / 100, guesserGet = Math.round((amt - adminComm) * 100) / 100;
-                let gName = gU ? gU.name : ("User " + gp.slice(-4));
-                if (gU && guesserGet > 0) adjustUserBalanceFB(gp, guesserGet);
+                let gName = gU ? gU.name : ("User " + gp.slice(-4)); if (gU && guesserGet > 0) adjustUserBalanceFB(gp, guesserGet);
                 saveChatMessageToFB(gp, me.phone, { id:genId(), sender:me.phone, senderName:me.name, text:`🎁 Sent a gift: ${giftName}`, isGift:true, read:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
                 let today = getLocalDateString(), nowStr = new Date().toLocaleString();
                 addTransactionToFB({ phone:me.phone, type:`Gift Sent to ${gName} (${giftName})`, amount:-amt, date:today, time:nowStr });
                 if (gU && guesserGet > 0) addTransactionToFB({ phone:gp, type:`Gift Received from ${me.name} (₹${amt} - ₹${adminComm} Admin Fee)`, amount:guesserGet, date:today, time:nowStr });
                 addGiftCommissionToFB({ id:genId(), date:today, time:nowStr, senderPhone:me.phone, senderName:me.name, receiverPhone:gp, receiverName:gName, giftName, giftAmount:amt, adminCommission:adminComm, guesserReceived:guesserGet });
-                alert(`✅ ${giftName} भेज दिया गया!\nअब आप ${gName} से सुबह 7:00 बजे से रात 12:00 बजे तक बात कर सकते हैं।`);
-                renderChatBox(document.getElementById('appRoot'), gp);
+                alert(`✅ ${giftName} भेज दिया गया!\nअब आप ${gName} से सुबह 7:00 बजे से रात 12:00 बजे तक बात कर सकते हैं।`); renderChatBox(document.getElementById('appRoot'), gp);
             });
         }
         function sendChatMessage(gp, bp) {
             if (enforceNotBlocked()) return;
             if (!isChatTimeOpen()) { alert("🌙 चैट का समय सुबह 7:00 बजे से रात 12:00 बजे तक है!"); return renderChatBox(document.getElementById('appRoot'), gp); }
-            let inp = document.getElementById('chatInputText'); if (!inp) return;
-            let text = inp.value.trim(); if (!text) return;
-            let isVipAdm = state.isAdminLoggedIn && gp === DEFAULT_VIP_PHONE, isAuth = gp === state.currentUserPhone || isVipAdm;
-            let key = isAuth ? bp : state.currentUserPhone; if (!key) return;
+            let inp = document.getElementById('chatInputText'); if (!inp) return; let text = inp.value.trim(); if (!text) return;
+            let isVipAdm = state.isAdminLoggedIn && gp === DEFAULT_VIP_PHONE, isAuth = gp === state.currentUserPhone || isVipAdm, key = isAuth ? bp : state.currentUserPhone; if (!key) return;
             inp.value = '';
             saveChatMessageToFB(gp, key, { id:genId(), sender:isVipAdm?DEFAULT_VIP_PHONE:state.currentUserPhone, senderName:isVipAdm?"M.KING VIP (Admin)":state.users[state.currentUserPhone].name, text, isGift:false, read:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
             renderChatBox(document.getElementById('appRoot'), gp);
@@ -1057,8 +991,7 @@
                 </div>`;
         }
         function submitDepositRequest() {
-            if (enforceNotBlocked()) return;
-            let aEl = document.getElementById('depAmtInput'), uEl = document.getElementById('depUtrInput'); if (!aEl || !uEl) return;
+            if (enforceNotBlocked()) return; let aEl = document.getElementById('depAmtInput'), uEl = document.getElementById('depUtrInput'); if (!aEl || !uEl) return;
             let raw = aEl.value.trim(), utr = uEl.value.trim().replace(/\s+/g,'').toUpperCase();
             if (!isStrictPositiveInt(raw) || parseInt(raw,10) < 100) return alert("❌ कम से कम ₹100 दर्ज करें!");
             if (!/^[A-Z0-9_-]{6,40}$/.test(utr)) return alert("❌ सही UTR / Ref नंबर दर्ज करें!");
@@ -1072,15 +1005,9 @@
         function legacyCopy(text) { let ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = "position:fixed;opacity:0;"; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); alert("✅ कॉपी हो गया!\n" + text); } catch (e) { prompt("कॉपी करें:", text); } document.body.removeChild(ta); }
 
         function claimReferralToWallet() {
-            if (enforceNotBlocked()) return;
-            let ph = state.currentUserPhone, claimedAmt = 0;
-            mkRef(`users/${ph}`).transaction(cur => {
-                if (!cur) return cur;
-                let rb = Number(cur.referralBalance || 0); if (rb <= 0) { claimedAmt = 0; return; }
-                claimedAmt = rb; cur.balance = Math.round(((Number(cur.balance) || 0) + rb) * 100) / 100; cur.referralBalance = 0; return cur;
-            }, (err, committed) => {
-                if (err) return alert("❌ नेटवर्क त्रुटि!");
-                if (!committed || claimedAmt <= 0) return alert("❌ Referral Commission Box में अभी कोई बैलेंस नहीं है!");
+            if (enforceNotBlocked()) return; let ph = state.currentUserPhone, claimedAmt = 0;
+            mkRef(`users/${ph}`).transaction(cur => { if (!cur) return cur; let rb = Number(cur.referralBalance || 0); if (rb <= 0) { claimedAmt = 0; return; } claimedAmt = rb; cur.balance = Math.round(((Number(cur.balance) || 0) + rb) * 100) / 100; cur.referralBalance = 0; return cur; }, (err, committed) => {
+                if (err) return alert("❌ नेटवर्क त्रुटि!"); if (!committed || claimedAmt <= 0) return alert("❌ Referral Commission Box में अभी कोई बैलेंस नहीं है!");
                 addTransactionToFB({ phone:ph, type:"Referral Commission Added to Wallet", amount:claimedAmt, date:getLocalDateString(), time:new Date().toLocaleString() });
                 alert(`✅ ₹${claimedAmt} मेन वॉलेट में जुड़ गया!`); navigate('profile');
             });
@@ -1098,9 +1025,7 @@
             if (enforceNotBlocked()) return;
             let req = state.withdrawRequests.find(w => w.id === id && w.phone === state.currentUserPhone && w.status === "PENDING");
             if (!req || !confirm(`₹${req.amount} की विड्रॉल रिक्वेस्ट कैंसिल करें?`)) return;
-            mkRef(`withdrawRequests/${id}`).transaction(cur => {
-                if (!cur || cur.status !== "PENDING") return; cur.status = "CANCELLED"; return cur;
-            }, (err, committed) => {
+            mkRef(`withdrawRequests/${id}`).transaction(cur => { if (!cur || cur.status !== "PENDING") return; cur.status = "CANCELLED"; return cur; }, (err, committed) => {
                 if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!");
                 adjustUserBalanceFB(req.phone, req.amount);
                 addTransactionToFB({ phone:req.phone, type:"Withdrawal Cancelled (Refund)", amount:req.amount, date:getLocalDateString(), time:new Date().toLocaleString() });
@@ -1129,6 +1054,7 @@
                     <div style="margin-top:6px;display:flex;justify-content:center;gap:6px;"><label class="btn btn-sm btn-chart" style="cursor:pointer;">📷 Upload<input type="file" accept="image/*" style="display:none;" onchange="changeAvatarGallery(event)"></label><button class="btn btn-sm btn-chart" onclick="changeAvatarUrl()">🔗 URL</button></div>
                     <div style="margin-top:10px;"><input type="text" id="profileNameInput" value="${escapeHTML(u.name)}" style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:6px;border-radius:8px;text-align:center;font-weight:bold;width:72%;"> <button class="btn btn-sm btn-play" onclick="saveProfileName()">Save</button><div style="font-size:12px;color:#e2e8f0;margin-top:5px;">📱 ${escapeHTML(u.phone)} | Balance: <b style="color:#4ade80">₹${u.balance}</b></div></div>
                 </div>
+                ${getInstallBannerHTML()}
                 <div class="form-card"><button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;padding:12px;font-size:15px;" onclick="navigate('deposit')">➕ Deposit Points (QR & UPI)</button></div>
                 <div class="ref-box">
                     <h4 style="color:var(--primary);margin-bottom:6px;font-size:15px;">🎁 Refer & Earn (Referral Commission Box)</h4>
@@ -1152,36 +1078,18 @@
                 <button class="btn" style="background:linear-gradient(135deg,#be123c,#e11d48);color:#fff;width:100%;padding:10px;" onclick="logoutPlayer()">🔒 Logout</button>`;
         }
         function changeAvatarGallery(ev) {
-            let f = ev.target.files[0]; if (!f) return;
-            if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!");
-            let r = new FileReader();
-            r.onload = e => {
-                let img = new Image(); img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!");
-                img.onload = () => {
-                    let w = img.width, h = img.height, m = 180;
-                    if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; }
-                    let c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img,0,0,w,h);
-                    let av = c.toDataURL('image/jpeg', 0.7); state.users[state.currentUserPhone].avatar = av;
-                    mkRef(`users/${state.currentUserPhone}/avatar`).set(av); navigate('profile');
-                }; img.src = e.target.result;
-            }; r.readAsDataURL(f);
+            let f = ev.target.files[0]; if (!f) return; if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!");
+            let r = new FileReader(); r.onload = e => { let img = new Image(); img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!"); img.onload = () => { let w = img.width, h = img.height, m = 180; if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; } let c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img,0,0,w,h); let av = c.toDataURL('image/jpeg', 0.7); state.users[state.currentUserPhone].avatar = av; mkRef(`users/${state.currentUserPhone}/avatar`).set(av); navigate('profile'); }; img.src = e.target.result; }; r.readAsDataURL(f);
         }
-        function changeAvatarUrl() {
-            let u = prompt("HTTPS Image URL डालें:", ""); if (u === null) return;
-            if (!/^https?:\/\//i.test(u.trim())) return alert("❌ सही http/https URL डालें!");
-            let av = u.trim(); state.users[state.currentUserPhone].avatar = av; mkRef(`users/${state.currentUserPhone}/avatar`).set(av); navigate('profile');
-        }
+        function changeAvatarUrl() { let u = prompt("HTTPS Image URL डालें:", ""); if (u === null) return; if (!/^https?:\/\//i.test(u.trim())) return alert("❌ सही http/https URL डालें!"); let av = u.trim(); state.users[state.currentUserPhone].avatar = av; mkRef(`users/${state.currentUserPhone}/avatar`).set(av); navigate('profile'); }
         function saveProfileName() { let n = (document.getElementById('profileNameInput')?.value||'').trim(); if (n) { state.users[state.currentUserPhone].name = n; mkRef(`users/${state.currentUserPhone}/name`).set(n); alert("नाम सेव हो गया!"); navigate('profile'); } }
         function savePaymentDetails() { let b = (document.getElementById('userBankInput')?.value||'').trim(), u = (document.getElementById('userUpiInput')?.value||'').trim(); state.users[state.currentUserPhone].bankDetails = b; state.users[state.currentUserPhone].upiDetails = u; mkRef(`users/${state.currentUserPhone}`).update({ bankDetails:b, upiDetails:u }); alert("डिटेल्स सेव हो गई!"); }
         function sendWithdrawalRequest() {
-            if (enforceNotBlocked()) return;
-            let raw = (document.getElementById('withdrawAmt')?.value||'').trim(), u = state.users[state.currentUserPhone];
+            if (enforceNotBlocked()) return; let raw = (document.getElementById('withdrawAmt')?.value||'').trim(), u = state.users[state.currentUserPhone];
             if (!u.bankDetails && !u.upiDetails) return alert("❌ पहले Bank या UPI डिटेल्स सेव करें!");
             if (!isStrictPositiveInt(raw) || parseInt(raw,10) < 500) return alert("कम से कम ₹500 दर्ज करें!");
             let amt = parseInt(raw, 10);
-            mkRef(`users/${u.phone}/balance`).transaction(cur => {
-                let b = Number(cur) || 0; if (b < amt) return; return Math.round((b - amt) * 100) / 100;
-            }, (err, committed) => {
+            mkRef(`users/${u.phone}/balance`).transaction(cur => { let b = Number(cur) || 0; if (b < amt) return; return Math.round((b - amt) * 100) / 100; }, (err, committed) => {
                 if (err || !committed) return alert(err ? "❌ नेटवर्क त्रुटि!" : "पर्याप्त बैलेंस नहीं है!");
                 let req = { id:genId(), phone:u.phone, name:u.name, amount:amt, status:"PENDING", date:getLocalDateString(), time:new Date().toLocaleString() };
                 state.withdrawRequests.push(req); saveWithdrawToFB(req);
@@ -1196,9 +1104,7 @@
         }
         function renderRates(root) { root.innerHTML = `<h3 style="margin-bottom:12px;color:var(--primary);">📊 Official Game Rates</h3>` + state.gameRates.map(r => `<div class="list-card">${escapeHTML(r.name)}: <b style="color:#4ade80">${escapeHTML(r.rate)}</b></div>`).join(''); }
 
-        function renderAdminLogin(root) {
-            root.innerHTML = `<div class="form-card" style="max-width:350px;margin:40px auto;text-align:center;"><h3 style="color:var(--primary);margin-bottom:15px;">🔐 Admin Login</h3><div class="input-group"><input type="text" id="admLoginPhone" placeholder="Admin Mobile"></div><div class="input-group"><div class="pass-wrap"><input type="password" id="admLoginPass" placeholder="Password" onkeydown="if(event.key==='Enter') verifyAdminLogin()"><button type="button" class="pass-eye" onclick="togglePassVisibility('admLoginPass',this)">👁️</button></div></div><button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;margin-bottom:8px;" onclick="verifyAdminLogin()">Login to Admin</button>${state.currentUserPhone ? `<button class="btn btn-chart" style="width:100%;" onclick="navigate('home')">← Back to App</button>` : `<button class="btn btn-chart" style="width:100%;" onclick="renderLoginScreen()">← Back to Player Login</button>`}</div>`;
-        }
+        function renderAdminLogin(root) { root.innerHTML = `<div class="form-card" style="max-width:350px;margin:40px auto;text-align:center;"><h3 style="color:var(--primary);margin-bottom:15px;">🔐 Admin Login</h3><div class="input-group"><input type="text" id="admLoginPhone" placeholder="Admin Mobile"></div><div class="input-group"><div class="pass-wrap"><input type="password" id="admLoginPass" placeholder="Password" onkeydown="if(event.key==='Enter') verifyAdminLogin()"><button type="button" class="pass-eye" onclick="togglePassVisibility('admLoginPass',this)">👁️</button></div></div><button class="btn" style="background:linear-gradient(135deg,#10b981,#22c55e);color:#042f2e;width:100%;margin-bottom:8px;" onclick="verifyAdminLogin()">Login to Admin</button>${state.currentUserPhone ? `<button class="btn btn-chart" style="width:100%;" onclick="navigate('home')">← Back to App</button>` : `<button class="btn btn-chart" style="width:100%;" onclick="renderLoginScreen()">← Back to Player Login</button>`}</div>`; }
         function verifyAdminLogin() {
             let ph = (document.getElementById('admLoginPhone')?.value||'').trim(), pw = (document.getElementById('admLoginPass')?.value||'').trim();
             if (ph === state.adminCreds.phone && verifyPassword(pw, state.adminCreds.pass)) {
@@ -1297,6 +1203,7 @@
 
             root.innerHTML = `
                 <div class="flex-between" style="margin-bottom:15px;"><h3 style="color:var(--primary);">⚙️ Admin Dashboard</h3><div style="display:flex;gap:6px;">${state.currentUserPhone?`<button class="btn btn-sm btn-chart" onclick="navigate('home')">← App</button>`:''}<button class="btn btn-sm" style="background:#f43f5e;color:#fff;" onclick="adminLogout()">Logout</button></div></div>
+                <div class="admin-section"><h4>📲 PWA App Icons (Vercel Setup)</h4><p style="font-size:11px;color:#cbd5e1;margin-bottom:8px;">इन दोनों PNG आइकन को डाउनलोड करके Vercel पर ` + "`manifest.json`" + ` और ` + "`sw.js`" + ` के साथ अपलोड करें:</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><button class="btn btn-sm btn-play" onclick="downloadPwaIcon(192)">⬇️ icon-192.png</button><button class="btn btn-sm btn-play" onclick="downloadPwaIcon(512)">⬇️ icon-512.png</button></div></div>
                 <div class="admin-section"><h4>📈 Profit / Loss & Business Dashboard</h4><div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:8px;"><input type="date" id="admPnlDate" value="${today}" onchange="adminFilterPnL(false)" style="background:var(--surface);border:1px solid var(--border-soft);color:#fff;padding:8px;border-radius:8px;"><button class="btn btn-sm" style="background:var(--blue);color:#082f49;" onclick="adminFilterPnL(true)">All Time</button></div><div id="admPnlBox"></div></div>
                 <div class="admin-section"><h4>🎁 Gift Commission Report (Total: ₹${totalGiftCommAll})</h4><p style="font-size:11px;color:#cbd5e1;margin-bottom:8px;">हर गिफ्ट का 20% एडमिन कमीशन (₹50 में ₹10, ₹100 में ₹20, ₹150 में ₹30) यहाँ जुड़ता है:</p><div style="max-height:190px;overflow-y:auto;">${giftLogHtml}</div></div>
                 <div class="admin-section"><h4>👑 M.KING VIP Private Chat Inbox (${vipCnt})</h4><button class="btn btn-play" style="width:100%;" onclick="openChatWithGuesserPhone('${DEFAULT_VIP_PHONE}')">💬 Open VIP Chat Inbox (${vipCnt})</button></div>
@@ -1320,24 +1227,18 @@
         function adminResetUserPassword(ph, id) { let u = state.users[ph]; if (!u) return; let np = prompt(`${ph} के लिए नया पासवर्ड लिखें (4+ अक्षर):`); if (!np || np.trim().length < 4) return; u.password = hashPassword(np.trim()); mkRef(`users/${ph}/password`).set(u.password); state.forgotRequests = state.forgotRequests.filter(r => r.id !== id); removeForgotFromFB(id); alert("नया पासवर्ड सेट हो गया!"); navigate('adminLogin'); }
         function approveDeposit(id) {
             mkRef(`depositRequests/${id}`).transaction(cur => { if (!cur || cur.status !== "PENDING") return; cur.status = "APPROVED"; return cur; }, (err, committed, snap) => {
-                if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!");
-                let req = snap.val();
+                if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!"); let req = snap.val();
                 if (!state.users[req.phone]) { state.users[req.phone] = { name:req.name||("Player "+req.phone.slice(-4)), balance:0, phone:req.phone, password:"", avatar:"", bankDetails:"", upiDetails:"", referredBy:null, referralBalance:0, referralTotalEarned:0, referralHistory:[], referralFirstBonusPaid:false, referralTotalDeposited:0, isBlocked:false, blockReason:"", joinedAt:new Date().toLocaleDateString() }; saveUserToFB(req.phone); }
-                adjustUserBalanceFB(req.phone, req.amount);
-                addTransactionToFB({ phone:req.phone, type:`Deposit Approved (UTR: ${req.utr})`, amount:req.amount, date:getLocalDateString(), time:new Date().toLocaleString() });
+                adjustUserBalanceFB(req.phone, req.amount); addTransactionToFB({ phone:req.phone, type:`Deposit Approved (UTR: ${req.utr})`, amount:req.amount, date:getLocalDateString(), time:new Date().toLocaleString() });
                 processReferralDeposit(req.phone, req.amount); alert("डिपॉजिट अप्रूव हो गया!"); navigate('adminLogin');
             });
         }
         function rejectDeposit(id) { mkRef(`depositRequests/${id}`).transaction(cur => { if (!cur || cur.status !== "PENDING") return; cur.status = "REJECTED"; return cur; }, (err, committed) => { if (err || !committed) return alert("❌ यह रिक्वेस्ट पहले ही प्रोसेस हो चुकी है!"); alert("डिपॉजिट रिजेक्ट हो गया!"); navigate('adminLogin'); }); }
-        function handleQrUpload(ev) {
-            let f = ev.target.files[0]; if (!f) return; if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!");
-            let r = new FileReader(); r.onload = e => { let img = new Image(); img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!"); img.onload = () => { let w = img.width, h = img.height, m = 360; if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; } let c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img,0,0,w,h); state.depositQR = c.toDataURL('image/jpeg', 0.75); let prev = document.getElementById('adminQrPreview'); if (prev) prev.src = state.depositQR; saveSettingsToFB(); }; img.src = e.target.result; }; r.readAsDataURL(f);
-        }
+        function handleQrUpload(ev) { let f = ev.target.files[0]; if (!f) return; if (!f.type.startsWith('image/')) return alert("❌ कृपया केवल Image फाइल चुनें!"); let r = new FileReader(); r.onload = e => { let img = new Image(); img.onerror = () => alert("❌ यह सही इमेज फाइल नहीं है!"); img.onload = () => { let w = img.width, h = img.height, m = 360; if (w > h && w > m) { h = Math.round(h*m/w); w = m; } else if (h > m) { w = Math.round(w*m/h); h = m; } let c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img,0,0,w,h); state.depositQR = c.toDataURL('image/jpeg', 0.75); let prev = document.getElementById('adminQrPreview'); if (prev) prev.src = state.depositQR; saveSettingsToFB(); }; img.src = e.target.result; }; r.readAsDataURL(f); }
         function adminSaveDepositSettings() { let u = (document.getElementById('admUpiInput')?.value||'').trim(); if (u) state.depositUPI = u; saveSettingsToFB(); alert("QR व UPI सेव हो गया!"); }
         function adminCheckBidLoad() {
             let mId = parseInt(document.getElementById('admLoadMarket')?.value, 10), dt = document.getElementById('admLoadDate')?.value || getLocalDateString(), box = document.getElementById('admLoadResultBox'); if (!box) return;
-            let f = state.bids.filter(b => b.marketId === mId && b.date === dt && b.status !== "REFUNDED");
-            if (!f.length) { box.innerHTML = `<p style="color:#cbd5e1;">कोई बिड नहीं लगी है।</p>`; return; }
+            let f = state.bids.filter(b => b.marketId === mId && b.date === dt && b.status !== "REFUNDED"); if (!f.length) { box.innerHTML = `<p style="color:#cbd5e1;">कोई बिड नहीं लगी है।</p>`; return; }
             let tot = 0, grp = {}; f.forEach(b => { tot += b.amount; let k = `${b.gameType} (${b.session}) - ${b.digit}`; if (!grp[k]) grp[k]={c:0,a:0}; grp[k].c++; grp[k].a+=b.amount; });
             box.innerHTML = `<div class="dark-row" style="border:1px solid var(--primary);">Bids: <b>${f.length}</b> | Total Load: <b style="color:#4ade80">₹${tot}</b></div>` + Object.entries(grp).sort((a,b)=>b[1].a-a[1].a).map(([k,v])=>`<div class="dark-row flex-between"><span>${escapeHTML(k)} (${v.c})</span><b style="color:var(--primary)">₹${v.a}</b></div>`).join('');
         }
@@ -1446,11 +1347,7 @@
             if (hasC && pannaSumDigit(cp) !== jd[1]) return alert(`❌ Close Panna (${cp}) का जोड़ ${pannaSumDigit(cp)} होना चाहिए!`);
             if (hasO && m.resultDate === dt && /^\d{3}-\d/.test(m.result) && !m.result.startsWith(`${op}-${jd[0]}`)) return alert(`❌ ${dt} का Open रिजल्ट पहले ही (${m.result}) घोषित हो चुका है!\nOpen बदलने के लिए पहले 'Rollback' बटन दबाएं।`);
             if (dt >= getMarketCycleDate(m, new Date())) { m.result = res; m.resultDate = dt; }
-            if (fullJ) {
-                let existingChartIdx = m.chart.findIndex(c => typeof c === "object" && c.date === dt);
-                if (existingChartIdx !== -1) m.chart[existingChartIdx].result = res; else m.chart.push({ date:dt, result:res });
-                m.lastChartDate = dt;
-            }
+            if (fullJ) { let existingChartIdx = m.chart.findIndex(c => typeof c === "object" && c.date === dt); if (existingChartIdx !== -1) m.chart[existingChartIdx].result = res; else m.chart.push({ date:dt, result:res }); m.lastChartDate = dt; }
             saveMarketToFB(m);
             let od = jd[0], cd = jd[1], settled = 0, won = 0, payout = 0, nd = getLocalDateString();
             state.bids.forEach(b => {
@@ -1480,19 +1377,14 @@
         function adminSaveSettings() { state.adminWhatsApp = (document.getElementById('admWa')?.value||'').trim(); state.noticeText = (document.getElementById('admNotice')?.value||'').trim(); saveSettingsToFB(); updateChromeUI(); alert("सेटिंग्स सेव हो गई!"); }
 
         window.addEventListener('hashchange', () => {
-            if (window.location.hash.toLowerCase() === '#admin') {
-                history.replaceState(null, '', window.location.pathname + window.location.search);
-                navigate('adminLogin');
-            }
+            if (window.location.hash.toLowerCase() === '#admin') { history.replaceState(null, '', window.location.pathname + window.location.search); navigate('adminLogin'); }
         });
 
         function showBootError(err) {
             let code = err && err.code ? err.code : '', msg = err && err.message ? err.message : 'Connection failed';
             let hint = (code === 'auth/operation-not-allowed' || code === 'auth/admin-restricted-operation')
-                ? "Firebase Console ➔ Build ➔ Authentication ➔ Sign-in method me jakar <b>Anonymous</b> ko Enable karein!"
-                : (String(msg).toLowerCase().includes('permission_denied')
-                    ? "Realtime Database ➔ Rules me <b>\"auth != null\"</b> rule Publish karein!"
-                    : escapeHTML(msg));
+                ? "Firebase Console ➔ Build/Security ➔ Authentication ➔ Sign-in method me jakar <b>Anonymous</b> ko Enable karein!"
+                : (String(msg).toLowerCase().includes('permission_denied') ? "Realtime Database ➔ Rules me <b>\"auth != null\"</b> rule Publish karein!" : escapeHTML(msg));
             document.getElementById('appRoot').innerHTML = `<div class="form-card" style="max-width:350px;margin:60px auto;text-align:center;border:2px solid var(--red);"><h3 style="color:#fda4af;margin-bottom:8px;">⚠️ Connection Error</h3><p style="font-size:12px;color:#e2e8f0;margin-bottom:12px;line-height:1.5;">${hint}</p><button class="btn btn-play" onclick="location.reload()">🔄 Retry</button></div>`;
         }
 
@@ -1506,24 +1398,18 @@
                     mkRef().on('value', snap => {
                         applyFirebaseSnapshot(snap.val());
                         if (!isFirebaseReady) {
-                            isFirebaseReady = true;
-                            syncDailyMarketResults();
-                            if (initialSecretAdmin) {
-                                try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
-                                navigate('adminLogin');
-                            } else if (!state.currentUserPhone || !state.users[state.currentUserPhone] || state.users[state.currentUserPhone].isBlocked) {
+                            isFirebaseReady = true; syncDailyMarketResults();
+                            if (initialSecretAdmin) { try { history.replaceState(null, '', window.location.pathname); } catch (e) {} navigate('adminLogin'); }
+                            else if (!state.currentUserPhone || !state.users[state.currentUserPhone] || state.users[state.currentUserPhone].isBlocked) {
                                 if (state.currentUserPhone && state.users[state.currentUserPhone]?.isBlocked) { localStorage.removeItem('mk_logged_in_phone'); state.currentUserPhone = null; }
-                                if (state.isAdminLoggedIn) navigate('adminLogin');
-                                else renderLoginScreen();
+                                if (state.isAdminLoggedIn) navigate('adminLogin'); else renderLoginScreen();
                             } else {
                                 document.getElementById('mainHeader').style.display = 'flex';
                                 document.getElementById('noticeBoardDisplay').style.display = 'block';
                                 document.getElementById('bottomNav').style.display = 'flex';
                                 navigate('home');
                             }
-                        } else {
-                            refreshActiveViewOnSync();
-                        }
+                        } else { refreshActiveViewOnSync(); }
                     }, showBootError);
                 }).catch(showBootError);
             });
